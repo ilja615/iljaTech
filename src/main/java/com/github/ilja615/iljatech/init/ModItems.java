@@ -7,8 +7,16 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModItems {
+    public static final Item BOILED_EGG = register("boiled_egg", new Item(new Item.Settings().food(ModFoods.BOILED_EGG_COMPONENT).maxCount(16)));
+
+    public static final Item TIN_INGOT = register("tin_ingot", new Item(new Item.Settings()));
+    public static final Item NICKEL_INGOT = register("nickel_ingot", new Item(new Item.Settings()));
+    public static final Item BRONZE_INGOT = register("bronze_ingot", new Item(new Item.Settings()));
+
+    public static final Item BRONZE_GEAR = register("bronze_gear", new Item(new Item.Settings()));
+
     public static <T extends Item> T register(String name, T item) {
-        return Registry.register(Registries.ITEM, Identifier.of(IljaTech.MOD_ID), item);
+        return Registry.register(Registries.ITEM, Identifier.of(IljaTech.MOD_ID, name), item);
     }
 
     public static void load() {}
