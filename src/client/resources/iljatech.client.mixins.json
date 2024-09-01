@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.github.ilja615.iljatech.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
