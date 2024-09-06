@@ -17,7 +17,7 @@ public class ModItems {
     public static final Item RAW_TIN_ORE = register("raw_tin", new Item(new Item.Settings()));
 
     public static final Item TIN_INGOT = register("tin_ingot", new Item(new Item.Settings()));
-    //public static final Item NICKEL_INGOT = register("nickel_ingot", new Item(new Item.Settings()));
+    public static final Item NICKEL_INGOT = register("nickel_ingot", new Item(new Item.Settings()));
     public static final Item BRONZE_INGOT = register("bronze_ingot", new Item(new Item.Settings()));
 
     public static final Item BRONZE_GEAR = register("bronze_gear", new Item(new Item.Settings()));
@@ -27,7 +27,7 @@ public class ModItems {
     }
 
     public static final List<ItemConvertible> ITEMGROUP_BLACKLIST = new ArrayList<ItemConvertible>(
-            Arrays.asList(BRONZE_INGOT, BRONZE_GEAR));
+            Arrays.asList(BRONZE_INGOT, BRONZE_GEAR, NICKEL_INGOT));
 
     public static void load() {}
 }
