@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
-public class ModItemGroups {
+public class ModItemGroup {
     private static final Text TITLE = Text.translatable("itemGroup." + IljaTech.MOD_ID + ".stuff");
     public static final ItemGroup ITEM_GROUP = register("stuff", FabricItemGroup.builder()
             .displayName(TITLE)
@@ -21,6 +21,7 @@ public class ModItemGroups {
                             key -> key.getNamespace().equals(IljaTech.MOD_ID))
                     .map(Registries.ITEM::getOrEmpty)
                     .map(Optional::orElseThrow)
+                    .filter(item -> !ModItems.ITEMGROUP_BLACKLIST.contains(item))
                     .forEach(entries::add))
             .build());
 

@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech;
 
-import com.github.ilja615.iljatech.init.ModItemGroups;
+import com.github.ilja615.iljatech.init.ModBlocks;
+import com.github.ilja615.iljatech.init.ModItemGroup;
 import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -19,7 +20,8 @@ public class IljaTech implements ModInitializer {
 		LOGGER.info("Initialization!");
 
 		ModItems.load();
-		ModItemGroups.load();
+		ModBlocks.load();
+		ModItemGroup.load();
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);

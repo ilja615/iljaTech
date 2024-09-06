@@ -1,0 +1,12 @@
+// 1.21.1	2024-09-06T09:37:01.4365808	iljaTech/Model Definitions
+cefca83a0be06694b913b2d55f2a1e1d025c7ed3 assets\iljatech\models\item\raw_tin.json
+8283bbedf2db48a45a474dfdf94f8b6040e8dbd7 assets\iljatech\models\item\bronze_ingot.json
+1641f5b1626d14108ed316cfce81fda9dd00624e assets\iljatech\models\block\tin_ore.json
+89801bc9ae29bf688662a2be11670023cb8875d7 assets\iljatech\models\item\bronze_gear.json
+0feaf9402fd84f103c6fbea0c119603b1130403d assets\iljatech\models\item\tin_ingot.json
+d9b498e90d2592f5a78a72edb11b484de4342401 assets\iljatech\models\item\boiled_egg.json
+5db1665a0ce3c6888eb1de1d7f38b7b98552fcef assets\iljatech\blockstates\tin_ore.json
+464d2a4200df01102695432061b2c0c1b57a74ae assets\iljatech\models\item\tin_ore.json
+7d8eaab4e9820e5d2de58eca9b843eb1ee63ab81 assets\iljatech\models\block\deepslate_tin_ore.json
+17ec27ac0b0f5fb1e3a8eb0a99e22210721029a7 assets\iljatech\blockstates\deepslate_tin_ore.json
+ed10e799c8041e92f0d6c353f3fb265252b7b57f assets\iljatech\models\item\deepslate_tin_ore.json

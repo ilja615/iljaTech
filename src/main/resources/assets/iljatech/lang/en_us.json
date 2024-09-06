@@ -1,8 +1,13 @@
 {
   "itemGroup.iljatech.stuff": "iljaTech Stuff",
+
   "item.iljatech.boiled_egg": "Boiled Egg",
+  "item.iljatech.raw_tin": "Raw Tin Ore",
   "item.iljatech.tin_ingot": "Tin Ingot",
   "item.iljatech.nickel_ingot": "Nickel Ingot",
   "item.iljatech.bronze_ingot": "Bronze Ingot",
-  "item.iljatech.bronze_gear": "Bronze Gear"
+  "item.iljatech.bronze_gear": "Bronze Gear",
+
+  "block.iljatech.tin_ore": "Tin Ore",
+  "block.iljatech.deepslate_tin_ore": "Deepslate Tin Ore"
 }
