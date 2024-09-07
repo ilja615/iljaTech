@@ -16,11 +16,17 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
         getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL)
-                .add(ModBlocks.TIN_ORE)
-                .add(ModBlocks.DEEPSLATE_TIN_ORE);
+                .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
+                .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE);
+
+        getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
+                .add(ModBlocks.ALUMINIUM_ORE).add(ModBlocks.DEEPSLATE_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
+                .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE);
 
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
-                .add(ModBlocks.TIN_ORE)
-                .add(ModBlocks.DEEPSLATE_TIN_ORE);
+                .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
+                .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE)
+                .add(ModBlocks.ALUMINIUM_ORE).add(ModBlocks.DEEPSLATE_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
+                .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE);
     }
 }

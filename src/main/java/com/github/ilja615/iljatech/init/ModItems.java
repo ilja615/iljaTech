@@ -15,10 +15,14 @@ public class ModItems {
     public static final Item BOILED_EGG = register("boiled_egg", new Item(new Item.Settings().food(ModFoods.BOILED_EGG_COMPONENT).maxCount(16)));
 
     public static final Item RAW_TIN_ORE = register("raw_tin", new Item(new Item.Settings()));
+    public static final Item RAW_NICKEL_ORE = register("raw_nickel", new Item(new Item.Settings()));
+    public static final Item RAW_ALUMINIUM_ORE = register("raw_aluminium", new Item(new Item.Settings()));
+    public static final Item RAW_CHROME_ORE = register("raw_chrome", new Item(new Item.Settings()));
 
     public static final Item TIN_INGOT = register("tin_ingot", new Item(new Item.Settings()));
     public static final Item NICKEL_INGOT = register("nickel_ingot", new Item(new Item.Settings()));
-    public static final Item BRONZE_INGOT = register("bronze_ingot", new Item(new Item.Settings()));
+    public static final Item ALUMINIUM_INGOT = register("aluminium_ingot", new Item(new Item.Settings()));
+    public static final Item CHROME_INGOT = register("chrome_ingot", new Item(new Item.Settings()));
 
     public static final Item BRONZE_GEAR = register("bronze_gear", new Item(new Item.Settings()));
 
@@ -27,7 +31,7 @@ public class ModItems {
     }
 
     public static final List<ItemConvertible> ITEMGROUP_BLACKLIST = new ArrayList<ItemConvertible>(
-            Arrays.asList(BRONZE_INGOT, BRONZE_GEAR, NICKEL_INGOT));
+            Arrays.asList(BRONZE_GEAR));
 
     public static void load() {}
 }

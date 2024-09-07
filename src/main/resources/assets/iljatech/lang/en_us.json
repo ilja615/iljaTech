@@ -1,13 +1,31 @@
 {
   "itemGroup.iljatech.stuff": "iljaTech Stuff",
 
+
   "item.iljatech.boiled_egg": "Boiled Egg",
+
   "item.iljatech.raw_tin": "Raw Tin Ore",
+  "item.iljatech.raw_nickel": "Raw Nickel Ore",
+  "item.iljatech.raw_aluminium": "Raw Aluminium Ore",
+  "item.iljatech.raw_chrome": "Raw Chrome Ore",
   "item.iljatech.tin_ingot": "Tin Ingot",
   "item.iljatech.nickel_ingot": "Nickel Ingot",
-  "item.iljatech.bronze_ingot": "Bronze Ingot",
+  "item.iljatech.aluminium_ingot": "Aluminium Ingot",
+  "item.iljatech.chrome_ingot": "Chrome Ingot",
+
   "item.iljatech.bronze_gear": "Bronze Gear",
 
+
   "block.iljatech.tin_ore": "Tin Ore",
-  "block.iljatech.deepslate_tin_ore": "Deepslate Tin Ore"
+  "block.iljatech.nickel_ore": "Nickel Ore",
+  "block.iljatech.aluminium_ore": "Aluminium Ore",
+  "block.iljatech.chrome_ore": "Chrome Ore",
+  "block.iljatech.deepslate_tin_ore": "Deepslate Tin Ore",
+  "block.iljatech.deepslate_nickel_ore": "Deepslate Nickel Ore",
+  "block.iljatech.deepslate_aluminium_ore": "Deepslate Aluminium Ore",
+  "block.iljatech.deepslate_chrome_ore": "Deepslate Chrome Ore",
+  "block.iljatech.raw_tin_ore": "Raw Tin Ore Block",
+  "block.iljatech.raw_nickel_ore": "Raw Nickel Ore Block",
+  "block.iljatech.raw_aluminium_ore": "Raw Aluminium Ore Block",
+  "block.iljatech.raw_chrome_ore": "Raw Chrome Ore Block"
 }

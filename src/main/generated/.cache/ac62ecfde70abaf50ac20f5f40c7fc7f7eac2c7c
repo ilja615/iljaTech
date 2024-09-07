@@ -1,3 +1,13 @@
-// 1.21.1	2024-09-06T09:47:30.6605879	iljaTech/Block Loot Tables
+// 1.21.1	2024-09-07T14:00:01.3912097	iljaTech/Block Loot Tables
+ac2bf833b13ad10acac6bf9b3a1ab9de85ced26a data\iljatech\loot_table\blocks\deepslate_aluminium_ore.json
+4c9b36712616cf5756adeefba44f857460f506bc data\iljatech\loot_table\blocks\raw_aluminium_ore.json
 db18894d0050cf9e458d3bc40717ae17802c7d0b data\iljatech\loot_table\blocks\deepslate_tin_ore.json
+f3fe96370250f4c7b2b64370577e5102522abc01 data\iljatech\loot_table\blocks\aluminium_ore.json
+8b53f56177286772b68cbb5d7a5d1539ede7f21b data\iljatech\loot_table\blocks\chrome_ore.json
+0383e498227d31b1014c086788d3ac1f48c624d6 data\iljatech\loot_table\blocks\nickel_ore.json
+bc0c6d6e07036a31e8ace12304e07012b1632dda data\iljatech\loot_table\blocks\deepslate_nickel_ore.json
 27c7de400754b0b37482ee4f3cae7f32e7293132 data\iljatech\loot_table\blocks\tin_ore.json
+83105986289ac41d337c2ce7f781f12ab0e2badd data\iljatech\loot_table\blocks\raw_chrome_ore.json
+5331250b2b2ef996fbf69d00e0de6c296ea9c008 data\iljatech\loot_table\blocks\raw_nickel_ore.json
+b558b798224a4fe7025f20c8e109932ca9efda36 data\iljatech\loot_table\blocks\deepslate_chrome_ore.json
+43a6be90978647ec09a12ef9c97f4cac7c85e3e1 data\iljatech\loot_table\blocks\raw_tin_ore.json

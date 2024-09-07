@@ -27,6 +27,16 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
     public void generate() {
         addDrop(ModBlocks.TIN_ORE, this::tinOreDrops);
         addDrop(ModBlocks.DEEPSLATE_TIN_ORE, this::tinOreDrops);
+        addDrop(ModBlocks.NICKEL_ORE, this::nickelOreDrops);
+        addDrop(ModBlocks.DEEPSLATE_NICKEL_ORE, this::nickelOreDrops);
+        addDrop(ModBlocks.ALUMINIUM_ORE, oreDrops(ModBlocks.ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
+        addDrop(ModBlocks.DEEPSLATE_ALUMINIUM_ORE, oreDrops(ModBlocks.DEEPSLATE_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
+        addDrop(ModBlocks.CHROME_ORE, oreDrops(ModBlocks.CHROME_ORE, ModItems.RAW_CHROME_ORE));
+        addDrop(ModBlocks.DEEPSLATE_CHROME_ORE, oreDrops(ModBlocks.DEEPSLATE_CHROME_ORE, ModItems.RAW_CHROME_ORE));
+        addDrop(ModBlocks.RAW_TIN_ORE);
+        addDrop(ModBlocks.RAW_NICKEL_ORE);
+        addDrop(ModBlocks.RAW_ALUMINIUM_ORE);
+        addDrop(ModBlocks.RAW_CHROME_ORE);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {
@@ -37,6 +47,19 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
                         drop,
                         ItemEntry.builder(ModItems.RAW_TIN_ORE)
                                 .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0F, 3.0F)))
+                                .apply(ApplyBonusLootFunction.oreDrops(impl.getOrThrow(Enchantments.FORTUNE)))
+                )
+        );
+    }
+
+    public LootTable.Builder nickelOreDrops(Block drop) {
+        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+        return this.dropsWithSilkTouch(
+                drop,
+                (LootPoolEntry.Builder<?>)this.applyExplosionDecay(
+                        drop,
+                        ItemEntry.builder(ModItems.RAW_NICKEL_ORE)
+                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0F, 4.0F)))
                                 .apply(ApplyBonusLootFunction.oreDrops(impl.getOrThrow(Enchantments.FORTUNE)))
                 )
         );
