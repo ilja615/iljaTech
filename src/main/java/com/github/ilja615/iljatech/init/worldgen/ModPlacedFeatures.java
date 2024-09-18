@@ -26,7 +26,7 @@ public class ModPlacedFeatures {
 
         context.register(OVERWORLD_TIN_ORE_KEY, new PlacedFeature(
                 registryLookup.getOrThrow(ModConfiguredFeatures.OVERWORLD_TIN_ORE_KEY),
-                List.copyOf(Modifiers.modifiersWithCount(10,
+                List.copyOf(Modifiers.modifiersWithCount(4,
                         HeightRangePlacementModifier.trapezoid(YOffset.fixed(32), YOffset.fixed(128))))));
         context.register(OVERWORLD_NICKEL_ORE_KEY, new PlacedFeature(
                 registryLookup.getOrThrow(ModConfiguredFeatures.OVERWORLD_NICKEL_ORE_KEY),
