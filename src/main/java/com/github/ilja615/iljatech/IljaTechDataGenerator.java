@@ -1,14 +1,10 @@
 package com.github.ilja615.iljatech;
 
-import com.github.ilja615.iljatech.datagen.ModBlockLootTableProvider;
-import com.github.ilja615.iljatech.datagen.ModBlockTagProvider;
-import com.github.ilja615.iljatech.datagen.ModModelProvider;
-import com.github.ilja615.iljatech.datagen.ModWorldGenerator;
+import com.github.ilja615.iljatech.datagen.*;
 import com.github.ilja615.iljatech.init.worldgen.ModConfiguredFeatures;
 import com.github.ilja615.iljatech.init.worldgen.ModPlacedFeatures;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryBuilder;
 import net.minecraft.registry.RegistryKeys;
 
@@ -20,6 +16,7 @@ public class IljaTechDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(ModBlockLootTableProvider::new);
 		pack.addProvider(ModBlockTagProvider::new);
 		pack.addProvider(ModWorldGenerator::new);
+		pack.addProvider(ModRecipeProvider::new);
 	}
 
 	@Override
