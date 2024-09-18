@@ -5,6 +5,9 @@
     "iljatech:raw_tin_ore",
     "iljatech:nickel_ore",
     "iljatech:deepslate_nickel_ore",
-    "iljatech:raw_nickel_ore"
+    "iljatech:raw_nickel_ore",
+    "iljatech:sandstone_aluminium_ore",
+    "iljatech:gravel_aluminium_ore",
+    "iljatech:raw_aluminium_ore"
   ]
 }

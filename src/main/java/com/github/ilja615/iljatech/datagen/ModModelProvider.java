@@ -1,4 +1,4 @@
-package com.github.ilja615.iljatech.data.provider;
+package com.github.ilja615.iljatech.datagen;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
@@ -32,12 +32,11 @@ public class ModModelProvider extends FabricModelProvider {
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.TIN_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NICKEL_ORE);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ALUMINIUM_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.CHROME_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DEEPSLATE_TIN_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DEEPSLATE_NICKEL_ORE);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DEEPSLATE_ALUMINIUM_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DEEPSLATE_CHROME_ORE);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.GRAVEL_ALUMINIUM_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_TIN_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_NICKEL_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_ALUMINIUM_ORE);

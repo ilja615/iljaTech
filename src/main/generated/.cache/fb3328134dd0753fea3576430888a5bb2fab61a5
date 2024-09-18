@@ -1,4 +1,5 @@
-// 1.21.1	2024-09-07T14:00:01.3942103	iljaTech/Tags for minecraft:block
-f1154d5ea33fb812ef9ac50da6353da272121fd8 data\minecraft\tags\block\mineable\pickaxe.json
-319d24f8b0068ae06a597fe366641f4d8f34e60d data\minecraft\tags\block\needs_stone_tool.json
-65f94d57bfac9f7300c25ce28c9d472db48e049b data\minecraft\tags\block\needs_iron_tool.json
+// 1.21.1	2024-09-18T07:21:33.0453452	iljaTech/Tags for minecraft:block
+229eb1f35738db7a924e9e29fc533e9359d1e138 data\minecraft\tags\block\mineable\shovel.json
+7091afbeb9fa356853c85fde96e29c35809f3dbd data\minecraft\tags\block\mineable\pickaxe.json
+f8cce8a869ad9422e4dda11d17ae83edd19e034c data\minecraft\tags\block\needs_stone_tool.json
+fd8c18f759286699f6bd81997259a79d1f7bc3ad data\minecraft\tags\block\needs_iron_tool.json

@@ -1,4 +1,4 @@
-package com.github.ilja615.iljatech.data.provider;
+package com.github.ilja615.iljatech.datagen;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
@@ -29,10 +29,10 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.DEEPSLATE_TIN_ORE, this::tinOreDrops);
         addDrop(ModBlocks.NICKEL_ORE, this::nickelOreDrops);
         addDrop(ModBlocks.DEEPSLATE_NICKEL_ORE, this::nickelOreDrops);
-        addDrop(ModBlocks.ALUMINIUM_ORE, oreDrops(ModBlocks.ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
-        addDrop(ModBlocks.DEEPSLATE_ALUMINIUM_ORE, oreDrops(ModBlocks.DEEPSLATE_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
         addDrop(ModBlocks.CHROME_ORE, oreDrops(ModBlocks.CHROME_ORE, ModItems.RAW_CHROME_ORE));
         addDrop(ModBlocks.DEEPSLATE_CHROME_ORE, oreDrops(ModBlocks.DEEPSLATE_CHROME_ORE, ModItems.RAW_CHROME_ORE));
+        addDrop(ModBlocks.SANDSTONE_ALUMINIUM_ORE, oreDrops(ModBlocks.SANDSTONE_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
+        addDrop(ModBlocks.GRAVEL_ALUMINIUM_ORE, oreDrops(ModBlocks.GRAVEL_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
         addDrop(ModBlocks.RAW_TIN_ORE);
         addDrop(ModBlocks.RAW_NICKEL_ORE);
         addDrop(ModBlocks.RAW_ALUMINIUM_ORE);
