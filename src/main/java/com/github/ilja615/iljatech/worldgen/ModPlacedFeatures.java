@@ -1,4 +1,4 @@
-package com.github.ilja615.iljatech.init.worldgen;
+package com.github.ilja615.iljatech.worldgen;
 
 import com.github.ilja615.iljatech.IljaTech;
 import net.minecraft.registry.Registerable;

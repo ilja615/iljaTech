@@ -1,8 +1,8 @@
 package com.github.ilja615.iljatech;
 
 import com.github.ilja615.iljatech.datagen.*;
-import com.github.ilja615.iljatech.init.worldgen.ModConfiguredFeatures;
-import com.github.ilja615.iljatech.init.worldgen.ModPlacedFeatures;
+import com.github.ilja615.iljatech.worldgen.ModConfiguredFeatures;
+import com.github.ilja615.iljatech.worldgen.ModPlacedFeatures;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.registry.RegistryBuilder;

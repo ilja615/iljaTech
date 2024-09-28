@@ -15,7 +15,6 @@
 
   "item.iljatech.bronze_gear": "Bronze Gear",
 
-
   "block.iljatech.tin_ore": "Tin Ore",
   "block.iljatech.nickel_ore": "Nickel Ore",
   "block.iljatech.chrome_ore": "Chrome Ore",
@@ -27,5 +26,8 @@
   "block.iljatech.raw_tin_ore": "Raw Tin Ore Block",
   "block.iljatech.raw_nickel_ore": "Raw Nickel Ore Block",
   "block.iljatech.raw_aluminium_ore": "Raw Aluminium Ore Block",
-  "block.iljatech.raw_chrome_ore": "Raw Chrome Ore Block"
+  "block.iljatech.raw_chrome_ore": "Raw Chrome Ore Block",
+
+  "block.iljatech.crank": "Crank",
+  "block.iljatech.gearbox": "Gear Box"
 }

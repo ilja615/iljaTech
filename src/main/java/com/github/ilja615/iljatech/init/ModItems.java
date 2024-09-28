@@ -31,7 +31,7 @@ public class ModItems {
     }
 
     public static final List<ItemConvertible> ITEMGROUP_BLACKLIST = new ArrayList<ItemConvertible>(
-            Arrays.asList(BRONZE_GEAR));
+            Arrays.asList());
 
     public static void load() {}
 }

@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "iljatech:block/gearbox_off",
+		"north": "iljatech:block/gearbox_input",
+		"south": "iljatech:block/gearbox_off",
+		"east": "iljatech:block/gearbox_off",
+		"west": "iljatech:block/gearbox_off",
+		"up": "iljatech:block/gearbox_off",
+		"down": "iljatech:block/gearbox_off"
+	}
+}

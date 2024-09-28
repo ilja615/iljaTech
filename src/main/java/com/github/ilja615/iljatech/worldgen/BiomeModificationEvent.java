@@ -1,4 +1,4 @@
-package com.github.ilja615.iljatech.init.worldgen;
+package com.github.ilja615.iljatech.worldgen;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;

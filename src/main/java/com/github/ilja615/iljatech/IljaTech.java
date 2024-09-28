@@ -3,7 +3,7 @@ package com.github.ilja615.iljatech;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItemGroup;
 import com.github.ilja615.iljatech.init.ModItems;
-import com.github.ilja615.iljatech.init.worldgen.BiomeModificationEvent;
+import com.github.ilja615.iljatech.worldgen.BiomeModificationEvent;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
