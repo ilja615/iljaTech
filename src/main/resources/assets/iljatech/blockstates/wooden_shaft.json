@@ -1,0 +1,395 @@
+{
+  "variants": {
+    "facing=east,mech_pwr=0": {
+      "model": "iljatech:block/wooden_shaft_off",
+      "y": 90
+    },
+    "facing=north,mech_pwr=0": {
+      "model": "iljatech:block/wooden_shaft_off"
+    },
+    "facing=south,mech_pwr=0": {
+      "model": "iljatech:block/wooden_shaft_off",
+      "y": 180
+    },
+    "facing=west,mech_pwr=0": {
+      "model": "iljatech:block/wooden_shaft_off",
+      "y": 270
+    },
+    "facing=up,mech_pwr=0": {
+      "model": "iljatech:block/wooden_shaft_off",
+      "x": 270
+    },
+    "facing=down,mech_pwr=0": {
+      "model": "iljatech:block/wooden_shaft_off",
+      "x": 90
+    },
+    "facing=east,mech_pwr=1": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=1": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=1": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=1": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=1": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=1": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=2": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=2": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=2": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=2": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=2": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=2": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=3": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=3": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=3": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=3": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=3": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=3": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=4": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=4": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=4": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=4": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=4": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=4": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=5": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=5": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=5": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=5": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=5": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=5": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=6": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=6": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=6": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=6": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=6": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=6": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=7": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=7": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=7": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=7": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=7": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=7": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=8": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=8": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=8": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=8": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=8": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=8": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=9": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=9": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=9": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=9": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=9": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=9": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=10": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=10": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=10": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=10": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=10": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=10": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=11": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=11": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=11": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=11": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=11": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=11": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=12": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=12": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=12": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=12": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=12": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=12": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=13": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=13": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=13": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=13": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=13": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=13": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=14": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=14": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=14": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=14": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=14": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=14": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=15": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=15": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=15": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=15": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=15": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=15": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    },
+    "facing=east,mech_pwr=16": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 90
+    },
+    "facing=north,mech_pwr=16": {
+      "model": "iljatech:block/wooden_shaft_on"
+    },
+    "facing=south,mech_pwr=16": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 180
+    },
+    "facing=west,mech_pwr=16": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "y": 270
+    },
+    "facing=up,mech_pwr=16": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 270
+    },
+    "facing=down,mech_pwr=16": {
+      "model": "iljatech:block/wooden_shaft_on",
+      "x": 90
+    }
+  }
+}

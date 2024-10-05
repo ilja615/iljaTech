@@ -32,7 +32,7 @@ public class ModBlocks {
 
     public static final Block CRANK = registerWithItem("crank", new CrankBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).pistonBehavior(PistonBehavior.DESTROY).noCollision()));
     public static final Block GEARBOX = registerWithItem("gearbox", new GearBoxBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
-    public static final Block WOODEN_SHAFT = registerWithItem("wooden_shaft", new WoodenShaftBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).requiresTool().strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD)));
+    public static final Block WOODEN_SHAFT = registerWithItem("wooden_shaft", new WoodenShaftBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).requiresTool().strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
 
     public static <T extends Block> T register(String name, T block) {
         return Registry.register(Registries.BLOCK, Identifier.of(IljaTech.MOD_ID, name), block);

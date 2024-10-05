@@ -33,5 +33,8 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
                 .add(ModBlocks.GRAVEL_ALUMINIUM_ORE);
+
+        getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+                .add(ModBlocks.CRANK).add(ModBlocks.WOODEN_SHAFT);
     }
 }

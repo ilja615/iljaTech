@@ -39,6 +39,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.RAW_CHROME_ORE);
         addDrop(ModBlocks.CRANK);
         addDrop(ModBlocks.GEARBOX);
+        addDrop(ModBlocks.WOODEN_SHAFT);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {
