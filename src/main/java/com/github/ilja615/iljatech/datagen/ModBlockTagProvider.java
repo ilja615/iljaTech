@@ -18,7 +18,7 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
                 .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE)
-                .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
+                .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
                 .add(ModBlocks.GEARBOX);
 
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
@@ -27,7 +27,7 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
                 .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
                 .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE)
-                .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
+                .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
                 .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE)
                 .add(ModBlocks.GEARBOX);
 

@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-26T21:30:24.5286074	iljaTech/Model Definitions
+// 1.21.1	2024-10-05T23:44:34.430188	iljaTech/Model Definitions
 c38ac9fbb1e51cb4a8c6c52214bcd65980889f25 assets\iljatech\models\item\chrome_ingot.json
 f05a7dd29e67100c2e1dfb0e8f1e5273c3a08b49 assets\iljatech\models\block\raw_nickel_ore.json
 1641f5b1626d14108ed316cfce81fda9dd00624e assets\iljatech\models\block\tin_ore.json
@@ -12,8 +12,8 @@ ceb71104be3a1499d6c227b1455300fd97383f0e assets\iljatech\models\item\deepslate_n
 7d8eaab4e9820e5d2de58eca9b843eb1ee63ab81 assets\iljatech\models\block\deepslate_tin_ore.json
 67e21fb67265c9e7931ca1d202c41ca9edd57e23 assets\iljatech\models\item\raw_chrome.json
 4d4f44f4516349c0640a602f114ad6cf94d9439f assets\iljatech\models\block\nickel_ore.json
-05d0a0cafe9eea55d5309fcb2289989f624bd6ae assets\iljatech\models\item\raw_chrome_ore.json
 89801bc9ae29bf688662a2be11670023cb8875d7 assets\iljatech\models\item\bronze_gear.json
+05d0a0cafe9eea55d5309fcb2289989f624bd6ae assets\iljatech\models\item\raw_chrome_ore.json
 93fc1b525a0267a26de0dd791963540a13b9985d assets\iljatech\blockstates\deepslate_nickel_ore.json
 1fb808227bb0324de8df5f9da0a9b75398697464 assets\iljatech\blockstates\nickel_ore.json
 1ab5632332c03ab62344e575bdcf6a66f4aebc5b assets\iljatech\models\item\raw_aluminium_ore.json
@@ -35,8 +35,8 @@ b61198c4f69e2b58a6f675d630a92fb5498a09f4 assets\iljatech\blockstates\raw_tin_ore
 b8983a12fcdbd1f89f640802105b6dc401db6821 assets\iljatech\models\item\chrome_ore.json
 36a384cb30af3be574826316b4ff29e8d0863a70 assets\iljatech\models\item\raw_nickel_ore.json
 cefca83a0be06694b913b2d55f2a1e1d025c7ed3 assets\iljatech\models\item\raw_tin.json
-761af095445e71a91e003752a62b7f0a0cd893a1 assets\iljatech\models\item\deepslate_chrome_ore.json
 c110a89cfcaffd8859bf37d87875ee401eb51fc3 assets\iljatech\models\item\gravel_aluminium_ore.json
+761af095445e71a91e003752a62b7f0a0cd893a1 assets\iljatech\models\item\deepslate_chrome_ore.json
 321304efb7ed8ed78f2dc579f9372bf7718dbb7e assets\iljatech\models\block\chrome_ore.json
 464d2a4200df01102695432061b2c0c1b57a74ae assets\iljatech\models\item\tin_ore.json
 17ec27ac0b0f5fb1e3a8eb0a99e22210721029a7 assets\iljatech\blockstates\deepslate_tin_ore.json
