@@ -390,29 +390,6 @@
     "facing=down,mech_pwr=16": {
       "model": "iljatech:block/gearbox_on",
       "x": 90
-    },
-    "facing=east,mech_pwr=17": {
-      "model": "iljatech:block/gearbox_on",
-      "y": 90
-    },
-    "facing=north,mech_pwr=17": {
-      "model": "iljatech:block/gearbox_on"
-    },
-    "facing=south,mech_pwr=17": {
-      "model": "iljatech:block/gearbox_on",
-      "y": 180
-    },
-    "facing=west,mech_pwr=17": {
-      "model": "iljatech:block/gearbox_on",
-      "y": 270
-    },
-    "facing=up,mech_pwr=17": {
-      "model": "iljatech:block/gearbox_on",
-      "x": 270
-    },
-    "facing=down,mech_pwr=17": {
-      "model": "iljatech:block/gearbox_on",
-      "x": 90
     }
   }
 }

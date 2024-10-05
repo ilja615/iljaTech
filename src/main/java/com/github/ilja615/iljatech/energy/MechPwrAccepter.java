@@ -1,16 +1,15 @@
 package com.github.ilja615.iljatech.energy;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public interface MechPwrAccepter {
-    // 0 is off
-    // 1-16 is powered
-    // 17 is an additional state for scheduling stops
-    public static final IntProperty MECH_PWR = IntProperty.of("mech_pwr", 0, 17);
+    public static final IntProperty MECH_PWR = IntProperty.of("mech_pwr", 0, 16);
+    public static final BooleanProperty SCHEDULE_STOP = BooleanProperty.of("schedule_stop");
 
     // If the block is able to receive power or not
     default boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom)

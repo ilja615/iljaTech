@@ -22,17 +22,23 @@ public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSende
 
     public GearBoxBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(MECH_PWR, 0).with(FACING, Direction.UP));
+        this.setDefaultState(this.stateManager.getDefaultState().with(MECH_PWR, 0).with(FACING, Direction.UP).with(SCHEDULE_STOP, false));
+    }
+
+    @Override
+    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+        if (notify) {
+            world.setBlockState(pos, state.with(MECH_PWR, 0));
+        }
+        super.onBlockAdded(state, world, pos, oldState, notify);
     }
 
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockState blockState = this.getDefaultState().with(FACING, ctx.getSide().getOpposite());
-
-        if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
-            return blockState;
+        if (ctx.getPlayer().isSneaking()) {
+            return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
+        } else {
+            return this.getDefaultState().with(FACING, ctx.getSide().getOpposite());
         }
-
-        return null;
     }
 
     @Override
@@ -57,8 +63,8 @@ public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSende
         if (state.getBlock() != this) { return; }
 
         // Check if a stop was scheduled
-        if (state.get(MECH_PWR) == 17) {
-            world.setBlockState(pos, state.with(MECH_PWR, 0));
+        if (state.get(SCHEDULE_STOP)) {
+            world.setBlockState(pos, state.with(MECH_PWR, 0).with(SCHEDULE_STOP, false));
         }
         else if (state.get(MECH_PWR) > 0) {
             // Collect a list of all possible power output directions
@@ -78,13 +84,13 @@ public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSende
                 else {
                     // Insufficient power, could not output...
                     // Scheduling to stop
-                    world.setBlockState(pos, state.with(MECH_PWR, 17));
+                    world.setBlockState(pos, state.with(SCHEDULE_STOP, true));
                     world.scheduleBlockTick(pos, this, 10);
                 }
             } else {
                 // There was nowhere to output to...
                 // Scheduling to stop
-                world.setBlockState(pos, state.with(MECH_PWR, 17));
+                world.setBlockState(pos, state.with(SCHEDULE_STOP, true));
                 world.scheduleBlockTick(pos, this, 10);
             }
         }
@@ -97,7 +103,7 @@ public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSende
         if (MechPwrSender.super.sendPower(world, thisPos, face, amount))
         {
             // The gearbox sent its power and should schedule to stop now
-            world.setBlockState(thisPos, state.with(MECH_PWR, 17));
+            world.setBlockState(thisPos, state.with(SCHEDULE_STOP, true));
             world.scheduleBlockTick(thisPos, this, 10);
             return true;
         } else {
@@ -107,6 +113,16 @@ public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSende
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING, MECH_PWR);
+        builder.add(FACING, MECH_PWR, SCHEDULE_STOP);
+    }
+
+    @Override
+    protected boolean hasComparatorOutput(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        return Math.min(15,state.get(MECH_PWR));
     }
 }
