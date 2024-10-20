@@ -31,5 +31,7 @@
 
   "block.iljatech.crank": "Crank",
   "block.iljatech.gearbox": "Gear Box",
-  "block.iljatech.wooden_shaft": "Wooden Shaft"
+  "block.iljatech.wooden_shaft": "Wooden Shaft",
+  "block.iljatech.roller_mill": "Roller Mill",
+  "block.iljatech.drill": "Drill"
 }
