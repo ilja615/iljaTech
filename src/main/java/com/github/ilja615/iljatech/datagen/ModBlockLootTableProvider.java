@@ -43,6 +43,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.WOODEN_SHAFT);
         addDrop(ModBlocks.ROLLER_MILL);
         addDrop(ModBlocks.DRILL);
+        addDrop(ModBlocks.COPPER_WIRE);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

@@ -13,7 +13,7 @@ public class IljaTechClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		// Block render layers
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
-				ModBlocks.DRILL, ModBlocks.ROLLER_MILL);
+				ModBlocks.DRILL, ModBlocks.ROLLER_MILL, ModBlocks.COPPER_WIRE);
 
 		// Block entity renderers
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.ROLLER_MILL, RollerMillRenderer::new);

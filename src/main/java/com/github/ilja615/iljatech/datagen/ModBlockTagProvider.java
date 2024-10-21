@@ -29,7 +29,8 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE)
                 .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
                 .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE)
-                .add(ModBlocks.GEARBOX).add(ModBlocks.ROLLER_MILL).add(ModBlocks.DRILL);
+                .add(ModBlocks.GEARBOX).add(ModBlocks.ROLLER_MILL).add(ModBlocks.DRILL)
+                .add(ModBlocks.COPPER_WIRE);
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
                 .add(ModBlocks.GRAVEL_ALUMINIUM_ORE);
