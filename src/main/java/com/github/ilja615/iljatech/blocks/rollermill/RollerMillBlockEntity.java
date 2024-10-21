@@ -10,9 +10,13 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 public class RollerMillBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int ticks = 0;
@@ -53,6 +57,19 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
         super.writeNbt(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
         Inventories.writeNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        var nbt = super.toInitialChunkDataNbt(registryLookup);
+        writeNbt(nbt, registryLookup);
+        return nbt;
     }
 
     public int getTicks() {

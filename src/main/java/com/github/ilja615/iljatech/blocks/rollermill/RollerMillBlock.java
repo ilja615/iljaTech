@@ -3,10 +3,7 @@ package com.github.ilja615.iljatech.blocks.rollermill;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -22,6 +19,9 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +30,13 @@ import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.SCHEDU
 
 public class RollerMillBlock extends Block implements BlockEntityProvider, MechPwrAccepter {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+    protected static final VoxelShape BASE_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
+    protected static final VoxelShape ROLLER_1_X = Block.createCuboidShape(1.0, 9.0, 0.0, 7.0, 15.0, 16.0);
+    protected static final VoxelShape ROLLER_2_X = Block.createCuboidShape(9.0, 9.0, 0.0, 15.0, 15.0, 16.0);
+    protected static final VoxelShape ROLLER_1_Z = Block.createCuboidShape(0.0, 9.0, 1.0, 16.0, 15.0, 7.0);
+    protected static final VoxelShape ROLLER_2_Z = Block.createCuboidShape(0.0, 9.0, 9.0, 16.0, 15.0, 15.0);
+    private static final VoxelShape X_AXIS_SHAPE = VoxelShapes.union(BASE_SHAPE, ROLLER_1_X, ROLLER_2_X);
+    private static final VoxelShape Z_AXIS_SHAPE = VoxelShapes.union(BASE_SHAPE, ROLLER_1_Z, ROLLER_2_Z);
 
     public RollerMillBlock(Settings settings) {
         super(settings);
@@ -98,8 +105,14 @@ public class RollerMillBlock extends Block implements BlockEntityProvider, MechP
                 ItemScatterer.spawn(world, pos, rollerMillBlockEntity.getInventory());
                 world.updateComparators(pos, this);
             }
-            super.onStateReplaced(state, world, pos, newState, moved);
         }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        Direction direction = state.get(FACING);
+        return direction.getAxis() == Direction.Axis.X ? X_AXIS_SHAPE : Z_AXIS_SHAPE;
     }
 
     @Override
