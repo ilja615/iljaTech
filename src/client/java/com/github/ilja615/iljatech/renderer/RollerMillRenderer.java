@@ -33,15 +33,5 @@ public class RollerMillRenderer implements BlockEntityRenderer<RollerMillBlockEn
                     light, overlay, matrices, vertexConsumers, world, 0);
             matrices.pop();
         }
-        ItemStack stack1 = inventory.getStack(1);
-        if (!stack1.isEmpty()) {
-            matrices.push();
-            matrices.multiply(RotationAxis.POSITIVE_X.rotation(90.0f));
-            matrices.translate(0.5d, 0.505f, 0.5d);
-            matrices.scale(SIZE, SIZE, SIZE);
-            this.context.getItemRenderer().renderItem(stack1, ModelTransformationMode.FIXED,
-                    light, overlay, matrices, vertexConsumers, world, 0);
-            matrices.pop();
-        }
     }
 }

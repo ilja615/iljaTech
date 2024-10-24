@@ -48,10 +48,7 @@ public class RollerMillBlock extends Block implements BlockEntityProvider, MechP
         if (!world.isClient)
         {
             if (world.getBlockEntity(pos) instanceof RollerMillBlockEntity blockEntity && player != null) {
-                player.sendMessage(Text.of(
-                        "ticks: " + blockEntity.getTicks() +
-                        ", item0: " + blockEntity.getInventory().getStack(0).toString() +
-                        ", item1: " + blockEntity.getInventory().getStack(1).toString()), true);
+                //player.sendMessage(Text.of("ticks: " + blockEntity.getTicks()), true);
                 return ActionResult.SUCCESS;
             }
         }
