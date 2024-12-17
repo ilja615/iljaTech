@@ -13,6 +13,9 @@
   "item.iljatech.aluminium_ingot": "Aluminium Ingot",
   "item.iljatech.chrome_ingot": "Chrome Ingot",
 
+  "item.iljatech.iron_hammer": "Iron Hammer",
+  "item.iljatech.iron_saw": "Iron Saw",
+
   "item.iljatech.bronze_gear": "Bronze Gear",
 
   "block.iljatech.tin_ore": "Tin Ore",
@@ -29,12 +32,29 @@
   "block.iljatech.raw_aluminium_ore": "Raw Aluminium Ore Block",
   "block.iljatech.raw_chrome_ore": "Raw Chrome Ore Block",
 
+  "block.iljatech.nailed_acacia_planks": "Nailed Acacia Planks",
+  "block.iljatech.nailed_bamboo_planks": "Nailed Bamboo Planks",
+  "block.iljatech.nailed_birch_planks": "Nailed Birch Planks",
+  "block.iljatech.nailed_cherry_planks": "Nailed Cherry Planks",
+  "block.iljatech.nailed_crimson_planks": "Nailed Crimson Planks",
+  "block.iljatech.nailed_dark_oak_planks": "Nailed Dark Oak Planks",
+  "block.iljatech.nailed_jungle_planks": "Nailed Jungle Planks",
+  "block.iljatech.nailed_mangrove_planks": "Nailed Mangrove Planks",
+  "block.iljatech.nailed_oak_planks": "Nailed Oak Planks",
+  "block.iljatech.nailed_spruce_planks": "Nailed Spruce Planks",
+  "block.iljatech.nailed_warped_planks": "Nailed Warped Planks",
+
   "block.iljatech.crank": "Crank",
   "block.iljatech.gearbox": "Gear Box",
   "block.iljatech.wooden_shaft": "Wooden Shaft",
   "block.iljatech.roller_mill": "Roller Mill",
   "block.iljatech.drill": "Drill",
 
+  "block.iljatech.iron_rod": "Iron Rod",
+  "block.iljatech.iron_plate": "Iron Plate",
+  "item.iljatech.iron_nails": "Iron Nails",
   "block.iljatech.copper_rod": "Copper Rod",
-  "block.iljatech.copper_wire": "Copper Wire"
+  "block.iljatech.copper_wire": "Copper Wire",
+
+  "effect.iljatech.stunned": "Stunned"
 }

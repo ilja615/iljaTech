@@ -32,6 +32,18 @@ public class ModBlocks {
     public static final Block RAW_ALUMINIUM_ORE = registerWithItem("raw_aluminium_ore", new Block(AbstractBlock.Settings.copy(Blocks.RAW_GOLD_BLOCK).mapColor(MapColor.BROWN)));
     public static final Block RAW_CHROME_ORE = registerWithItem("raw_chrome_ore", new Block(AbstractBlock.Settings.copy(Blocks.RAW_GOLD_BLOCK).mapColor(MapColor.LIGHT_GRAY)));
 
+    public static final Block NAILED_ACACIA_PLANKS = registerWithItem("nailed_acacia_planks", new Block(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS)));
+    public static final Block NAILED_BAMBOO_PLANKS = registerWithItem("nailed_bamboo_planks", new Block(AbstractBlock.Settings.copy(Blocks.BAMBOO_PLANKS)));
+    public static final Block NAILED_BIRCH_PLANKS = registerWithItem("nailed_birch_planks", new Block(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS)));
+    public static final Block NAILED_CHERRY_PLANKS = registerWithItem("nailed_cherry_planks", new Block(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS)));
+    public static final Block NAILED_CRIMSON_PLANKS = registerWithItem("nailed_crimson_planks", new Block(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS)));
+    public static final Block NAILED_DARK_OAK_PLANKS = registerWithItem("nailed_dark_oak_planks", new Block(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS)));
+    public static final Block NAILED_JUNGLE_PLANKS = registerWithItem("nailed_jungle_planks", new Block(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS)));
+    public static final Block NAILED_MANGROVE_PLANKS = registerWithItem("nailed_mangrove_planks", new Block(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS)));
+    public static final Block NAILED_OAK_PLANKS = registerWithItem("nailed_oak_planks", new Block(AbstractBlock.Settings.copy(Blocks.OAK_PLANKS)));
+    public static final Block NAILED_SPRUCE_PLANKS = registerWithItem("nailed_spruce_planks", new Block(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS)));
+    public static final Block NAILED_WARPED_PLANKS = registerWithItem("nailed_warped_planks", new Block(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS)));
+
     public static final Block CRANK = registerWithItem("crank", new CrankBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).pistonBehavior(PistonBehavior.DESTROY).noCollision()));
     public static final Block GEARBOX = registerWithItem("gearbox", new GearBoxBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block WOODEN_SHAFT = registerWithItem("wooden_shaft", new WoodenShaftBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
@@ -40,6 +52,8 @@ public class ModBlocks {
 
     public static final Block COPPER_ROD = registerWithItem("copper_rod", new AxisRodBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block COPPER_WIRE = registerWithItem("copper_wire", new WireBlock(AbstractBlock.Settings.copy(Blocks.RAIL)));
+    public static final Block IRON_PLATE = registerWithItem("iron_plate", new PlateBlock(AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(2.5F, 6.0F).sounds(BlockSoundGroup.METAL)));
+    public static final Block IRON_ROD = registerWithItem("iron_rod", new AxisRodBlock(AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.METAL)));
 
 
     public static <T extends Block> T register(String name, T block) {

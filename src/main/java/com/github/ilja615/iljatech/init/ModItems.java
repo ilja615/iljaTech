@@ -1,6 +1,8 @@
 package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
+import com.github.ilja615.iljatech.items.HammerItem;
+import com.github.ilja615.iljatech.items.SawItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.registry.Registries;
@@ -25,6 +27,10 @@ public class ModItems {
     public static final Item CHROME_INGOT = register("chrome_ingot", new Item(new Item.Settings()));
 
     public static final Item BRONZE_GEAR = register("bronze_gear", new Item(new Item.Settings()));
+
+    public static final Item IRON_HAMMER = register("iron_hammer", new HammerItem(new Item.Settings().maxDamage(128)));
+    public static final Item IRON_SAW = register("iron_saw", new SawItem(new Item.Settings().maxDamage(128)));
+    public static final Item IRON_NAILS = register("iron_nails", new Item(new Item.Settings()));
 
     public static <T extends Item> T register(String name, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(IljaTech.MOD_ID, name), item);

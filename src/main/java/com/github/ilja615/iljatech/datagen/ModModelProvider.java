@@ -41,5 +41,18 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_NICKEL_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_ALUMINIUM_ORE);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_CHROME_ORE);
+
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_ACACIA_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_BAMBOO_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_BIRCH_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_CHERRY_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_CRIMSON_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_DARK_OAK_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_JUNGLE_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_MANGROVE_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_OAK_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_SPRUCE_PLANKS);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_WARPED_PLANKS);
+
     }
 }

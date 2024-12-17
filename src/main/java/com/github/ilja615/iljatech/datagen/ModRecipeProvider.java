@@ -10,6 +10,7 @@ import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -32,6 +33,8 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 ModItems.TIN_INGOT, 0.7f, "tin", exporter);
         oreSmeltingBlastingRecipes(List.of(ModBlocks.NICKEL_ORE, ModBlocks.DEEPSLATE_NICKEL_ORE, ModItems.RAW_NICKEL_ORE),
                 ModItems.NICKEL_INGOT, 0.7f, "nickel", exporter);
+
+        plateRecipe(Items.IRON_INGOT, ModBlocks.IRON_PLATE, exporter);
     }
     
     private static void blockFwBwRecipes(Item item, ItemConvertible block, RecipeExporter exporter) {
@@ -52,5 +55,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     private static void oreSmeltingBlastingRecipes(List<ItemConvertible> ores, Item ingot, float xp, String group, RecipeExporter exporter) {
         RecipeProvider.offerBlasting(exporter, ores, RecipeCategory.MISC, ingot, xp, 100, group);
         RecipeProvider.offerSmelting(exporter, ores, RecipeCategory.MISC, ingot, xp, 200, group);
+    }
+
+    private static void plateRecipe(Item item, ItemConvertible plate, RecipeExporter exporter) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, plate)
+                .input('#', item)
+                .input('H', ModItems.IRON_HAMMER)
+                .pattern("H ")
+                .pattern("##")
+                .criterion(hasItem(item), conditionsFromItem(item))
+                .criterion(hasItem(ModItems.IRON_HAMMER), conditionsFromItem(ModItems.IRON_HAMMER))
+                .offerTo(exporter);
     }
 }

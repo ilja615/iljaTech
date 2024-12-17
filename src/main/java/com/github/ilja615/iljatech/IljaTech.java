@@ -1,10 +1,7 @@
 package com.github.ilja615.iljatech;
 
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
-import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModItemGroup;
-import com.github.ilja615.iljatech.init.ModItems;
+import com.github.ilja615.iljatech.init.*;
 import com.github.ilja615.iljatech.worldgen.BiomeModificationEvent;
 import net.fabricmc.api.ModInitializer;
 
@@ -28,6 +25,8 @@ public class IljaTech implements ModInitializer {
 		ModItemGroup.load();
 		BiomeModificationEvent.load();
 		ModBlockEntityTypes.load();
+		ModEffects.load();
+		ModSounds.load();
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);

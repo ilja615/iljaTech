@@ -11,7 +11,7 @@ public class StarParticle extends SpriteBillboardParticle {
 
     protected StarParticle(ClientWorld clientWorld, double x, double y, double z) {
         super(clientWorld, x, y, z);
-        this.maxAge = 35;
+        this.maxAge = 15;
     }
 
     @Override
@@ -23,9 +23,9 @@ public class StarParticle extends SpriteBillboardParticle {
         if (this.age++ >= this.maxAge) {
             this.markDead();
         } else {
-            double dx = 0.125d * Math.cos(this.age / 5.0d);
+            double dx = 0.125d * Math.cos(this.age / 4.0d);
             double dy = 0.04d * Math.cos(this.age / 2.0d);
-            double dz = 0.125d * Math.sin(this.age / 5.0d);
+            double dz = 0.125d * Math.sin(this.age / 4.0d);
             this.move(dx, dy, dz);
         }
     }

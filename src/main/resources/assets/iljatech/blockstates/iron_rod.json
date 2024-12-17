@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "iljatech:block/iron_rod",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "iljatech:block/iron_rod",
+      "x": 90
+    },
+    "axis=y": {
+      "model": "iljatech:block/iron_rod"
+    }
+  }
+}
