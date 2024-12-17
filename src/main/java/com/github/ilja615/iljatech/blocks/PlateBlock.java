@@ -10,6 +10,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -23,15 +24,9 @@ import java.util.Map;
 
 public class PlateBlock extends Block implements Waterloggable
 {
-    public static final BooleanProperty NORTH = Properties.NORTH;
-    public static final BooleanProperty EAST = Properties.EAST;
-    public static final BooleanProperty SOUTH = Properties.SOUTH;
-    public static final BooleanProperty WEST = Properties.WEST;
-    public static final BooleanProperty UP = Properties.UP;
-    public static final BooleanProperty DOWN = Properties.DOWN;
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    public static final DirectionProperty FACING = Properties.FACING;
 
-    public static final Map<Direction, BooleanProperty> FACING_PROPERTIES = ConnectingBlock.FACING_PROPERTIES;
+    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     protected static final VoxelShape UP_AABB = Block.createCuboidShape(0.0d, 14.0d, 0.0d, 16.0d, 16.0d, 16.0d);
     protected static final VoxelShape DOWN_AABB = Block.createCuboidShape(0.0d, 0.0d, 0.0d, 16.0d, 2.0d, 16.0d);
@@ -43,131 +38,79 @@ public class PlateBlock extends Block implements Waterloggable
     public PlateBlock(AbstractBlock.Settings settings)
     {
         super(settings);
-        this.setDefaultState(this.getDefaultState().with(UP, Boolean.valueOf(false)).with(DOWN, Boolean.valueOf(false))
-                .with(NORTH, Boolean.valueOf(false)).with(EAST, Boolean.valueOf(false))
-                .with(SOUTH, Boolean.valueOf(false)).with(WEST, Boolean.valueOf(false))
+        this.setDefaultState(this.getDefaultState()
+                .with(FACING, Direction.NORTH)
                 .with(WATERLOGGED, Boolean.valueOf(false)));
     }
 
     @Override
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext ctx) {
         VoxelShape voxelshape = VoxelShapes.empty();
-        if (state.get(UP)) {
+        if (state.get(FACING) == Direction.UP) {
             voxelshape = VoxelShapes.union(voxelshape, UP_AABB);
         }
 
-        if (state.get(DOWN)) {
+        if (state.get(FACING) == Direction.DOWN) {
             voxelshape = VoxelShapes.union(voxelshape, DOWN_AABB);
         }
 
-        if (state.get(NORTH)) {
+        if (state.get(FACING) == Direction.NORTH) {
             voxelshape = VoxelShapes.union(voxelshape, NORTH_AABB);
         }
 
-        if (state.get(EAST)) {
+        if (state.get(FACING) == Direction.EAST) {
             voxelshape = VoxelShapes.union(voxelshape, EAST_AABB);
         }
 
-        if (state.get(SOUTH)) {
+        if (state.get(FACING) == Direction.SOUTH) {
             voxelshape = VoxelShapes.union(voxelshape, SOUTH_AABB);
         }
 
-        if (state.get(WEST)) {
+        if (state.get(FACING) == Direction.WEST) {
             voxelshape = VoxelShapes.union(voxelshape, WEST_AABB);
         }
         return voxelshape;
-    }
-
-    public static BooleanProperty getPropertyFor(Direction side) {
-        return FACING_PROPERTIES.get(side);
     }
 
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockPos blockPos = ctx.getBlockPos();
-        BlockState blockState = ctx.getWorld().getBlockState(blockPos);
-        if (blockState.isOf(this))
+        if (ctx.getSide().getAxis() == Direction.Axis.Y)
         {
-            // For adding more plates to an existing block
-            if (ctx.getSide().getAxis() == Direction.Axis.Y)
-            {
-                if (ctx.getHitPos().getX() - blockPos.getX() > 0.875D)
-                    return blockState.with(EAST, true);
-                if (ctx.getHitPos().getX() - blockPos.getX() < 0.125D)
-                    return blockState.with(WEST, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() > 0.875D)
-                    return blockState.with(SOUTH, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() < 0.125D)
-                    return blockState.with(NORTH, true);
-            }
-            if (ctx.getSide().getAxis() == Direction.Axis.X)
-            {
-                if (ctx.getHitPos().getY() - blockPos.getY() > 0.875D)
-                    return blockState.with(UP, true);
-                if (ctx.getHitPos().getY() - blockPos.getY() < 0.125D)
-                    return blockState.with(DOWN, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() > 0.875D)
-                    return blockState.with(SOUTH, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() < 0.125D)
-                    return blockState.with(NORTH, true);
-            }
-            if (ctx.getSide().getAxis() == Direction.Axis.Z)
-            {
-                if (ctx.getHitPos().getY() - blockPos.getY() > 0.875D)
-                    return blockState.with(UP, true);
-                if (ctx.getHitPos().getY() - blockPos.getY() < 0.125D)
-                    return blockState.with(DOWN, true);
-                if (ctx.getHitPos().getX() - blockPos.getX() > 0.875D)
-                    return blockState.with(EAST, true);
-                if (ctx.getHitPos().getX() - blockPos.getX() < 0.125D)
-                    return blockState.with(WEST, true);
-            }
-            // Default:
-            if (!blockState.get(FACING_PROPERTIES.get(ctx.getSide().getOpposite())))
-                return blockState.with(FACING_PROPERTIES.get(ctx.getSide().getOpposite()), true);
-            else
-                return blockState;
-        } else {
-            // For placing a new block:
-            if (ctx.getSide().getAxis() == Direction.Axis.Y)
-            {
-                if (ctx.getHitPos().getX() - blockPos.getX() > 0.875D)
-                    return this.getDefaultState().with(EAST, true);
-                if (ctx.getHitPos().getX() - blockPos.getX() < 0.125D)
-                    return this.getDefaultState().with(WEST, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() > 0.875D)
-                    return this.getDefaultState().with(SOUTH, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() < 0.125D)
-                    return this.getDefaultState().with(NORTH, true);
-                return this.getDefaultState().with(FACING_PROPERTIES.get(ctx.getSide().getOpposite()), true);
-            }
-            if (ctx.getSide().getAxis() == Direction.Axis.X)
-            {
-                if (ctx.getHitPos().getY() - blockPos.getY() > 0.875D)
-                    return this.getDefaultState().with(UP, true);
-                if (ctx.getHitPos().getY() - blockPos.getY() < 0.125D)
-                    return this.getDefaultState().with(DOWN, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() > 0.875D)
-                    return this.getDefaultState().with(SOUTH, true);
-                if (ctx.getHitPos().getZ() - blockPos.getZ() < 0.125D)
-                    return this.getDefaultState().with(NORTH, true);
-                return this.getDefaultState().with(FACING_PROPERTIES.get(ctx.getSide().getOpposite()), true);
-            }
-            if (ctx.getSide().getAxis() == Direction.Axis.Z)
-            {
-                if (ctx.getHitPos().getY() - blockPos.getY() > 0.875D)
-                    return this.getDefaultState().with(UP, true);
-                if (ctx.getHitPos().getY() - blockPos.getY() < 0.125D)
-                    return this.getDefaultState().with(DOWN, true);
-                if (ctx.getHitPos().getX() - blockPos.getX() > 0.875D)
-                    return this.getDefaultState().with(EAST, true);
-                if (ctx.getHitPos().getX() - blockPos.getX() < 0.125D)
-                    return this.getDefaultState().with(WEST, true);
-                return this.getDefaultState().with(FACING_PROPERTIES.get(ctx.getSide().getOpposite()), true);
-            }
-            return this.getDefaultState().with(FACING_PROPERTIES.get(ctx.getSide()), true);
+            if (ctx.getHitPos().getX() - blockPos.getX() > 0.75D)
+                return this.getDefaultState().with(FACING, Direction.EAST);
+            if (ctx.getHitPos().getX() - blockPos.getX() < 0.25D)
+                return this.getDefaultState().with(FACING, Direction.WEST);
+            if (ctx.getHitPos().getZ() - blockPos.getZ() > 0.75D)
+                return this.getDefaultState().with(FACING, Direction.SOUTH);
+            if (ctx.getHitPos().getZ() - blockPos.getZ() < 0.25D)
+                return this.getDefaultState().with(FACING, Direction.NORTH);
         }
+        if (ctx.getSide().getAxis() == Direction.Axis.X)
+        {
+            if (ctx.getHitPos().getY() - blockPos.getY() > 0.75D)
+                return this.getDefaultState().with(FACING, Direction.UP);
+            if (ctx.getHitPos().getY() - blockPos.getY() < 0.25D)
+                return this.getDefaultState().with(FACING, Direction.DOWN);
+            if (ctx.getHitPos().getZ() - blockPos.getZ() > 0.75D)
+                return this.getDefaultState().with(FACING, Direction.SOUTH);
+            if (ctx.getHitPos().getZ() - blockPos.getZ() < 0.25D)
+                return this.getDefaultState().with(FACING, Direction.NORTH);
+        }
+        if (ctx.getSide().getAxis() == Direction.Axis.Z)
+        {
+            if (ctx.getHitPos().getY() - blockPos.getY() > 0.75D)
+                return this.getDefaultState().with(FACING, Direction.UP);
+            if (ctx.getHitPos().getY() - blockPos.getY() < 0.25D)
+                return this.getDefaultState().with(FACING, Direction.DOWN);
+            if (ctx.getHitPos().getX() - blockPos.getX() > 0.75D)
+                return this.getDefaultState().with(FACING, Direction.EAST);
+            if (ctx.getHitPos().getX() - blockPos.getX() < 0.25D)
+                return this.getDefaultState().with(FACING, Direction.WEST);
+        }
+        // In case clicked on "middle" of face:
+        return this.getDefaultState().with(FACING, ctx.getSide().getOpposite());
     }
 
     // Watterlogging stuff
@@ -214,6 +157,6 @@ public class PlateBlock extends Block implements Waterloggable
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST, WATERLOGGED);
+        builder.add(FACING, WATERLOGGED);
     }
 }
