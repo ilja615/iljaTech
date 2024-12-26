@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "iljatech:raw_chrome_ore"
-    }
+    "iljatech:raw_chrome_ore"
   ],
   "result": {
     "count": 9,

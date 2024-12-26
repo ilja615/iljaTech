@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "iljatech:raw_aluminium_ore"
-    }
+    "iljatech:raw_aluminium_ore"
   ],
   "result": {
     "count": 9,

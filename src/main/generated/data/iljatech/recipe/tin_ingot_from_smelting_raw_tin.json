@@ -4,9 +4,7 @@
   "cookingtime": 200,
   "experience": 0.7,
   "group": "tin",
-  "ingredient": {
-    "item": "iljatech:raw_tin"
-  },
+  "ingredient": "iljatech:raw_tin",
   "result": {
     "id": "iljatech:tin_ingot"
   }

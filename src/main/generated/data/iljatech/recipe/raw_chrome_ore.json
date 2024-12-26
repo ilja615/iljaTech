@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "iljatech:raw_chrome"
-    }
+    "#": "iljatech:raw_chrome"
   },
   "pattern": [
     "###",

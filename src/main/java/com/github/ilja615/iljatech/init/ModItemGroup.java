@@ -19,8 +19,7 @@ public class ModItemGroup {
                     .stream()
                     .filter(
                             key -> key.getNamespace().equals(IljaTech.MOD_ID))
-                    .map(Registries.ITEM::getOrEmpty)
-                    .map(Optional::orElseThrow)
+                    .map(Registries.ITEM::get)
                     .filter(item -> !ModItems.ITEMGROUP_BLACKLIST.contains(item))
                     .forEach(entries::add))
             .build());

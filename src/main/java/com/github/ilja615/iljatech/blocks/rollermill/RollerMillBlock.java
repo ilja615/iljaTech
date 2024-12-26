@@ -11,7 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ItemScatterer;
@@ -29,7 +29,7 @@ import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.SCHEDULED_STOP;
 
 public class RollerMillBlock extends Block implements BlockEntityProvider, MechPwrAccepter {
-    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
     protected static final VoxelShape BASE_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
     protected static final VoxelShape ROLLER_1_X = Block.createCuboidShape(1.0, 9.0, 0.0, 7.0, 15.0, 16.0);
     protected static final VoxelShape ROLLER_2_X = Block.createCuboidShape(9.0, 9.0, 0.0, 15.0, 15.0, 16.0);

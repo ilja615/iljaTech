@@ -61,7 +61,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {
-        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+        RegistryWrapper.Impl<Enchantment> impl = this.registries.getOrThrow(RegistryKeys.ENCHANTMENT);
         return this.dropsWithSilkTouch(
                 drop,
                 (LootPoolEntry.Builder<?>)this.applyExplosionDecay(
@@ -74,7 +74,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
     }
 
     public LootTable.Builder nickelOreDrops(Block drop) {
-        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
+        RegistryWrapper.Impl<Enchantment> impl = this.registries.getOrThrow(RegistryKeys.ENCHANTMENT);
         return this.dropsWithSilkTouch(
                 drop,
                 (LootPoolEntry.Builder<?>)this.applyExplosionDecay(

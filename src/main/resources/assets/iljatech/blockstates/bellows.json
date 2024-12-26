@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,press=0": {
+      "model": "iljatech:block/bellows_0",
+      "y": 90
+    },
+    "facing=north,press=0": {
+      "model": "iljatech:block/bellows_0"
+    },
+    "facing=south,press=0": {
+      "model": "iljatech:block/bellows_0",
+      "y": 180
+    },
+    "facing=west,press=0": {
+      "model": "iljatech:block/bellows_0",
+      "y": 270
+    },
+    "facing=east,press=1": {
+      "model": "iljatech:block/bellows_1",
+      "y": 90
+    },
+    "facing=north,press=1": {
+      "model": "iljatech:block/bellows_1"
+    },
+    "facing=south,press=1": {
+      "model": "iljatech:block/bellows_1",
+      "y": 180
+    },
+    "facing=west,press=1": {
+      "model": "iljatech:block/bellows_1",
+      "y": 270
+    },
+    "facing=east,press=2": {
+      "model": "iljatech:block/bellows_2",
+      "y": 90
+    },
+    "facing=north,press=2": {
+      "model": "iljatech:block/bellows_2"
+    },
+    "facing=south,press=2": {
+      "model": "iljatech:block/bellows_2",
+      "y": 180
+    },
+    "facing=west,press=2": {
+      "model": "iljatech:block/bellows_2",
+      "y": 270
+    },
+    "facing=east,press=3": {
+      "model": "iljatech:block/bellows_1",
+      "y": 90
+    },
+    "facing=north,press=3": {
+      "model": "iljatech:block/bellows_1"
+    },
+    "facing=south,press=3": {
+      "model": "iljatech:block/bellows_1",
+      "y": 180
+    },
+    "facing=west,press=3": {
+      "model": "iljatech:block/bellows_1",
+      "y": 270
+    }
+  }
+}

@@ -8,17 +8,23 @@ import com.github.ilja615.iljatech.init.ModSounds;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
+import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +33,9 @@ import net.minecraft.world.World;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static net.minecraft.item.Item.BASE_ATTACK_DAMAGE_MODIFIER_ID;
+import static net.minecraft.item.Item.BASE_ATTACK_SPEED_MODIFIER_ID;
 
 public class HammerItem extends Item {
 
@@ -43,24 +52,21 @@ public class HammerItem extends Item {
         BLOCK_CRACKING_MAP = Collections.unmodifiableMap(aMap);
     }
 
-    public HammerItem(Settings settings) {
+    public HammerItem(Item.Settings settings) {
         super(settings);
     }
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return true;
-    }
-
-
-    @Override
-    public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        target.addStatusEffect(new StatusEffectInstance(ModEffects.STUNNED, 30));
+        if (attacker instanceof PlayerEntity playerAttacker) {
+            System.out.println(playerAttacker.getAttackCooldownProgress(0.0F));
+            target.addStatusEffect(new StatusEffectInstance(ModEffects.STUNNED, 30));
+        }
         stack.damage(1, attacker, EquipmentSlot.MAINHAND);
         if (!attacker.getWorld().isClient) {
             attacker.getWorld().playSound(null, target.getBlockPos(), ModSounds.HAMMER, SoundCategory.PLAYERS, 2.5f, 1.5f);
         }
-        super.postDamageEntity(stack, target, attacker);
+        return super.postHit(stack, target, attacker);
     }
 
     @Override
@@ -71,6 +77,23 @@ public class HammerItem extends Item {
             return moreDamaged;
         }
         return ItemStack. EMPTY;
+    }
+
+    public static AttributeModifiersComponent createAttributeModifiers(ToolMaterial material, float baseAttackDamage, float attackSpeed) {
+        return AttributeModifiersComponent.builder()
+            .add(
+                EntityAttributes.ATTACK_DAMAGE,
+                new EntityAttributeModifier(
+                        BASE_ATTACK_DAMAGE_MODIFIER_ID, (double)((float)baseAttackDamage + material.attackDamageBonus()), EntityAttributeModifier.Operation.ADD_VALUE
+                ),
+                AttributeModifierSlot.MAINHAND
+            )
+            .add(
+                EntityAttributes.ATTACK_SPEED,
+                new EntityAttributeModifier(BASE_ATTACK_SPEED_MODIFIER_ID, (double)attackSpeed, EntityAttributeModifier.Operation.ADD_VALUE),
+                AttributeModifierSlot.MAINHAND
+            )
+            .build();
     }
 
     @Override

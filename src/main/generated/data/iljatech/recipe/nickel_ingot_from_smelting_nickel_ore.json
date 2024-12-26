@@ -4,9 +4,7 @@
   "cookingtime": 200,
   "experience": 0.7,
   "group": "nickel",
-  "ingredient": {
-    "item": "iljatech:nickel_ore"
-  },
+  "ingredient": "iljatech:nickel_ore",
   "result": {
     "id": "iljatech:nickel_ingot"
   }
