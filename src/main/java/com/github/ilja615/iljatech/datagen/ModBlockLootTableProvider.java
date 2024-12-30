@@ -58,6 +58,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.NAILED_OAK_PLANKS);
         addDrop(ModBlocks.NAILED_SPRUCE_PLANKS);
         addDrop(ModBlocks.NAILED_WARPED_PLANKS);
+        addDrop(ModBlocks.BELLOWS);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

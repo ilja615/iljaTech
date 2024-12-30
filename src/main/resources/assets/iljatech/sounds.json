@@ -4,6 +4,18 @@
     "sounds": [
       "iljatech:hammer"
     ]
+  },
+  "bellows_inhale": {
+    "subtitle": "subtitles.iljatech.bellows_inhale",
+    "sounds": [
+      "iljatech:bellows_inhale"
+    ]
+  },
+  "bellows_exhale": {
+    "subtitle": "subtitles.iljatech.bellows_exhale",
+    "sounds": [
+      "iljatech:bellows_exhale"
+    ]
   }
 }
 

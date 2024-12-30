@@ -44,12 +44,14 @@
   "block.iljatech.nailed_spruce_planks": "Nailed Spruce Planks",
   "block.iljatech.nailed_warped_planks": "Nailed Warped Planks",
 
+  "block.iljatech.stoked_fire": "Stoked Fire",
+  "block.iljatech.bellows": "Bellows",
+
   "block.iljatech.crank": "Crank",
   "block.iljatech.gearbox": "Gear Box",
   "block.iljatech.wooden_shaft": "Wooden Shaft",
   "block.iljatech.roller_mill": "Roller Mill",
   "block.iljatech.drill": "Drill",
-  "block.iljatech.bellows": "Bellows",
 
   "block.iljatech.iron_rod": "Iron Rod",
   "block.iljatech.iron_plate": "Iron Plate",
@@ -57,5 +59,8 @@
   "block.iljatech.copper_rod": "Copper Rod",
   "block.iljatech.copper_wire": "Copper Wire",
 
-  "effect.iljatech.stunned": "Stunned"
+  "effect.iljatech.stunned": "Stunned",
+
+  "subtitles.iljatech.bellows_inhale": "Bellows Inhale",
+  "subtitles.iljatech.bellows_exhale": "Bellows Exhale"
 }

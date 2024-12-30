@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "#": "#minecraft:planks"
+    "#": "#iljatech:nailed_planks",
+    "X": "minecraft:leather"
   },
   "pattern": [
-    "  #",
-    " # ",
-    "#  "
+    "###",
+    "XXX",
+    "###"
   ],
   "result": {
     "count": 1,
-    "id": "iljatech:wooden_shaft"
+    "id": "iljatech:bellows"
   }
 }

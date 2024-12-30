@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": {
-      "item": "iljatech:iron_plate"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "iljatech:iron_plate",
+    "/": "minecraft:stick"
   },
   "pattern": [
     "/##"

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_side_alt",
+  "textures": {
+    "fire": "iljatech:block/stoked_fire_1"
+  }
+}
