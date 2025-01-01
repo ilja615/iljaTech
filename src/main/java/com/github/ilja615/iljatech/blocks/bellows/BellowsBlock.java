@@ -1,12 +1,16 @@
-package com.github.ilja615.iljatech.blocks;
+package com.github.ilja615.iljatech.blocks.bellows;
 
+import com.github.ilja615.iljatech.blocks.StokedFireBlock;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
+import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.init.ModSounds;
+import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.SlabType;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.ParticleTypes;
@@ -23,8 +27,9 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-public class BellowsBlock extends HorizontalFacingBlock implements MechPwrAccepter {
+public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityProvider, MechPwrAccepter {
     public static final int BLOW_DISTANCE = 5;
     public static final float BLOW_PARTICLE_SPEED = 0.5f;
     public static final IntProperty PRESS = IntProperty.of("press", 0, 3);
@@ -44,12 +49,11 @@ public class BellowsBlock extends HorizontalFacingBlock implements MechPwrAccept
 
     @Override
     public void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount) {
-        BlockState state = world.getBlockState(thisPos);
-        world.setBlockState(thisPos, state.with(PRESS, 1));
-        world.scheduleBlockTick(thisPos, this, 5);
-        exhale(world, thisPos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
-        if (!world.isClient) {
-            world.playSound(null, thisPos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        if (world.getBlockState(thisPos).get(PRESS) == 0) {
+            if (world.getBlockEntity(thisPos) instanceof BellowsBlockEntity bellowsBlockEntity) {
+                this.exhale(world.getBlockState(thisPos), world, thisPos);
+                bellowsBlockEntity.setTicks(5);
+            }
         }
         MechPwrAccepter.super.receivePower(world, thisPos, sideFrom, amount);
     }
@@ -57,14 +61,11 @@ public class BellowsBlock extends HorizontalFacingBlock implements MechPwrAccept
     @Override
     public void onDePower(World world, BlockPos thisPos) {
         if (world.getBlockState(thisPos).get(PRESS) == 2) {
-            BlockState state = world.getBlockState(thisPos);
-            world.setBlockState(thisPos, state.with(PRESS, 3));
-            world.scheduleBlockTick(thisPos, this, 5);
-            if (!world.isClient) {
-                world.playSound(null, thisPos, ModSounds.BELLOWS_INHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            if (world.getBlockEntity(thisPos) instanceof BellowsBlockEntity bellowsBlockEntity) {
+                this.inhale(world.getBlockState(thisPos), world, thisPos);
             }
-            MechPwrAccepter.super.onDePower(world, thisPos);
         }
+        MechPwrAccepter.super.onDePower(world, thisPos);
     }
 
     @Override
@@ -102,38 +103,46 @@ public class BellowsBlock extends HorizontalFacingBlock implements MechPwrAccept
         if (state.getBlock() != this) { return super.onUse(state, world, pos, player, hit); }
 
         if (state.get(PRESS) == 0) {
-            world.setBlockState(pos, state.with(PRESS, 1));
-            world.scheduleBlockTick(pos, this, 5);
-            exhale(world, pos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
-            if (!world.isClient) {
-                world.playSound(null, pos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
-            }
+            this.exhale(state, world, pos);
             return ActionResult.SUCCESS;
         }
         if (state.get(PRESS) == 2) {
-            world.setBlockState(pos, state.with(PRESS, 3));
-            world.scheduleBlockTick(pos, this, 5);
-            if (!world.isClient) {
-                world.playSound(null, pos, ModSounds.BELLOWS_INHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
-            }
+            this.inhale(state, world, pos);
             return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hit);
     }
 
+    @Nullable
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        super.scheduledTick(state, world, pos, random);
-        if (state.getBlock() != this) { return; }
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntityTypes.BELLOWS.instantiate(pos, state);
+    }
 
-        if (state.get(PRESS) == 1) {
-            world.setBlockState(pos, state.with(PRESS, 2));
-        } else if (state.get(PRESS) == 3) {
-            world.setBlockState(pos, state.with(PRESS, 0));
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return TickableBlockEntity.getTicker(world);
+    }
+
+    // Contract
+    public void exhale(BlockState state, World world, BlockPos pos) {
+        world.setBlockState(pos, state.with(PRESS, 1));
+        blowWind(world, pos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
+        if (!world.isClient) {
+            world.playSound(null, pos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
         }
     }
 
-    public static void exhale(World world, BlockPos startPosition, Direction direction, int length, float speed) {
+    // Expand
+    public void inhale(BlockState state, World world, BlockPos pos) {
+        world.setBlockState(pos, state.with(PRESS, 3));
+        if (!world.isClient) {
+            world.playSound(null, pos, ModSounds.BELLOWS_INHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        }
+    }
+
+    public static void blowWind(World world, BlockPos startPosition, Direction direction, int length, float speed) {
         for (int i = 1; i < length + 1; i++) {
             // The wind goes to the next block
             BlockPos newPos = startPosition.offset(direction, i);
