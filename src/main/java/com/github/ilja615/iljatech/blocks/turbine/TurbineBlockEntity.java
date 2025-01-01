@@ -44,7 +44,6 @@ public class TurbineBlockEntity extends BlockEntity implements TickableBlockEnti
         } else if (this.ticks <= 0 && state.get(MechPwrAccepter.ON_OFF_PWR) != MechPwrAccepter.OnOffPwr.OFF) {
             world.setBlockState(pos, state.with(MechPwrAccepter.ON_OFF_PWR, MechPwrAccepter.OnOffPwr.OFF));
             this.ticks = 0;
-            ((MechPwrSender) state.getBlock()).communicateDePowerNeighbors(world, pos);
         }
     }
 

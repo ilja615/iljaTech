@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class BellowsBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int ticks = 0;
+    private int schedule_stop = 0;
 
     public BellowsBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.BELLOWS, pos, state);
@@ -24,16 +25,16 @@ public class BellowsBlockEntity extends BlockEntity implements TickableBlockEnti
 
         if (ticks > 0) {
             this.ticks--;
-        }
 
-        BlockState state = world.getBlockState(pos);
-        if (!state.isOf(ModBlocks.BELLOWS)) { return; }
+            BlockState state = world.getBlockState(pos);
+            if (!state.isOf(ModBlocks.BELLOWS)) { return; }
 
-        if (ticks == 0) {
-            if (state.get(BellowsBlock.PRESS) == 1) {
-                world.setBlockState(pos, state.with(BellowsBlock.PRESS, 2));
-            } else if (state.get(BellowsBlock.PRESS) == 3) {
-                world.setBlockState(pos, state.with(BellowsBlock.PRESS, 0));
+            if (ticks == 0) {
+                if (state.get(BellowsBlock.PRESS) == 1) {
+                    world.setBlockState(pos, state.with(BellowsBlock.PRESS, 2));
+                } else if (state.get(BellowsBlock.PRESS) == 3) {
+                    world.setBlockState(pos, state.with(BellowsBlock.PRESS, 0));
+                }
             }
         }
     }
@@ -56,5 +57,9 @@ public class BellowsBlockEntity extends BlockEntity implements TickableBlockEnti
 
     public void setTicks(int amountTicksTime) {
         this.ticks = amountTicksTime;
+    }
+
+    public void scheduleStopTicks(int amountTicksTime) {
+        this.schedule_stop = amountTicksTime;
     }
 }

@@ -17,14 +17,4 @@ public interface MechPwrSender {
         }
         return false;
     }
-
-    default void communicateDePowerNeighbors(World world, BlockPos thisPos) {
-        for (Direction direction : Direction.values()) {
-            BlockPos newPos = thisPos.offset(direction);
-            Block block = world.getBlockState(newPos).getBlock();
-            if (block instanceof MechPwrAccepter) {
-                ((MechPwrAccepter) block).onDePower(world, newPos);
-            }
-        }
-    }
 }

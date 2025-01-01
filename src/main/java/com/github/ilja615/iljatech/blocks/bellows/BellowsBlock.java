@@ -29,6 +29,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
+
 public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityProvider, MechPwrAccepter {
     public static final int BLOW_DISTANCE = 5;
     public static final float BLOW_PARTICLE_SPEED = 0.5f;
@@ -39,33 +41,44 @@ public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityPr
 
     public BellowsBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(PRESS, 2));
+        this.setDefaultState(this.stateManager.getDefaultState().with(PRESS, 2).with(ON_OFF_PWR, OFF));
     }
 
     @Override
     public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom) {
-        return world.getBlockState(thisPos).get(PRESS) == 0;
+        return world.getBlockState(thisPos).getProperties().contains(ON_OFF_PWR);
     }
 
     @Override
     public void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount) {
+        // When the bellows is powered, it will exhale
         if (world.getBlockState(thisPos).get(PRESS) == 0) {
-            if (world.getBlockEntity(thisPos) instanceof BellowsBlockEntity bellowsBlockEntity) {
-                this.exhale(world.getBlockState(thisPos), world, thisPos);
-                bellowsBlockEntity.setTicks(5);
-            }
+            this.exhale(world.getBlockState(thisPos), world, thisPos);
         }
-        MechPwrAccepter.super.receivePower(world, thisPos, sideFrom, amount);
+
+        // Schedules to stop
+        world.setBlockState(thisPos, world.getBlockState(thisPos).with(ON_OFF_PWR, ON));
+        world.scheduleBlockTick(thisPos, this, 10);
     }
 
     @Override
-    public void onDePower(World world, BlockPos thisPos) {
-        if (world.getBlockState(thisPos).get(PRESS) == 2) {
-            if (world.getBlockEntity(thisPos) instanceof BellowsBlockEntity bellowsBlockEntity) {
-                this.inhale(world.getBlockState(thisPos), world, thisPos);
+    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        super.scheduledTick(state, world, pos, random);
+        if (state.getBlock() != this) {
+            return;
+        }
+        if (state.get(ON_OFF_PWR) == SCHEDULED_STOP) {
+            world.setBlockState(pos, state.with(ON_OFF_PWR, OFF));
+
+            // When the bellows is de-powered, it will inhale
+            if (world.getBlockState(pos).get(PRESS) == 2) {
+                this.inhale(world.getBlockState(pos), world, pos);
             }
         }
-        MechPwrAccepter.super.onDePower(world, thisPos);
+        else if (state.get(ON_OFF_PWR) == ON){
+            world.scheduleBlockTick(pos, this, 10);
+            world.setBlockState(pos, state.with(ON_OFF_PWR, SCHEDULED_STOP));
+        }
     }
 
     @Override
@@ -73,7 +86,7 @@ public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityPr
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(PRESS, FACING);
+        builder.add(PRESS, FACING, ON_OFF_PWR);
     }
 
     @Override
@@ -128,6 +141,9 @@ public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityPr
     // Contract
     public void exhale(BlockState state, World world, BlockPos pos) {
         world.setBlockState(pos, state.with(PRESS, 1));
+        if (world.getBlockEntity(pos) instanceof BellowsBlockEntity bellowsBlockEntity) {
+            bellowsBlockEntity.setTicks(5);
+        }
         blowWind(world, pos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
         if (!world.isClient) {
             world.playSound(null, pos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
@@ -137,6 +153,9 @@ public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityPr
     // Expand
     public void inhale(BlockState state, World world, BlockPos pos) {
         world.setBlockState(pos, state.with(PRESS, 3));
+        if (world.getBlockEntity(pos) instanceof BellowsBlockEntity bellowsBlockEntity) {
+            bellowsBlockEntity.setTicks(5);
+        }
         if (!world.isClient) {
             world.playSound(null, pos, ModSounds.BELLOWS_INHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
         }

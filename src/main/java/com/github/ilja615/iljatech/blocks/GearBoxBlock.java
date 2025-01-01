@@ -64,7 +64,6 @@ public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSende
         // Check if a stop was scheduled and then stop
         if (state.get(SCHEDULE_STOP)) {
             world.setBlockState(pos, state.with(MECH_PWR, 0).with(SCHEDULE_STOP, false));
-            communicateDePowerNeighbors(world, pos);
         }
         else if (state.get(MECH_PWR) > 0) {
             // Collect a list of all possible power output directions

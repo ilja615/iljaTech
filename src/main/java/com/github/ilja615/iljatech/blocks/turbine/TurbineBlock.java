@@ -19,12 +19,12 @@ import org.jetbrains.annotations.Nullable;
 public class TurbineBlock extends Block implements BlockEntityProvider, MechPwrAccepter, MechPwrSender {
     public TurbineBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(ON_OFF_PWR, OnOffPwr.OFF).with(SCHEDULE_STOP, false));
+        this.setDefaultState(this.stateManager.getDefaultState().with(ON_OFF_PWR, OnOffPwr.OFF));
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(ON_OFF_PWR, SCHEDULE_STOP);
+        builder.add(ON_OFF_PWR);
     }
 
     @Nullable

@@ -52,9 +52,4 @@ public interface MechPwrAccepter {
             world.setBlockState(thisPos, world.getBlockState(thisPos).with(SCHEDULE_STOP, false));
         }
     }
-
-    // This is for extra behavior that the block will do when the power supply stops and turns off
-    default void onDePower(World world, BlockPos thisPos) {
-
-    }
 }

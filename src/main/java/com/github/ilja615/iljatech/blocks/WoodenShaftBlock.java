@@ -63,7 +63,6 @@ public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrS
         // Check if a stop was scheduled and then stop
         if (state.get(SCHEDULE_STOP)) {
             world.setBlockState(pos, state.with(MECH_PWR, 0).with(SCHEDULE_STOP, false));
-            communicateDePowerNeighbors(world, pos);
         }
         else if (state.get(MECH_PWR) > 0) {
             // Output to the other side
