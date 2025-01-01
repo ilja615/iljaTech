@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "on_off_pwr=on": {
+      "model": "iljatech:block/turbine_on"
+    },
+    "on_off_pwr=off": {
+      "model": "iljatech:block/turbine_off"
+    },
+    "on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/turbine_on"
+    }
+  }
+}

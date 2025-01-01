@@ -13,11 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+
 import java.util.ArrayList;
 
-public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSender
-{
+public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSender {
     public static final EnumProperty<Direction> FACING = Properties.FACING;
 
     public GearBoxBlock(Settings settings) {
@@ -62,9 +61,10 @@ public class GearBoxBlock extends Block implements MechPwrAccepter, MechPwrSende
         super.scheduledTick(state, world, pos, random);
         if (state.getBlock() != this) { return; }
 
-        // Check if a stop was scheduled
+        // Check if a stop was scheduled and then stop
         if (state.get(SCHEDULE_STOP)) {
             world.setBlockState(pos, state.with(MECH_PWR, 0).with(SCHEDULE_STOP, false));
+            communicateDePowerNeighbors(world, pos);
         }
         else if (state.get(MECH_PWR) > 0) {
             // Collect a list of all possible power output directions

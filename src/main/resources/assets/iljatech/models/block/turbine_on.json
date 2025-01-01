@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:block/cube",
+	"textures": {
+		"particle": "iljatech:block/turbine_on",
+		"north": "iljatech:block/bronze_block",
+		"south": "iljatech:block/bronze_block",
+		"east": "iljatech:block/bronze_block",
+		"west": "iljatech:block/bronze_block",
+		"up": "iljatech:block/gearbox_on",
+		"down": "iljatech:block/turbine_on"
+	}
+}

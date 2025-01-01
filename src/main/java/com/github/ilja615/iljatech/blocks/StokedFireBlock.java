@@ -28,10 +28,7 @@ public class StokedFireBlock extends AbstractFireBlock {
 
     @Override
     protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        if (world.random.nextInt(16) == 0)
-        {
-            Heat.emitHeat(world, pos.up());
-        }
+        Heat.emitHeat(world, pos.up());
         world.scheduleBlockTick(pos, this, 20);
         super.onBlockAdded(state, world, pos, oldState, notify);
     }
@@ -47,10 +44,7 @@ public class StokedFireBlock extends AbstractFireBlock {
         } else {
             world.setBlockState(pos, state.with(STOKED, Math.max(0, stoked - 1)));
             world.scheduleBlockTick(pos, this, 20);
-            if (random.nextInt(16) == 0)
-            {
-                Heat.emitHeat(world, pos.up());
-            }
+            Heat.emitHeat(world, pos.up());
         }
     }
 

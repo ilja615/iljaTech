@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks;
 
+import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.init.ModSounds;
@@ -23,7 +24,9 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class BellowsBlock extends HorizontalFacingBlock {
+public class BellowsBlock extends HorizontalFacingBlock implements MechPwrAccepter {
+    public static final int BLOW_DISTANCE = 5;
+    public static final float BLOW_PARTICLE_SPEED = 0.5f;
     public static final IntProperty PRESS = IntProperty.of("press", 0, 3);
     public static final MapCodec<BellowsBlock> CODEC = createCodec(BellowsBlock::new);
     protected static final VoxelShape SHAPE_1 = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0);
@@ -32,7 +35,36 @@ public class BellowsBlock extends HorizontalFacingBlock {
     public BellowsBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(PRESS, 2));
+    }
 
+    @Override
+    public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom) {
+        return world.getBlockState(thisPos).get(PRESS) == 0;
+    }
+
+    @Override
+    public void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount) {
+        BlockState state = world.getBlockState(thisPos);
+        world.setBlockState(thisPos, state.with(PRESS, 1));
+        world.scheduleBlockTick(thisPos, this, 5);
+        exhale(world, thisPos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
+        if (!world.isClient) {
+            world.playSound(null, thisPos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        }
+        MechPwrAccepter.super.receivePower(world, thisPos, sideFrom, amount);
+    }
+
+    @Override
+    public void onDePower(World world, BlockPos thisPos) {
+        if (world.getBlockState(thisPos).get(PRESS) == 2) {
+            BlockState state = world.getBlockState(thisPos);
+            world.setBlockState(thisPos, state.with(PRESS, 3));
+            world.scheduleBlockTick(thisPos, this, 5);
+            if (!world.isClient) {
+                world.playSound(null, thisPos, ModSounds.BELLOWS_INHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            }
+            MechPwrAccepter.super.onDePower(world, thisPos);
+        }
     }
 
     @Override
@@ -72,7 +104,7 @@ public class BellowsBlock extends HorizontalFacingBlock {
         if (state.get(PRESS) == 0) {
             world.setBlockState(pos, state.with(PRESS, 1));
             world.scheduleBlockTick(pos, this, 5);
-            exhale(world, pos, state.get(FACING), 5, 0.5f);
+            exhale(world, pos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
             if (!world.isClient) {
                 world.playSound(null, pos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
             }

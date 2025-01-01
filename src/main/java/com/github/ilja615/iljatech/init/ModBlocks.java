@@ -4,6 +4,7 @@ import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.*;
 import com.github.ilja615.iljatech.blocks.AxisRodBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
+import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
@@ -54,6 +55,7 @@ public class ModBlocks {
     public static final Block WOODEN_SHAFT = registerWithItem("wooden_shaft", new WoodenShaftBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(IljaTech.MOD_ID, "wooden_shaft")))));
     public static final Block ROLLER_MILL = registerWithItem("roller_mill", new RollerMillBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(IljaTech.MOD_ID, "rolling_mill")))));
     public static final Block DRILL = registerWithItem("drill", new DrillBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque().registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(IljaTech.MOD_ID, "drill")))));
+    public static final Block TURBINE = registerWithItem("turbine", new TurbineBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(IljaTech.MOD_ID, "turbine")))));
 
     public static final Block COPPER_ROD = registerWithItem("copper_rod", new AxisRodBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.COPPER).registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(IljaTech.MOD_ID, "copper_rod")))));
     public static final Block COPPER_WIRE = registerWithItem("copper_wire", new WireBlock(AbstractBlock.Settings.copy(Blocks.RAIL).registryKey(RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(IljaTech.MOD_ID, "copper_wire")))));

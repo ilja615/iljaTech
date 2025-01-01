@@ -32,18 +32,29 @@ public interface MechPwrAccepter {
     }
 
     // If the block is able to receive power or not
-    default boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom)
-    {
+    default boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom) {
         BlockState state = world.getBlockState(thisPos);
-        return (state.getProperties().contains(MECH_PWR));
+        return (state.getProperties().contains(MECH_PWR)) || (state.getProperties().contains(ON_OFF_PWR));
     }
 
     // What the block will do upon receiving power
-    default void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount)
-    {
+    default void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount) {
+        if (amount <= 0) return;
         if (world.getBlockState(thisPos).getProperties().contains(MECH_PWR)) {
             amount = Math.min(amount, 16); // Can not send more than 16 power
             world.setBlockState(thisPos, world.getBlockState(thisPos).with(MECH_PWR, amount));
         }
-    };
+        if (world.getBlockState(thisPos).getProperties().contains(ON_OFF_PWR)) {
+            world.setBlockState(thisPos, world.getBlockState(thisPos).with(ON_OFF_PWR, OnOffPwr.ON));
+        }
+        if (world.getBlockState(thisPos).getProperties().contains(SCHEDULE_STOP)) {
+            // Remove any scheduled stop, since the power was just added
+            world.setBlockState(thisPos, world.getBlockState(thisPos).with(SCHEDULE_STOP, false));
+        }
+    }
+
+    // This is for extra behavior that the block will do when the power supply stops and turns off
+    default void onDePower(World world, BlockPos thisPos) {
+
+    }
 }

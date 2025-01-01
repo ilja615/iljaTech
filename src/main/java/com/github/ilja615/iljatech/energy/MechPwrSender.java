@@ -6,8 +6,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public interface MechPwrSender {
-    default boolean sendPower(World world, BlockPos thisPos, Direction direction, int amount)
-    {
+    default boolean sendPower(World world, BlockPos thisPos, Direction direction, int amount) {
         BlockPos neighborPos = thisPos.offset(direction);
         Block block = world.getBlockState(neighborPos).getBlock();
         if (block instanceof MechPwrAccepter) {
@@ -17,5 +16,15 @@ public interface MechPwrSender {
             }
         }
         return false;
+    }
+
+    default void communicateDePowerNeighbors(World world, BlockPos thisPos) {
+        for (Direction direction : Direction.values()) {
+            BlockPos newPos = thisPos.offset(direction);
+            Block block = world.getBlockState(newPos).getBlock();
+            if (block instanceof MechPwrAccepter) {
+                ((MechPwrAccepter) block).onDePower(world, newPos);
+            }
+        }
     }
 }

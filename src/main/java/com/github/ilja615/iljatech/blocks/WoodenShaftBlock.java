@@ -14,8 +14,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-
 public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrSender
 {
     public static final EnumProperty<Direction> FACING = Properties.FACING;
@@ -62,9 +60,10 @@ public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrS
         super.scheduledTick(state, world, pos, random);
         if (state.getBlock() != this) { return; }
 
-        // Check if a stop was scheduled
+        // Check if a stop was scheduled and then stop
         if (state.get(SCHEDULE_STOP)) {
             world.setBlockState(pos, state.with(MECH_PWR, 0).with(SCHEDULE_STOP, false));
+            communicateDePowerNeighbors(world, pos);
         }
         else if (state.get(MECH_PWR) > 0) {
             // Output to the other side
