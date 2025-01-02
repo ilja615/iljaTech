@@ -1,22 +1,21 @@
 package com.github.ilja615.iljatech.blocks.turbine;
 
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
-import com.github.ilja615.iljatech.energy.MechPwrSender;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 public class TurbineBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int ticks = 0;
+    private float steamY = -1f;
 
     public TurbineBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.TURBINE, pos, state);
@@ -26,6 +25,21 @@ public class TurbineBlockEntity extends BlockEntity implements TickableBlockEnti
     public void tick() {
         if (this.world == null || this.world.isClient)
             return;
+
+        if (steamY != -1.0f) {
+            if (steamY < this.pos.getY()) {
+                // The steam will travel up to the turbine
+                steamY += 0.03f; // Blocks per tick
+                if (this.world.random.nextFloat() < 0.2f) {
+                    ((ServerWorld) world).spawnParticles(ModParticles.STEAM, this.pos.getX() + 0.5f, steamY, this.pos.getZ() + 0.5f, 4, 0.0f, 0.0f, 0.0f, 0.0);
+                }
+            }
+            if (steamY >= this.pos.getY()) {
+                // The steam reached the turbine
+                steamY = -1.0f; // Resets the steam
+                this.ticks = 200; // Starts the turbine
+            }
+        }
 
         if (ticks > 0) {
             this.ticks--;
@@ -67,4 +81,11 @@ public class TurbineBlockEntity extends BlockEntity implements TickableBlockEnti
         this.ticks = amountTicksTime;
     }
 
+    public float getSteamY() {
+        return steamY;
+    }
+
+    public void setSteamY(float startY) {
+        this.steamY = startY;
+    }
 }

@@ -12,8 +12,8 @@ public class SteamParticle extends AnimatedParticle {
         this.velocityX = velocityX + (Math.random() * 2.0d - 1.0d) * 0.03d;
         this.velocityY = velocityY + (Math.random() * 2.0d - 1.0d) * 0.03d;
         this.velocityZ = velocityZ + (Math.random() * 2.0d - 1.0d) * 0.03d;
-        this.scale += 0.2f;
         this.maxAge = 32 + this.random.nextInt(16);
+        this.scale += 0.2;
         this.setSpriteForAge(spriteProvider);
     }
 
@@ -33,7 +33,7 @@ public class SteamParticle extends AnimatedParticle {
         } else {
             this.setSpriteForAge(this.spriteProvider);
             if (this.age % (this.maxAge / 8) < 1)
-                this.scale += 0.1f;
+                this.scale += 0.05f;
             this.move(this.velocityX, this.velocityY, this.velocityZ);
         }
     }

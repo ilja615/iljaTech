@@ -4,6 +4,7 @@ import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.particles.StarParticle;
+import com.github.ilja615.iljatech.particles.SteamParticle;
 import com.github.ilja615.iljatech.renderer.RollerMillRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -22,5 +23,6 @@ public class IljaTechClient implements ClientModInitializer {
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.ROLLER_MILL, RollerMillRenderer::new);
 
 		ParticleFactoryRegistry.getInstance().register(ModParticles.STAR, StarParticle.Factory::new);
+		ParticleFactoryRegistry.getInstance().register(ModParticles.STEAM, SteamParticle.Factory::new);
 	}
 }
