@@ -3,15 +3,12 @@ package com.github.ilja615.iljatech.blocks;
 import com.github.ilja615.iljatech.energy.Heat;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 public class StokedFireBlock extends AbstractFireBlock {
     public static final IntProperty STOKED = IntProperty.of("stoked", 0, 3);

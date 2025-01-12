@@ -16,8 +16,8 @@ import net.minecraft.util.Identifier;
 public class StunnedEffect extends StatusEffect {
     public StunnedEffect() {
         super(StatusEffectCategory.HARMFUL, 0xfbd132);
-        addAttributeModifier(EntityAttributes.MOVEMENT_SPEED, Identifier.of(IljaTech.MOD_ID, "stunned"), -50.0F, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
-        addAttributeModifier(EntityAttributes.JUMP_STRENGTH, Identifier.of(IljaTech.MOD_ID, "stunned"), -50.0F, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, Identifier.of(IljaTech.MOD_ID, "stunned"), -50.0F, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        addAttributeModifier(EntityAttributes.GENERIC_JUMP_STRENGTH, Identifier.of(IljaTech.MOD_ID, "stunned"), -50.0F, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class StunnedEffect extends StatusEffect {
     }
 
     @Override
-    public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if (!entity.isPlayer()) {
             entity.setMovementSpeed(0.0f);
         }
@@ -34,6 +34,6 @@ public class StunnedEffect extends StatusEffect {
             ((ServerWorld) entity.getWorld()).spawnParticles(ModParticles.STAR, entity.getX(), entity.getY() + entity.getHeight() + 0.5d, entity.getZ() - 0.25d, 1, 0.0D, 0.0D, 0.0D, 1.0D);
         }
 
-        return super.applyUpdateEffect(world, entity, amplifier);
+        return super.applyUpdateEffect(entity, amplifier);
     }
 }

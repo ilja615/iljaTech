@@ -17,8 +17,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.block.WireOrientation;
-import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public class WireBlock extends Block {
@@ -72,20 +70,17 @@ public class WireBlock extends Block {
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
-        if (!world.isClient && world.getBlockState(pos).isOf(this)) {
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {        if (!world.isClient && world.getBlockState(pos).isOf(this)) {
             this.updateBlockState(world, pos, state, false);
             world.scheduleBlockTick(pos, this, 1);
         }
-        super.neighborUpdate(state, world, pos, sourceBlock, wireOrientation, notify);
     }
 
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldAccess world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-        if (!world.isClient()) {
+    @Override
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {        if (!world.isClient()) {
             world.scheduleBlockTick(pos, this, 1);
         }
-        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
-    }
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);    }
 
     @Override
     protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {

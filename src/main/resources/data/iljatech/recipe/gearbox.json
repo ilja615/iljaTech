@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "#": "iljatech:bronze_gear"
+    "#": {
+      "item": "iljatech:bronze_gear"
+    }
   },
   "pattern": [
     "##",

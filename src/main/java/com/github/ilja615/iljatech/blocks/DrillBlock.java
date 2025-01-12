@@ -8,8 +8,8 @@ import net.minecraft.block.WallMountedBlock;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -23,7 +23,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 
 import java.util.List;
 
@@ -47,10 +46,11 @@ public class DrillBlock extends Block implements MechPwrAccepter {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-        return state.get(FACING) == direction && !state.canPlaceAt(world, pos)
+    protected BlockState getStateForNeighborUpdate(
+            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
+    ) {        return state.get(FACING) == direction && !state.canPlaceAt(world, pos)
             ? Blocks.AIR.getDefaultState()
-            : super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+            : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
@@ -69,11 +69,11 @@ public class DrillBlock extends Block implements MechPwrAccepter {
         BlockState thisState = world.getBlockState(thisPos);
         if (thisState.getBlock() instanceof DrillBlock) {
             BlockPos miningPos = thisPos.offset(thisState.get(FACING));
-            if (miningPos.getY() > world.getBottomY() && miningPos.getY() < world.getTopYInclusive() && world.getWorldBorder().contains(miningPos)) {
+            if (miningPos.getY() > world.getBottomY() && miningPos.getY() < world.getTopY() && world.getWorldBorder().contains(miningPos)) {
                 BlockState state = world.getBlockState(miningPos);
                 if (!state.isAir() && state.getHardness(world, miningPos) >= 0 && !state.isIn(BlockTags.INCORRECT_FOR_IRON_TOOL)) {
                     List<ItemStack> drops = state.getDroppedStacks(
-                            new LootWorldContext.Builder(world)
+                            new LootContextParameterSet.Builder(world)
                                     .add(LootContextParameters.TOOL, Items.IRON_PICKAXE.getDefaultStack())
                                     .add(LootContextParameters.ORIGIN, miningPos.toCenterPos())
                     );

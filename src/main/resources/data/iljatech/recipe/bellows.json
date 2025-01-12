@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "#": "#iljatech:nailed_planks",
-    "X": "minecraft:leather"
+    "#": {
+      "tag": "iljatech:nailed_planks"
+    },
+    "X": {
+      "item": "minecraft:leather"
+    }
   },
   "pattern": [
     "###",

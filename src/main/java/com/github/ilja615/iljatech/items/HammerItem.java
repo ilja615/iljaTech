@@ -5,6 +5,7 @@ import com.github.ilja615.iljatech.init.ModEffects;
 import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.init.ModSounds;
+import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -37,7 +38,7 @@ import java.util.Map;
 import static net.minecraft.item.Item.BASE_ATTACK_DAMAGE_MODIFIER_ID;
 import static net.minecraft.item.Item.BASE_ATTACK_SPEED_MODIFIER_ID;
 
-public class HammerItem extends Item {
+public class HammerItem extends Item implements FabricItem {
 
     private static final Map<Block, Block> BLOCK_CRACKING_MAP;
     static {
@@ -59,7 +60,8 @@ public class HammerItem extends Item {
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (attacker instanceof PlayerEntity playerAttacker) {
-            System.out.println(playerAttacker.getAttackCooldownProgress(0.0F));
+            // I want to make it so it only works when the weapon cooldown was fully charged but idk how.
+//            System.out.println(playerAttacker.getAttackCooldownProgress(0.0F));
             target.addStatusEffect(new StatusEffectInstance(ModEffects.STUNNED, 30));
         }
         stack.damage(1, attacker, EquipmentSlot.MAINHAND);
@@ -67,6 +69,11 @@ public class HammerItem extends Item {
             attacker.getWorld().playSound(null, target.getBlockPos(), ModSounds.HAMMER, SoundCategory.PLAYERS, 2.5f, 1.5f);
         }
         return super.postHit(stack, target, attacker);
+    }
+
+    @Override
+    public boolean hasRecipeRemainder() {
+        return true;
     }
 
     @Override
@@ -78,18 +85,29 @@ public class HammerItem extends Item {
         }
         return ItemStack. EMPTY;
     }
+//
+//
+//    @Override
+//    public ItemStack getRecipeRemainder(ItemStack stack) {
+//        if (stack.getDamage() < stack.getMaxDamage() - 1) {
+//            ItemStack moreDamaged = stack.copy();
+//            moreDamaged.setDamage(stack.getDamage() + 1);
+//            return moreDamaged;
+//        }
+//        return ItemStack. EMPTY;
+//    }
 
     public static AttributeModifiersComponent createAttributeModifiers(ToolMaterial material, float baseAttackDamage, float attackSpeed) {
         return AttributeModifiersComponent.builder()
             .add(
-                EntityAttributes.ATTACK_DAMAGE,
+                EntityAttributes.GENERIC_ATTACK_DAMAGE,
                 new EntityAttributeModifier(
-                        BASE_ATTACK_DAMAGE_MODIFIER_ID, (double)((float)baseAttackDamage + material.attackDamageBonus()), EntityAttributeModifier.Operation.ADD_VALUE
+                        BASE_ATTACK_DAMAGE_MODIFIER_ID, (double)((float)baseAttackDamage + material.getAttackDamage()), EntityAttributeModifier.Operation.ADD_VALUE
                 ),
                 AttributeModifierSlot.MAINHAND
             )
             .add(
-                EntityAttributes.ATTACK_SPEED,
+                EntityAttributes.GENERIC_ATTACK_SPEED,
                 new EntityAttributeModifier(BASE_ATTACK_SPEED_MODIFIER_ID, (double)attackSpeed, EntityAttributeModifier.Operation.ADD_VALUE),
                 AttributeModifierSlot.MAINHAND
             )

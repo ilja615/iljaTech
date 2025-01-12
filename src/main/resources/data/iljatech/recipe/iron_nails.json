@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "equipment",
   "ingredients": [
-    "iljatech:iron_rod",
-    "iljatech:iron_saw"
+    {
+      "item": "iljatech:iron_rod"
+    },
+    {
+      "item": "iljatech:iron_saw"
+    }
   ],
   "result": {
     "count": 2,
