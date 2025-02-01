@@ -5,13 +5,16 @@ import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
@@ -59,6 +62,8 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.NAILED_SPRUCE_PLANKS);
         addDrop(ModBlocks.NAILED_WARPED_PLANKS);
         addDrop(ModBlocks.BELLOWS);
+        addDrop(ModBlocks.FIRE_BRICKS);
+        this.addDrop(ModBlocks.FIRE_CLAY, block -> this.drops(block, ModItems.FIRE_CLAY_BALL, ConstantLootNumberProvider.create(4.0F)));
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

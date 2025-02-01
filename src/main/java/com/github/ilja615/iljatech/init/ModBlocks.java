@@ -49,6 +49,8 @@ public class ModBlocks {
 
     public static final Block BELLOWS = registerWithItem("bellows", new BellowsBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block STOKED_FIRE = registerWithItem("stoked_fire", new StokedFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.BRIGHT_RED).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));
+    public static final Block FIRE_CLAY = registerWithItem("fire_clay", new Block(AbstractBlock.Settings.copy(Blocks.CLAY)));
+    public static final Block FIRE_BRICKS = registerWithItem("fire_bricks", new Block(AbstractBlock.Settings.copy(Blocks.BRICKS)));
 
     public static final Block CRANK = registerWithItem("crank", new CrankBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).pistonBehavior(PistonBehavior.DESTROY).noCollision()));
     public static final Block GEARBOX = registerWithItem("gearbox", new GearBoxBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));

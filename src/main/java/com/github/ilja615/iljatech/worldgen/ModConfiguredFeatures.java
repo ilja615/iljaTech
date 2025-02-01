@@ -11,10 +11,10 @@ import net.minecraft.structure.rule.BlockMatchRuleTest;
 import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.structure.rule.TagMatchRuleTest;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.world.gen.blockpredicate.BlockPredicate;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.stateprovider.PredicatedStateProvider;
 
 import java.util.List;
 
@@ -25,13 +25,14 @@ public class ModConfiguredFeatures {
     public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_gravel_aluminium_ore");
     public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_large_gravel_aluminium_ore");
     public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_CHROME_ORE_KEY = registerKey("overworld_chrome_ore");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_FIRE_CLAY_KEY = registerKey("overworld_fire_clay");
 
     public static void bootStrap(Registerable<ConfiguredFeature<?, ?>> context) {
         RuleTest stoneOreReplaceables = new TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslateOreReplaceables = new TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
         RuleTest sandStoneOreReplaceables = new BlockMatchRuleTest(Blocks.SANDSTONE);
         RuleTest gravelOreReplaceables = new BlockMatchRuleTest(Blocks.GRAVEL);
-
+        RuleTest ruleTest = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
 
         List<OreFeatureConfig.Target> overworldTinTargets = List.of(
                 OreFeatureConfig.createTarget(stoneOreReplaceables, ModBlocks.TIN_ORE.getDefaultState()),
@@ -53,6 +54,8 @@ public class ModConfiguredFeatures {
         context.register(OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldGravelAluminiumTargets, 6)));
         context.register(OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldGravelAluminiumTargets, 48)));
         context.register(OVERWORLD_CHROME_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldChromeTargets, 5)));
+        context.register(OVERWORLD_FIRE_CLAY_KEY, new ConfiguredFeature<>(Feature.DISK, new DiskFeatureConfig(
+                        PredicatedStateProvider.of(ModBlocks.FIRE_CLAY), BlockPredicate.matchingBlocks(List.of(Blocks.DIRT, ModBlocks.FIRE_CLAY)), UniformIntProvider.create(2, 3), 1)));
     }
 
     private static RegistryKey<ConfiguredFeature<?, ?>> registerKey(String name) {

@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": "minecraft:iron_ingot",
-    "H": "iljatech:iron_hammer"
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "H": {
+      "item": "iljatech:iron_hammer"
+    }
   },
   "pattern": [
     "H ",

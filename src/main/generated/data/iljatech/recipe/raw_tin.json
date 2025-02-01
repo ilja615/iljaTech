@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "iljatech:raw_tin_ore"
+    {
+      "item": "iljatech:raw_tin_ore"
+    }
   ],
   "result": {
     "count": 9,

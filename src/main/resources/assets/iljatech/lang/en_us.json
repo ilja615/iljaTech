@@ -12,9 +12,19 @@
   "item.iljatech.nickel_ingot": "Nickel Ingot",
   "item.iljatech.aluminium_ingot": "Aluminium Ingot",
   "item.iljatech.chrome_ingot": "Chrome Ingot",
+  "item.iljatech.crushed_iron_ore": "Crushed Raw Iron",
+  "item.iljatech.crushed_gold_ore": "Crushed Raw Gold",
+  "item.iljatech.crushed_copper_ore": "Crushed Raw Copper",
+  "item.iljatech.crushed_tin_ore": "Crushed Raw Tin",
+  "item.iljatech.crushed_nickel_ore": "Crushed Raw Nickel",
+  "item.iljatech.crushed_aluminium_ore": "Crushed Raw Aluminium",
+  "item.iljatech.crushed_chrome_ore": "Crushed Raw Chrome",
 
   "item.iljatech.iron_hammer": "Iron Hammer",
   "item.iljatech.iron_saw": "Iron Saw",
+
+  "item.iljatech.fire_clay_ball": "Fire Clay Ball",
+  "item.iljatech.fire_brick": "Fire Brick",
 
   "item.iljatech.bronze_gear": "Bronze Gear",
 
@@ -52,12 +62,16 @@
   "block.iljatech.wooden_shaft": "Wooden Shaft",
   "block.iljatech.roller_mill": "Roller Mill",
   "block.iljatech.drill": "Drill",
+  "block.iljatech.turbine": "Turbine",
 
   "block.iljatech.iron_rod": "Iron Rod",
   "block.iljatech.iron_plate": "Iron Plate",
   "item.iljatech.iron_nails": "Iron Nails",
   "block.iljatech.copper_rod": "Copper Rod",
   "block.iljatech.copper_wire": "Copper Wire",
+
+  "block.iljatech.fire_clay": "Fire Clay",
+  "block.iljatech.fire_bricks": "Fire Bricks",
 
   "effect.iljatech.stunned": "Stunned",
 

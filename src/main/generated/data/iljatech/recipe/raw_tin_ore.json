@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "iljatech:raw_tin"
+    "#": {
+      "item": "iljatech:raw_tin"
+    }
   },
   "pattern": [
     "###",

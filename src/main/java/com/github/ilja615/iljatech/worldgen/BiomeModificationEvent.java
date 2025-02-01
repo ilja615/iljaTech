@@ -36,5 +36,10 @@ public class BiomeModificationEvent {
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_CHROME_ORE_KEY
         );
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInOverworld(),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                ModPlacedFeatures.OVERWORLD_FIRE_CLAY_KEY
+        );
     }
 }

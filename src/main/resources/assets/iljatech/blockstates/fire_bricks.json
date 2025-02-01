@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "iljatech:block/fire_bricks"
+      },
+      {
+        "model": "iljatech:block/fire_bricks1"
+      },
+      {
+        "model": "iljatech:block/fire_bricks2"
+      }
+    ]
+  }
+}

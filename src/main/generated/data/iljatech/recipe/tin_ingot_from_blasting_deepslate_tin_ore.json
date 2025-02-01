@@ -4,7 +4,9 @@
   "cookingtime": 100,
   "experience": 0.7,
   "group": "tin",
-  "ingredient": "iljatech:deepslate_tin_ore",
+  "ingredient": {
+    "item": "iljatech:deepslate_tin_ore"
+  },
   "result": {
     "id": "iljatech:tin_ingot"
   }

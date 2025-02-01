@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "iljatech:raw_aluminium"
+    "#": {
+      "item": "iljatech:raw_aluminium"
+    }
   },
   "pattern": [
     "###",

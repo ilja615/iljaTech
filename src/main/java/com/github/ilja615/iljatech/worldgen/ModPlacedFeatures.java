@@ -1,14 +1,17 @@
 package com.github.ilja615.iljatech.worldgen;
 
 import com.github.ilja615.iljatech.IljaTech;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.YOffset;
+import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.PlacedFeature;
+import net.minecraft.world.gen.feature.PlacedFeatures;
 import net.minecraft.world.gen.placementmodifier.*;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class ModPlacedFeatures {
     public static final RegistryKey<PlacedFeature> OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_gravel_aluminium_ore");
     public static final RegistryKey<PlacedFeature> OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_large_gravel_aluminium_ore");
     public static final RegistryKey<PlacedFeature> OVERWORLD_CHROME_ORE_KEY = registerKey("overworld_chrome_ore");
+    public static final RegistryKey<PlacedFeature> OVERWORLD_FIRE_CLAY_KEY = registerKey("overworld_fire_clay");
 
     public static void bootStrap(Registerable<PlacedFeature> context) {
         RegistryEntryLookup<ConfiguredFeature<?, ?>> registryLookup = context.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
@@ -48,6 +52,9 @@ public class ModPlacedFeatures {
                 registryLookup.getOrThrow(ModConfiguredFeatures.OVERWORLD_CHROME_ORE_KEY),
                 List.copyOf(Modifiers.modifiersWithCount(4,
                         HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.aboveBottom(80))))));
+        context.register(OVERWORLD_FIRE_CLAY_KEY, new PlacedFeature(
+                registryLookup.getOrThrow(ModConfiguredFeatures.OVERWORLD_FIRE_CLAY_KEY),
+                List.of(SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BlockFilterPlacementModifier.of(BlockPredicate.matchingFluids(Fluids.WATER)), BiomePlacementModifier.of())));
     }
 
     private static RegistryKey<PlacedFeature> registerKey(String name) {

@@ -35,7 +35,8 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         oreSmeltingBlastingRecipes(List.of(ModBlocks.NICKEL_ORE, ModBlocks.DEEPSLATE_NICKEL_ORE, ModItems.RAW_NICKEL_ORE),
                 ModItems.NICKEL_INGOT, 0.7f, "nickel", exporter);
         plateRecipe(Items.IRON_INGOT, ModBlocks.IRON_PLATE, exporter);
-    }
+        RecipeProvider.offerSmelting(exporter, List.of(ModItems.FIRE_CLAY_BALL), RecipeCategory.MISC, ModItems.FIRE_BRICK, 0.4f, 200, "fire_brick");
+}
 
     private static void blockFwBwRecipes(Item item, ItemConvertible block, RecipeExporter exporter) {
         ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, block)

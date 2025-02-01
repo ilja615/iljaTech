@@ -24,8 +24,16 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.NICKEL_INGOT, Models.GENERATED);
         itemModelGenerator.register(ModItems.ALUMINIUM_INGOT, Models.GENERATED);
         itemModelGenerator.register(ModItems.CHROME_INGOT, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_RAW_ALUMINIUM, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_RAW_CHROME, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_RAW_NICKEL, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_RAW_COPPER, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_RAW_GOLD, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_RAW_TIN, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_RAW_IRON, Models.GENERATED);
         itemModelGenerator.register(ModItems.BRONZE_GEAR, Models.GENERATED);
-
+        itemModelGenerator.register(ModItems.FIRE_CLAY_BALL, Models.GENERATED);
+        itemModelGenerator.register(ModItems.FIRE_BRICK, Models.GENERATED);
     }
 
     @Override
@@ -54,5 +62,6 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_SPRUCE_PLANKS);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_WARPED_PLANKS);
 
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.FIRE_CLAY);
     }
 }
