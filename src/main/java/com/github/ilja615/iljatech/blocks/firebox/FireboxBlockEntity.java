@@ -1,32 +1,30 @@
-package com.github.ilja615.iljatech.blocks.rollermill;
+package com.github.ilja615.iljatech.blocks.firebox;
 
+import com.github.ilja615.iljatech.energy.Heat;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class RollerMillBlockEntity extends BlockEntity implements TickableBlockEntity {
+public class FireboxBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int ticks = 0;
+    private int stokedTicks = 0;
 
-    // TODO: Might change it to SidedInventory later
-    private final SimpleInventory inventory = new SimpleInventory(2) {
+    private final SimpleInventory inventory = new SimpleInventory(1) {
         @Override
         public void markDirty() {
             super.markDirty();
@@ -35,8 +33,8 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
     };
     private final InventoryStorage storage = InventoryStorage.of(inventory,null);
 
-    public RollerMillBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntityTypes.ROLLER_MILL, pos, state);
+    public FireboxBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.FIREBOX, pos, state);
     }
 
     @Override
@@ -44,28 +42,47 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
         if (this.world == null || this.world.isClient)
             return;
 
-        ItemStack stack0 = this.inventory.getStack(0);
-        ItemStack stack1 = this.inventory.getStack(1);
-        if (stack0.isEmpty()) {
-            this.ticks = 0;
+        if (ticks > 0) {
+            this.ticks--;
+            if (ticks % 100 == 0)
+            {
+                Heat.emitHeat(world, pos.up());
+                int ash_level = world.getBlockState(pos).get(FireboxBlock.ASH_LEVEL);
+                world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.ASH_LEVEL, Math.min(ash_level + 1, 5)), 3);
+            }
         }
-        if (ticks++ > 100) {
-            this.ticks = 0;
-            if (stack1.isEmpty()) {
-                if (stack0.isOf(Items.COPPER_INGOT)) {
-                    this.inventory.setStack(0, ItemStack.EMPTY);
-                    this.inventory.setStack(1, new ItemStack(ModBlocks.COPPER_ROD, 2));
-                    ((ServerWorld) this.world).getChunkManager().markForUpdate(this. getPos());
-                    this.update();
-                }
-                if (stack0.isOf(ModBlocks.COPPER_ROD.asItem())) {
-                    this.inventory.setStack(0, ItemStack.EMPTY);
-                    this.inventory.setStack(1, new ItemStack(ModBlocks.COPPER_WIRE, 2));
-                    ((ServerWorld) this.world).getChunkManager().markForUpdate(this. getPos());
-                    this.update();
+        if (stokedTicks > 0) {
+            this.stokedTicks--;
+        }
+        ItemStack itemstack = this.inventory.getStack(0);
+        if (ticks == 0)
+        {
+            if (FuelRegistry.INSTANCE.get(itemstack.getItem()) != null && FuelRegistry.INSTANCE.get(itemstack.getItem()) > 0)
+                ticks = FuelRegistry.INSTANCE.get(itemstack.getItem());
+            if (ticks > 0)
+            {
+                if (!itemstack.isEmpty()) {
+                    itemstack.decrement(1);
+                    this.inventory.setStack(0, itemstack);
                 }
             }
         }
+
+        if (ticks > 0) {
+            if (world.getBlockState(pos).get(FireboxBlock.ASH_LEVEL) == 5) {
+                world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.CHOKING), 3);
+            } else {
+                if (stokedTicks > 0) {
+                    world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.STOKED), 3);
+                } else {
+                    world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.ON), 3);
+                }
+            }
+        } else {
+            world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.OFF), 3);
+        }
+
+        this.update();
     }
 
     @Override
@@ -97,6 +114,14 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
 
     public int getTicks() {
         return ticks;
+    }
+
+    public int getStokedTicks() {
+        return ticks;
+    }
+
+    public void setStokedTicks(int a) {
+        this.stokedTicks = a;
     }
 
     private void update() {

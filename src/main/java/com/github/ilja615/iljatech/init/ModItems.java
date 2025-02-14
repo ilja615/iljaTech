@@ -44,6 +44,7 @@ public class ModItems {
 
     public static final Item FIRE_CLAY_BALL = register("fire_clay_ball", new Item(new Item.Settings()));
     public static final Item FIRE_BRICK = register("fire_brick", new Item(new Item.Settings()));
+    public static final Item ASH = register("ash", new Item(new Item.Settings()));
 
     public static <T extends Item> T register(String name, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(IljaTech.MOD_ID, name), item);

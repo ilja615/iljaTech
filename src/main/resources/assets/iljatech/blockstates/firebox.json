@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,lit=off": {
+      "model": "iljatech:block/firebox_off",
+      "y": 90
+    },
+    "facing=east,lit=on": {
+      "model": "iljatech:block/firebox_on",
+      "y": 90
+    },
+    "facing=east,lit=stoked": {
+      "model": "iljatech:block/firebox_stoked",
+      "y": 90
+    },
+    "facing=east,lit=choking": {
+      "model": "iljatech:block/firebox_choking",
+      "y": 90
+    },
+    "facing=north,lit=off": {
+      "model": "iljatech:block/firebox_off"
+    },
+    "facing=north,lit=on": {
+      "model": "iljatech:block/firebox_on"
+    },
+    "facing=north,lit=stoked": {
+      "model": "iljatech:block/firebox_stoked"
+    },
+    "facing=north,lit=choking": {
+      "model": "iljatech:block/firebox_choking"
+    },
+    "facing=south,lit=off": {
+      "model": "iljatech:block/firebox_off",
+      "y": 180
+    },
+    "facing=south,lit=on": {
+      "model": "iljatech:block/firebox_on",
+      "y": 180
+    },
+    "facing=south,lit=stoked": {
+      "model": "iljatech:block/firebox_stoked",
+      "y": 180
+    },
+    "facing=south,lit=choking": {
+      "model": "iljatech:block/firebox_choking",
+      "y": 180
+    },
+    "facing=west,lit=off": {
+      "model": "iljatech:block/firebox_off",
+      "y": 270
+    },
+    "facing=west,lit=on": {
+      "model": "iljatech:block/firebox_on",
+      "y": 270
+    },
+    "facing=west,lit=stoked": {
+      "model": "iljatech:block/firebox_stoked",
+      "y": 270
+    },
+    "facing=west,lit=choking": {
+      "model": "iljatech:block/firebox_choking",
+      "y": 270
+    }
+  }
+}

@@ -45,7 +45,7 @@ public class Heat {
             if (!flag) {
                 //LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(blockPos), world, blockPos);
                 if (!world.isClient) {
-                    ((ServerWorld) world).spawnParticles(ModParticles.STEAM, blockPos.getX() + world.random.nextFloat() * 0.5f + 0.25f, blockPos.getY() + world.random.nextFloat() * 0.5f + 0.25f, blockPos.getZ() + world.random.nextFloat() * 0.5f + 0.25f, 5, 0.0f, 0.3f, 0.0f, 0.0);
+                    ((ServerWorld) world).spawnParticles(ModParticles.STEAM, blockPos.getX() + world.random.nextFloat() * 0.5f + 0.25f, blockPos.getY() + world.random.nextFloat() * 0.5f + 1.0f, blockPos.getZ() + world.random.nextFloat() * 0.5f + 0.25f, 5, 0.0f, 0.3f, 0.0f, 0.0);
                 }
 
                 List<ItemEntity> itemEntityList= world.getEntitiesByClass(ItemEntity.class, new Box(blockPos), EntityPredicates.EXCEPT_SPECTATOR);

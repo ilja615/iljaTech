@@ -1,6 +1,8 @@
 package com.github.ilja615.iljatech.blocks.bellows;
 
 import com.github.ilja615.iljatech.blocks.StokedFireBlock;
+import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
+import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
@@ -169,6 +171,11 @@ public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityPr
             // The wind can stoke a fires.
             if (world.getBlockState(newPos).getBlock() == Blocks.FIRE || world.getBlockState(newPos).isOf(ModBlocks.STOKED_FIRE))
                 world.setBlockState(newPos, ModBlocks.STOKED_FIRE.getDefaultState().with(StokedFireBlock.STOKED, 3), 3);
+
+            // The wind can stoke a fire in firebox
+            if (world.getBlockState(newPos).getBlock() == ModBlocks.FIREBOX && world.getBlockEntity(newPos) instanceof FireboxBlockEntity fireboxBlockEntity)
+                if (world.getBlockState(newPos).get(FireboxBlock.LIT) != FireboxBlock.Lit.OFF)
+                    fireboxBlockEntity.setStokedTicks(80);
 
             // The wind stops when there was a block that fully occupies the block face
             if (Block.isFaceFullSquare(world.getBlockState(newPos).getCollisionShape(world, newPos), direction.getOpposite()))

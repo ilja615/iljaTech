@@ -34,6 +34,7 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.BRONZE_GEAR, Models.GENERATED);
         itemModelGenerator.register(ModItems.FIRE_CLAY_BALL, Models.GENERATED);
         itemModelGenerator.register(ModItems.FIRE_BRICK, Models.GENERATED);
+        itemModelGenerator.register(ModItems.ASH, Models.GENERATED);
     }
 
     @Override

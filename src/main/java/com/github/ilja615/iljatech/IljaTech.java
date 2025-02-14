@@ -32,6 +32,6 @@ public class IljaTech implements ModInitializer {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);
 		});
 
-		ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
+		ModBlockEntityTypes.registerStorages();
 	}
 }

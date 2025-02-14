@@ -25,6 +25,7 @@
 
   "item.iljatech.fire_clay_ball": "Fire Clay Ball",
   "item.iljatech.fire_brick": "Fire Brick",
+  "item.iljatech.ash": "Ashes",
 
   "item.iljatech.bronze_gear": "Bronze Gear",
 
@@ -54,8 +55,11 @@
   "block.iljatech.nailed_spruce_planks": "Nailed Spruce Planks",
   "block.iljatech.nailed_warped_planks": "Nailed Warped Planks",
 
+  "block.iljatech.fire_clay": "Fire Clay",
+  "block.iljatech.fire_bricks": "Fire Bricks",
   "block.iljatech.stoked_fire": "Stoked Fire",
   "block.iljatech.bellows": "Bellows",
+  "block.iljatech.firebox": "Firebox",
 
   "block.iljatech.crank": "Crank",
   "block.iljatech.gearbox": "Gear Box",
@@ -69,9 +73,6 @@
   "item.iljatech.iron_nails": "Iron Nails",
   "block.iljatech.copper_rod": "Copper Rod",
   "block.iljatech.copper_wire": "Copper Wire",
-
-  "block.iljatech.fire_clay": "Fire Clay",
-  "block.iljatech.fire_bricks": "Fire Bricks",
 
   "effect.iljatech.stunned": "Stunned",
 

@@ -2,10 +2,12 @@ package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.bellows.BellowsBlockEntity;
+import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
@@ -19,9 +21,15 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(TurbineBlockEntity::new, ModBlocks.TURBINE).build());
     public static final BlockEntityType<BellowsBlockEntity> BELLOWS = register("bellows",
             FabricBlockEntityTypeBuilder.create(BellowsBlockEntity::new, ModBlocks.BELLOWS).build());
+    public static final BlockEntityType<FireboxBlockEntity> FIREBOX = register("firebox",
+            FabricBlockEntityTypeBuilder.create(FireboxBlockEntity::new, ModBlocks.FIREBOX).build());
 
-    public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType<T> type)
-    {
+    public static void registerStorages() {
+        ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
+        ItemStorage.SIDED.registerForBlockEntity(FireboxBlockEntity::getInventoryProvider, ModBlockEntityTypes.FIREBOX);
+    }
+
+    public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType<T> type) {
         return Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(IljaTech.MOD_ID, name), type);
     }
 

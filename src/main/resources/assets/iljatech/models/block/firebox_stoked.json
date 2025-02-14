@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "iljatech:block/firebox_stoked",
+    "side": "iljatech:block/rusty_plate",
+    "top": "iljatech:block/rusty_plate"
+  }
+}

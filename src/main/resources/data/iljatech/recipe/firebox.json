@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "T": {
+      "item": "iljatech:tin_ingot"
+    }
+  },
+  "pattern": [
+    "TTT",
+    "T T",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:firebox"
+  }
+}
