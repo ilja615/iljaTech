@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ModItems {
+    public static final Item BOOK = register("book", new Item(new Item.Settings()));
+
     public static final Item BOILED_EGG = register("boiled_egg", new Item(new Item.Settings().food(ModFoods.BOILED_EGG_COMPONENT).maxCount(16)));
 
     public static final Item RAW_TIN_ORE = register("raw_tin", new Item(new Item.Settings()));

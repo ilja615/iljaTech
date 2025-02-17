@@ -37,19 +37,13 @@ public class BoilingCategory extends CategoryProvider {
     }
 
     @Override
-    protected BookCategoryModel additionalSetup(BookCategoryModel category) {
-        //When first opening the category, open the basic formatting entry automatically.
-        return category.withEntryToOpen(this.modLoc(ID, BasicFormattingEntry.ID), true);
-    }
-
-    @Override
     protected String categoryName() {
         return "Boiling Category";
     }
 
     @Override
     protected BookIconModel categoryIcon() {
-        return null;
+        return BookIconModel.create(Items.CAULDRON);
     }
 
     @Override

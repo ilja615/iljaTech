@@ -1,13 +1,13 @@
 {
   "background_u_index": 0,
   "background_v_index": 0,
-  "category": "formatting",
-  "description": "book.iljatech.iljatech.formatting.basic.description",
+  "category": "boiling",
+  "description": "book.iljatech.iljatech.boiling.egg.description",
   "hide_while_locked": false,
   "icon": {
-    "item": "minecraft:paper"
+    "item": "iljatech:boiled_egg"
   },
-  "name": "book.iljatech.iljatech.formatting.basic.name",
+  "name": "book.iljatech.iljatech.boiling.egg.name",
   "pages": [
     {
       "type": "modonomicon:text",
@@ -16,8 +16,8 @@
         "type": "modonomicon:none"
       },
       "show_title_separator": true,
-      "text": "book.iljatech.iljatech.formatting.basic.page1.text",
-      "title": "book.iljatech.iljatech.formatting.basic.page1.title",
+      "text": "book.iljatech.iljatech.boiling.egg.page1.text",
+      "title": "book.iljatech.iljatech.boiling.egg.page1.title",
       "use_markdown_in_title": false
     },
     {
@@ -27,13 +27,13 @@
         "type": "modonomicon:none"
       },
       "show_title_separator": true,
-      "text": "book.iljatech.iljatech.formatting.basic.page2.text",
+      "text": "book.iljatech.iljatech.boiling.egg.page2.text",
       "title": "",
       "use_markdown_in_title": false
     }
   ],
   "show_when_any_parent_unlocked": false,
   "sort_number": 0,
-  "x": -8,
-  "y": -1
+  "x": 0,
+  "y": 0
 }

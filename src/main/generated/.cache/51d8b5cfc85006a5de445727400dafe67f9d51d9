@@ -1,28 +1,4 @@
-// 1.21.1	2025-02-17T17:19:39.0347515	iljaTech/Books: iljatech
-25599e25ed527acc02f50be872b48c7b71d3c686 data\iljatech\modonomicon\books\iljatech\entries\features\spotlight.json
-fc1e114993883ad51b98bbf8d6d3e7c1e41da7ae data\iljatech\modonomicon\books\iljatech\entries\index_mode\demo2.json
-0d0f4673877420e007aa4634c80e32d823aa6366 data\iljatech\modonomicon\books\iljatech\entries\features\condition_root.json
-f456fd8fa370ebcd59e4f6d76e2d896f978564e4 data\iljatech\modonomicon\books\iljatech\entries\features\entity.json
-fe45068328382886f534f20708e08c270bdb2f9a data\iljatech\modonomicon\books\iljatech\entries\conditional\always_locked.json
-0f88dc34556ad3fc16d5b77801446d0b5ec2159d data\iljatech\modonomicon\books\iljatech\entries\features\condition_level_1.json
-5a942d9341f865b032a641f2cf8fbfcce73e7716 data\iljatech\modonomicon\books\iljatech\entries\formatting\advanced.json
-4fb3874f40eee7cb8c9dc47daaa031147b354562 data\iljatech\modonomicon\books\iljatech\entries\features\image.json
-467a434794d1fcefabb0927334595aca3d03c15f data\iljatech\modonomicon\books\iljatech\categories\features.json
-0b54f0cb6938c85707f871f1406497d60d0eb8a5 data\iljatech\modonomicon\books\iljatech\entries\features\condition_advancement.json
-ef3e5e5d7f91b19e4aa9b5eab0ee8cba42d0f076 data\iljatech\modonomicon\books\iljatech\entries\features\recipe.json
-21abf8524a7e3657700de2b537b43a4dbb241faf data\iljatech\modonomicon\books\iljatech\book.json
-93ee8fcf4077b9cbff08e4787937e8dc20f70d7c data\iljatech\modonomicon\books\iljatech\entries\features\condition_level_2.json
-b51a3d2114f3459c6175c3f60ba9cc340a61c19e data\iljatech\modonomicon\books\iljatech\entries\features\two_parents.json
-6b0487bd829d072e269d340d1c26323fc9489c66 data\iljatech\modonomicon\books\iljatech\entries\features\multiblock.json
-7292c29cff1b4e6bab780d98f2e0eb8ccd3245df data\iljatech\modonomicon\books\iljatech\entries\index_mode\demo1.json
-1e77e9669d7a3bf1eba4db8caa7dfe43d2ff1eb4 data\iljatech\modonomicon\books\iljatech\entries\features\custom_icon.json
-6f5d61ba0d7174bb522aacbcf1340f0b63c19ed1 data\iljatech\modonomicon\books\iljatech\entries\formatting\link.json
-a8406ea19ce49bd32f43e662d57b4bcacc408a2f data\iljatech\modonomicon\books\iljatech\entries\features\component_icon.json
-9a4bec432ade23be8fca8b6c36769b5aee2729c0 data\iljatech\modonomicon\books\iljatech\entries\formatting\basic.json
-ddc002817f4d479f7ea3ddc6e9e1e41b5bc67b6f data\iljatech\modonomicon\books\iljatech\entries\formatting\always_locked.json
-f9bbb02d5ca67b584d465c77fda5beeee3904b56 data\iljatech\modonomicon\books\iljatech\categories\index_mode.json
-26ac356873a3fc08378627b2e98128180e4976cc data\iljatech\modonomicon\books\iljatech\categories\formatting.json
-8133902da124b35813ba0fc728f93744617d174e data\iljatech\modonomicon\books\iljatech\entries\features\command.json
-bf9b95afd35a2ffa8502ee8f7d05b51bfe1882da data\iljatech\modonomicon\books\iljatech\entries\features\empty.json
-a144a37a146bb3acbefef566667c10da7ef5d16a data\iljatech\modonomicon\books\iljatech\categories\conditional.json
-800330a85981947bebb4f9bb480f4f2acee0f0af data\iljatech\modonomicon\books\iljatech\entries\features\redirect.json
+// 1.21.1	2025-02-17T22:59:04.9372153	iljaTech/Books: iljatech
+4a2fcd2301c0592b9185afbda548dc131a161ec0 data\iljatech\modonomicon\books\iljatech\categories\boiling.json
+70c37055ae197659e298215bbc36d414301a4c5a data\iljatech\modonomicon\books\iljatech\entries\boiling\egg.json
+609cc99a0dcba50e546c2cc0819df4596b82298e data\iljatech\modonomicon\books\iljatech\book.json

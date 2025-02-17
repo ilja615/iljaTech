@@ -12,6 +12,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
 
     protected void addMiscTranslations(){
         this.add("itemGroup.iljatech.stuff", "iljaTech Stuff");
+        this.add("item.iljatech.book", "Book");
         this.add("item.iljatech.boiled_egg", "Boiled Egg");
         this.add("item.iljatech.raw_tin", "Raw Tin Ore");
         this.add("item.iljatech.raw_nickel", "Raw Nickel Ore");
