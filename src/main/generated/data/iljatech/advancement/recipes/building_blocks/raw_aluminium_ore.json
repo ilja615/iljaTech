@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raw_aluminium": {
+      "conditions": {
+        "items": [
+          {
+            "items": "iljatech:raw_aluminium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "iljatech:raw_aluminium_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raw_aluminium"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "iljatech:raw_aluminium_ore"
+    ]
+  }
+}

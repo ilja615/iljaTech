@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "group": "tin",
+  "ingredient": {
+    "item": "iljatech:deepslate_tin_ore"
+  },
+  "result": {
+    "id": "iljatech:tin_ingot"
+  }
+}

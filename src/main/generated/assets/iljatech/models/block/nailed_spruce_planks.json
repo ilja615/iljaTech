@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "iljatech:block/nailed_spruce_planks"
+  }
+}
