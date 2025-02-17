@@ -81,6 +81,6 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
 
     @Override
     protected void addTranslations() {
-
+        this.addMiscTranslations();
     }
 }
