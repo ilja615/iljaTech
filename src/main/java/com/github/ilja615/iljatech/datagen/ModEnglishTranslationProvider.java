@@ -1,9 +1,14 @@
 package com.github.ilja615.iljatech.datagen;
 
 import com.github.ilja615.iljatech.IljaTech;
+import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.klikli_dev.modonomicon.api.datagen.AbstractModonomiconLanguageProvider;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.data.DataOutput;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
+import org.jetbrains.annotations.NotNull;
 
 public class ModEnglishTranslationProvider extends AbstractModonomiconLanguageProvider {
     public ModEnglishTranslationProvider(DataOutput output, ModonomiconLanguageProvider cachedProvider) {
@@ -63,6 +68,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.fire_bricks", "Fire Bricks");
         this.add("block.iljatech.stoked_fire", "Stoked Fire");
         this.add("block.iljatech.bellows", "Bellows");
+        this.add("block.iljatech.foundry", "Foundry");
         this.add("block.iljatech.firebox", "Firebox");
         this.add("block.iljatech.crank", "Crank");
         this.add("block.iljatech.gearbox", "Gear Box");
@@ -78,6 +84,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
+        this.add("container.iljatech.foundry", "Foundry");
     }
 
     @Override

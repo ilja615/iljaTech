@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "iljatech:block/foundry_on",
+    "side": "iljatech:block/fire_bricks",
+    "top": "iljatech:block/fire_bricks"
+  }
+}

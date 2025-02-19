@@ -1,30 +1,38 @@
-package com.github.ilja615.iljatech.blocks.firebox;
+package com.github.ilja615.iljatech.blocks.foundry;
 
-import com.github.ilja615.iljatech.energy.Heat;
+import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
+import com.klikli_dev.modonomicon.api.multiblock.Multiblock;
+import com.klikli_dev.modonomicon.multiblock.DenseMultiblock;
+import com.klikli_dev.modonomicon.multiblock.SimulateResultImpl;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class FireboxBlockEntity extends BlockEntity implements TickableBlockEntity {
+public class FoundryBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
-    private int stokedTicks = 0;
+    public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".foundry");
 
-    private final SimpleInventory inventory = new SimpleInventory(1) {
+    private final SimpleInventory inventory = new SimpleInventory(7) {
         @Override
         public void markDirty() {
             super.markDirty();
@@ -33,56 +41,13 @@ public class FireboxBlockEntity extends BlockEntity implements TickableBlockEnti
     };
     private final InventoryStorage storage = InventoryStorage.of(inventory,null);
 
-    public FireboxBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntityTypes.FIREBOX, pos, state);
+    public FoundryBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntityTypes.FOUNDRY, pos, state);
     }
 
     @Override
     public void tick() {
-        if (this.world == null || this.world.isClient)
-            return;
 
-        if (ticks > 0) {
-            this.ticks--;
-            if (ticks % 100 == 0)
-            {
-                Heat.emitHeat(world, pos.up());
-                int ash_level = world.getBlockState(pos).get(FireboxBlock.ASH_LEVEL);
-                world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.ASH_LEVEL, Math.min(ash_level + 1, 5)), 3);
-            }
-        }
-        if (stokedTicks > 0) {
-            this.stokedTicks--;
-        }
-        ItemStack itemstack = this.inventory.getStack(0);
-        if (ticks == 0)
-        {
-            if (FuelRegistry.INSTANCE.get(itemstack.getItem()) != null && FuelRegistry.INSTANCE.get(itemstack.getItem()) > 0)
-                ticks = FuelRegistry.INSTANCE.get(itemstack.getItem());
-            if (ticks > 0)
-            {
-                if (!itemstack.isEmpty()) {
-                    itemstack.decrement(1);
-                    this.inventory.setStack(0, itemstack);
-                }
-            }
-        }
-
-        if (ticks > 0) {
-            if (world.getBlockState(pos).get(FireboxBlock.ASH_LEVEL) == 5) {
-                world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.CHOKING), 3);
-            } else {
-                if (stokedTicks > 0) {
-                    world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.STOKED), 3);
-                } else {
-                    world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.ON), 3);
-                }
-            }
-        } else {
-            world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.OFF), 3);
-        }
-
-        this.update();
     }
 
     @Override
@@ -116,14 +81,6 @@ public class FireboxBlockEntity extends BlockEntity implements TickableBlockEnti
         return ticks;
     }
 
-    public int getStokedTicks() {
-        return stokedTicks;
-    }
-
-    public void setStokedTicks(int a) {
-        this.stokedTicks = a;
-    }
-
     private void update() {
         markDirty();
         if (world != null)
@@ -136,5 +93,22 @@ public class FireboxBlockEntity extends BlockEntity implements TickableBlockEnti
 
     public SimpleInventory getInventory() {
         return this.inventory;
+    }
+
+
+    @Override
+    public BlockPosPayload getScreenOpeningData(ServerPlayerEntity player) {
+        return new BlockPosPayload(this.pos);
+    }
+
+    @Override
+    public Text getDisplayName() {
+        return TITLE;
+    }
+
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+        return new FoundryScreenHandler(syncId, playerInventory, this);
     }
 }

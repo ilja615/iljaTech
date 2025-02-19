@@ -5,6 +5,7 @@ import com.github.ilja615.iljatech.blocks.*;
 import com.github.ilja615.iljatech.blocks.AxisRodBlock;
 import com.github.ilja615.iljatech.blocks.bellows.BellowsBlock;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
+import com.github.ilja615.iljatech.blocks.foundry.FoundryBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
@@ -53,6 +54,7 @@ public class ModBlocks {
     public static final Block STOKED_FIRE = registerWithItem("stoked_fire", new StokedFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.BRIGHT_RED).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));
     public static final Block FIRE_CLAY = registerWithItem("fire_clay", new Block(AbstractBlock.Settings.copy(Blocks.CLAY).mapColor(MapColor.TERRACOTTA_WHITE)));
     public static final Block FIRE_BRICKS = registerWithItem("fire_bricks", new Block(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.TERRACOTTA_WHITE)));
+    public static final Block FOUNDRY = registerWithItem("foundry", new FoundryBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.TERRACOTTA_WHITE).luminance(state -> state.get(FoundryBlock.LIT) ? 8 : 0)));
     public static final Block FIREBOX = registerWithItem("firebox", new FireboxBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.BROWN).sounds(BlockSoundGroup.METAL).luminance(state -> state.get(FireboxBlock.LIT).luminance)));
 
     public static final Block CRANK = registerWithItem("crank", new CrankBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).pistonBehavior(PistonBehavior.DESTROY).noCollision()));
