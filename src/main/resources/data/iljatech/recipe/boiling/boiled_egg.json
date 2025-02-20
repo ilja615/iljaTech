@@ -1,0 +1,8 @@
+{
+  "type": "iljatech:boiling",
+  "ingredient": {
+    "item": "minecraft:egg"
+  },
+  "result": "iljatech:boiled_egg",
+  "count": 1
+}

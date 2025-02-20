@@ -1,9 +1,9 @@
-// 1.21.1	2025-02-19T17:01:09.6987759	iljaTech/Block Loot Tables
+// 1.21.1	2025-02-20T11:42:40.2918605	iljaTech/Block Loot Tables
 4c9b36712616cf5756adeefba44f857460f506bc data\iljatech\loot_table\blocks\raw_aluminium_ore.json
 cc14c921e441c1e9e5f903dd69aff5bf6956765d data\iljatech\loot_table\blocks\red_sandstone_aluminium_ore.json
 8b53f56177286772b68cbb5d7a5d1539ede7f21b data\iljatech\loot_table\blocks\chrome_ore.json
-7fea5fef010fa4dd9626b67d7077e38b2e17a5f8 data\iljatech\loot_table\blocks\nailed_bamboo_planks.json
 0383e498227d31b1014c086788d3ac1f48c624d6 data\iljatech\loot_table\blocks\nickel_ore.json
+7fea5fef010fa4dd9626b67d7077e38b2e17a5f8 data\iljatech\loot_table\blocks\nailed_bamboo_planks.json
 0ee9f6bd31fac2383f2e2fc95f345627450938d6 data\iljatech\loot_table\blocks\nailed_cherry_planks.json
 7482f928a0dad614c0196bce06de503e3a50cf77 data\iljatech\loot_table\blocks\iron_plate.json
 8d870d68b7ba954472cf7bf8c9b200683029d7e5 data\iljatech\loot_table\blocks\nailed_jungle_planks.json

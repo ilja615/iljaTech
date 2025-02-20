@@ -4,12 +4,15 @@ import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.init.ModParticles;
+import com.github.ilja615.iljatech.init.ModRecipeTypes;
+import com.github.ilja615.iljatech.recipe.BoilingRecipe;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -17,6 +20,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Heat {
     public static void emitHeat(World world, BlockPos blockPos) {
@@ -29,7 +33,9 @@ public class Heat {
 
                     // Check if there is no steam going to the turbine yet
                     if (turbineBlockEntity.getSteamY() == -1.0f) {
+                        // If the turbine is found, set it so that there will go a steam cloud to that
                         turbineBlockEntity.setSteamY(blockPos.getY());
+                        LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(blockPos), world, blockPos);
                         flag = true;
                     }
                     break;
@@ -41,9 +47,9 @@ public class Heat {
                 }
             }
 
-            // Show some particles of steam if there was no turbine found
+            // Check boiling recipes and puff some steam particles in case there was no turbine
             if (!flag) {
-                //LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(blockPos), world, blockPos);
+                LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(blockPos), world, blockPos);
                 if (!world.isClient) {
                     ((ServerWorld) world).spawnParticles(ModParticles.STEAM, blockPos.getX() + world.random.nextFloat() * 0.5f + 0.25f, blockPos.getY() + world.random.nextFloat() * 0.5f + 1.0f, blockPos.getZ() + world.random.nextFloat() * 0.5f + 0.25f, 5, 0.0f, 0.3f, 0.0f, 0.0);
                 }
@@ -54,9 +60,21 @@ public class Heat {
                     if (itemEntity.getStack().isEmpty())
                         break;
 
-                    if (itemEntity.getStack().isOf(Items.EGG)) {
-                        itemEntity.getStack().decrement(1);
-                        world.spawnEntity(new ItemEntity(world, blockPos.getX() + 0.5d, blockPos.getY() + 1.0d, blockPos.getZ() + 0.5d, new ItemStack(ModItems.BOILED_EGG, 1)));
+                    List<RecipeEntry<BoilingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.BOILING_TYPE);
+                    for (RecipeEntry<BoilingRecipe> rr : recipes)
+                    {
+                        BoilingRecipe r = rr.value();
+                        System.out.println(r.stack() + " -> " + r.output());
+                        ItemStack resultingStack = r.output().copy();
+                        if (r.stack().getMatchingStacks()[0].isEmpty() || itemEntity.getStack().isEmpty())
+                            break;
+
+                        if (r.stack().getMatchingStacks()[0].getItem() == itemEntity.getStack().getItem())
+                        {
+                            itemEntity.getStack().decrement(1);
+                            world.spawnEntity(new ItemEntity(world, blockPos.getX() + 0.5d, blockPos.getY() + 1.0d, blockPos.getZ() + 0.5d, resultingStack));
+                            break;
+                        }
                     }
                 }
             }
