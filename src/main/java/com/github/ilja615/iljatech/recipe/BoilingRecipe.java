@@ -40,12 +40,6 @@ public record BoilingRecipe(Ingredient stack, ItemStack output) implements Recip
         BoilingRecipe::new
     );
 
-    public static final Serializer SERIALIZER = Registry.register(
-        Registries.RECIPE_SERIALIZER,
-        Identifier.of(IljaTech.MOD_ID, "boiling"),
-        new Serializer()
-    );
-
     @Override
     public boolean matches(InputContainer input, World world) {
         return stack.test(input.stack());
@@ -67,12 +61,12 @@ public record BoilingRecipe(Ingredient stack, ItemStack output) implements Recip
     }
 
     @Override
-    public RecipeSerializer<? extends Recipe<InputContainer>> getSerializer() {
-        return SERIALIZER;
+    public RecipeSerializer<?> getSerializer() {
+        return Registries.RECIPE_SERIALIZER.get(Registries.RECIPE_TYPE.getId(getType()));
     }
 
     @Override
-    public RecipeType<? extends Recipe<InputContainer>> getType() {
+    public RecipeType<?> getType() {
         return ModRecipeTypes.BOILING_TYPE;
     }
 
@@ -104,7 +98,6 @@ public record BoilingRecipe(Ingredient stack, ItemStack output) implements Recip
     }
 
     public record Serializer() implements RecipeSerializer<BoilingRecipe> {
-
         @Override
         public MapCodec<BoilingRecipe> codec() {
             return CODEC;
