@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks.foundry;
 
+import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
@@ -67,5 +68,13 @@ public class FoundryScreenHandler extends ScreenHandler {
 
     public FoundryBlockEntity getBlockEntity() {
         return this.blockEntity;
+    }
+
+    public float getProgress() {
+        return (float) this.blockEntity.getTicks() / (float) FoundryBlockEntity.RECIPE_DURATION;
+    }
+
+    public FireboxBlock.Lit getLitState() {
+        return this.blockEntity.validateHeatMultiblock();
     }
 }

@@ -46,7 +46,9 @@ public class FoundryBlock extends HorizontalFacingBlock implements BlockEntityPr
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if(!world.isClient) {
             if(world.getBlockEntity(pos) instanceof FoundryBlockEntity foundryBlockEntity) {
-                player.openHandledScreen(foundryBlockEntity);
+                if (foundryBlockEntity.validateFoundryMultiblock()) {
+                    player.openHandledScreen(foundryBlockEntity);
+                }
             }
         }
 

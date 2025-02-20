@@ -1,4 +1,4 @@
-// 1.21.1	2025-02-20T14:47:36.5593008	iljaTech/Block Loot Tables
+// 1.21.1	2025-02-20T16:15:43.1519096	iljaTech/Block Loot Tables
 4c9b36712616cf5756adeefba44f857460f506bc data\iljatech\loot_table\blocks\raw_aluminium_ore.json
 cc14c921e441c1e9e5f903dd69aff5bf6956765d data\iljatech\loot_table\blocks\red_sandstone_aluminium_ore.json
 8b53f56177286772b68cbb5d7a5d1539ede7f21b data\iljatech\loot_table\blocks\chrome_ore.json
@@ -12,6 +12,7 @@ cc14c921e441c1e9e5f903dd69aff5bf6956765d data\iljatech\loot_table\blocks\red_san
 a7b50d6ab33b89837e634617bc9637ba014bf40b data\iljatech\loot_table\blocks\drill.json
 30ec3011be39b41a7d4a159049c980f3aa60793a data\iljatech\loot_table\blocks\nailed_acacia_planks.json
 c00df05e6dec0509b6cf8d84f95207acc768c322 data\iljatech\loot_table\blocks\nailed_spruce_planks.json
+eccfd8d77767bdd722926fd48bf95bc8e5675c10 data\iljatech\loot_table\blocks\foundry.json
 5331250b2b2ef996fbf69d00e0de6c296ea9c008 data\iljatech\loot_table\blocks\raw_nickel_ore.json
 c50844152fcd0f278136576fa828068b6d07c112 data\iljatech\loot_table\blocks\fire_bricks.json
 b558b798224a4fe7025f20c8e109932ca9efda36 data\iljatech\loot_table\blocks\deepslate_chrome_ore.json
@@ -28,8 +29,10 @@ c01c68bdb5e22e3ea2a999522d0a5502a0829200 data\iljatech\loot_table\blocks\nailed_
 dc5194cb0f4fe38c54804425ed3367d38e875ded data\iljatech\loot_table\blocks\nailed_mangrove_planks.json
 35c5c99b936a884875a38229ac08d032b2045663 data\iljatech\loot_table\blocks\nailed_crimson_planks.json
 98d2e0c126c9244b61d317de30da87ab0a2be887 data\iljatech\loot_table\blocks\nailed_dark_oak_planks.json
+a4f3ec843bd933b05a1c4bcc54c02679687232c0 data\iljatech\loot_table\blocks\rusty_casing.json
 bc0c6d6e07036a31e8ace12304e07012b1632dda data\iljatech\loot_table\blocks\deepslate_nickel_ore.json
 b1b58a8dc6202c24d6f7db95ba97b90c8477bad6 data\iljatech\loot_table\blocks\nailed_birch_planks.json
+981ad5d6feb5a2e184c2ea39b9d210925bbf6ac2 data\iljatech\loot_table\blocks\firebox.json
 83105986289ac41d337c2ce7f781f12ab0e2badd data\iljatech\loot_table\blocks\raw_chrome_ore.json
 a795b91f5c4558dcacbff0013e2a51496c761205 data\iljatech\loot_table\blocks\wooden_shaft.json
 ace315a8d92b425889b2ec54a069adfc200a761b data\iljatech\loot_table\blocks\copper_rod.json

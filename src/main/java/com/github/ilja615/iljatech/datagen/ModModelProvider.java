@@ -65,5 +65,6 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_WARPED_PLANKS);
 
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.FIRE_CLAY);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RUSTY_CASING);
     }
 }

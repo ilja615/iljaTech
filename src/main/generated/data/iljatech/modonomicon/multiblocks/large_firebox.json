@@ -1,0 +1,24 @@
+{
+  "type": "modonomicon:dense",
+  "mapping": {
+    "#": {
+      "type": "modonomicon:block",
+      "block": "iljatech:rusty_casing"
+    },
+    "0": {
+      "type": "modonomicon:block",
+      "block": "iljatech:rusty_casing"
+    },
+    "F": {
+      "type": "modonomicon:block",
+      "block": "iljatech:firebox"
+    }
+  },
+  "pattern": [
+    [
+      "###",
+      "#0#",
+      "#F#"
+    ]
+  ]
+}

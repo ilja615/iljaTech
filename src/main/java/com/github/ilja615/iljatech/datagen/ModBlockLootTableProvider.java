@@ -64,6 +64,9 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.BELLOWS);
         addDrop(ModBlocks.FIRE_BRICKS);
         this.addDrop(ModBlocks.FIRE_CLAY, block -> this.drops(block, ModItems.FIRE_CLAY_BALL, ConstantLootNumberProvider.create(4.0F)));
+        addDrop(ModBlocks.FIREBOX);
+        addDrop(ModBlocks.FOUNDRY);
+        addDrop(ModBlocks.RUSTY_CASING);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

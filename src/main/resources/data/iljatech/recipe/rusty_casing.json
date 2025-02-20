@@ -10,12 +10,12 @@
     }
   },
   "pattern": [
-    "III",
-    "I I",
-    "###"
+    "I#I",
+    "# #",
+    "I#I"
   ],
   "result": {
-    "count": 1,
-    "id": "iljatech:firebox"
+    "count": 4,
+    "id": "iljatech:rusty_casing"
   }
 }

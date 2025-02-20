@@ -22,5 +22,14 @@ public class ModMultiblockProvider extends MultiblockProvider {
                         .block('F', () -> ModBlocks.FOUNDRY)
                         .build(false)
         );
+
+        this.add(this.modLoc("large_firebox"),
+                new DenseMultiblockBuilder()
+                        .layer("###", "#0#", "#F#")
+                        .block('#', () -> ModBlocks.RUSTY_CASING)
+                        .block('0', () -> ModBlocks.RUSTY_CASING)
+                        .block('F', () -> ModBlocks.FIREBOX)
+                        .build(false)
+        );
     }
 }

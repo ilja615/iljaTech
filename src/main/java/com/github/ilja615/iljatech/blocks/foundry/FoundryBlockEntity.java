@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.blocks.foundry;
 
 import com.github.ilja615.iljatech.IljaTech;
+import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
@@ -34,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class FoundryBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
+    public static final int RECIPE_DURATION = 100;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".foundry");
 
     private final SimpleInventory inventory = new SimpleInventory(5) {
@@ -52,16 +54,48 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     @Override
     public void tick() {
         Direction facing = world.getBlockState(pos).get(FoundryBlock.FACING);
-        BlockPos startPos = pos.offset(facing.getOpposite()).down();
-        if (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "foundry")).validate(world, startPos) != null) {
-            if (!world.isClient) {
-                double x = pos.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52*facing.getOffsetX() : world.random.nextDouble() * 0.6 - 0.3);
-                double y = pos.getY() + 0.3125d + world.random.nextDouble() * 6.0d / 16.0d;
-                double z = pos.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52*facing.getOffsetZ() : world.random.nextDouble() * 0.6 - 0.3);
-                ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
+        FireboxBlock.Lit lit = validateHeatMultiblock();
+        if (validateFoundryMultiblock()) {
+            if (lit != FireboxBlock.Lit.OFF) {
+                if (ticks++ > RECIPE_DURATION) {
+                    this.ticks = 0;
+                    // Do something after the recipe is done
+                }
+                if (!world.isClient) {
+                    double x = pos.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52 * facing.getOffsetX() : world.random.nextDouble() * 0.6 - 0.3);
+                    double y = pos.getY() + 0.3125d + world.random.nextDouble() * 6.0d / 16.0d;
+                    double z = pos.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52 * facing.getOffsetZ() : world.random.nextDouble() * 0.6 - 0.3);
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
+                }
+            } else {
+                if (ticks > 2) {
+                    // Progress reverts if not heated
+                    this.ticks -= 2;
+                }
             }
         } else {
+            // Progress resets if Multiblock becomes invalidated
+            this.ticks = 0;
         }
+    }
+
+    public boolean validateFoundryMultiblock() {
+        Direction facing = world.getBlockState(pos).get(FoundryBlock.FACING);
+        BlockPos startPos = pos.offset(facing.getOpposite()).down();
+        return (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "foundry")).validate(world, startPos) != null);
+    }
+
+    public FireboxBlock.Lit validateHeatMultiblock() {
+        Direction facing = world.getBlockState(pos).get(FoundryBlock.FACING);
+        if (world.getBlockState(pos.down(2)).getBlock() instanceof FireboxBlock) {
+            if (world.getBlockState(pos.down(2)).get(FireboxBlock.FACING) == facing) {
+                BlockPos startPos = pos.offset(facing.getOpposite()).down(2);
+                if (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "large_firebox")).validate(world, startPos) != null) {
+                    return world.getBlockState(pos.down(2)).get(FireboxBlock.LIT);
+                }
+            }
+        }
+        return FireboxBlock.Lit.OFF;
     }
 
     @Override
