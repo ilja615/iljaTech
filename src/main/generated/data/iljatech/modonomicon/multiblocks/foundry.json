@@ -1,0 +1,34 @@
+{
+  "type": "modonomicon:dense",
+  "mapping": {
+    "#": {
+      "type": "modonomicon:block",
+      "block": "iljatech:fire_bricks"
+    },
+    "0": {
+      "type": "modonomicon:block",
+      "block": "iljatech:fire_bricks"
+    },
+    "F": {
+      "type": "modonomicon:block",
+      "block": "iljatech:foundry"
+    }
+  },
+  "pattern": [
+    [
+      "###",
+      "###",
+      "###"
+    ],
+    [
+      "###",
+      "###",
+      "#F#"
+    ],
+    [
+      "###",
+      "#0#",
+      "###"
+    ]
+  ]
+}

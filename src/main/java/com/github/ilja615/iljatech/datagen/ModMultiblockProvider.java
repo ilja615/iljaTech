@@ -12,15 +12,15 @@ public class ModMultiblockProvider extends MultiblockProvider {
 
     @Override
     public void buildMultiblocks() {
-        this.add(this.modLoc("placement/foundry"),
+        this.add(this.modLoc("foundry"),
                 new DenseMultiblockBuilder()
-                        .layer("###", "#0#", "###")
-                        .layer("###", "###", "#F#")
                         .layer("###", "###", "###")
+                        .layer("###", "###", "#F#")
+                        .layer("###", "#0#", "###")
                         .block('#', () -> ModBlocks.FIRE_BRICKS)
                         .block('0', () -> ModBlocks.FIRE_BRICKS)
                         .block('F', () -> ModBlocks.FOUNDRY)
-                        .build()
+                        .build(false)
         );
     }
 }

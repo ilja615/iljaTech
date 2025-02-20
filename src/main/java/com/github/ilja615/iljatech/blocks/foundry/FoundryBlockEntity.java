@@ -2,11 +2,15 @@ package com.github.ilja615.iljatech.blocks.foundry;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
-import com.klikli_dev.modonomicon.api.multiblock.Multiblock;
-import com.klikli_dev.modonomicon.multiblock.DenseMultiblock;
-import com.klikli_dev.modonomicon.multiblock.SimulateResultImpl;
+import com.klikli_dev.modonomicon.api.ModonomiconAPI;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.block.Block;
@@ -32,7 +36,7 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     private int ticks = 0;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".foundry");
 
-    private final SimpleInventory inventory = new SimpleInventory(7) {
+    private final SimpleInventory inventory = new SimpleInventory(5) {
         @Override
         public void markDirty() {
             super.markDirty();
@@ -47,7 +51,17 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
 
     @Override
     public void tick() {
-
+        Direction facing = world.getBlockState(pos).get(FoundryBlock.FACING);
+        BlockPos startPos = pos.offset(facing.getOpposite()).down();
+        if (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "foundry")).validate(world, startPos) != null) {
+            if (!world.isClient) {
+                double x = pos.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52*facing.getOffsetX() : world.random.nextDouble() * 0.6 - 0.3);
+                double y = pos.getY() + 0.3125d + world.random.nextDouble() * 6.0d / 16.0d;
+                double z = pos.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52*facing.getOffsetZ() : world.random.nextDouble() * 0.6 - 0.3);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
+            }
+        } else {
+        }
     }
 
     @Override

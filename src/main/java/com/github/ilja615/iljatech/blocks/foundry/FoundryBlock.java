@@ -1,7 +1,9 @@
 package com.github.ilja615.iljatech.blocks.foundry;
 
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
+import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.mojang.serialization.MapCodec;
@@ -16,6 +18,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
@@ -23,6 +26,7 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -74,5 +78,17 @@ public class FoundryBlock extends HorizontalFacingBlock implements BlockEntityPr
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return TickableBlockEntity.getTicker(world);
+    }
+
+    @Override
+    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof FoundryBlockEntity foundryBlockEntity) {
+                ItemScatterer.spawn(world, pos, foundryBlockEntity.getInventory());
+                world.updateComparators(pos, this);
+            }
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 }

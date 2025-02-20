@@ -31,12 +31,11 @@ public class FoundryScreenHandler extends ScreenHandler {
         this.blockEntity = blockEntity;
         this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
 
-        for (int column = 0; column < 4; column++) {
-            addSlot(new Slot(this.blockEntity.getInventory(), column, 12 + (column * 18), 35));
-        }
-        addSlot(new Slot(this.blockEntity.getInventory(), 4, 66, 11));
-        addSlot(new Slot(this.blockEntity.getInventory(), 5, 128, 35));
-        addSlot(new Slot(this.blockEntity.getInventory(), 6, 128, 58));
+        addSlot(new Slot(this.blockEntity.getInventory(), 0, 34, 35));
+        addSlot(new Slot(this.blockEntity.getInventory(), 1, 52, 35));
+        addSlot(new Slot(this.blockEntity.getInventory(), 2, 62, 11));
+        addSlot(new Slot(this.blockEntity.getInventory(), 3, 124, 35));
+        addSlot(new Slot(this.blockEntity.getInventory(), 4, 124, 58));
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
