@@ -38,6 +38,7 @@ public class ModItems {
     public static final Item CRUSHED_RAW_GOLD = register("crushed_gold_ore", new Item(new Item.Settings()));
     public static final Item CRUSHED_RAW_COPPER = register("crushed_copper_ore", new Item(new Item.Settings()));
 
+    public static final Item BRONZE_INGOT = register("bronze_ingot", new Item(new Item.Settings()));
     public static final Item BRONZE_GEAR = register("bronze_gear", new Item(new Item.Settings()));
 
     public static final Item IRON_HAMMER = register("iron_hammer", new HammerItem(new Item.Settings().maxDamage(128).attributeModifiers(HammerItem.createAttributeModifiers(ToolMaterials.IRON, 2.5F, -3.8F))));

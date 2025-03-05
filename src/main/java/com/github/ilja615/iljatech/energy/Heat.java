@@ -2,25 +2,20 @@ package com.github.ilja615.iljatech.energy;
 
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
-import com.github.ilja615.iljatech.recipe.BoilingRecipe;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Optional;
 
 public class Heat {
     public static void emitHeat(World world, BlockPos blockPos) {

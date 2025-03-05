@@ -2,13 +2,19 @@ package com.github.ilja615.iljatech.blocks.foundry;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
+import com.github.ilja615.iljatech.energy.BoilingRecipe;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModParticles;
+import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
+import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.klikli_dev.modonomicon.api.ModonomiconAPI;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -32,6 +38,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class FoundryBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
@@ -57,15 +65,52 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
         FireboxBlock.Lit lit = validateHeatMultiblock();
         if (validateFoundryMultiblock()) {
             if (lit != FireboxBlock.Lit.OFF) {
-                if (ticks++ > RECIPE_DURATION) {
-                    this.ticks = 0;
-                    // Do something after the recipe is done
-                }
-                if (!world.isClient) {
-                    double x = pos.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52 * facing.getOffsetX() : world.random.nextDouble() * 0.6 - 0.3);
-                    double y = pos.getY() + 0.3125d + world.random.nextDouble() * 6.0d / 16.0d;
-                    double z = pos.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52 * facing.getOffsetZ() : world.random.nextDouble() * 0.6 - 0.3);
-                    ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
+                List<RecipeEntry<FoundryRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.FOUNDRY_TYPE);
+                for (RecipeEntry<FoundryRecipe> rr : recipes)
+                {
+                    FoundryRecipe r = rr.value();
+                    // Gets the first 2 items and see if it matches with the recipe (second index is excl.)
+                    if (r.matches(new FoundryRecipe.InputContainer(inventory.getHeldStacks().subList(0, 2)), world)) {
+                        // Display particles
+                        if (!world.isClient) {
+                            double x = pos.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52 * facing.getOffsetX() : world.random.nextDouble() * 0.6 - 0.3);
+                            double y = pos.getY() + 0.3125d + world.random.nextDouble() * 6.0d / 16.0d;
+                            double z = pos.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52 * facing.getOffsetZ() : world.random.nextDouble() * 0.6 - 0.3);
+                            ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
+                        }
+
+                        ItemStack output = r.output().copy();
+                        if (!output.isEmpty()) {
+                            if (inventory.getStack(3).isEmpty()) { // 3 is output slot
+                                if (ticks++ > RECIPE_DURATION) {
+                                    // In this case a new result ItemStack is added with 1 of the result.
+                                    for (CountedIngredient ci : r.ingredients()) {
+                                        inventory.getHeldStacks().subList(0, 2).forEach(itemStack -> {
+                                            if (itemStack.isOf(ci.getMatchingStacks().get(0).getItem())) {
+                                                itemStack.decrement(ci.count());
+                                            }
+                                        });
+                                    }
+                                    inventory.setStack(3, output);
+                                    this.ticks = 0;
+                                }
+                            } else if (inventory.getStack(3).getItem() == output.getItem() &&
+                                    inventory.getStack(3).getCount() + output.getCount() <= inventory.getStack(3).getMaxCount()) {
+                                if (ticks++ > RECIPE_DURATION) {
+                                    // In this case the result ItemStack is added to what was already there
+                                    for (CountedIngredient ci : r.ingredients()) {
+                                        inventory.getHeldStacks().subList(0, 2).forEach(itemStack -> {
+                                            if (itemStack.isOf(ci.getMatchingStacks().get(0).getItem())) {
+                                                itemStack.decrement(ci.count());
+                                            }
+                                        });
+                                    }
+                                    inventory.getStack(3).increment(output.getCount());
+                                    this.ticks = 0;
+                                }
+                            }
+                        }
+                    }
                 }
             } else {
                 if (ticks > 2) {
@@ -77,6 +122,7 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
             // Progress resets if Multiblock becomes invalidated
             this.ticks = 0;
         }
+        update();
     }
 
     public boolean validateFoundryMultiblock() {

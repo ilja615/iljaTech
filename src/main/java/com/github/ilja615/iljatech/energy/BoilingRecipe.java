@@ -1,6 +1,5 @@
-package com.github.ilja615.iljatech.recipe;
+package com.github.ilja615.iljatech.energy;
 
-import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -11,12 +10,9 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public record BoilingRecipe(Ingredient stack, ItemStack output) implements Recipe<BoilingRecipe.InputContainer> {
@@ -68,20 +64,6 @@ public record BoilingRecipe(Ingredient stack, ItemStack output) implements Recip
     @Override
     public RecipeType<?> getType() {
         return ModRecipeTypes.BOILING_TYPE;
-    }
-
-//    @Override
-//    public IngredientPlacement getIngredientPlacement() {
-//        return IngredientPlacement.forSingleSlot(stack);
-//    }
-
-//    @Override
-//    public RecipeBookCategory getRecipeBookCategory() {
-//        return CATEGORY;
-//    }
-
-    public static void register() {
-
     }
 
     public record InputContainer(ItemStack stack) implements RecipeInput {

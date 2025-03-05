@@ -35,5 +35,15 @@ public class FoundryScreen extends HandledScreen<FoundryScreenHandler> {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         drawMouseoverTooltip(context, mouseX, mouseY);
+
+        if (isPointWithinBounds(39, 54, 24, 14, mouseX, mouseY)) {
+            String toolTip = switch (((FoundryScreenHandler)this.handler).getLitState()) {
+                case ON -> "Firebox burning as normally";
+                case OFF -> "Provide heat with large firebox";
+                case STOKED -> "Firebox is being stoked";
+                case CHOKING -> "Firebox choking. Cleaning needed.";
+            };
+            context.drawTooltip(this.textRenderer, Text.literal(toolTip), mouseX, mouseY);
+        }
     }
 }

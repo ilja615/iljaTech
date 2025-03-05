@@ -39,6 +39,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("item.iljatech.fire_clay_ball", "Fire Clay Ball");
         this.add("item.iljatech.fire_brick", "Fire Brick");
         this.add("item.iljatech.ash", "Ashes");
+        this.add("item.iljatech.bronze_ingot", "Bronze Ingot");
         this.add("item.iljatech.bronze_gear", "Bronze Gear");
         this.add("block.iljatech.tin_ore", "Tin Ore");
         this.add("block.iljatech.nickel_ore", "Nickel Ore");

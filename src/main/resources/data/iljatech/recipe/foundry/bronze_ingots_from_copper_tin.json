@@ -1,0 +1,21 @@
+{
+  "type": "iljatech:foundry",
+  "ingredients": [
+    {
+      "count": 3,
+      "ingredient": {
+        "item": "iljatech:crushed_copper_ore"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "iljatech:crushed_tin_ore"
+      }
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "iljatech:bronze_ingot"
+  }
+}

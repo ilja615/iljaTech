@@ -1,12 +1,10 @@
 package com.github.ilja615.iljatech;
 
-import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.init.*;
 import com.github.ilja615.iljatech.worldgen.BiomeModificationEvent;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;
 import org.slf4j.Logger;
@@ -29,6 +27,7 @@ public class IljaTech implements ModInitializer {
 		ModSounds.load();
 		ModScreenHandlerTypes.load();
 		ModRecipeTypes.load();
+		ModRecipeTypes.registerIngredientTypes();
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);
