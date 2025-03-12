@@ -70,7 +70,7 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
                 {
                     FoundryRecipe r = rr.value();
                     // Gets the first 2 items and see if it matches with the recipe (second index is excl.)
-                    if (r.matches(new FoundryRecipe.InputContainer(inventory.getHeldStacks().subList(0, 2)), world)) {
+                    if (r.matches(new FoundryRecipe.InputContainer(inventory.getHeldStacks().subList(0, 2), inventory.getHeldStacks().get(2)), world)) {
                         // Display particles
                         if (!world.isClient) {
                             double x = pos.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52 * facing.getOffsetX() : world.random.nextDouble() * 0.6 - 0.3);
@@ -81,8 +81,9 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
 
                         ItemStack output = r.output().copy();
                         if (!output.isEmpty()) {
-                            if (inventory.getStack(3).isEmpty()) { // 3 is output slot
-                                if (ticks++ > RECIPE_DURATION) {
+                            if (ticks++ > RECIPE_DURATION) {
+                                // The recipe is finished. The output is handled.
+                                if (inventory.getStack(3).isEmpty()) { // 3 is output slot
                                     // In this case a new result ItemStack is added with 1 of the result.
                                     for (CountedIngredient ci : r.ingredients()) {
                                         inventory.getHeldStacks().subList(0, 2).forEach(itemStack -> {
@@ -92,11 +93,8 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
                                         });
                                     }
                                     inventory.setStack(3, output);
-                                    this.ticks = 0;
-                                }
-                            } else if (inventory.getStack(3).getItem() == output.getItem() &&
+                                } else if (inventory.getStack(3).getItem() == output.getItem() &&
                                     inventory.getStack(3).getCount() + output.getCount() <= inventory.getStack(3).getMaxCount()) {
-                                if (ticks++ > RECIPE_DURATION) {
                                     // In this case the result ItemStack is added to what was already there
                                     for (CountedIngredient ci : r.ingredients()) {
                                         inventory.getHeldStacks().subList(0, 2).forEach(itemStack -> {
@@ -106,8 +104,18 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
                                         });
                                     }
                                     inventory.getStack(3).increment(output.getCount());
-                                    this.ticks = 0;
                                 }
+
+                                // Subtracting the flux and giving the slag
+                                inventory.getStack(2).decrement(r.flux().count()); // 2 is flux slot
+                                ItemStack slag = r.slag().copy();
+                                if (inventory.getStack(4).isEmpty()) { // 4 is slag slot
+                                    inventory.setStack(4, slag);
+                                } else if (inventory.getStack(4).getItem() == slag.getItem() &&
+                                        inventory.getStack(4).getCount() + slag.getCount() <= inventory.getStack(4).getMaxCount()) {
+                                    inventory.getStack(4).increment(slag.getCount());
+                                }
+                                    this.ticks = 0;
                             }
                         }
                     }

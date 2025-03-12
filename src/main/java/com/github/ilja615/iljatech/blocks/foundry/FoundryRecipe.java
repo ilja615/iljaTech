@@ -21,17 +21,36 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.function.Function;
 
-public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack output) implements Recipe<FoundryRecipe.InputContainer> {
+public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack output, CountedIngredient flux, ItemStack slag,
+                            int processingTime, float slagChance, float slagChanceUsingFlux, boolean isFluxRequired) implements Recipe<FoundryRecipe.InputContainer> {
     public static final MapCodec<FoundryRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.list(CountedIngredient.CODEC.codec()).fieldOf("ingredients").forGetter(FoundryRecipe::ingredients),
-            ItemStack.CODEC.fieldOf("result").forGetter(FoundryRecipe::output)
-    ).apply(instance, (countedIngredients, itemStack) -> new FoundryRecipe(countedIngredients, itemStack)));
+            ItemStack.CODEC.fieldOf("result").forGetter(FoundryRecipe::output),
+            CountedIngredient.CODEC.fieldOf("flux").forGetter(FoundryRecipe::flux),
+            ItemStack.CODEC.fieldOf("slag").forGetter(FoundryRecipe::slag),
+            Codec.INT.fieldOf("processing_time").forGetter(FoundryRecipe::processingTime),
+            Codec.FLOAT.fieldOf("slag_chance_without_flux").forGetter(FoundryRecipe::slagChance),
+            Codec.FLOAT.fieldOf("slag_chance_using_flux").forGetter(FoundryRecipe::slagChanceUsingFlux),
+            Codec.BOOL.fieldOf("is_flux_required").forGetter(FoundryRecipe::isFluxRequired)
+    ).apply(instance, FoundryRecipe::new));
 
     public static final PacketCodec<RegistryByteBuf, FoundryRecipe> PACKET_CODEC = PacketCodec.tuple(
         CountedIngredient.PACKET_CODEC.collect(PacketCodecs.toList()),
         FoundryRecipe::ingredients,
         ItemStack.PACKET_CODEC,
         FoundryRecipe::output,
+        CountedIngredient.PACKET_CODEC,
+        FoundryRecipe::flux,
+        ItemStack.PACKET_CODEC,
+        FoundryRecipe::slag,
+        PacketCodecs.INTEGER,
+        FoundryRecipe::processingTime,
+        PacketCodecs.FLOAT,
+        FoundryRecipe::slagChance,
+        PacketCodecs.FLOAT,
+        FoundryRecipe::slagChanceUsingFlux,
+        PacketCodecs.BOOL,
+        FoundryRecipe::isFluxRequired,
         FoundryRecipe::new
     );
 
@@ -40,6 +59,14 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
         if (input.getSize() != this.ingredients.size()) {
             return false;
         } else {
+            // Check if a correct flux is provided
+            if (!this.flux.getMatchingStacks().stream().map(ItemStack::getItem).toList().contains(input.flux.getItem())) {
+                return false;
+            }
+            // Check if enough flux is provided
+            if (input.flux.getCount() < this.flux.count()) {
+                return false;
+            }
 
             List<Item> a = this.ingredients.stream().map(countedIngredient -> countedIngredient.ingredient().getMatchingStacks()[0].getItem()).toList();
             List<Item> b = input.stacks.stream().map(ItemStack::getItem).toList();
@@ -96,7 +123,7 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
         return ModRecipeTypes.FOUNDRY_TYPE;
     }
 
-    public record InputContainer(List<ItemStack> stacks) implements RecipeInput {
+    public record InputContainer(List<ItemStack> stacks, ItemStack flux) implements RecipeInput {
         @Override
         public ItemStack getStackInSlot(int slot) {
             return stacks.get(slot);

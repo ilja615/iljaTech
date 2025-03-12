@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "iljatech:block/limestone",
+    "side": "iljatech:block/limestone",
+    "top": "iljatech:block/limestone"
+  }
+}

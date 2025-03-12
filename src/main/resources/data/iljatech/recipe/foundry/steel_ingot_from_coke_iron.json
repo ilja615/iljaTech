@@ -1,0 +1,35 @@
+{
+  "type": "iljatech:foundry",
+  "processing_time": 200,
+  "slag_chance_without_flux": 0.0,
+  "slag_chance_using_flux": 0.9,
+  "is_flux_required": true,
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "iljatech:crushed_coke"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "iljatech:crushed_iron_ore"
+      }
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:steel_bloom"
+  },
+  "flux": {
+    "count": 1,
+    "ingredient": {
+      "item": "iljatech:limestone"
+    }
+  },
+  "slag": {
+    "count": 1,
+    "id": "iljatech:ferrous_slag"
+  }
+}

@@ -40,6 +40,7 @@ public class ModItems {
 
     public static final Item BRONZE_INGOT = register("bronze_ingot", new Item(new Item.Settings()));
     public static final Item BRONZE_GEAR = register("bronze_gear", new Item(new Item.Settings()));
+    public static final Item STEEL_INGOT = register("steel_ingot", new Item(new Item.Settings()));
 
     public static final Item IRON_HAMMER = register("iron_hammer", new HammerItem(new Item.Settings().maxDamage(128).attributeModifiers(HammerItem.createAttributeModifiers(ToolMaterials.IRON, 2.5F, -3.8F))));
     public static final Item IRON_SAW = register("iron_saw", new SawItem(new Item.Settings().maxDamage(128)));
@@ -48,6 +49,10 @@ public class ModItems {
     public static final Item FIRE_CLAY_BALL = register("fire_clay_ball", new Item(new Item.Settings()));
     public static final Item FIRE_BRICK = register("fire_brick", new Item(new Item.Settings()));
     public static final Item ASH = register("ash", new Item(new Item.Settings()));
+    public static final Item COKE = register("coke", new Item(new Item.Settings()));
+    public static final Item CRUSHED_COKE = register("crushed_coke", new Item(new Item.Settings()));
+    public static final Item FERROUS_SLAG = register("ferrous_slag", new Item(new Item.Settings()));
+    public static final Item STEEL_BLOOM = register("steel_bloom", new Item(new Item.Settings()));
 
     public static <T extends Item> T register(String name, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(IljaTech.MOD_ID, name), item);

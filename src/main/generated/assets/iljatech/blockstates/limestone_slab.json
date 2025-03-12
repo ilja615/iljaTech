@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "iljatech:block/limestone_slab"
+    },
+    "type=double": {
+      "model": "iljatech:block/limestone"
+    },
+    "type=top": {
+      "model": "iljatech:block/limestone_slab_top"
+    }
+  }
+}

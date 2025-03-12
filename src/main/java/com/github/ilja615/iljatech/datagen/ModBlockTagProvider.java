@@ -37,5 +37,8 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
                 .add(ModBlocks.CRANK).add(ModBlocks.WOODEN_SHAFT);
+
+        getOrCreateTagBuilder(BlockTags.WALLS)
+                .add(ModBlocks.LIMESTONE_WALL);
     }
 }

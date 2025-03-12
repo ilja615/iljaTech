@@ -41,6 +41,11 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("item.iljatech.ash", "Ashes");
         this.add("item.iljatech.bronze_ingot", "Bronze Ingot");
         this.add("item.iljatech.bronze_gear", "Bronze Gear");
+        this.add("item.iljatech.steel_ingot", "Steel Ingot");
+        this.add("item.iljatech.coke", "Coke");
+        this.add("item.iljatech.crushed_coke", "Crushed Coke");
+        this.add("item.iljatech.ferrous_slag", "Ferrous Slag");
+        this.add("item.iljatech.steel_bloom", "Steel Bloom");
         this.add("block.iljatech.tin_ore", "Tin Ore");
         this.add("block.iljatech.nickel_ore", "Nickel Ore");
         this.add("block.iljatech.chrome_ore", "Chrome Ore");
@@ -67,6 +72,10 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.nailed_warped_planks", "Nailed Warped Planks");
         this.add("block.iljatech.fire_clay", "Fire Clay");
         this.add("block.iljatech.fire_bricks", "Fire Bricks");
+        this.add("block.iljatech.limestone", "Limestone");
+        this.add("block.iljatech.limestone_slab", "Limestone Slab");
+        this.add("block.iljatech.limestone_stairs", "Limestone Stairs");
+        this.add("block.iljatech.limestone_wall", "Limestone Wall");
         this.add("block.iljatech.stoked_fire", "Stoked Fire");
         this.add("block.iljatech.bellows", "Bellows");
         this.add("block.iljatech.foundry", "Foundry");

@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
+import net.minecraft.data.family.BlockFamily;
 
 public class ModModelProvider extends FabricModelProvider {
     public ModModelProvider(FabricDataOutput output) {
@@ -37,6 +38,12 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.FIRE_BRICK, Models.GENERATED);
         itemModelGenerator.register(ModItems.ASH, Models.GENERATED);
         itemModelGenerator.register(ModItems.BOOK, Models.GENERATED);
+        itemModelGenerator.register(ModItems.STEEL_INGOT, Models.GENERATED);
+        itemModelGenerator.register(ModItems.COKE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CRUSHED_COKE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.FERROUS_SLAG, Models.GENERATED);
+        itemModelGenerator.register(ModItems.STEEL_BLOOM, Models.GENERATED);
+
     }
 
     @Override
@@ -67,5 +74,13 @@ public class ModModelProvider extends FabricModelProvider {
 
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.FIRE_CLAY);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RUSTY_CASING);
+
+        var limestoneFamily = new BlockFamily.Builder(ModBlocks.LIMESTONE)
+                .slab(ModBlocks.LIMESTONE_SLAB)
+                .stairs(ModBlocks.LIMESTONE_STAIRS)
+                .wall(ModBlocks.LIMESTONE_WALL)
+                .build();
+        blockStateModelGenerator.registerCubeAllModelTexturePool(limestoneFamily.getBaseBlock())
+                .family(limestoneFamily);
     }
 }

@@ -1,5 +1,9 @@
 {
   "type": "iljatech:foundry",
+  "processing_time": 100,
+  "slag_chance_without_flux": 0.0,
+  "slag_chance_using_flux": 0.0,
+  "is_flux_required": false,
   "ingredients": [
     {
       "count": 3,
@@ -17,5 +21,15 @@
   "result": {
     "count": 3,
     "id": "iljatech:bronze_ingot"
+  },
+  "flux": {
+    "count": 0,
+    "ingredient": {
+      "item": "minecraft:air"
+    }
+  },
+  "slag": {
+    "count": 0,
+    "id": "minecraft:air"
   }
 }

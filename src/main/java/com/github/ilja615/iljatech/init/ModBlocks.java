@@ -58,6 +58,11 @@ public class ModBlocks {
     public static final Block RUSTY_CASING = registerWithItem("rusty_casing", new Block(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.BROWN).sounds(BlockSoundGroup.METAL)));
     public static final Block FIREBOX = registerWithItem("firebox", new FireboxBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.BROWN).sounds(BlockSoundGroup.METAL).luminance(state -> state.get(FireboxBlock.LIT).luminance)));
 
+    public static final Block LIMESTONE = registerWithItem("limestone", new Block(AbstractBlock.Settings.copy(Blocks.STONE).mapColor(MapColor.TERRACOTTA_WHITE)));
+    public static final Block LIMESTONE_SLAB = registerWithItem("limestone_slab", new SlabBlock(AbstractBlock.Settings.copy(LIMESTONE)));
+    public static final Block LIMESTONE_STAIRS = registerWithItem("limestone_stairs", new StairsBlock(LIMESTONE.getDefaultState(), AbstractBlock.Settings.copy(LIMESTONE)));
+    public static final Block LIMESTONE_WALL = registerWithItem("limestone_wall", new WallBlock(AbstractBlock.Settings.copy(LIMESTONE)));
+
     public static final Block CRANK = registerWithItem("crank", new CrankBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).pistonBehavior(PistonBehavior.DESTROY).noCollision()));
     public static final Block GEARBOX = registerWithItem("gearbox", new GearBoxBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block WOODEN_SHAFT = registerWithItem("wooden_shaft", new WoodenShaftBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
