@@ -3,6 +3,8 @@ package com.github.ilja615.iljatech.blocks.foundry;
 import com.github.ilja615.iljatech.energy.BoilingRecipe;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.util.CountedIngredient;
+import com.mojang.datafixers.util.Function6;
+import com.mojang.datafixers.util.Function8;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -34,7 +36,7 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
             Codec.BOOL.fieldOf("is_flux_required").forGetter(FoundryRecipe::isFluxRequired)
     ).apply(instance, FoundryRecipe::new));
 
-    public static final PacketCodec<RegistryByteBuf, FoundryRecipe> PACKET_CODEC = PacketCodec.tuple(
+    public static final PacketCodec<RegistryByteBuf, FoundryRecipe> PACKET_CODEC = tuple(
         CountedIngredient.PACKET_CODEC.collect(PacketCodecs.toList()),
         FoundryRecipe::ingredients,
         ItemStack.PACKET_CODEC,
@@ -121,6 +123,41 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
     @Override
     public RecipeType<?> getType() {
         return ModRecipeTypes.FOUNDRY_TYPE;
+    }
+
+    static <B, C, T1, T2, T3, T4, T5, T6, T7, T8> PacketCodec<B, C> tuple(final PacketCodec<? super B, T1> codec1, final Function<C, T1> from1,
+                                                                          final PacketCodec<? super B, T2> codec2, final Function<C, T2> from2,
+                                                                          final PacketCodec<? super B, T3> codec3, final Function<C, T3> from3,
+                                                                          final PacketCodec<? super B, T4> codec4, final Function<C, T4> from4,
+                                                                          final PacketCodec<? super B, T5> codec5, final Function<C, T5> from5,
+                                                                          final PacketCodec<? super B, T6> codec6, final Function<C, T6> from6,
+                                                                          final PacketCodec<? super B, T7> codec7, final Function<C, T7> from7,
+                                                                          final PacketCodec<? super B, T8> codec8, final Function<C, T8> from8,
+                                                                          final Function8<T1, T2, T3, T4, T5, T6, T7, T8, C> to) {
+        return new PacketCodec<B, C>() {
+            public C decode(B object) {
+                T1 object1 = codec1.decode(object);
+                T2 object2 = codec2.decode(object);
+                T3 object3 = codec3.decode(object);
+                T4 object4 = codec4.decode(object);
+                T5 object5 = codec5.decode(object);
+                T6 object6 = codec6.decode(object);
+                T7 object7 = codec7.decode(object);
+                T8 object8 = codec8.decode(object);
+                return to.apply(object1, object2, object3, object4, object5, object6, object7, object8);
+            }
+
+            public void encode(B object, C object2) {
+                codec1.encode(object, from1.apply(object2));
+                codec2.encode(object, from2.apply(object2));
+                codec3.encode(object, from3.apply(object2));
+                codec4.encode(object, from4.apply(object2));
+                codec5.encode(object, from5.apply(object2));
+                codec6.encode(object, from6.apply(object2));
+                codec7.encode(object, from7.apply(object2));
+                codec8.encode(object, from8.apply(object2));
+            }
+        };
     }
 
     public record InputContainer(List<ItemStack> stacks, ItemStack flux) implements RecipeInput {
