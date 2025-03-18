@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "iljatech:block/clinker_bricks"
+      },
+      {
+        "model": "iljatech:block/clinker_bricks1"
+      },
+      {
+        "model": "iljatech:block/clinker_bricks2"
+      }
+    ]
+  }
+}

@@ -63,10 +63,15 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.NAILED_WARPED_PLANKS);
         addDrop(ModBlocks.BELLOWS);
         addDrop(ModBlocks.FIRE_BRICKS);
+        addDrop(ModBlocks.CLINKER_BRICKS);
         this.addDrop(ModBlocks.FIRE_CLAY, block -> this.drops(block, ModItems.FIRE_CLAY_BALL, ConstantLootNumberProvider.create(4.0F)));
         addDrop(ModBlocks.FIREBOX);
         addDrop(ModBlocks.FOUNDRY);
         addDrop(ModBlocks.RUSTY_CASING);
+        addDrop(ModBlocks.LIMESTONE);
+        addDrop(ModBlocks.LIMESTONE_STAIRS);
+        addDrop(ModBlocks.LIMESTONE_WALL);
+        slabDrops(ModBlocks.LIMESTONE_SLAB);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

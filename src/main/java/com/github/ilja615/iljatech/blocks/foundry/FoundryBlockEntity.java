@@ -2,21 +2,16 @@ package com.github.ilja615.iljatech.blocks.foundry;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
-import com.github.ilja615.iljatech.energy.BoilingRecipe;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.klikli_dev.modonomicon.api.ModonomiconAPI;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
@@ -43,7 +38,7 @@ import java.util.List;
 
 public class FoundryBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
-    public static final int RECIPE_DURATION = 100;
+    private int maxTicks = 0;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".foundry");
 
     private final SimpleInventory inventory = new SimpleInventory(5) {
@@ -78,10 +73,12 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
                             double z = pos.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52 * facing.getOffsetZ() : world.random.nextDouble() * 0.6 - 0.3);
                             ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
                         }
+                        // Update the processing time
+                        this.maxTicks = r.processingTime();
 
                         ItemStack output = r.output().copy();
                         if (!output.isEmpty()) {
-                            if (ticks++ > RECIPE_DURATION) {
+                            if (ticks++ > r.processingTime()) {
                                 // The recipe is finished. The output is handled.
                                 if (inventory.getStack(3).isEmpty()) { // 3 is output slot
                                     // In this case a new result ItemStack is added with 1 of the result.
@@ -106,16 +103,22 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
                                     inventory.getStack(3).increment(output.getCount());
                                 }
 
-                                // Subtracting the flux and giving the slag
+                                // Subtracting the flux
+                                boolean providedFlux = r.flux().getMatchingStacks().stream().map(ItemStack::getItem).toList().contains(inventory.getStack(2).getItem());
                                 inventory.getStack(2).decrement(r.flux().count()); // 2 is flux slot
-                                ItemStack slag = r.slag().copy();
-                                if (inventory.getStack(4).isEmpty()) { // 4 is slag slot
-                                    inventory.setStack(4, slag);
-                                } else if (inventory.getStack(4).getItem() == slag.getItem() &&
-                                        inventory.getStack(4).getCount() + slag.getCount() <= inventory.getStack(4).getMaxCount()) {
-                                    inventory.getStack(4).increment(slag.getCount());
+
+                                float slagChance = providedFlux ? r.slagChanceUsingFlux() : r.slagChanceWithoutFlux();
+                                if (world.random.nextFloat() <= slagChance) {
+                                    ItemStack slag = r.slag().copy();
+                                    if (inventory.getStack(4).isEmpty()) { // 4 is slag slot
+                                        inventory.setStack(4, slag);
+                                    } else if (inventory.getStack(4).getItem() == slag.getItem() &&
+                                            inventory.getStack(4).getCount() + slag.getCount() <= inventory.getStack(4).getMaxCount()) {
+                                        inventory.getStack(4).increment(slag.getCount());
+                                    }
                                 }
-                                    this.ticks = 0;
+                                this.ticks = 0;
+                                this.maxTicks = 0;
                             }
                         }
                     }
@@ -156,6 +159,7 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
+        this.maxTicks = nbt.getInt("MaxTicks");
         Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
@@ -163,6 +167,7 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
+        nbt.putInt("MaxTicks", this.maxTicks);
         Inventories.writeNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
@@ -181,6 +186,10 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
 
     public int getTicks() {
         return ticks;
+    }
+
+    public int getMaxTicks() {
+        return maxTicks;
     }
 
     private void update() {

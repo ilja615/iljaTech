@@ -72,6 +72,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.nailed_warped_planks", "Nailed Warped Planks");
         this.add("block.iljatech.fire_clay", "Fire Clay");
         this.add("block.iljatech.fire_bricks", "Fire Bricks");
+        this.add("block.iljatech.clinker_bricks", "Clinker Bricks");
         this.add("block.iljatech.limestone", "Limestone");
         this.add("block.iljatech.limestone_slab", "Limestone Slab");
         this.add("block.iljatech.limestone_stairs", "Limestone Stairs");
@@ -80,6 +81,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.bellows", "Bellows");
         this.add("block.iljatech.foundry", "Foundry");
         this.add("block.iljatech.firebox", "Firebox");
+        this.add("block.iljatech.coke_oven", "Coke Oven");
         this.add("block.iljatech.crank", "Crank");
         this.add("block.iljatech.gearbox", "Gear Box");
         this.add("block.iljatech.wooden_shaft", "Wooden Shaft");
@@ -95,6 +97,8 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
         this.add("container.iljatech.foundry", "Foundry");
+        this.add("container.iljatech.coke_oven", "Coke Oven");
+
     }
 
     @Override

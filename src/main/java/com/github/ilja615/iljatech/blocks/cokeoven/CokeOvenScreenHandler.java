@@ -1,6 +1,7 @@
-package com.github.ilja615.iljatech.blocks.foundry;
+package com.github.ilja615.iljatech.blocks.cokeoven;
 
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
+import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
@@ -9,34 +10,29 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.CraftingResultSlot;
-import net.minecraft.screen.slot.FurnaceOutputSlot;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.Nullable;
 
-public class FoundryScreenHandler extends ScreenHandler {
-    private final FoundryBlockEntity blockEntity;
+public class CokeOvenScreenHandler extends ScreenHandler {
+    private final CokeOvenBlockEntity blockEntity;
     private final ScreenHandlerContext context;
 
     // Client Constructor
-    public FoundryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
-        this(syncId, playerInventory, (FoundryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()));
+    public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
+        this(syncId, playerInventory, (CokeOvenBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()));
     }
 
     // Main Constructor - (Directly called from server)
-    public FoundryScreenHandler(int syncId, PlayerInventory playerInventory, FoundryBlockEntity blockEntity) {
-        super(ModScreenHandlerTypes.FOUNDRY, syncId);
+    public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory, CokeOvenBlockEntity blockEntity) {
+        super(ModScreenHandlerTypes.COKE_OVEN, syncId);
 
         this.blockEntity = blockEntity;
         this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
 
-        addSlot(new Slot(this.blockEntity.getInventory(), 0, 34, 35));
-        addSlot(new Slot(this.blockEntity.getInventory(), 1, 52, 35));
-        addSlot(new Slot(this.blockEntity.getInventory(), 2, 62, 11));
-        addSlot(new Slot(this.blockEntity.getInventory(), 3, 124, 35));
-        addSlot(new Slot(this.blockEntity.getInventory(), 4, 124, 58));
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                addSlot(new Slot(this.blockEntity.getInventory(), (column + (row * 3)), 62 + (column * 18), 6 + (row * 18)));
+            }
+        }
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
@@ -63,18 +59,14 @@ public class FoundryScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return canUse(this.context, player, ModBlocks.FOUNDRY);
+        return canUse(this.context, player, ModBlocks.COKE_OVEN);
     }
 
-    public FoundryBlockEntity getBlockEntity() {
+    public CokeOvenBlockEntity getBlockEntity() {
         return this.blockEntity;
     }
 
-    public float getProgress() {
-        return this.blockEntity.getMaxTicks() == 0 ? 0.0f : (float) this.blockEntity.getTicks() / this.blockEntity.getMaxTicks();
-    }
-
     public FireboxBlock.Lit getLitState() {
-        return this.blockEntity.validateHeatMultiblock();
+        return FireboxBlock.Lit.OFF;
     }
 }

@@ -2,6 +2,7 @@ package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.bellows.BellowsBlockEntity;
+import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
@@ -26,6 +27,8 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(FireboxBlockEntity::new, ModBlocks.FIREBOX).build());
     public static final BlockEntityType<FoundryBlockEntity> FOUNDRY = register("foundry",
             FabricBlockEntityTypeBuilder.create(FoundryBlockEntity::new, ModBlocks.FOUNDRY).build());
+    public static final BlockEntityType<CokeOvenBlockEntity> COKE_OVEN = register("coke_oven",
+            FabricBlockEntityTypeBuilder.create(CokeOvenBlockEntity::new, ModBlocks.COKE_OVEN).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);

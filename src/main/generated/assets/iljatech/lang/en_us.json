@@ -1,6 +1,8 @@
 {
   "block.iljatech.bellows": "Bellows",
   "block.iljatech.chrome_ore": "Chrome Ore",
+  "block.iljatech.clinker_bricks": "Clinker Bricks",
+  "block.iljatech.coke_oven": "Coke Oven",
   "block.iljatech.copper_rod": "Copper Rod",
   "block.iljatech.copper_wire": "Copper Wire",
   "block.iljatech.crank": "Crank",
@@ -51,6 +53,7 @@
   "book.iljatech.iljatech.boiling.name": "Boiling Category",
   "book.iljatech.iljatech.name": "IljaTech Book",
   "book.iljatech.iljatech.tooltip": "A book for IljaTech research",
+  "container.iljatech.coke_oven": "Coke Oven",
   "container.iljatech.foundry": "Foundry",
   "effect.iljatech.stunned": "Stunned",
   "item.iljatech.aluminium_ingot": "Aluminium Ingot",
