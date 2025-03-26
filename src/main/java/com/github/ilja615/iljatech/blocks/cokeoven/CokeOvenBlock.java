@@ -40,7 +40,12 @@ public class CokeOvenBlock extends HorizontalFacingBlock implements BlockEntityP
         if (state.get(OPEN)) {
             if(!world.isClient) {
                 if(world.getBlockEntity(pos) instanceof CokeOvenBlockEntity cokeOvenBlockEntity) {
-                    player.openHandledScreen(cokeOvenBlockEntity);
+                    if (cokeOvenBlockEntity.validateCokeOvenMultiblock())
+                        player.openHandledScreen(cokeOvenBlockEntity);
+                    else {
+                        world.setBlockState(pos, state.with(OPEN, false));
+                        world.playSound(null, pos, SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    }
                 }
             }
             world.setBlockState(pos, state.with(OPEN, false));

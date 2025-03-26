@@ -31,5 +31,15 @@ public class ModMultiblockProvider extends MultiblockProvider {
                         .block('F', () -> ModBlocks.FIREBOX)
                         .build(false)
         );
+
+        this.add(this.modLoc("coke_oven"),
+                new DenseMultiblockBuilder()
+                        .layer("###")
+                        .layer("###")
+                        .layer("##0")
+                        .block('#', () -> ModBlocks.CLINKER_BRICKS)
+                        .block('0', () -> ModBlocks.COKE_OVEN)
+                        .build(false)
+        );
     }
 }

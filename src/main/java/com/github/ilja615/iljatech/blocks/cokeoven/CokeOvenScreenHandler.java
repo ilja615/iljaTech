@@ -28,11 +28,9 @@ public class CokeOvenScreenHandler extends ScreenHandler {
         this.blockEntity = blockEntity;
         this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
 
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 3; column++) {
-                addSlot(new Slot(this.blockEntity.getInventory(), (column + (row * 3)), 62 + (column * 18), 6 + (row * 18)));
-            }
-        }
+        addSlot(new Slot(this.blockEntity.getInventory(), 0, 44, 24));
+        addSlot(new Slot(this.blockEntity.getInventory(), 1, 116, 24));
+
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
@@ -64,6 +62,10 @@ public class CokeOvenScreenHandler extends ScreenHandler {
 
     public CokeOvenBlockEntity getBlockEntity() {
         return this.blockEntity;
+    }
+
+    public float getProgress() {
+        return (float) this.blockEntity.getTicks() / 100.0f;
     }
 
     public FireboxBlock.Lit getLitState() {

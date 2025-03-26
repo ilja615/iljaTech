@@ -121,6 +121,7 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
                                 this.maxTicks = 0;
                             }
                         }
+                        break;
                     }
                 }
             } else {

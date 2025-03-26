@@ -1,0 +1,24 @@
+{
+  "type": "modonomicon:dense",
+  "mapping": {
+    "#": {
+      "type": "modonomicon:block",
+      "block": "iljatech:clinker_bricks"
+    },
+    "0": {
+      "type": "modonomicon:block",
+      "block": "iljatech:coke_oven"
+    }
+  },
+  "pattern": [
+    [
+      "###"
+    ],
+    [
+      "###"
+    ],
+    [
+      "##0"
+    ]
+  ]
+}

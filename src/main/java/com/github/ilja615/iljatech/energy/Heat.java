@@ -59,7 +59,6 @@ public class Heat {
                     for (RecipeEntry<BoilingRecipe> rr : recipes)
                     {
                         BoilingRecipe r = rr.value();
-                        System.out.println(r.stack() + " -> " + r.output());
                         ItemStack resultingStack = r.output().copy();
                         if (r.stack().getMatchingStacks()[0].isEmpty() || itemEntity.getStack().isEmpty())
                             break;

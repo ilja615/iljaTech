@@ -1,0 +1,10 @@
+{
+  "type": "iljatech:coking",
+  "ingredient": {
+    "item": "minecraft:coal"
+  },
+  "result": {
+    "count": 1,
+    "id": "iljatech:coke"
+  }
+}
