@@ -24,7 +24,7 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
             Codec.list(CountedIngredient.CODEC.codec()).fieldOf("ingredients").forGetter(FoundryRecipe::ingredients),
             ItemStack.CODEC.fieldOf("result").forGetter(FoundryRecipe::output),
             CountedIngredient.CODEC.fieldOf("flux").forGetter(FoundryRecipe::flux),
-            ItemStack.CODEC.fieldOf("slag").forGetter(FoundryRecipe::slag),
+            ItemStack.OPTIONAL_CODEC.fieldOf("slag").forGetter(FoundryRecipe::slag),
             Codec.INT.fieldOf("processing_time").forGetter(FoundryRecipe::processingTime),
             Codec.FLOAT.fieldOf("slag_chance_without_flux").forGetter(FoundryRecipe::slagChanceWithoutFlux),
             Codec.FLOAT.fieldOf("slag_chance_using_flux").forGetter(FoundryRecipe::slagChanceUsingFlux),
@@ -39,7 +39,7 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
             List<CountedIngredient> ingredients = ingredientsCodec.decode(buf);
             ItemStack output = ItemStack.PACKET_CODEC.decode(buf);
             CountedIngredient flux = CountedIngredient.PACKET_CODEC.decode(buf);
-            ItemStack slag = ItemStack.PACKET_CODEC.decode(buf);
+            ItemStack slag = ItemStack.OPTIONAL_PACKET_CODEC.decode(buf);
             int processingTime = PacketCodecs.INTEGER.decode(buf);
             float slagChance = PacketCodecs.FLOAT.decode(buf);
             float slagChanceUsingFlux = PacketCodecs.FLOAT.decode(buf);
@@ -52,7 +52,7 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
             ingredientsCodec.encode(buf, recipe.ingredients);
             ItemStack.PACKET_CODEC.encode(buf, recipe.output);
             CountedIngredient.PACKET_CODEC.encode(buf, recipe.flux);
-            ItemStack.PACKET_CODEC.encode(buf, recipe.slag);
+            ItemStack.OPTIONAL_PACKET_CODEC.encode(buf, recipe.slag);
             PacketCodecs.INTEGER.encode(buf, recipe.processingTime);
             PacketCodecs.FLOAT.encode(buf, recipe.slagChanceWithoutFlux);
             PacketCodecs.FLOAT.encode(buf, recipe.slagChanceUsingFlux);

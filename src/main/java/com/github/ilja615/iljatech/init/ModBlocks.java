@@ -7,6 +7,7 @@ import com.github.ilja615.iljatech.blocks.bellows.BellowsBlock;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlock;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlock;
+import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
@@ -54,9 +55,9 @@ public class ModBlocks {
     public static final Block BELLOWS = registerWithItem("bellows", new BellowsBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block STOKED_FIRE = registerWithItem("stoked_fire", new StokedFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.BRIGHT_RED).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));
     public static final Block FOUNDRY = registerWithItem("foundry", new FoundryBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.TERRACOTTA_WHITE).luminance(state -> state.get(FoundryBlock.LIT) ? 8 : 0)));
-    public static final Block RUSTY_CASING = registerWithItem("rusty_casing", new Block(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.BROWN).sounds(BlockSoundGroup.METAL)));
-    public static final Block FIREBOX = registerWithItem("firebox", new FireboxBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.BROWN).sounds(BlockSoundGroup.METAL).luminance(state -> state.get(FireboxBlock.LIT).luminance)));
+    public static final Block FIREBOX = registerWithItem("firebox", new FireboxBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.TERRACOTTA_WHITE).luminance(state -> state.get(FireboxBlock.LIT).luminance)));
     public static final Block COKE_OVEN = registerWithItem("coke_oven", new CokeOvenBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.DULL_RED).nonOpaque()));
+    public static final Block ITEM_HATCH = registerWithItem("item_hatch", new ItemHatchBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK)));
 
     public static final Block FIRE_CLAY = registerWithItem("fire_clay", new Block(AbstractBlock.Settings.copy(Blocks.CLAY).mapColor(MapColor.TERRACOTTA_WHITE)));
     public static final Block FIRE_BRICKS = registerWithItem("fire_bricks", new Block(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.TERRACOTTA_WHITE)));

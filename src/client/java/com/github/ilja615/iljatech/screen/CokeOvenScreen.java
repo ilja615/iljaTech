@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.screen;
 
 import com.github.ilja615.iljatech.IljaTech;
+import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenScreenHandler;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryScreenHandler;
 import net.minecraft.client.gui.DrawContext;
@@ -22,7 +23,7 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        int l = MathHelper.ceil(((CokeOvenScreenHandler)this.handler).getProgress() * 48);
+        int l = MathHelper.ceil((float) ((CokeOvenScreenHandler) this.handler).getTicks() / CokeOvenBlockEntity.PROCESS_TIME * 48);
         context.drawTexture(TEXTURE,this.x + 64, this.y + 24, 176, 0, l, 16);
         switch (((CokeOvenScreenHandler)this.handler).getLitState()) {
             case ON -> context.drawTexture(TEXTURE,this.x + 39, this.y + 54, 176, 16, 24, 14);
@@ -43,6 +44,13 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
                 case STOKED -> "Firebox is being stoked";
                 case CHOKING -> "Firebox choking. Cleaning needed.";
             };
+            context.drawTooltip(this.textRenderer, Text.literal(toolTip), mouseX, mouseY);
+        }
+        if (isPointWithinBounds(64, 24, 48, 16, mouseX, mouseY) && ((CokeOvenScreenHandler) this.handler).getTicks() > 0) {
+            int ticksRemaining = CokeOvenBlockEntity.PROCESS_TIME - ((CokeOvenScreenHandler) this.handler).getTicks();
+            int minutes = MathHelper.floor(ticksRemaining / 1200f);
+            int seconds = MathHelper.floor((ticksRemaining % 1200f) / 20f);
+            String toolTip = "Time left: " + (minutes < 10 ? "0"+minutes : minutes) + ":" + (seconds < 10 ? "0"+seconds : seconds);
             context.drawTooltip(this.textRenderer, Text.literal(toolTip), mouseX, mouseY);
         }
     }

@@ -9,6 +9,7 @@ import com.github.ilja615.iljatech.particles.SteamParticle;
 import com.github.ilja615.iljatech.renderer.RollerMillRenderer;
 import com.github.ilja615.iljatech.screen.CokeOvenScreen;
 import com.github.ilja615.iljatech.screen.FoundryScreen;
+import com.github.ilja615.iljatech.screen.ItemHatchScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -33,5 +34,6 @@ public class IljaTechClient implements ClientModInitializer {
 		// Bind screen to Handler
 		HandledScreens.register(ModScreenHandlerTypes.FOUNDRY, FoundryScreen::new);
 		HandledScreens.register(ModScreenHandlerTypes.COKE_OVEN, CokeOvenScreen::new);
+		HandledScreens.register(ModScreenHandlerTypes.ITEM_HATCH, ItemHatchScreen::new);
 	}
 }

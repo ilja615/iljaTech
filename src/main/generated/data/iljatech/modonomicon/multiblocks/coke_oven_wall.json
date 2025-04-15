@@ -7,17 +7,12 @@
     },
     "0": {
       "type": "modonomicon:block",
-      "block": "iljatech:coke_oven"
-    },
-    "H": {
-      "type": "modonomicon:tag",
-      "display": "iljatech:clinker_bricks",
-      "tag": "#iljatech:clinker_brick_or_item_hatch"
+      "block": "iljatech:clinker_bricks"
     }
   },
   "pattern": [
     [
-      "#H#"
+      "###"
     ],
     [
       "###"

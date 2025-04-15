@@ -67,7 +67,8 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         this.addDrop(ModBlocks.FIRE_CLAY, block -> this.drops(block, ModItems.FIRE_CLAY_BALL, ConstantLootNumberProvider.create(4.0F)));
         addDrop(ModBlocks.FIREBOX);
         addDrop(ModBlocks.FOUNDRY);
-        addDrop(ModBlocks.RUSTY_CASING);
+        addDrop(ModBlocks.ITEM_HATCH);
+        addDrop(ModBlocks.COKE_OVEN);
         addDrop(ModBlocks.LIMESTONE);
         addDrop(ModBlocks.LIMESTONE_STAIRS);
         addDrop(ModBlocks.LIMESTONE_WALL);

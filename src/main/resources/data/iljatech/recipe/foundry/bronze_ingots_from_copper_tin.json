@@ -25,11 +25,11 @@
   "flux": {
     "count": 0,
     "ingredient": {
-      "item": "minecraft:air"
+      "item": "minecraft:quartz"
     }
   },
   "slag": {
     "count": 0,
-    "id": "minecraft:air"
+    "id": "iljatech:silicate_slag"
   }
 }

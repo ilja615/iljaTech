@@ -52,6 +52,7 @@ public class ModItems {
     public static final Item COKE = register("coke", new Item(new Item.Settings()));
     public static final Item CRUSHED_COKE = register("crushed_coke", new Item(new Item.Settings()));
     public static final Item FERROUS_SLAG = register("ferrous_slag", new Item(new Item.Settings()));
+    public static final Item SILICATE_SLAG = register("silicate_slag", new Item(new Item.Settings()));
     public static final Item STEEL_BLOOM = register("steel_bloom", new Item(new Item.Settings()));
 
     public static <T extends Item> T register(String name, T item) {

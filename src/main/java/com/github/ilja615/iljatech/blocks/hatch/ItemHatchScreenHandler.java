@@ -1,8 +1,5 @@
-package com.github.ilja615.iljatech.blocks.cokeoven;
+package com.github.ilja615.iljatech.blocks.hatch;
 
-import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
-import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
-import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
@@ -14,25 +11,25 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 
-public class CokeOvenScreenHandler extends ScreenHandler {
-    private final CokeOvenBlockEntity blockEntity;
+public class ItemHatchScreenHandler extends ScreenHandler {
+    private final ItemHatchBlockEntity blockEntity;
     private final ScreenHandlerContext context;
 
     // Client Constructor
-    public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
-        this(syncId, playerInventory, (CokeOvenBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()), new SimpleInventory(5));
+    public ItemHatchScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
+        this(syncId, playerInventory, (ItemHatchBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()), new SimpleInventory(5));
     }
 
     // Main Constructor - (Directly called from server)
-    public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory, CokeOvenBlockEntity blockEntity, SimpleInventory inventory) {
-        super(ModScreenHandlerTypes.COKE_OVEN, syncId);
+    public ItemHatchScreenHandler(int syncId, PlayerInventory playerInventory, ItemHatchBlockEntity blockEntity, SimpleInventory inventory) {
+        super(ModScreenHandlerTypes.ITEM_HATCH, syncId);
 
         this.blockEntity = blockEntity;
         this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
 
-        addSlot(new Slot(inventory, 0, 44, 24));
-        addSlot(new Slot(inventory, 1, 116, 24));
-
+        for (int i = 0; i < 5; i++) {
+            addSlot(new Slot(inventory, i, 44 + (i * 18), 20));
+        }
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
@@ -41,14 +38,14 @@ public class CokeOvenScreenHandler extends ScreenHandler {
     private void addPlayerInventory(PlayerInventory playerInv) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(playerInv, 9 + (column + (row * 9)), 8 + (column * 18), 84 + (row * 18)));
+                addSlot(new Slot(playerInv, 9 + (column + (row * 9)), 8 + (column * 18), 51 + (row * 18)));
             }
         }
     }
 
     private void addPlayerHotbar(PlayerInventory playerInv) {
         for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(playerInv, column, 8 + (column * 18), 142));
+            addSlot(new Slot(playerInv, column, 8 + (column * 18), 109));
         }
     }
 
@@ -59,18 +56,10 @@ public class CokeOvenScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return canUse(this.context, player, ModBlocks.COKE_OVEN);
+        return canUse(this.context, player, ModBlocks.ITEM_HATCH);
     }
 
-    public CokeOvenBlockEntity getBlockEntity() {
+    public ItemHatchBlockEntity getBlockEntity() {
         return this.blockEntity;
-    }
-
-    public int getTicks() {
-        return this.blockEntity.getTicks();
-    }
-
-    public FireboxBlock.Lit getLitState() {
-        return FireboxBlock.Lit.OFF;
     }
 }

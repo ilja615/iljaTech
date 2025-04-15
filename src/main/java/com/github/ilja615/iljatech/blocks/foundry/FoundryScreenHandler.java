@@ -6,6 +6,7 @@ import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -22,21 +23,21 @@ public class FoundryScreenHandler extends ScreenHandler {
 
     // Client Constructor
     public FoundryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
-        this(syncId, playerInventory, (FoundryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()));
+        this(syncId, playerInventory, (FoundryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()), new SimpleInventory(5));
     }
 
     // Main Constructor - (Directly called from server)
-    public FoundryScreenHandler(int syncId, PlayerInventory playerInventory, FoundryBlockEntity blockEntity) {
+    public FoundryScreenHandler(int syncId, PlayerInventory playerInventory, FoundryBlockEntity blockEntity, SimpleInventory inventory) {
         super(ModScreenHandlerTypes.FOUNDRY, syncId);
 
         this.blockEntity = blockEntity;
         this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
 
-        addSlot(new Slot(this.blockEntity.getInventory(), 0, 34, 35));
-        addSlot(new Slot(this.blockEntity.getInventory(), 1, 52, 35));
-        addSlot(new Slot(this.blockEntity.getInventory(), 2, 62, 11));
-        addSlot(new Slot(this.blockEntity.getInventory(), 3, 124, 35));
-        addSlot(new Slot(this.blockEntity.getInventory(), 4, 124, 58));
+        addSlot(new Slot(inventory, 0, 34, 35));
+        addSlot(new Slot(inventory, 1, 52, 35));
+        addSlot(new Slot(inventory, 2, 62, 11));
+        addSlot(new Slot(inventory, 3, 124, 35));
+        addSlot(new Slot(inventory, 4, 124, 58));
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);

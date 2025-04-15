@@ -5,6 +5,7 @@ import com.github.ilja615.iljatech.blocks.bellows.BellowsBlockEntity;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
+import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
@@ -29,11 +30,14 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(FoundryBlockEntity::new, ModBlocks.FOUNDRY).build());
     public static final BlockEntityType<CokeOvenBlockEntity> COKE_OVEN = register("coke_oven",
             FabricBlockEntityTypeBuilder.create(CokeOvenBlockEntity::new, ModBlocks.COKE_OVEN).build());
+    public static final BlockEntityType<ItemHatchBlockEntity> ITEM_HATCH = register("item_hatch",
+            FabricBlockEntityTypeBuilder.create(ItemHatchBlockEntity::new, ModBlocks.ITEM_HATCH).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
         ItemStorage.SIDED.registerForBlockEntity(FireboxBlockEntity::getInventoryProvider, ModBlockEntityTypes.FIREBOX);
         ItemStorage.SIDED.registerForBlockEntity(FoundryBlockEntity::getInventoryProvider, ModBlockEntityTypes.FOUNDRY);
+        ItemStorage.SIDED.registerForBlockEntity(ItemHatchBlockEntity::getInventoryProvider, ModBlockEntityTypes.ITEM_HATCH);
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType<T> type) {

@@ -221,6 +221,6 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     @Nullable
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new FoundryScreenHandler(syncId, playerInventory, this);
+        return new FoundryScreenHandler(syncId, playerInventory, this, this.inventory);
     }
 }

@@ -82,6 +82,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.foundry", "Foundry");
         this.add("block.iljatech.firebox", "Firebox");
         this.add("block.iljatech.coke_oven", "Coke Oven");
+        this.add("block.iljatech.item_hatch", "Item Hatch");
         this.add("block.iljatech.crank", "Crank");
         this.add("block.iljatech.gearbox", "Gear Box");
         this.add("block.iljatech.wooden_shaft", "Wooden Shaft");
@@ -98,6 +99,8 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
         this.add("container.iljatech.foundry", "Foundry");
         this.add("container.iljatech.coke_oven", "Coke Oven");
+        this.add("container.iljatech.item_hatch", "Item Hatch");
+
 
     }
 

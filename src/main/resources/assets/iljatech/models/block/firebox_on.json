@@ -2,7 +2,7 @@
   "parent": "minecraft:block/orientable",
   "textures": {
     "front": "iljatech:block/firebox_on",
-    "side": "iljatech:block/rusty_casing",
-    "top": "iljatech:block/rusty_casing"
+    "side": "iljatech:block/fire_bricks",
+    "top": "iljatech:block/fire_bricks"
   }
 }

@@ -3,8 +3,10 @@ package com.github.ilja615.iljatech.blocks.cokeoven;
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlock;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryRecipe;
+import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
 import com.github.ilja615.iljatech.energy.BoilingRecipe;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.CountedIngredient;
@@ -31,6 +33,7 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -41,6 +44,7 @@ import java.util.List;
 public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".coke_oven");
+    public static final int PROCESS_TIME = 12000; // Ten minutes
     private final SimpleInventory inventory = new SimpleInventory(2) {
         @Override
         public void markDirty() {
@@ -57,6 +61,24 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     @Override
     public void tick() {
         if (validateCokeOvenMultiblock()) {
+            // Transfer items from the item hatch if there is one
+            Direction facing = world.getBlockState(pos).get(CokeOvenBlock.FACING);
+            if (world.getBlockEntity(pos.offset(facing.getOpposite()).up(2)) instanceof ItemHatchBlockEntity itemHatch) {
+                for (ItemStack stack : itemHatch.getInventory().getHeldStacks()) {
+                    if (!stack.isEmpty()) {
+                        if (inventory.getStack(0).isEmpty()) {
+                            inventory.setStack(0, new ItemStack(stack.getItem(), 1));
+                            stack.decrement(1);
+                            break;
+                        } else if (inventory.getStack(0).isOf(stack.getItem())) {
+                            inventory.getStack(0).increment(1);
+                            stack.decrement(1);
+                            break;
+                        }
+                    }
+                }
+            }
+
             List<RecipeEntry<CokingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.COKING_TYPE);
             boolean flag = false;
             for (RecipeEntry<CokingRecipe> rr : recipes)
@@ -69,7 +91,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                     world.setBlockState(pos, world.getBlockState(pos).with(CokeOvenBlock.LIT, true));
                     ItemStack output = r.output().copy();
                     if (!output.isEmpty()) {
-                        if (ticks++ > 100) {
+                        if (ticks++ > PROCESS_TIME) {
                             // The recipe is finished. The output is handled.
                             if (inventory.getStack(1).isEmpty()) { // 1 is output slot
                                 // In this case a new result ItemStack is added with 1 of the result.
@@ -98,7 +120,15 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     public boolean validateCokeOvenMultiblock() {
-        return (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos) != null);
+        BlockRotation rotation = ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos);
+        Direction facing = world.getBlockState(pos).get(CokeOvenBlock.FACING);
+        if (rotation != null) {
+            return (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven_wall")).validate(world, pos.offset(facing.rotateYClockwise()), rotation)
+                    || ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos.offset(facing.rotateYClockwise()), rotation))
+                    && (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven_wall")).validate(world, pos.offset(facing.rotateYCounterclockwise()), rotation)
+                    || ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos.offset(facing.rotateYCounterclockwise()), rotation));
+        }
+        return false;
     }
 
     @Override
@@ -159,6 +189,6 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     @Nullable
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new CokeOvenScreenHandler(syncId, playerInventory, this);
+        return new CokeOvenScreenHandler(syncId, playerInventory, this, this.inventory);
     }
 }

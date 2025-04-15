@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "iljatech:rusty_casing"
+          "name": "iljatech:item_hatch"
         }
       ],
       "rolls": 1.0

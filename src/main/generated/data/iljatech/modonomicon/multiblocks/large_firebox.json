@@ -3,11 +3,11 @@
   "mapping": {
     "#": {
       "type": "modonomicon:block",
-      "block": "iljatech:rusty_casing"
+      "block": "iljatech:fire_bricks"
     },
     "0": {
       "type": "modonomicon:block",
-      "block": "iljatech:rusty_casing"
+      "block": "iljatech:fire_bricks"
     },
     "F": {
       "type": "modonomicon:block",
