@@ -15,6 +15,7 @@ public class ItemHatchScreen extends HandledScreen<ItemHatchScreenHandler> {
         super(handler, inventory, title);
         this.backgroundWidth = 176;
         this.backgroundHeight = 133;
+        this.playerInventoryTitleY = 39;
     }
 
     @Override

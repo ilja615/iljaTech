@@ -10,6 +10,7 @@ import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -37,7 +38,9 @@ public class ModBlockEntityTypes {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
         ItemStorage.SIDED.registerForBlockEntity(FireboxBlockEntity::getInventoryProvider, ModBlockEntityTypes.FIREBOX);
         ItemStorage.SIDED.registerForBlockEntity(FoundryBlockEntity::getInventoryProvider, ModBlockEntityTypes.FOUNDRY);
+        ItemStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getInventoryProvider, ModBlockEntityTypes.COKE_OVEN);
         ItemStorage.SIDED.registerForBlockEntity(ItemHatchBlockEntity::getInventoryProvider, ModBlockEntityTypes.ITEM_HATCH);
+        FluidStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getFluidTankProvider, ModBlockEntityTypes.COKE_OVEN);
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType<T> type) {

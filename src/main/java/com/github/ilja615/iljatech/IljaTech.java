@@ -28,6 +28,7 @@ public class IljaTech implements ModInitializer {
 		ModScreenHandlerTypes.load();
 		ModRecipeTypes.load();
 		ModRecipeTypes.registerIngredientTypes();
+		ModFluids.load();
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);

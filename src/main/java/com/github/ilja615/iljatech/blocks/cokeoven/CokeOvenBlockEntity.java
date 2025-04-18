@@ -7,13 +7,18 @@ import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
 import com.github.ilja615.iljatech.energy.BoilingRecipe;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
+import com.github.ilja615.iljatech.init.ModFluids;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.klikli_dev.modonomicon.api.ModonomiconAPI;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -25,6 +30,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -44,7 +50,7 @@ import java.util.List;
 public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".coke_oven");
-    public static final int PROCESS_TIME = 12000; // Ten minutes
+    public static final int PROCESS_TIME = 120; // Ten minutes
     private final SimpleInventory inventory = new SimpleInventory(2) {
         @Override
         public void markDirty() {
@@ -53,6 +59,10 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
         }
     };
     private final InventoryStorage storage = InventoryStorage.of(inventory,null);
+
+    private final SingleFluidStorage fluidStorage = SingleFluidStorage.withFixedCapacity(
+            FluidConstants.BUCKET * 16,
+            this::update);
 
     public CokeOvenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.COKE_OVEN, pos, state);
@@ -93,17 +103,23 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                     if (!output.isEmpty()) {
                         if (ticks++ > PROCESS_TIME) {
                             // The recipe is finished. The output is handled.
-                            if (inventory.getStack(1).isEmpty()) { // 1 is output slot
-                                // In this case a new result ItemStack is added with 1 of the result.
-                                inventory.getStack(0).decrement(1);
-                                inventory.setStack(1, output);
-                            } else if (inventory.getStack(1).getItem() == output.getItem() &&
-                                    inventory.getStack(1).getCount() + output.getCount() <= inventory.getStack(1).getMaxCount()) {
-                                // In this case the result ItemStack is added to what was already there
-                                inventory.getStack(0).decrement(1);
-                                inventory.getStack(1).increment(output.getCount());
+                            long insertedAmount = 0;
+                            try(Transaction transaction = Transaction.openOuter()) {
+                                insertedAmount = fluidStorage.insert(FluidVariant.of(ModFluids.STILL_CREOSOTE_OIL), FluidConstants.BUCKET/10, transaction);
                             }
-                            this.ticks = 0;
+                            if (insertedAmount > 0) {
+                                if (inventory.getStack(1).isEmpty()) { // 1 is output slot
+                                    // In this case a new result ItemStack is added with 1 of the result.
+                                    inventory.getStack(0).decrement(1);
+                                    inventory.setStack(1, output);
+                                } else if (inventory.getStack(1).getItem() == output.getItem() &&
+                                        inventory.getStack(1).getCount() + output.getCount() <= inventory.getStack(1).getMaxCount()) {
+                                    // In this case the result ItemStack is added to what was already there
+                                    inventory.getStack(0).decrement(1);
+                                    inventory.getStack(1).increment(output.getCount());
+                                }
+                                this.ticks = 0;
+                            }
                         }
                         flag = true;
                     }
@@ -135,14 +151,26 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
-        Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+
+        if (nbt.contains("Inventory", NbtElement.COMPOUND_TYPE))
+            Inventories.readNbt(nbt.getCompound("Inventory"), this.inventory.getHeldStacks(), registryLookup);
+
+        if (nbt.contains("FluidTank", NbtElement.COMPOUND_TYPE))
+            this.fluidStorage.readNbt(nbt.getCompound("FluidTank"), registryLookup);
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
-        Inventories.writeNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+
+        var inventoryNbt = new NbtCompound();
+        Inventories.writeNbt(inventoryNbt, this.inventory.getHeldStacks(), registryLookup);
+        nbt.put("Inventory", inventoryNbt);
+
+        var fluidNbt = new NbtCompound();
+        this.fluidStorage.writeNbt(fluidNbt, registryLookup);
+        nbt.put("FluidTank", fluidNbt);
     }
 
     @Nullable
@@ -174,6 +202,14 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
 
     public SimpleInventory getInventory() {
         return this.inventory;
+    }
+
+    public SingleFluidStorage getFluidTankProvider(Direction direction) {
+        return this.fluidStorage;
+    }
+
+    public SingleFluidStorage getFluidStorage() {
+        return this.fluidStorage;
     }
 
     @Override

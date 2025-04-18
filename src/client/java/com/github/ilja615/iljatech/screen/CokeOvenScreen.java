@@ -4,6 +4,7 @@ import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenScreenHandler;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryScreenHandler;
+import com.github.ilja615.iljatech.screen.widget.FluidWidget;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,6 +19,14 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
         super(handler, inventory, title);
         this.backgroundWidth = 176;
         this.backgroundHeight = 166;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        addDrawable(new FluidWidget(this.handler.getBlockEntity().getFluidStorage(),
+                116, 42, () -> this.handler.getBlockEntity().getPos()));
     }
 
     @Override
