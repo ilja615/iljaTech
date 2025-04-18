@@ -14,10 +14,14 @@ import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.klikli_dev.modonomicon.api.ModonomiconAPI;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -45,13 +49,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".coke_oven");
     public static final int PROCESS_TIME = 120; // Ten minutes
-    private final SimpleInventory inventory = new SimpleInventory(2) {
+    private final SimpleInventory inventory = new SimpleInventory(3) {
         @Override
         public void markDirty() {
             super.markDirty();
@@ -63,6 +68,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     private final SingleFluidStorage fluidStorage = SingleFluidStorage.withFixedCapacity(
             FluidConstants.BUCKET * 16,
             this::update);
+    private final ContainerItemContext fluidItemContext = ContainerItemContext.ofSingleSlot(InventoryStorage.of(inventory, null).getSlot(2));
 
     public CokeOvenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.COKE_OVEN, pos, state);
@@ -89,6 +95,25 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                 }
             }
 
+            // Transfer fluids to the bucket or item if there is one
+            Storage<FluidVariant> itemFluidStorage  = this.fluidItemContext.find(FluidStorage.ITEM);
+            if (itemFluidStorage != null && fluidStorage.amount >= FluidConstants.BUCKET) {
+                long acceptedAmount = 0;
+                long transferredAmount = 0;
+                try(Transaction transaction = Transaction.openOuter()) {
+                    acceptedAmount = itemFluidStorage.insert(FluidVariant.of(ModFluids.STILL_CREOSOTE_OIL), FluidConstants.BUCKET, transaction);
+                    System.out.println(acceptedAmount);
+                    if (acceptedAmount == FluidConstants.BUCKET) {
+                        transferredAmount = fluidStorage.extract(FluidVariant.of(ModFluids.STILL_CREOSOTE_OIL), FluidConstants.BUCKET, transaction);
+                        System.out.println(transferredAmount);
+                        if (transferredAmount == FluidConstants.BUCKET) {
+                            transaction.commit();
+                            update();
+                        }
+                    }
+                }
+            }
+
             List<RecipeEntry<CokingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.COKING_TYPE);
             boolean flag = false;
             for (RecipeEntry<CokingRecipe> rr : recipes)
@@ -106,6 +131,10 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                             long insertedAmount = 0;
                             try(Transaction transaction = Transaction.openOuter()) {
                                 insertedAmount = fluidStorage.insert(FluidVariant.of(ModFluids.STILL_CREOSOTE_OIL), FluidConstants.BUCKET/10, transaction);
+                                if (insertedAmount > 0) {
+                                    transaction.commit();
+                                    update();
+                                }
                             }
                             if (insertedAmount > 0) {
                                 if (inventory.getStack(1).isEmpty()) { // 1 is output slot
@@ -145,6 +174,13 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                     || ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos.offset(facing.rotateYCounterclockwise()), rotation));
         }
         return false;
+    }
+
+    public boolean isValid(ItemStack stack, int slot) {
+        if(stack.isEmpty()) return true;
+
+        Storage<FluidVariant> storage = ContainerItemContext.withConstant(stack).find(FluidStorage.ITEM);
+        return storage != null;
     }
 
     @Override

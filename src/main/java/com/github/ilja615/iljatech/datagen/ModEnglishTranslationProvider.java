@@ -95,14 +95,13 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("item.iljatech.iron_nails", "Iron Nails");
         this.add("block.iljatech.copper_rod", "Copper Rod");
         this.add("block.iljatech.copper_wire", "Copper Wire");
+        this.add("block.iljatech.creosote_oil", "Creosote Oil");
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
         this.add("container.iljatech.foundry", "Foundry");
         this.add("container.iljatech.coke_oven", "Coke Oven");
         this.add("container.iljatech.item_hatch", "Item Hatch");
-
-
     }
 
     @Override

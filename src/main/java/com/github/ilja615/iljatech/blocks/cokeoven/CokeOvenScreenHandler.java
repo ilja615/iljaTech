@@ -32,7 +32,12 @@ public class CokeOvenScreenHandler extends ScreenHandler {
 
         addSlot(new Slot(inventory, 0, 44, 24));
         addSlot(new Slot(inventory, 1, 116, 24));
-
+        addSlot(new Slot(inventory, 2, 116, 42) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return blockEntity.isValid(stack, 2);
+            }
+        });
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);

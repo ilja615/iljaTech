@@ -26,7 +26,7 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
         super.init();
 
         addDrawable(new FluidWidget(this.handler.getBlockEntity().getFluidStorage(),
-                116, 42, () -> this.handler.getBlockEntity().getPos()));
+                this.x + 116, this.y + 42, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
     }
 
     @Override
@@ -63,4 +63,5 @@ public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
             context.drawTooltip(this.textRenderer, Text.literal(toolTip), mouseX, mouseY);
         }
     }
+
 }

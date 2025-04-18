@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "iljatech:fire_brick"
+    },
+    {
+      "item": "minecraft:brick"
+    },
+    {
+      "item": "iljatech:fire_brick"
+    },
+    {
+      "item": "minecraft:brick"
+    },
+    {
+      "item": "minecraft:coal"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:clinker_bricks"
+  }
+}

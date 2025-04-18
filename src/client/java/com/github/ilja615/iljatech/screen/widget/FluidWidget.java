@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.texture.Sprite;
@@ -15,6 +16,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.math.ColorHelper;
@@ -26,13 +28,16 @@ import java.util.function.Supplier;
 public class FluidWidget implements Drawable, Widget {
     private final SingleFluidStorage fluidTank;
     private final Supplier<BlockPos> posSupplier;
+    private int x;
+    private int y;
+    private TextRenderer textRenderer;
 
-    private int x, y;
-    public FluidWidget(SingleFluidStorage fluidTank, int x, int y, Supplier<BlockPos> posSupplier) {
+    public FluidWidget(SingleFluidStorage fluidTank, int x, int y, Supplier<BlockPos> posSupplier, TextRenderer textRenderer) {
         this.fluidTank = fluidTank;
         this.x = x;
         this.y = y;
         this.posSupplier = posSupplier;
+        this.textRenderer = textRenderer;
     }
 
     @Override
@@ -55,8 +60,12 @@ public class FluidWidget implements Drawable, Widget {
         float blue = (tintColor & 0xFF) / 255.0F;
         context.drawSprite(this.x, this.y, 0, 16, 16, stillTexture, red, green, blue, 1.0f);
 
+        String string = String.valueOf(MathHelper.floor((float) fluidAmount / FluidConstants.BUCKET * 10f)/10.0f);
+        context.drawText(textRenderer, string, x + 19 - 2 - textRenderer.getWidth(string), y + 6 + 3, 16777215, true);
+
         if (isPointWithinBounds(this.x, this.y, mouseX, mouseY)) {
             drawTooltip(context, mouseX, mouseY);
+//            context.fillGradient(RenderLayer.getGuiOverlay(), this.x, this.y, this.x + 16, this.y + 16, -2130706433, -2130706433, 0);
         }
     }
 

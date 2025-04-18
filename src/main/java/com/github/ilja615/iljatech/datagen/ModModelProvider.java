@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.datagen;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
+import com.github.ilja615.iljatech.init.ModFluids;
 import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -43,7 +44,7 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.CRUSHED_COKE, Models.GENERATED);
         itemModelGenerator.register(ModItems.FERROUS_SLAG, Models.GENERATED);
         itemModelGenerator.register(ModItems.STEEL_BLOOM, Models.GENERATED);
-
+        itemModelGenerator.register(ModFluids.CREOSOTE_OIL_BUCKET, Models.GENERATED);
     }
 
     @Override
