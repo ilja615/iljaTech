@@ -1,10 +1,14 @@
 {
   "type": "iljatech:coking",
   "ingredient": {
-    "item": "minecraft:coal"
+    "count": 16,
+    "ingredient": {
+      "item": "minecraft:coal"
+    }
   },
   "result": {
-    "count": 1,
+    "count": 16,
     "id": "iljatech:coke"
-  }
+  },
+  "fluid_amount": 40500
 }

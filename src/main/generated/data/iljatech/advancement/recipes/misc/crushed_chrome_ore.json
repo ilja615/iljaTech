@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_iron_hammer": {
+      "conditions": {
+        "items": [
+          {
+            "items": "iljatech:iron_hammer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_raw_chrome": {
+      "conditions": {
+        "items": [
+          {
+            "items": "iljatech:raw_chrome"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "iljatech:crushed_chrome_ore"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raw_chrome",
+      "has_iron_hammer"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "iljatech:crushed_chrome_ore"
+    ]
+  }
+}

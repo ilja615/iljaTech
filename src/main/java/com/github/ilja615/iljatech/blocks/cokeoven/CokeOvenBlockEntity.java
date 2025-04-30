@@ -55,7 +55,7 @@ import java.util.List;
 public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".coke_oven");
-    public static final int PROCESS_TIME = 120; // Ten minutes
+    public static final int PROCESS_TIME = 120; // 12000 ticks is ten minutes
     private final SimpleInventory inventory = new SimpleInventory(3) {
         @Override
         public void markDirty() {
@@ -130,7 +130,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                             // The recipe is finished. The output is handled.
                             long insertedAmount = 0;
                             try(Transaction transaction = Transaction.openOuter()) {
-                                insertedAmount = fluidStorage.insert(FluidVariant.of(ModFluids.STILL_CREOSOTE_OIL), FluidConstants.BUCKET/10, transaction);
+                                insertedAmount = fluidStorage.insert(FluidVariant.of(ModFluids.STILL_CREOSOTE_OIL), r.fluidAmount(), transaction);
                                 if (insertedAmount > 0) {
                                     transaction.commit();
                                     update();
@@ -139,12 +139,12 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                             if (insertedAmount > 0) {
                                 if (inventory.getStack(1).isEmpty()) { // 1 is output slot
                                     // In this case a new result ItemStack is added with 1 of the result.
-                                    inventory.getStack(0).decrement(1);
+                                    inventory.getStack(0).decrement(r.countedIngredient().count());
                                     inventory.setStack(1, output);
                                 } else if (inventory.getStack(1).getItem() == output.getItem() &&
                                         inventory.getStack(1).getCount() + output.getCount() <= inventory.getStack(1).getMaxCount()) {
                                     // In this case the result ItemStack is added to what was already there
-                                    inventory.getStack(0).decrement(1);
+                                    inventory.getStack(0).decrement(r.countedIngredient().count());
                                     inventory.getStack(1).increment(output.getCount());
                                 }
                                 this.ticks = 0;

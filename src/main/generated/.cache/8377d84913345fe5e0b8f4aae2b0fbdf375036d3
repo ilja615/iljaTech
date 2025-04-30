@@ -1,4 +1,4 @@
-// 1.21.1	2025-04-18T18:31:36.8295655	iljaTech/Model Definitions
+// 1.21.1	2025-04-21T18:07:57.5018211	iljaTech/Model Definitions
 0feaf9402fd84f103c6fbea0c119603b1130403d assets\iljatech\models\item\tin_ingot.json
 b4573e37b2e0361fb19d0616215f3056bb613ac4 assets\iljatech\models\item\aluminium_ingot.json
 cfe4e93d3d127cea57dabb2d50cd5ea0bfa1afdd assets\iljatech\models\item\fire_clay_ball.json
@@ -12,8 +12,8 @@ b658a8ff35755d64f0b5a5030f392b1b23126ade assets\iljatech\blockstates\nailed_jung
 01dc3437f145817bfbd04a150cecc4897e77a561 assets\iljatech\models\block\item_hatch.json
 283bc5332ee7b690b58bfb9fbd0e89fb098fe7d1 assets\iljatech\models\item\limestone_wall.json
 ee0230680a91de092825490b59f94e460bfc8799 assets\iljatech\models\item\raw_tin_ore.json
-2454bc652349a76b65039bf3dbdd78400270db8b assets\iljatech\models\block\nailed_oak_planks.json
 a71a646584d0483c583b140d9e35ed338457c5db assets\iljatech\models\item\crushed_tin_ore.json
+2454bc652349a76b65039bf3dbdd78400270db8b assets\iljatech\models\block\nailed_oak_planks.json
 881e8c2142094d46f7cf416e9aa86d3143fe11d2 assets\iljatech\blockstates\raw_aluminium_ore.json
 91f500f776adbddbebd2953a9ddb6eea4981f49f assets\iljatech\models\item\nailed_spruce_planks.json
 96761088bbbf597081071090d914710c74d3eefd assets\iljatech\models\item\crushed_aluminium_ore.json
@@ -60,8 +60,8 @@ abbd6d4bb78304a18d8d2d817e11832dac9f670f assets\iljatech\models\item\crushed_cok
 cfc21281986fdd2aac2a4b6bf43e87f6463f8399 assets\iljatech\models\item\nailed_jungle_planks.json
 e92d9d37f6d8156ea9a22de437524a4b68d58633 assets\iljatech\blockstates\raw_chrome_ore.json
 023284f2be0466fbc5d2885807c3176de6d15780 assets\iljatech\models\block\limestone_slab.json
-e3620101a381908dcd232ea0db67db1cf9c68a07 assets\iljatech\models\item\crushed_copper_ore.json
 a9821342c5a8f233e4bf96466b36cb420d9ad015 assets\iljatech\models\item\coke.json
+e3620101a381908dcd232ea0db67db1cf9c68a07 assets\iljatech\models\item\crushed_copper_ore.json
 792f78f3b540be3a1c42d4593fdbf645570fe247 assets\iljatech\models\item\raw_nickel.json
 862ef4567af27bf40c20442818d4926f8ceec2e7 assets\iljatech\blockstates\deepslate_chrome_ore.json
 72b92f2135abafe34551039321afde04a0496359 assets\iljatech\models\item\fire_brick.json
@@ -73,9 +73,9 @@ a95daa7a5b957fac962c8e667a69953ab2572d76 assets\iljatech\models\item\crushed_chr
 d535497717177424f1a9ccf230c113ed1538b176 assets\iljatech\models\block\nailed_bamboo_planks.json
 1fb808227bb0324de8df5f9da0a9b75398697464 assets\iljatech\blockstates\nickel_ore.json
 453ec80c0afc6254959e2776bd112cecadb9b131 assets\iljatech\models\block\nailed_warped_planks.json
+49e03116617aacbcd1a546420ab58a380e8f5b26 assets\iljatech\blockstates\fire_clay.json
 e5a4460b0a9ab722c1b72e3e600461b2010d8158 assets\iljatech\blockstates\nailed_dark_oak_planks.json
 751e229fa592a839088ae0230b8f57e1e8c961db assets\iljatech\blockstates\nailed_mangrove_planks.json
-49e03116617aacbcd1a546420ab58a380e8f5b26 assets\iljatech\blockstates\fire_clay.json
 e3e0dc115e6c71b580530b2f7caffd21ea8c1de0 assets\iljatech\models\block\nailed_cherry_planks.json
 3be8b161b787c645dbad310334671853c6f588ff assets\iljatech\models\block\deepslate_nickel_ore.json
 35d2258ade1933377c69caa6dc64b05b6a59fc4c assets\iljatech\blockstates\gravel_aluminium_ore.json

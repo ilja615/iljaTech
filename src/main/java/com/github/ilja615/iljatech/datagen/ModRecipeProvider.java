@@ -35,6 +35,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         oreSmeltingBlastingRecipes(List.of(ModBlocks.NICKEL_ORE, ModBlocks.DEEPSLATE_NICKEL_ORE, ModItems.RAW_NICKEL_ORE),
                 ModItems.NICKEL_INGOT, 0.7f, "nickel", exporter);
         plateRecipe(Items.IRON_INGOT, ModBlocks.IRON_PLATE, exporter);
+        hammerRecipe(ModItems.STEEL_BLOOM, ModItems.STEEL_INGOT, exporter);
+        hammerRecipe(ModItems.COKE, ModItems.CRUSHED_COKE, exporter);
+        hammerRecipe(ModItems.RAW_ALUMINIUM_ORE, ModItems.CRUSHED_RAW_ALUMINIUM, exporter);
+        hammerRecipe(ModItems.RAW_CHROME_ORE, ModItems.CRUSHED_RAW_CHROME, exporter);
+        hammerRecipe(Items.RAW_COPPER, ModItems.CRUSHED_RAW_COPPER, exporter);
+        hammerRecipe(Items.RAW_GOLD, ModItems.CRUSHED_RAW_GOLD, exporter);
+        hammerRecipe(Items.RAW_IRON, ModItems.CRUSHED_RAW_IRON, exporter);
+        hammerRecipe(ModItems.RAW_NICKEL_ORE, ModItems.CRUSHED_RAW_NICKEL, exporter);
+        hammerRecipe(ModItems.RAW_TIN_ORE, ModItems.CRUSHED_RAW_TIN, exporter);
+
         RecipeProvider.offerSmelting(exporter, List.of(ModItems.FIRE_CLAY_BALL), RecipeCategory.MISC, ModItems.FIRE_BRICK, 0.4f, 200, "fire_brick");
 }
 
@@ -63,6 +73,17 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .input('H', ModItems.IRON_HAMMER)
                 .pattern("H ")
                 .pattern("##")
+                .criterion(hasItem(item), conditionsFromItem(item))
+                .criterion(hasItem(ModItems.IRON_HAMMER), conditionsFromItem(ModItems.IRON_HAMMER))
+                .offerTo(exporter);
+    }
+
+    private static void hammerRecipe(Item item, ItemConvertible output, RecipeExporter exporter) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, output)
+                .input('#', item)
+                .input('H', ModItems.IRON_HAMMER)
+                .pattern("H")
+                .pattern("#")
                 .criterion(hasItem(item), conditionsFromItem(item))
                 .criterion(hasItem(ModItems.IRON_HAMMER), conditionsFromItem(ModItems.IRON_HAMMER))
                 .offerTo(exporter);

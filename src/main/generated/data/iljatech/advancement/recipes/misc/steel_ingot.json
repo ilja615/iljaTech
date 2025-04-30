@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_iron_hammer": {
+      "conditions": {
+        "items": [
+          {
+            "items": "iljatech:iron_hammer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_steel_bloom": {
+      "conditions": {
+        "items": [
+          {
+            "items": "iljatech:steel_bloom"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "iljatech:steel_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_steel_bloom",
+      "has_iron_hammer"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "iljatech:steel_ingot"
+    ]
+  }
+}

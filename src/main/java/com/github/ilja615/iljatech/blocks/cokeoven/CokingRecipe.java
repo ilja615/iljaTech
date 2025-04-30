@@ -1,11 +1,15 @@
 package com.github.ilja615.iljatech.blocks.cokeoven;
 
+import com.github.ilja615.iljatech.blocks.foundry.FoundryRecipe;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
+import com.github.ilja615.iljatech.util.CountedIngredient;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
@@ -15,13 +19,15 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
-public record CokingRecipe(Ingredient stack, ItemStack output) implements Recipe<CokingRecipe.InputContainer> {
+public record CokingRecipe(CountedIngredient countedIngredient, ItemStack output, int fluidAmount) implements Recipe<CokingRecipe.InputContainer> {
 
     public static final MapCodec<CokingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient")
-                .forGetter(CokingRecipe::stack),
+        CountedIngredient.CODEC.fieldOf("ingredient")
+                .forGetter(CokingRecipe::countedIngredient),
         ItemStack.CODEC.fieldOf("result")
-                .forGetter(CokingRecipe::output)
+                .forGetter(CokingRecipe::output),
+        Codec.INT.fieldOf("fluid_amount")
+                .forGetter(CokingRecipe::fluidAmount)
             ).apply(
                 instance,
                 CokingRecipe::new
@@ -29,16 +35,18 @@ public record CokingRecipe(Ingredient stack, ItemStack output) implements Recipe
     );
 
     public static final PacketCodec<RegistryByteBuf, CokingRecipe> PACKET_CODEC = PacketCodec.tuple(
-        Ingredient.PACKET_CODEC,
-        CokingRecipe::stack,
+        CountedIngredient.PACKET_CODEC,
+        CokingRecipe::countedIngredient,
         ItemStack.PACKET_CODEC,
         CokingRecipe::output,
+        PacketCodecs.INTEGER,
+        CokingRecipe::fluidAmount,
         CokingRecipe::new
     );
 
     @Override
     public boolean matches(InputContainer input, World world) {
-        return stack.test(input.stack());
+        return countedIngredient.test(input.stack());
     }
 
     @Override

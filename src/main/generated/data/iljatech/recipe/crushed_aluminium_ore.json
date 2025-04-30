@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "iljatech:raw_aluminium"
+    },
+    "H": {
+      "item": "iljatech:iron_hammer"
+    }
+  },
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:crushed_aluminium_ore"
+  }
+}

@@ -9,6 +9,7 @@ import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
+import com.github.ilja615.iljatech.blocks.windmill.WindmillBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -33,6 +34,8 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(CokeOvenBlockEntity::new, ModBlocks.COKE_OVEN).build());
     public static final BlockEntityType<ItemHatchBlockEntity> ITEM_HATCH = register("item_hatch",
             FabricBlockEntityTypeBuilder.create(ItemHatchBlockEntity::new, ModBlocks.ITEM_HATCH).build());
+    public static final BlockEntityType<WindmillBlockEntity> WINDMILL = register("windmill",
+            FabricBlockEntityTypeBuilder.create(WindmillBlockEntity::new, ModBlocks.WINDMILL).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
