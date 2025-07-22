@@ -1,0 +1,25 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "iljatech:block/conveyor_belt_diag_off",
+		"1": "iljatech:block/conveyor_belt_down_off_h",
+		"3": "iljatech:block/conveyor_belt_up_big_off",
+		"4": "iljatech:block/wooden_scaffold",
+		"particle": "iljatech:block/conveyor_belt_diag_off"
+	},
+	"elements": [
+		{
+			"from": [0, 8, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 0]},
+			"faces": {
+				"north": {"uv": [0, 8, 16, 16], "texture": "#0"},
+				"east": {"uv": [16, 8, 0, 16], "texture": "#1"},
+				"south": {"uv": [16, 8, 0, 16], "texture": "#0"},
+				"west": {"uv": [0, 8, 16, 16], "texture": "#3"},
+				"up": {"uv": [7, 4, 8, 5], "rotation": 90, "texture": "#4"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 90, "texture": "#4"}
+			}
+		}
+	]
+}

@@ -11,6 +11,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,13 +24,6 @@ public class WindmillBlockEntity extends BlockEntity implements TickableBlockEnt
 
     @Override
     public void tick() {
-        if (this.world == null || this.world.isClient)
-            return;
-
-        if (ticks++ > 80) {
-            this.ticks = 0;
-        }
-        update();
     }
 
     @Override

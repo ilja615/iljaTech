@@ -5,6 +5,7 @@ import com.github.ilja615.iljatech.blocks.*;
 import com.github.ilja615.iljatech.blocks.AxisRodBlock;
 import com.github.ilja615.iljatech.blocks.bellows.BellowsBlock;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlock;
+import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlock;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlock;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlock;
@@ -73,6 +74,7 @@ public class ModBlocks {
     public static final Block TURBINE = registerWithItem("turbine", new TurbineBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block WINDMILL = registerWithItem("windmill", new WindmillBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD)));
     public static final Block WINDMILL_BLADE = registerWithItem("windmill_blade", new Block(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block CONVEYOR_BELT = registerWithItem("conveyor_belt", new ConveyorBeltBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD)));
 
     public static final Block COPPER_ROD = registerWithItem("copper_rod", new AxisRodBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block COPPER_WIRE = registerWithItem("copper_wire", new WireBlock(AbstractBlock.Settings.copy(Blocks.RAIL)));
