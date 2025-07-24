@@ -9,6 +9,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.nio.channels.Pipe;
@@ -24,17 +25,41 @@ public class PipeBlock  extends Block {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockState blockstate = this.getDefaultState();
-        return updateBlockState(ctx.getWorld(), ctx.getBlockPos(), blockstate, true);
-    }
+        Direction dir1 = ctx.getSide().getOpposite();
+        Direction dir2 = ctx.getPlayerLookDirection().getOpposite();
+        PipeShape pipeshape = null;
+        if ((dir1 == Direction.NORTH && dir2 == Direction.SOUTH) || (dir2 == Direction.NORTH && dir1 == Direction.SOUTH))
+            pipeshape = PipeShape.NORTH_SOUTH;
+        if ((dir1 == Direction.NORTH && dir2 == Direction.EAST) || (dir2 == Direction.NORTH && dir1 == Direction.EAST))
+            pipeshape = PipeShape.NORTH_EAST;
+        if ((dir1 == Direction.NORTH && dir2 == Direction.WEST) || (dir2 == Direction.NORTH && dir1 == Direction.WEST))
+            pipeshape = PipeShape.NORTH_WEST;
+        if ((dir1 == Direction.EAST && dir2 == Direction.WEST) || (dir2 == Direction.EAST && dir1 == Direction.WEST))
+            pipeshape = PipeShape.EAST_WEST;
+        if ((dir1 == Direction.UP && dir2 == Direction.DOWN) || (dir2 == Direction.UP && dir1 == Direction.DOWN))
+            pipeshape = PipeShape.UP_DOWN;
+        if ((dir1 == Direction.SOUTH && dir2 == Direction.EAST) || (dir2 == Direction.SOUTH && dir1 == Direction.EAST))
+            pipeshape = PipeShape.SOUTH_EAST;
+        if ((dir1 == Direction.SOUTH && dir2 == Direction.WEST) || (dir2 == Direction.SOUTH && dir1 == Direction.WEST))
+            pipeshape = PipeShape.SOUTH_WEST;
+        if ((dir1 == Direction.NORTH && dir2 == Direction.UP) || (dir2 == Direction.NORTH && dir1 == Direction.UP))
+            pipeshape = PipeShape.NORTH_UP;
+        if ((dir1 == Direction.NORTH && dir2 == Direction.DOWN) || (dir2 == Direction.NORTH && dir1 == Direction.DOWN))
+            pipeshape = PipeShape.NORTH_DOWN;
+        if ((dir1 == Direction.EAST && dir2 == Direction.UP) || (dir2 == Direction.EAST && dir1 == Direction.UP))
+            pipeshape = PipeShape.EAST_UP;
+        if ((dir1 == Direction.EAST && dir2 == Direction.DOWN) || (dir2 == Direction.EAST && dir1 == Direction.DOWN))
+            pipeshape = PipeShape.EAST_DOWN;
+        if ((dir1 == Direction.SOUTH && dir2 == Direction.UP) || (dir2 == Direction.SOUTH && dir1 == Direction.UP))
+            pipeshape = PipeShape.SOUTH_UP;
+        if ((dir1 == Direction.SOUTH && dir2 == Direction.DOWN) || (dir2 == Direction.SOUTH && dir1 == Direction.DOWN))
+            pipeshape = PipeShape.SOUTH_DOWN;
+        if ((dir1 == Direction.WEST && dir2 == Direction.UP) || (dir2 == Direction.WEST && dir1 == Direction.UP))
+            pipeshape = PipeShape.WEST_UP;
+        if ((dir1 == Direction.WEST && dir2 == Direction.DOWN) || (dir2 == Direction.WEST && dir1 == Direction.DOWN))
+            pipeshape = PipeShape.WEST_DOWN;
 
-    protected BlockState updateBlockState(World world, BlockPos pos, BlockState state, boolean notify) {
-        if (world.isClient) {
-            return state;
-        } else {
-            PipeShape pipeshape = state.get(PIPE_SHAPE);
-            BlockState returnState = (new PipePlacementHelper(world, pos, state)).place(notify, pipeshape).getState();
-            return returnState;
-        }
+        return blockstate.with(PIPE_SHAPE, pipeshape);
     }
 
     public static boolean isPipe(World world, BlockPos pos) {
