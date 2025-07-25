@@ -96,6 +96,9 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.copper_rod", "Copper Rod");
         this.add("block.iljatech.copper_wire", "Copper Wire");
         this.add("block.iljatech.creosote_oil", "Creosote Oil");
+        this.add("block.iljatech.steel_pipe", "Steel Pipe");
+        this.add("block.iljatech.wooden_pipe", "Wooden Pipe");
+        this.add("block.iljatech.funnel", "Funnel");
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
