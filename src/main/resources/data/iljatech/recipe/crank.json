@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "#": {
-      "item": "iljatech:bronze_gear"
+    "/": {
+      "item": "minecraft:stick"
     }
   },
   "pattern": [
-    "##",
-    "##"
+    " //",
+    "// "
   ],
   "result": {
-    "count": 4,
-    "id": "iljatech:gearbox"
+    "count": 1,
+    "id": "iljatech:crank"
   }
 }

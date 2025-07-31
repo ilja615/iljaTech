@@ -142,24 +142,28 @@ public class BellowsBlock extends HorizontalFacingBlock implements BlockEntityPr
 
     // Contract
     public void exhale(BlockState state, World world, BlockPos pos) {
-        world.setBlockState(pos, state.with(PRESS, 1));
-        if (world.getBlockEntity(pos) instanceof BellowsBlockEntity bellowsBlockEntity) {
-            bellowsBlockEntity.setTicks(5);
-        }
-        blowWind(world, pos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
-        if (!world.isClient) {
-            world.playSound(null, pos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        if (state.get(PRESS) == 0) {
+            blowWind(world, pos, state.get(FACING), BLOW_DISTANCE, BLOW_PARTICLE_SPEED);
+            world.setBlockState(pos, state.with(PRESS, 1));
+            if (world.getBlockEntity(pos) instanceof BellowsBlockEntity bellowsBlockEntity) {
+                bellowsBlockEntity.setTicks(5);
+            }
+            if (!world.isClient) {
+                world.playSound(null, pos, ModSounds.BELLOWS_EXHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            }
         }
     }
 
     // Expand
     public void inhale(BlockState state, World world, BlockPos pos) {
-        world.setBlockState(pos, state.with(PRESS, 3));
-        if (world.getBlockEntity(pos) instanceof BellowsBlockEntity bellowsBlockEntity) {
-            bellowsBlockEntity.setTicks(5);
-        }
-        if (!world.isClient) {
-            world.playSound(null, pos, ModSounds.BELLOWS_INHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        if (state.get(PRESS) == 2) {
+            world.setBlockState(pos, state.with(PRESS, 3));
+            if (world.getBlockEntity(pos) instanceof BellowsBlockEntity bellowsBlockEntity) {
+                bellowsBlockEntity.setTicks(5);
+            }
+            if (!world.isClient) {
+                world.playSound(null, pos, ModSounds.BELLOWS_INHALE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            }
         }
     }
 

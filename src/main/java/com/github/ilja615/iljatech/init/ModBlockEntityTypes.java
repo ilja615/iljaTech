@@ -3,8 +3,10 @@ package com.github.ilja615.iljatech.init;
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.bellows.BellowsBlockEntity;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
+import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlockEntity;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
+import com.github.ilja615.iljatech.blocks.funnel.FunnelBlockEntity;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
@@ -36,6 +38,10 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(ItemHatchBlockEntity::new, ModBlocks.ITEM_HATCH).build());
     public static final BlockEntityType<WindmillBlockEntity> WINDMILL = register("windmill",
             FabricBlockEntityTypeBuilder.create(WindmillBlockEntity::new, ModBlocks.WINDMILL).build());
+    public static final BlockEntityType<FunnelBlockEntity> FUNNEL = register("funnel",
+            FabricBlockEntityTypeBuilder.create(FunnelBlockEntity::new, ModBlocks.FUNNEL).build());
+    public static final BlockEntityType<ConveyorBeltBlockEntity> CONVEYOR_BELT = register("conveyor_belt",
+            FabricBlockEntityTypeBuilder.create(ConveyorBeltBlockEntity::new, ModBlocks.CONVEYOR_BELT).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
@@ -44,6 +50,8 @@ public class ModBlockEntityTypes {
         ItemStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getInventoryProvider, ModBlockEntityTypes.COKE_OVEN);
         ItemStorage.SIDED.registerForBlockEntity(ItemHatchBlockEntity::getInventoryProvider, ModBlockEntityTypes.ITEM_HATCH);
         FluidStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getFluidTankProvider, ModBlockEntityTypes.COKE_OVEN);
+        FluidStorage.SIDED.registerForBlockEntity(FunnelBlockEntity::getFluidTankProvider, ModBlockEntityTypes.FUNNEL);
+
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType<T> type) {

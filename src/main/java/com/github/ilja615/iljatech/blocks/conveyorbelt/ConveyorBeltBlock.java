@@ -2,8 +2,13 @@ package com.github.ilja615.iljatech.blocks.conveyorbelt;
 
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.energy.MechPwrSender;
+import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
+import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.enums.RailShape;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -33,13 +38,12 @@ import java.util.Iterator;
 
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 
-public class ConveyorBeltBlock extends HorizontalFacingBlock implements MechPwrAccepter, MechPwrSender {
+public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEntityProvider, MechPwrAccepter, MechPwrSender {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final EnumProperty CONVEYOR_BELT_STATE = EnumProperty.of("type", ConveyorBeltState.class);
 
     protected static final VoxelShape TOP_SHAPE = Block.createCuboidShape(0.0, 8.0, 0.0, 16.0, 16.0, 16.0);
     protected static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
-    Box ITEM_AREA_SHAPE = (Box)Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0).getBoundingBoxes().get(0);
 
     public ConveyorBeltBlock(Settings settings) {
         super(settings);
@@ -47,6 +51,18 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements MechPwrA
                 .with(FACING, Direction.NORTH)
                 .with(ON_OFF_PWR, OFF)
                 .with(CONVEYOR_BELT_STATE, ConveyorBeltState.NORMAL));
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntityTypes.CONVEYOR_BELT.instantiate(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return TickableBlockEntity.getTicker(world);
     }
 
     @Override
@@ -128,19 +144,6 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements MechPwrA
         // Schedules to relay the power after right away receiving it
         world.scheduleBlockTick(thisPos, this, 1);
         MechPwrAccepter.super.receivePower(world, thisPos, sideFrom, amount);
-
-        // Push items
-        Direction dir = world.getBlockState(thisPos).get(FACING);
-        BlockState state1 = world.getBlockState(thisPos.offset(dir));
-        boolean up = state1.isOf(ModBlocks.CONVEYOR_BELT) && (state1.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.TOP_SLAB || state1.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.DIAGONAL) && state1.get(FACING) == dir;
-        Box box = ITEM_AREA_SHAPE.offset(thisPos.getX(), thisPos.getY() + 0.5d, thisPos.getZ());
-        for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, EntityPredicates.VALID_ENTITY)) {
-            itemEntity.move(MovementType.PISTON, Vec3d.of(dir.getVector()).multiply(0.2d));
-            if (up && itemEntity.horizontalCollision) {
-                itemEntity.move(MovementType.PISTON, Vec3d.of(Direction.UP.getVector()).multiply(0.5d));
-                itemEntity.move(MovementType.PISTON, Vec3d.of(dir.getVector()).multiply(0.2d));
-            }
-        }
     }
 
     @Override

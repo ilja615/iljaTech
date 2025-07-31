@@ -3,15 +3,16 @@
   "category": "redstone",
   "key": {
     "#": {
-      "item": "iljatech:bronze_gear"
+      "item": "iljatech:steel_ingot"
     }
   },
   "pattern": [
-    "##",
-    "##"
+    "# #",
+    "#C#",
+    " # "
   ],
   "result": {
-    "count": 4,
-    "id": "iljatech:gearbox"
+    "count": 1,
+    "id": "iljatech:item_hatch"
   }
 }

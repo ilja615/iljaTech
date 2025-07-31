@@ -43,6 +43,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.RAW_CHROME_ORE);
         addDrop(ModBlocks.CRANK);
         addDrop(ModBlocks.GEARBOX);
+        addDrop(ModBlocks.TURBINE);
         addDrop(ModBlocks.WOODEN_SHAFT);
         addDrop(ModBlocks.ROLLER_MILL);
         addDrop(ModBlocks.DRILL);
@@ -73,6 +74,10 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.LIMESTONE_STAIRS);
         addDrop(ModBlocks.LIMESTONE_WALL);
         slabDrops(ModBlocks.LIMESTONE_SLAB);
+        addDrop(ModBlocks.FUNNEL);
+        addDrop(ModBlocks.STEEL_PIPE);
+        addDrop(ModBlocks.CONVEYOR_BELT);
+
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "iljatech:bronze_ingot"
+    },
+    "G": {
+      "item": "iljatech:bronze_gear"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "iljatech:iron_rod"
+    }
+  },
+  "pattern": [
+    "BGB",
+    "BRB",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:turbine"
+  }
+}

@@ -1,21 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "redstone",
+  "category": "misc",
   "key": {
     "#": {
-      "tag": "minecraft:planks"
-    },
-    "X": {
-      "item": "minecraft:leather"
+      "item": "iljatech:fire_brick"
     }
   },
   "pattern": [
     "###",
-    "XXX",
+    "# #",
     "###"
   ],
   "result": {
     "count": 1,
-    "id": "iljatech:bellows"
+    "id": "iljatech:foundry"
   }
 }

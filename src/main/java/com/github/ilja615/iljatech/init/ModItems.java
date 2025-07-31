@@ -45,6 +45,7 @@ public class ModItems {
     public static final Item IRON_HAMMER = register("iron_hammer", new HammerItem(new Item.Settings().maxDamage(128).attributeModifiers(HammerItem.createAttributeModifiers(ToolMaterials.IRON, 2.5F, -3.8F))));
     public static final Item IRON_SAW = register("iron_saw", new SawItem(new Item.Settings().maxDamage(128)));
     public static final Item IRON_NAILS = register("iron_nails", new Item(new Item.Settings()));
+    public static final Item IRON_CYLINDER = register("iron_cylinder", new Item(new Item.Settings()));
 
     public static final Item FIRE_CLAY_BALL = register("fire_clay_ball", new Item(new Item.Settings()));
     public static final Item FIRE_BRICK = register("fire_brick", new Item(new Item.Settings()));

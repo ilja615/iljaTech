@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "#": {
+      "item": "iljatech:clinker_bricks"
+    }
+  },
+  "pattern": [
+    "##I",
+    "# I",
+    "##I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:coke_oven"
+  }
+}
