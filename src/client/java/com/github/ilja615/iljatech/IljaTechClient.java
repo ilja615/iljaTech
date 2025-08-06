@@ -3,6 +3,7 @@ package com.github.ilja615.iljatech;
 import com.github.ilja615.iljatech.init.*;
 import com.github.ilja615.iljatech.particles.StarParticle;
 import com.github.ilja615.iljatech.particles.SteamParticle;
+import com.github.ilja615.iljatech.renderer.ConveyorBeltRenderer;
 import com.github.ilja615.iljatech.renderer.RollerMillRenderer;
 import com.github.ilja615.iljatech.renderer.WindmillRenderer;
 import com.github.ilja615.iljatech.screen.CokeOvenScreen;
@@ -29,6 +30,7 @@ public class IljaTechClient implements ClientModInitializer {
 		// Block entity renderers
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.ROLLER_MILL, RollerMillRenderer::new);
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.WINDMILL, WindmillRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntityTypes.CONVEYOR_BELT, ConveyorBeltRenderer::new);
 
 		// Register particle factories
 		ParticleFactoryRegistry.getInstance().register(ModParticles.STAR, StarParticle.Factory::new);

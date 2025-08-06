@@ -3,6 +3,7 @@ package com.github.ilja615.iljatech.blocks.funnel;
 import com.github.ilja615.iljatech.blocks.pipe.PipeBlock;
 import com.github.ilja615.iljatech.blocks.pipe.PipeShape;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
@@ -18,6 +19,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -47,7 +49,7 @@ public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEnti
 
             // Pipe liquid transfer
             float hydrostaticPressure = 0.1f;
-            while (niter < 100 && hydrostaticPressure > 0.0f) {
+            while (niter < 100) {
                 if (!(world.getBlockState(nextPos).getBlock() instanceof PipeBlock))
                     break;
                 PipeShape pipeShape = world.getBlockState(nextPos).get(PipeBlock.PIPE_SHAPE);
@@ -70,9 +72,13 @@ public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEnti
                 niter++;
             }
             if (world.getBlockState(nextPos).isAir()) {
-                ParticleEffect particleEffect = ParticleTypes.DRIPPING_WATER;
-                world.addParticle(particleEffect, nextPos.getX()+0.5f, nextPos.getY()+0.5f, nextPos.getZ()+0.5f, 0.0, 0.0, 0.0);
-            } else if (ticks >= 100) {
+                if (!world.isClient) {
+                    double px = thisDirection.getAxis() == Direction.Axis.X ? nextPos.getX() + 0.5d - 0.5d * thisDirection.getOffsetX() : nextPos.getX() + world.random.nextFloat() * 0.5f + 0.25f;
+                    double py = thisDirection.getAxis() == Direction.Axis.Y ? nextPos.getY() + 0.5d - 0.5d * thisDirection.getOffsetY() : nextPos.getY() + world.random.nextFloat() * 0.25f + 0.25f;
+                    double pz = thisDirection.getAxis() == Direction.Axis.Z ? nextPos.getZ() + 0.5d - 0.5d * thisDirection.getOffsetZ() : nextPos.getZ() + world.random.nextFloat() * 0.5f + 0.25f;
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.DRIPPING_WATER, px, py, pz, world.random.nextInt(3), 0.1f, 0.1f, 0.1f, 0.0);
+                }
+            } else if (ticks >= 100 && hydrostaticPressure >= 0) {
                 ticks = 0;
                 if (world.getBlockState(pos.up()).isOf(Blocks.WATER_CAULDRON)) {
                     LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(pos.up()), world, pos.up());
