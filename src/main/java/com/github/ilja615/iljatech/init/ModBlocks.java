@@ -10,6 +10,7 @@ import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlock;
 import com.github.ilja615.iljatech.blocks.funnel.FunnelBlock;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlock;
+import com.github.ilja615.iljatech.blocks.pipe.ClayPipeBlock;
 import com.github.ilja615.iljatech.blocks.pipe.PipeBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
@@ -76,10 +77,12 @@ public class ModBlocks {
     public static final Block TURBINE = registerWithItem("turbine", new TurbineBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block WINDMILL = registerWithItem("windmill", new WindmillBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD)));
     public static final Block WINDMILL_BLADE = registerWithItem("windmill_blade", new Block(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
-    public static final Block CONVEYOR_BELT = registerWithItem("conveyor_belt", new ConveyorBeltBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD)));
+    public static final Block CONVEYOR_BELT = registerWithItem("conveyor_belt", new ConveyorBeltBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
 
-    public static final Block STEEL_PIPE = registerWithItem("steel_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque()));
+    public static final Block STEEL_PIPE = registerWithItem("steel_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).nonOpaque()));
     public static final Block FUNNEL = registerWithItem("funnel", new FunnelBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.DECORATED_POT).nonOpaque()));
+    public static final Block CLAY_PIPE = registerWithItem("clay_pipe", new ClayPipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_BLUE_GRAY).strength(0.6F).sounds(BlockSoundGroup.GRAVEL).nonOpaque()));
+    public static final Block TERRACOTTA_PIPE = registerWithItem("terracotta_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).sounds(BlockSoundGroup.DECORATED_POT).requiresTool().strength(1.25F, 4.2F).nonOpaque()));
 
     public static final Block COPPER_ROD = registerWithItem("copper_rod", new AxisRodBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block COPPER_WIRE = registerWithItem("copper_wire", new WireBlock(AbstractBlock.Settings.copy(Blocks.RAIL)));

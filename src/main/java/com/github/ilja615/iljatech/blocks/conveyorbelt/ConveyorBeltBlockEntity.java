@@ -9,10 +9,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.MovementType;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -29,18 +26,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 
 public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBlockEntity {
     Box ITEM_AREA_SHAPE = (Box) Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0).getBoundingBoxes().get(0);
 
-    private final Map<ItemStack, Vec3d> STACKS = new HashMap<>();
+    private final List<Pair<ItemStack, Vec3d>> STACKS = new ArrayList<>();
+    private final List<Integer> toRemove = new ArrayList<>();
 
-    private final static Codec<Pair<ItemStack, Vec3d>> CODEC = Codec.pair(ItemStack.CODEC, Vec3d.CODEC);
+    private final static Codec<Pair<ItemStack, Vec3d>> CODEC = Codec.mapPair(ItemStack.CODEC.fieldOf("item"), Vec3d.CODEC.fieldOf("pos")).codec();
 
     float VELOCITY = 0.07f;
 
@@ -50,31 +46,39 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
 
     @Override
     public void tick() {
-        // Push items (which should happen only on server)
-        if (world.isClient)
-            return;
+        boolean flag = false;
 
-        Box box = ITEM_AREA_SHAPE.offset(pos.getX(), pos.getY() + 0.5d, pos.getZ());
-        for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, EntityPredicates.VALID_ENTITY)) {
-            if (!itemEntity.isOnGround() || world.getBlockState(pos).get(ConveyorBeltBlock.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.OFF)
-                break;
-            STACKS.put(itemEntity.getStack(), pos.toCenterPos().add(0, 0.6d, 0));
-            itemEntity.kill();
+        if (!toRemove.isEmpty()) {
+            Collections.sort(toRemove);
+            for (int j = toRemove.size() - 1; j >= 0; j--) {
+                int i = toRemove.get(j);
+                STACKS.remove(i);
+            }
+            toRemove.clear();
         }
-        Map<ItemStack, Vec3d> updates = new HashMap<>();
-        List<ItemStack> toRemove = new ArrayList<>();
 
-        STACKS.forEach((itemStack, itemPos) -> {
-            BlockPos under = BlockPos.ofFloored(itemPos.add(0, -0.5, 0));
+        // Push items (which should happen only on server)
+        if (!world.isClient) {
+            Box box = ITEM_AREA_SHAPE.offset(pos.getX(), pos.getY() + 0.5d, pos.getZ());
+            for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, EntityPredicates.VALID_ENTITY)) {
+                if (!itemEntity.isOnGround() || world.getBlockState(pos).get(ConveyorBeltBlock.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.OFF)
+                    break;
+                STACKS.add(new Pair<>(itemEntity.getStack(), pos.toCenterPos().add(0, 0.75d, 0)));
+                flag = true;
+                itemEntity.kill();
+            }
+        }
+        List<Pair<Integer, Pair<ItemStack, Vec3d>>> updates = new ArrayList<>();
+
+        for(int i = 0; i < STACKS.size(); ++i) {
+            Pair<ItemStack, Vec3d> pair = STACKS.get(i);
+            ItemStack itemStack = pair.getFirst();
+            Vec3d itemPos = pair.getSecond();
+            BlockPos under = BlockPos.ofFloored(itemPos.add(0, -1.0, 0));
+            if (world.getBlockState(under).getBlock() instanceof ConveyorBeltBlock && world.getBlockState(under).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.TOP_SLAB)
+                under = under.up();
             if (world.getBlockState(under).getBlock() instanceof ConveyorBeltBlock && world.getBlockState(under).get(ConveyorBeltBlock.ON_OFF_PWR) != MechPwrAccepter.OnOffPwr.OFF) {
                 Direction nextDir = world.getBlockState(under).get(ConveyorBeltBlock.FACING);
-                Vec3d newPos = itemPos;
-
-                if (nextDir.getAxis() == Direction.Axis.X)
-                    newPos = new Vec3d(itemPos.getX() + nextDir.getOffsetX() * VELOCITY, itemPos.getY(), Math.floor(itemPos.getZ()) + 0.5d);
-                if (nextDir.getAxis() == Direction.Axis.Z)
-                    newPos = new Vec3d(Math.floor(itemPos.getX()) + 0.5d, itemPos.getY(), itemPos.getZ() + nextDir.getOffsetZ() * VELOCITY);
-
                 double progress = 0.0d;
                 if (nextDir.getVector().getComponentAlongAxis(nextDir.getAxis()) == 1) {
                     progress = itemPos.getComponentAlongAxis(nextDir.getAxis()) - under.getComponentAlongAxis(nextDir.getAxis());
@@ -85,30 +89,28 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
 
                 BlockState state1 = world.getBlockState(under.offset(nextDir));
                 boolean up = state1.isOf(ModBlocks.CONVEYOR_BELT) && (state1.get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.TOP_SLAB || state1.get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.DIAGONAL) && state1.get(ConveyorBeltBlock.FACING) == nextDir;
+                boolean onSlab = world.getBlockState(under).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.BOTTOM_SLAB;
 
-                if (up && progress >= 1.0d - VELOCITY) {
-                    up = false;
-                    newPos = newPos.add(0, 0.5d, 0);
-                    if (nextDir.getAxis() == Direction.Axis.X)
-                        newPos = new Vec3d(newPos.getX() + nextDir.getOffsetX() * VELOCITY, newPos.getY(), Math.floor(newPos.getZ()) + 0.5d);
-                    if (nextDir.getAxis() == Direction.Axis.Z)
-                        newPos = new Vec3d(Math.floor(newPos.getX()) + 0.5d, newPos.getY(), newPos.getZ() + nextDir.getOffsetZ() * VELOCITY);
-                }
-                System.out.println(up + " " + progress);
+                Vec3d newPos = new Vec3d(
+                        nextDir.getAxis() == Direction.Axis.X ? itemPos.getX() + nextDir.getOffsetX() * VELOCITY : Math.floor(itemPos.getX()) + 0.5d,
+                        under.getY() + 1.25d - (onSlab ? 0.5d : 0) + (up ? 0.5d * progress : 0),
+                        nextDir.getAxis() == Direction.Axis.Z ? itemPos.getZ() + nextDir.getOffsetZ() * VELOCITY : Math.floor(itemPos.getZ()) + 0.5d);
 
-                ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, newPos.getX(), newPos.getY() + (up ?  + progress * 0.5d : 0), newPos.getZ(), 1, 0.0f, 0.0f, 0.0f, 0.0);
-
-                updates.put(itemStack, newPos); // schedule update
+//                System.out.println(under + " " + progress + " " + newPos + " " + onSlab + " " + world.getBlockState(under).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE));
+                updates.add(new Pair<>(i, new Pair<>(itemStack, newPos))); // schedule update
             } else {
                 world.spawnEntity(new ItemEntity(world, itemPos.getX(), itemPos.getY(), itemPos.getZ(), itemStack));
-                toRemove.add(itemStack); // schedule removal
+                boolean slab = world.getBlockState(pos).isOf(ModBlocks.CONVEYOR_BELT) && world.getBlockState(pos).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.BOTTOM_SLAB;
+                updates.add(new Pair<>(i, new Pair<>(itemStack, pos.toCenterPos().add(0.0d, (slab ? -0.5d : 0.0d), 0.0d)))); // hide it for when removal doesnt sync
+                toRemove.add(i); // schedule removal
             }
-        });
-        // apply changes after the foreach otherwise there is ConcurrentModificationException
-        if (!toRemove.isEmpty() || !updates.isEmpty())
+        }
+        // apply changes after the foreach otherwise there is maybe ConcurrentModificationException
+        updates.forEach(indexedPair -> STACKS.set(indexedPair.getFirst(), indexedPair.getSecond()));
+
+        if (!toRemove.isEmpty() || !updates.isEmpty() || flag) {
             update();
-        toRemove.forEach(STACKS::remove);
-        updates.forEach(STACKS::put);
+        }
     }
 
     @Override
@@ -117,13 +119,22 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
 
         NbtList nbtList = nbt.getList("Stacks", NbtElement.COMPOUND_TYPE);
 
-        for(int i = 0; i < nbtList.size(); ++i) {
-            NbtCompound nbtCompound = nbtList.getCompound(i);
-            Optional<Pair<ItemStack, Vec3d>> pair = CODEC.parse(registryLookup.getOps(NbtOps.INSTANCE), nbtCompound).resultOrPartial((error) -> {});
-            if (pair.isPresent()) {
-                STACKS.put(pair.get().getFirst(), pair.get().getSecond());
+        if (!STACKS.isEmpty())
+            for(int i = 0; i < nbtList.size(); ++i) {
+                NbtCompound nbtCompound = nbtList.getCompound(i);
+                Optional<Pair<ItemStack, Vec3d>> pair = CODEC.parse(registryLookup.getOps(NbtOps.INSTANCE), nbtCompound).resultOrPartial((error) -> {});
+                if (pair.isPresent() && i < STACKS.size()) {
+                    STACKS.set(i, pair.get());
+                }
             }
-        }
+        else
+            for(int i = 0; i < nbtList.size(); ++i) {
+                NbtCompound nbtCompound = nbtList.getCompound(i);
+                Optional<Pair<ItemStack, Vec3d>> pair = CODEC.parse(registryLookup.getOps(NbtOps.INSTANCE), nbtCompound).resultOrPartial((error) -> {});
+                if (pair.isPresent()) {
+                    STACKS.add(i, pair.get());
+                }
+            }
     }
 
     @Override
@@ -132,8 +143,9 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
 
         NbtList nbtList = new NbtList();
         for(int i = 0; i < STACKS.size(); ++i) {
-            ItemStack itemStack = STACKS.entrySet().stream().toList().get(i).getKey();
-            Vec3d itemPos = STACKS.entrySet().stream().toList().get(i).getValue();
+            Pair<ItemStack, Vec3d> pair = STACKS.get(i);
+            ItemStack itemStack = pair.getFirst();
+            Vec3d itemPos = pair.getSecond();
             if (!itemStack.isEmpty()) {
                 NbtCompound nbtCompound = new NbtCompound();
                 nbtList.add(CODEC.encode(new Pair<>(itemStack, itemPos), registryLookup.getOps(NbtOps.INSTANCE), nbtCompound).getOrThrow());
@@ -161,7 +173,7 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
             world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
-    public Map<ItemStack, Vec3d> getStacks() {
+    public List<Pair<ItemStack, Vec3d>> getStacks() {
         return STACKS;
     }
 }

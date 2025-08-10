@@ -1,6 +1,8 @@
 package com.github.ilja615.iljatech.renderer;
 
 import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlockEntity;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -8,9 +10,12 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.joml.Quaternionf;
 
+import java.util.List;
 import java.util.Map;
 
 public class ConveyorBeltRenderer implements BlockEntityRenderer<ConveyorBeltBlockEntity> {
@@ -23,13 +28,15 @@ public class ConveyorBeltRenderer implements BlockEntityRenderer<ConveyorBeltBlo
 
     @Override
     public void render(ConveyorBeltBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        Map<ItemStack, Vec3d> stacks = entity.getStacks();
+        List<Pair<ItemStack, Vec3d>> stacks = entity.getStacks();
         World world = entity.getWorld();
 
-        stacks.forEach((itemStack, itemPos) -> {
+        stacks.forEach(pair -> {
+            ItemStack itemStack = pair.getFirst();
+            Vec3d itemPos = pair.getSecond();
             if (!itemStack.isEmpty()) {
                 matrices.push();
-                matrices.translate(0.5d, 1.5d, 0.5d);
+                matrices.translate(itemPos.getX() - entity.getPos().getX(), itemPos.getY() - entity.getPos().getY(), itemPos.getZ() - entity.getPos().getZ());
                 matrices.scale(SIZE, SIZE, SIZE);
                 this.context.getItemRenderer().renderItem(itemStack, ModelTransformationMode.FIXED,
                         light, overlay, matrices, vertexConsumers, world, 0);

@@ -1,0 +1,71 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "minecraft:block/clay",
+		"1": "minecraft:block/clay",
+		"2": "iljatech:block/clay_pipe_opening",
+		"particle": "minecraft:block/clay"
+	},
+	"elements": [
+		{
+			"from": [15, 3, 3],
+			"to": [16, 13, 13],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 10], "texture": "#2"},
+				"east": {"uv": [0, 0, 10, 10], "texture": "#2"},
+				"south": {"uv": [0, 0, 1, 10], "texture": "#2"},
+				"west": {"uv": [0, 0, 10, 10], "texture": "#2"},
+				"up": {"uv": [0, 10, 10, 11], "rotation": 90, "texture": "#2"},
+				"down": {"uv": [0, 9, 10, 10], "rotation": 270, "texture": "#2"}
+			}
+		},
+		{
+			"from": [4, 4, 4],
+			"to": [12, 12, 16],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#0"},
+				"east": {"uv": [0, 0, 12, 8], "texture": "#0"},
+				"south": {"uv": [1, 1, 9, 9], "texture": "#2"},
+				"west": {"uv": [0, 0, 12, 8], "texture": "#0"},
+				"up": {"uv": [4, 4, 16, 12], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [4, 12, 16, 4], "rotation": 270, "texture": "#1"}
+			}
+		},
+		{
+			"from": [3, 3, 15],
+			"to": [13, 13, 16],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 10, 10], "texture": "#2"},
+				"east": {"uv": [0, 0, 1, 10], "texture": "#2"},
+				"south": {"uv": [0, 0, 10, 10], "texture": "#2"},
+				"west": {"uv": [0, 0, 1, 10], "texture": "#2"},
+				"up": {"uv": [0, 10, 10, 11], "rotation": 180, "texture": "#2"},
+				"down": {"uv": [0, 9, 10, 10], "rotation": 180, "texture": "#2"}
+			}
+		},
+		{
+			"from": [12, 4, 4],
+			"to": [16, 12, 12],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 8], "texture": "#0"},
+				"east": {"uv": [1, 1, 9, 9], "texture": "#2"},
+				"south": {"uv": [0, 0, 4, 8], "texture": "#0"},
+				"west": {"uv": [0, 0, 7, 8], "texture": "#missing"},
+				"up": {"uv": [4, 0, 12, 4], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [4, 4, 12, 0], "rotation": 270, "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		}
+	}
+}

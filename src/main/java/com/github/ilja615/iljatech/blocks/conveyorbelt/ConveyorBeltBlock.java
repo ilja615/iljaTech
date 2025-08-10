@@ -9,32 +9,28 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.enums.RailShape;
-import net.minecraft.entity.ItemEntity;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MovementType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Iterator;
 
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 
@@ -197,5 +193,50 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
         } else {
             return false;
         }
+    }
+
+    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        if (state.get(CONVEYOR_BELT_STATE) != ConveyorBeltState.BOTTOM_SLAB) {
+            return super.canPlaceAt(state, world, pos);
+        } else {
+            BlockState blockState = world.getBlockState(pos.down());
+            return blockState.isOf(this) && blockState.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.TOP_SLAB;
+        }
+    }
+
+    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        if (!world.isClient) {
+            if (player.isCreative()) {
+                onBreakInCreative(world, pos, state, player);
+            } else {
+                dropStacks(state, world, pos, (BlockEntity)null, player, player.getMainHandStack());
+            }
+        }
+
+        return super.onBreak(world, pos, state, player);
+    }
+
+    public void afterBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
+        super.afterBreak(world, player, pos, Blocks.AIR.getDefaultState(), blockEntity, tool);
+    }
+
+    /**
+     * Destroys a bottom half of a tall double block (such as a plant or a door)
+     * without dropping an item when broken in creative.
+     *
+     * @see Block#onBreak(World, BlockPos, BlockState, PlayerEntity)
+     */
+    protected static void onBreakInCreative(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        ConveyorBeltState conveyorBeltState = (ConveyorBeltState) state.get(CONVEYOR_BELT_STATE);
+        if (conveyorBeltState == ConveyorBeltState.BOTTOM_SLAB) {
+            BlockPos blockPos = pos.down();
+            BlockState blockState = world.getBlockState(blockPos);
+            if (blockState.isOf(state.getBlock()) && blockState.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.TOP_SLAB) {
+                BlockState blockState2 = blockState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
+                world.setBlockState(blockPos, blockState2, Block.NOTIFY_ALL | Block.SKIP_DROPS);
+                world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, blockPos, Block.getRawIdFromState(blockState));
+            }
+        }
+
     }
 }
