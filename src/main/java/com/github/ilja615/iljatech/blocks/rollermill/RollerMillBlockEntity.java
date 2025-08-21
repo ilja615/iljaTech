@@ -3,16 +3,17 @@ package com.github.ilja615.iljatech.blocks.rollermill;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
+import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -22,8 +23,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class RollerMillBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int ticks = 0;
+    private Direction direction = Direction.NORTH;
+
+    private final static Codec<Direction> CODEC = Direction.CODEC;
 
     // TODO: Might change it to SidedInventory later
     private final SimpleInventory inventory = new SimpleInventory(2) {
@@ -41,7 +47,7 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
 
     @Override
     public void tick() {
-        if (this.world == null || this.world.isClient)
+        if (this.world == null)
             return;
 
         ItemStack stack0 = this.inventory.getStack(0);
@@ -72,6 +78,9 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
+        Optional<Direction> parsed = CODEC.parse(registryLookup.getOps(NbtOps.INSTANCE),
+                nbt.getCompound("Direction")).resultOrPartial(err -> {});
+        parsed.ifPresent(direction -> this.direction = direction);
         Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
@@ -79,6 +88,9 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
+        NbtCompound dst = new NbtCompound();
+        CODEC.encode(this.direction, registryLookup.getOps(NbtOps.INSTANCE), dst).resultOrPartial(err -> {}).ifPresent(nbtCompound ->
+                nbt.put("Direction", nbtCompound));
         Inventories.writeNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
@@ -97,6 +109,14 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
 
     public int getTicks() {
         return ticks;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 
     private void update() {

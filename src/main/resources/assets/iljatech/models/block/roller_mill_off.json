@@ -3,8 +3,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
-		"3": "iljatech:block/roller_off",
-		"4": "iljatech:block/roller_off_mirrored",
+		"3": "iljatech:block/roller",
 		"5": "iljatech:block/rolling_mill_side"
 	},
 	"elements": [
@@ -26,12 +25,12 @@
 			"to": [15.5, 16, 11],
 			"rotation": {"angle": 0, "axis": "x", "origin": [8, 13, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 15, 6], "rotation": 180, "texture": "#4"},
-				"east": {"uv": [0, 10, 6, 16], "rotation": 270, "texture": "#4"},
-				"south": {"uv": [0, 0, 15, 6], "texture": "#4"},
-				"west": {"uv": [0, 10, 6, 16], "rotation": 90, "texture": "#4"},
-				"up": {"uv": [0, 4, 15, 10], "rotation": 180, "texture": "#4"},
-				"down": {"uv": [0, 0, 15, 6], "texture": "#4"}
+				"north": {"uv": [0, 0, 15, 6], "rotation": 180, "texture": "#3"},
+				"east": {"uv": [0, 10, 6, 16], "rotation": 270, "texture": "#3"},
+				"south": {"uv": [0, 0, 15, 6], "texture": "#3"},
+				"west": {"uv": [0, 10, 6, 16], "rotation": 90, "texture": "#3"},
+				"up": {"uv": [0, 4, 15, 10], "rotation": 180, "texture": "#3"},
+				"down": {"uv": [0, 0, 15, 6], "texture": "#3"}
 			}
 		},
 		{

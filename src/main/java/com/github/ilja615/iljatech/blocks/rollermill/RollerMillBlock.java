@@ -8,11 +8,10 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
@@ -30,13 +29,16 @@ import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.SCHEDU
 
 public class RollerMillBlock extends Block implements BlockEntityProvider, MechPwrAccepter {
     public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
-    protected static final VoxelShape BASE_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
-    protected static final VoxelShape ROLLER_1_X = Block.createCuboidShape(1.0, 9.0, 0.0, 7.0, 15.0, 16.0);
-    protected static final VoxelShape ROLLER_2_X = Block.createCuboidShape(9.0, 9.0, 0.0, 15.0, 15.0, 16.0);
-    protected static final VoxelShape ROLLER_1_Z = Block.createCuboidShape(0.0, 9.0, 1.0, 16.0, 15.0, 7.0);
-    protected static final VoxelShape ROLLER_2_Z = Block.createCuboidShape(0.0, 9.0, 9.0, 16.0, 15.0, 15.0);
-    private static final VoxelShape X_AXIS_SHAPE = VoxelShapes.union(BASE_SHAPE, ROLLER_1_X, ROLLER_2_X);
-    private static final VoxelShape Z_AXIS_SHAPE = VoxelShapes.union(BASE_SHAPE, ROLLER_1_Z, ROLLER_2_Z);
+    protected static final VoxelShape SIDE_SHAPE_1_X = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.0);
+    protected static final VoxelShape SIDE_SHAPE_2_X = Block.createCuboidShape(0.0, 0.0, 16.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SIDE_SHAPE_1_Z = Block.createCuboidShape(0.0, 0.0, 0.0, 0.0, 16.0, 16.0);
+    protected static final VoxelShape SIDE_SHAPE_2_Z = Block.createCuboidShape(16.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape ROLLER_1_X = Block.createCuboidShape(5.0, 2.0, 0.5, 11.0, 8.0, 15.5);
+    protected static final VoxelShape ROLLER_2_X = Block.createCuboidShape(5.0, 10.0, 0.5, 11.0, 16.0, 15.5);
+    protected static final VoxelShape ROLLER_1_Z = Block.createCuboidShape(0.5, 2.0, 5.0, 15.5, 18.0, 11.0);
+    protected static final VoxelShape ROLLER_2_Z = Block.createCuboidShape(0.5, 10.0, 5.0, 15.5, 16.0, 11.0);
+    private static final VoxelShape X_AXIS_SHAPE = VoxelShapes.union(SIDE_SHAPE_1_X, SIDE_SHAPE_2_X, ROLLER_1_X, ROLLER_2_X);
+    private static final VoxelShape Z_AXIS_SHAPE = VoxelShapes.union(SIDE_SHAPE_1_Z, SIDE_SHAPE_2_Z, ROLLER_1_Z, ROLLER_2_Z);
 
     public RollerMillBlock(Settings settings) {
         super(settings);
@@ -91,6 +93,19 @@ public class RollerMillBlock extends Block implements BlockEntityProvider, MechP
         else if (state.get(ON_OFF_PWR) == ON){
             world.scheduleBlockTick(pos, this, 10);
             world.setBlockState(pos, state.with(ON_OFF_PWR, SCHEDULED_STOP));
+        }
+    }
+
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    }
+
+    @Override
+    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+        super.onBlockAdded(state, world, pos, oldState, notify);
+        if (world.getBlockEntity(pos) instanceof RollerMillBlockEntity rmbe) {
+            rmbe.setDirection(state.get(FACING));
         }
     }
 

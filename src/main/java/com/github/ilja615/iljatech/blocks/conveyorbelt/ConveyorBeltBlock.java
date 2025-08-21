@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks.conveyorbelt;
 
+import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.energy.MechPwrSender;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
@@ -145,9 +146,11 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
     @Override
     public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom)
     {
+        // Can not be active if there is no space above
+        boolean isBlocked = world.getBlockState(thisPos.up()).isFullCube(world, thisPos.up());
         // Can not accept power from its facing direction
         BlockState state = world.getBlockState(thisPos);
-        return (state.getProperties().contains(FACING) && state.get(FACING) != sideFrom && state.getProperties().contains(ON_OFF_PWR));
+        return (!isBlocked && state.getProperties().contains(FACING) && state.get(FACING) != sideFrom && state.getProperties().contains(ON_OFF_PWR));
     }
 
     @Override
@@ -167,6 +170,11 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
                 dir = Direction.UP;
 
             Block other = world.getBlockState(pos.offset(dir)).getBlock();
+            Block upBlock = world.getBlockState(pos.up()).getBlock();
+            if (upBlock instanceof RollerMillBlock) {
+                if (((MechPwrAccepter)upBlock).acceptsPower(world, pos.up(), Direction.DOWN))
+                    sendPower(world, pos, Direction.UP, 1);
+            }
 
             if (other instanceof MechPwrAccepter && ((MechPwrAccepter)other).acceptsPower(world, pos.offset(dir), dir.getOpposite())) {
                 // Can only relay to other conveyor belts

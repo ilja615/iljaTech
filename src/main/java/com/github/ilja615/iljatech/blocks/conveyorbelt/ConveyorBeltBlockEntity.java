@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks.conveyorbelt;
 
+import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
@@ -18,10 +19,9 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -35,6 +35,7 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
 
     private final List<Pair<ItemStack, Vec3d>> STACKS = new ArrayList<>();
     private final List<Integer> toRemove = new ArrayList<>();
+    private int ticks = 0;
 
     private final static Codec<Pair<ItemStack, Vec3d>> CODEC = Codec.mapPair(ItemStack.CODEC.fieldOf("item"), Vec3d.CODEC.fieldOf("pos")).codec();
 
@@ -57,17 +58,21 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
             toRemove.clear();
         }
 
-        // Push items (which should happen only on server)
-        if (!world.isClient) {
+        if (ticks++ >= 20) {
+            ticks = 0;
             Box box = ITEM_AREA_SHAPE.offset(pos.getX(), pos.getY() + 0.5d, pos.getZ());
             for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, EntityPredicates.VALID_ENTITY)) {
                 if (!itemEntity.isOnGround() || world.getBlockState(pos).get(ConveyorBeltBlock.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.OFF)
                     break;
-                STACKS.add(new Pair<>(itemEntity.getStack(), pos.toCenterPos().add(0, 0.75d, 0)));
+                STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(1), pos.toCenterPos().add(0, 0.75d, 0)));
                 flag = true;
-                itemEntity.kill();
+                if (itemEntity.getStack().getCount() == 1)
+                    itemEntity.kill();
+                else
+                    itemEntity.getStack().decrement(1);
             }
         }
+
         List<Pair<Integer, Pair<ItemStack, Vec3d>>> updates = new ArrayList<>();
 
         for(int i = 0; i < STACKS.size(); ++i) {
@@ -96,7 +101,17 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
                         under.getY() + 1.25d - (onSlab ? 0.5d : 0) + (up ? 0.5d * progress : 0),
                         nextDir.getAxis() == Direction.Axis.Z ? itemPos.getZ() + nextDir.getOffsetZ() * VELOCITY : Math.floor(itemPos.getZ()) + 0.5d);
 
-//                System.out.println(under + " " + progress + " " + newPos + " " + onSlab + " " + world.getBlockState(under).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE));
+                if (world.getBlockEntity(under.up()) instanceof RollerMillBlockEntity rmbe) {
+                    ItemStack input = rmbe.getInventory().getStack(0);
+                    if (input.isEmpty()) {
+                        rmbe.getInventory().setStack(0, itemStack);
+                        toRemove.add(i); // schedule removal from conveyor
+                    } else if (input.isOf(itemStack.getItem()) && input.getCount() < input.getMaxCount()) {
+                        input.increment(1);
+                        toRemove.add(i); // schedule removal from conveyor
+                    }
+                    rmbe.setDirection(nextDir);
+                }
                 updates.add(new Pair<>(i, new Pair<>(itemStack, newPos))); // schedule update
             } else {
                 world.spawnEntity(new ItemEntity(world, itemPos.getX(), itemPos.getY(), itemPos.getZ(), itemStack));
@@ -118,40 +133,45 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
         super.readNbt(nbt, registryLookup);
 
         NbtList nbtList = nbt.getList("Stacks", NbtElement.COMPOUND_TYPE);
+        RegistryOps<NbtElement> ops = registryLookup.getOps(NbtOps.INSTANCE);
 
-        if (!STACKS.isEmpty())
-            for(int i = 0; i < nbtList.size(); ++i) {
-                NbtCompound nbtCompound = nbtList.getCompound(i);
-                Optional<Pair<ItemStack, Vec3d>> pair = CODEC.parse(registryLookup.getOps(NbtOps.INSTANCE), nbtCompound).resultOrPartial((error) -> {});
-                if (pair.isPresent() && i < STACKS.size()) {
-                    STACKS.set(i, pair.get());
-                }
+        int targetSize = nbtList.size();
+        if (STACKS.size() > targetSize) {
+            STACKS.subList(targetSize, STACKS.size()).clear();
+        }
+
+        for (int i = 0; i < nbtList.size(); i++) {
+            NbtCompound entry = nbtList.getCompound(i);
+            Optional<Pair<ItemStack, Vec3d>> parsed =
+                    CODEC.parse(ops, entry).resultOrPartial(err -> {});
+
+            if (parsed.isEmpty()) continue;
+
+            if (i < STACKS.size()) {
+                STACKS.set(i, parsed.get());
+            } else {
+                STACKS.add(parsed.get());
             }
-        else
-            for(int i = 0; i < nbtList.size(); ++i) {
-                NbtCompound nbtCompound = nbtList.getCompound(i);
-                Optional<Pair<ItemStack, Vec3d>> pair = CODEC.parse(registryLookup.getOps(NbtOps.INSTANCE), nbtCompound).resultOrPartial((error) -> {});
-                if (pair.isPresent()) {
-                    STACKS.add(i, pair.get());
-                }
-            }
+        }
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
 
-        NbtList nbtList = new NbtList();
-        for(int i = 0; i < STACKS.size(); ++i) {
+        RegistryOps<NbtElement> ops = registryLookup.getOps(NbtOps.INSTANCE);
+        NbtList out = new NbtList();
+
+        for (int i = 0; i < STACKS.size(); i++) {
             Pair<ItemStack, Vec3d> pair = STACKS.get(i);
-            ItemStack itemStack = pair.getFirst();
-            Vec3d itemPos = pair.getSecond();
-            if (!itemStack.isEmpty()) {
-                NbtCompound nbtCompound = new NbtCompound();
-                nbtList.add(CODEC.encode(new Pair<>(itemStack, itemPos), registryLookup.getOps(NbtOps.INSTANCE), nbtCompound).getOrThrow());
-            }
+            ItemStack stack = pair.getFirst();
+            if (stack.isEmpty()) continue;
+
+            NbtCompound dst = new NbtCompound();
+            CODEC.encode(pair, ops, dst).resultOrPartial(err -> {}).ifPresent(out::add);
         }
-        nbt.put("Stacks", nbtList);
+
+        nbt.put("Stacks", out);
     }
 
     @Nullable

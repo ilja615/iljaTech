@@ -8,6 +8,7 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 
@@ -27,7 +28,9 @@ public class RollerMillRenderer implements BlockEntityRenderer<RollerMillBlockEn
         ItemStack stack0 = inventory.getStack(0);
         if (!stack0.isEmpty()) {
             matrices.push();
-            matrices.translate(0.5d, 1.1d - (0.004d * entity.getTicks()), 0.5d);
+            Direction d = entity.getDirection();
+            matrices.translate(0.5d, 0.5d, 0.5d);
+            matrices.translate(d.getOffsetX() * 0.01 * (entity.getTicks() - 50), 0d, d.getOffsetZ() * 0.01 * (entity.getTicks() - 50));
             matrices.scale(SIZE, SIZE, SIZE);
             this.context.getItemRenderer().renderItem(stack0, ModelTransformationMode.FIXED,
                     light, overlay, matrices, vertexConsumers, world, 0);
