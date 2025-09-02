@@ -11,6 +11,18 @@
     "iljatech:gravel_aluminium_ore",
     "iljatech:raw_aluminium_ore",
     "iljatech:gearbox",
-    "iljatech:drill"
+    "iljatech:drill",
+    "iljatech:iron_sheetmetal",
+    "iljatech:iron_sheetmetal_slab",
+    "iljatech:iron_sheetmetal_stairs",
+    "iljatech:exposed_iron_sheetmetal",
+    "iljatech:exposed_iron_sheetmetal_slab",
+    "iljatech:exposed_iron_sheetmetal_stairs",
+    "iljatech:weathered_iron_sheetmetal",
+    "iljatech:weathered_iron_sheetmetal_slab",
+    "iljatech:weathered_iron_sheetmetal_stairs",
+    "iljatech:rusty_iron_sheetmetal",
+    "iljatech:rusty_iron_sheetmetal_slab",
+    "iljatech:rusty_iron_sheetmetal_stairs"
   ]
 }

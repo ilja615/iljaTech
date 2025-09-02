@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.renderer;
 
+import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -16,6 +17,8 @@ public class RollerMillRenderer implements BlockEntityRenderer<RollerMillBlockEn
     private final BlockEntityRendererFactory.Context context;
     private static final float SIZE = 0.75F;
 
+    private Direction direction = null;
+
     public RollerMillRenderer(BlockEntityRendererFactory.Context ctx) {
         context = ctx;
     }
@@ -28,9 +31,9 @@ public class RollerMillRenderer implements BlockEntityRenderer<RollerMillBlockEn
         ItemStack stack0 = inventory.getStack(0);
         if (!stack0.isEmpty()) {
             matrices.push();
-            Direction d = entity.getDirection();
+            direction = entity.getCachedState().get(RollerMillBlock.FACING);
             matrices.translate(0.5d, 0.5d, 0.5d);
-            matrices.translate(d.getOffsetX() * 0.01 * (entity.getTicks() - 50), 0d, d.getOffsetZ() * 0.01 * (entity.getTicks() - 50));
+            matrices.translate(direction.getOffsetX() * 0.01 * (entity.getTicks() - 50), 0d, direction.getOffsetZ() * 0.01 * (entity.getTicks() - 50));
             matrices.scale(SIZE, SIZE, SIZE);
             this.context.getItemRenderer().renderItem(stack0, ModelTransformationMode.FIXED,
                     light, overlay, matrices, vertexConsumers, world, 0);

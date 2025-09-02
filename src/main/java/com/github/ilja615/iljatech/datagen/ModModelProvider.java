@@ -76,6 +76,7 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.FIRE_CLAY);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ITEM_HATCH);
 
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.WOODEN_SCAFFOLDING);
 
         var limestoneFamily = new BlockFamily.Builder(ModBlocks.LIMESTONE)
                 .slab(ModBlocks.LIMESTONE_SLAB)
@@ -84,5 +85,26 @@ public class ModModelProvider extends FabricModelProvider {
                 .build();
         blockStateModelGenerator.registerCubeAllModelTexturePool(limestoneFamily.getBaseBlock())
                 .family(limestoneFamily);
+
+        var ironSheetMetalFamily = new BlockFamily.Builder(ModBlocks.IRON_SHEETMETAL)
+                .slab(ModBlocks.IRON_SHEETMETAL_SLAB)
+                .stairs(ModBlocks.IRON_SHEETMETAL_STAIRS)
+                .build();
+        blockStateModelGenerator.registerCubeAllModelTexturePool(ironSheetMetalFamily.getBaseBlock()).family(ironSheetMetalFamily);
+        var exposedIronSheetMetalFamily = new BlockFamily.Builder(ModBlocks.EXPOSED_IRON_SHEETMETAL)
+                .slab(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB)
+                .stairs(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS)
+                .build();
+        blockStateModelGenerator.registerCubeAllModelTexturePool(exposedIronSheetMetalFamily.getBaseBlock()).family(exposedIronSheetMetalFamily);
+        var weatheredIronSheetMetalFamily = new BlockFamily.Builder(ModBlocks.WEATHERED_IRON_SHEETMETAL)
+                .slab(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB)
+                .stairs(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS)
+                .build();
+        blockStateModelGenerator.registerCubeAllModelTexturePool(weatheredIronSheetMetalFamily.getBaseBlock()).family(weatheredIronSheetMetalFamily);
+        var rustyIronSheetMetalFamily = new BlockFamily.Builder(ModBlocks.RUSTY_IRON_SHEETMETAL)
+                .slab(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB)
+                .stairs(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS)
+                .build();
+        blockStateModelGenerator.registerCubeAllModelTexturePool(rustyIronSheetMetalFamily.getBaseBlock()).family(rustyIronSheetMetalFamily);
     }
 }

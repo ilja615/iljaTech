@@ -1,0 +1,10 @@
+{
+  "type": "iljatech:rolling",
+  "ingredient": {
+    "item": "minecraft:copper_ingot"
+  },
+  "result": {
+    "count": 2,
+    "id": "iljatech:copper_rod"
+  }
+}

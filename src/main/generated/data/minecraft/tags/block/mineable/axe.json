@@ -1,6 +1,18 @@
 {
   "values": [
     "iljatech:crank",
-    "iljatech:wooden_shaft"
+    "iljatech:wooden_shaft",
+    "iljatech:conveyor_belt",
+    "iljatech:nailed_acacia_planks",
+    "iljatech:nailed_bamboo_planks",
+    "iljatech:nailed_birch_planks",
+    "iljatech:nailed_cherry_planks",
+    "iljatech:nailed_crimson_planks",
+    "iljatech:nailed_dark_oak_planks",
+    "iljatech:nailed_jungle_planks",
+    "iljatech:nailed_mangrove_planks",
+    "iljatech:nailed_oak_planks",
+    "iljatech:nailed_spruce_planks",
+    "iljatech:nailed_warped_planks"
   ]
 }

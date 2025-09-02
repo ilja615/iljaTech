@@ -1,10 +1,7 @@
 package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.WallMountedBlock;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -42,7 +39,8 @@ public class DrillBlock extends Block implements MechPwrAccepter {
 
     @Override
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return WallMountedBlock.canPlaceAt(world, pos, state.get(FACING).getOpposite());
+        return (WallMountedBlock.canPlaceAt(world, pos, state.get(FACING).getOpposite())
+        || world.getBlockState(pos).isOf(Blocks.HONEY_BLOCK));
     }
 
     @Override

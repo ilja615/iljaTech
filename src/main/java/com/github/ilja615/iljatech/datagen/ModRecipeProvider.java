@@ -44,6 +44,12 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         hammerRecipe(Items.RAW_IRON, ModItems.CRUSHED_RAW_IRON, exporter);
         hammerRecipe(ModItems.RAW_NICKEL_ORE, ModItems.CRUSHED_RAW_NICKEL, exporter);
         hammerRecipe(ModItems.RAW_TIN_ORE, ModItems.CRUSHED_RAW_TIN, exporter);
+        sheetMetalRecipes(ModBlocks.IRON_PLATE, ModBlocks.IRON_SHEETMETAL, exporter);
+        slabStairRecipes(ModBlocks.IRON_SHEETMETAL, ModBlocks.IRON_SHEETMETAL_SLAB, ModBlocks.IRON_SHEETMETAL_STAIRS, exporter);
+        slabStairRecipes(ModBlocks.EXPOSED_IRON_SHEETMETAL, ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB, ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS, exporter);
+        slabStairRecipes(ModBlocks.WEATHERED_IRON_SHEETMETAL, ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB, ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS, exporter);
+        slabStairRecipes(ModBlocks.RUSTY_IRON_SHEETMETAL, ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB, ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS, exporter);
+        slabStairWallRecipes(ModBlocks.LIMESTONE, ModBlocks.LIMESTONE_SLAB, ModBlocks.LIMESTONE_STAIRS, ModBlocks.LIMESTONE_WALL, exporter);
 
         RecipeProvider.offerSmelting(exporter, List.of(ModItems.FIRE_CLAY_BALL), RecipeCategory.MISC, ModItems.FIRE_BRICK, 0.4f, 200, "fire_brick");
 }
@@ -75,6 +81,40 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .pattern("##")
                 .criterion(hasItem(item), conditionsFromItem(item))
                 .criterion(hasItem(ModItems.IRON_HAMMER), conditionsFromItem(ModItems.IRON_HAMMER))
+                .offerTo(exporter);
+    }
+
+    private static void sheetMetalRecipes(ItemConvertible plate, ItemConvertible block, RecipeExporter exporter) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, block, 8)
+                .input('#', plate)
+                .pattern("##")
+                .pattern("##")
+                .criterion(hasItem(plate), conditionsFromItem(plate))
+                .offerTo(exporter);
+    }
+
+    private static void slabStairRecipes(ItemConvertible block, ItemConvertible slab, ItemConvertible stairs, RecipeExporter exporter) {
+            ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, slab, 6)
+                .input('#', block)
+                .pattern("###")
+                .criterion(hasItem(block), conditionsFromItem(block))
+                .offerTo(exporter);
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, stairs, 4)
+                .input('#', block)
+                .pattern("#  ")
+                .pattern("## ")
+                .pattern("###")
+                .criterion(hasItem(block), conditionsFromItem(block))
+                .offerTo(exporter);
+    }
+
+    private static void slabStairWallRecipes(ItemConvertible block, ItemConvertible slab, ItemConvertible stairs, ItemConvertible wall, RecipeExporter exporter) {
+        slabStairRecipes(block, slab, stairs, exporter);
+        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, wall, 6)
+                .input('#', block)
+                .pattern("###")
+                .pattern("###")
+                .criterion(hasItem(block), conditionsFromItem(block))
                 .offerTo(exporter);
     }
 

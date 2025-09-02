@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "iljatech:block/weathered_iron_sheetmetal",
+    "side": "iljatech:block/weathered_iron_sheetmetal",
+    "top": "iljatech:block/weathered_iron_sheetmetal"
+  }
+}

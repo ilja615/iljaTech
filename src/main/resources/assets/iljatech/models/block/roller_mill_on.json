@@ -5,7 +5,8 @@
 	"textures": {
 		"3": "iljatech:block/roller_on",
 		"4": "iljatech:block/roller_on_mirrored",
-		"5": "iljatech:block/rolling_mill_side"
+		"5": "iljatech:block/rolling_mill_side",
+		"particle": "iljatech:block/roller"
 	},
 	"elements": [
 		{

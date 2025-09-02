@@ -172,6 +172,8 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
             Block other = world.getBlockState(pos.offset(dir)).getBlock();
             Block upBlock = world.getBlockState(pos.up()).getBlock();
             if (upBlock instanceof RollerMillBlock) {
+                if (world.getBlockState(pos.up()).get(FACING) != dir)
+                    world.setBlockState(pos.up(), world.getBlockState(pos.up()).with(FACING, dir));
                 if (((MechPwrAccepter)upBlock).acceptsPower(world, pos.up(), Direction.DOWN))
                     sendPower(world, pos, Direction.UP, 1);
             }
@@ -218,6 +220,27 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
                 onBreakInCreative(world, pos, state, player);
             } else {
                 dropStacks(state, world, pos, (BlockEntity)null, player, player.getMainHandStack());
+                ConveyorBeltState conveyorBeltState = (ConveyorBeltState) state.get(CONVEYOR_BELT_STATE);
+                if (conveyorBeltState == ConveyorBeltState.BOTTOM_SLAB) {
+                    BlockPos blockPos = pos.down();
+                    BlockState blockState = world.getBlockState(blockPos);
+                    if (blockState.isOf(state.getBlock()) && blockState.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.TOP_SLAB) {
+                        dropStacks(blockState, world, blockPos, (BlockEntity)null, player, player.getMainHandStack());
+                        BlockState blockState2 = blockState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
+                        world.setBlockState(blockPos, blockState2, Block.NOTIFY_ALL);
+                        world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, blockPos, Block.getRawIdFromState(blockState));
+                    }
+                }
+                if (conveyorBeltState == ConveyorBeltState.TOP_SLAB) {
+                    BlockPos blockPos = pos.up();
+                    BlockState blockState = world.getBlockState(blockPos);
+                    if (blockState.isOf(state.getBlock()) && blockState.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.BOTTOM_SLAB) {
+                        dropStacks(blockState, world, blockPos, (BlockEntity)null, player, player.getMainHandStack());
+                        BlockState blockState2 = blockState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
+                        world.setBlockState(blockPos, blockState2, Block.NOTIFY_ALL);
+                        world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, blockPos, Block.getRawIdFromState(blockState));
+                    }
+                }
             }
         }
 
@@ -245,6 +268,14 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
                 world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, blockPos, Block.getRawIdFromState(blockState));
             }
         }
-
+        if (conveyorBeltState == ConveyorBeltState.TOP_SLAB) {
+            BlockPos blockPos = pos.up();
+            BlockState blockState = world.getBlockState(blockPos);
+            if (blockState.isOf(state.getBlock()) && blockState.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.BOTTOM_SLAB) {
+                BlockState blockState2 = blockState.getFluidState().isOf(Fluids.WATER) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState();
+                world.setBlockState(blockPos, blockState2, Block.NOTIFY_ALL | Block.SKIP_DROPS);
+                world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, blockPos, Block.getRawIdFromState(blockState));
+            }
+        }
     }
 }

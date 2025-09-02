@@ -61,7 +61,7 @@ public class Heat {
                         BoilingRecipe r = rr.value();
                         ItemStack resultingStack = r.output().copy();
                         if (r.stack().getMatchingStacks()[0].isEmpty() || itemEntity.getStack().isEmpty())
-                            break;
+                            continue;
 
                         if (r.stack().getMatchingStacks()[0].getItem() == itemEntity.getStack().getItem())
                         {

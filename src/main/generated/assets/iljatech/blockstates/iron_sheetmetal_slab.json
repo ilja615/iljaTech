@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "iljatech:block/iron_sheetmetal_slab"
+    },
+    "type=double": {
+      "model": "iljatech:block/iron_sheetmetal"
+    },
+    "type=top": {
+      "model": "iljatech:block/iron_sheetmetal_slab_top"
+    }
+  }
+}

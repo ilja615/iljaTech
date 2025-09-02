@@ -4,7 +4,8 @@
 	"parent": "minecraft:block/block",
 	"textures": {
 		"3": "iljatech:block/roller",
-		"5": "iljatech:block/rolling_mill_side"
+		"5": "iljatech:block/rolling_mill_side",
+		"particle": "iljatech:block/roller"
 	},
 	"elements": [
 		{

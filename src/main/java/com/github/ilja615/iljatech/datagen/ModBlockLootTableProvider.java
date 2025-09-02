@@ -77,7 +77,16 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.FUNNEL);
         addDrop(ModBlocks.STEEL_PIPE);
         addDrop(ModBlocks.CONVEYOR_BELT);
-
+        addDrop(ModBlocks.IRON_SHEETMETAL);
+        slabDrops(ModBlocks.IRON_SHEETMETAL_SLAB);
+        addDrop(ModBlocks.IRON_SHEETMETAL_STAIRS);
+        addDrop(ModBlocks.WEATHERED_IRON_SHEETMETAL);
+        slabDrops(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB);
+        addDrop(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS);
+        addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL);
+        slabDrops(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB);
+        addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
+        addDrop(ModBlocks.WOODEN_SCAFFOLDING);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

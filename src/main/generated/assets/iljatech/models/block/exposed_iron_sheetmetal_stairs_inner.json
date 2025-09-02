@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "iljatech:block/exposed_iron_sheetmetal",
+    "side": "iljatech:block/exposed_iron_sheetmetal",
+    "top": "iljatech:block/exposed_iron_sheetmetal"
+  }
+}

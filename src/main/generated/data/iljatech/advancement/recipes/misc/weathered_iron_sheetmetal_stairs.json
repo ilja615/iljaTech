@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "iljatech:weathered_iron_sheetmetal_stairs"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_weathered_iron_sheetmetal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "iljatech:weathered_iron_sheetmetal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_weathered_iron_sheetmetal"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "iljatech:weathered_iron_sheetmetal_stairs"
+    ]
+  }
+}

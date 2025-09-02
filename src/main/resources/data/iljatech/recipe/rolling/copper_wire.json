@@ -1,0 +1,10 @@
+{
+  "type": "iljatech:rolling",
+  "ingredient": {
+    "item": "iljatech:copper_rod"
+  },
+  "result": {
+    "count": 2,
+    "id": "iljatech:copper_wire"
+  }
+}

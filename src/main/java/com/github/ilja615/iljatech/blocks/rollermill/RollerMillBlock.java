@@ -29,10 +29,10 @@ import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.SCHEDU
 
 public class RollerMillBlock extends Block implements BlockEntityProvider, MechPwrAccepter {
     public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
-    protected static final VoxelShape SIDE_SHAPE_1_X = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.0);
-    protected static final VoxelShape SIDE_SHAPE_2_X = Block.createCuboidShape(0.0, 0.0, 16.0, 16.0, 16.0, 16.0);
-    protected static final VoxelShape SIDE_SHAPE_1_Z = Block.createCuboidShape(0.0, 0.0, 0.0, 0.0, 16.0, 16.0);
-    protected static final VoxelShape SIDE_SHAPE_2_Z = Block.createCuboidShape(16.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SIDE_SHAPE_1_X = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 16.0, 0.01);
+    protected static final VoxelShape SIDE_SHAPE_2_X = Block.createCuboidShape(0.0, 0.0, 15.99, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SIDE_SHAPE_1_Z = Block.createCuboidShape(0.0, 0.0, 0.0, 0.01, 16.0, 16.0);
+    protected static final VoxelShape SIDE_SHAPE_2_Z = Block.createCuboidShape(15.99, 0.0, 0.0, 16.0, 16.0, 16.0);
     protected static final VoxelShape ROLLER_1_X = Block.createCuboidShape(5.0, 2.0, 0.5, 11.0, 8.0, 15.5);
     protected static final VoxelShape ROLLER_2_X = Block.createCuboidShape(5.0, 10.0, 0.5, 11.0, 16.0, 15.5);
     protected static final VoxelShape ROLLER_1_Z = Block.createCuboidShape(0.5, 2.0, 5.0, 15.5, 18.0, 11.0);
@@ -99,14 +99,6 @@ public class RollerMillBlock extends Block implements BlockEntityProvider, MechP
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
-    }
-
-    @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        super.onBlockAdded(state, world, pos, oldState, notify);
-        if (world.getBlockEntity(pos) instanceof RollerMillBlockEntity rmbe) {
-            rmbe.setDirection(state.get(FACING));
-        }
     }
 
     @Override

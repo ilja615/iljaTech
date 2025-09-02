@@ -19,7 +19,11 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
                 .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE)
                 .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
-                .add(ModBlocks.GEARBOX).add(ModBlocks.DRILL);
+                .add(ModBlocks.GEARBOX).add(ModBlocks.DRILL)
+                .add(ModBlocks.IRON_SHEETMETAL).add(ModBlocks.IRON_SHEETMETAL_SLAB).add(ModBlocks.IRON_SHEETMETAL_STAIRS)
+                .add(ModBlocks.EXPOSED_IRON_SHEETMETAL).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS)
+                .add(ModBlocks.WEATHERED_IRON_SHEETMETAL).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS)
+                .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
 
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE);
@@ -30,13 +34,23 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
                 .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE)
                 .add(ModBlocks.GEARBOX).add(ModBlocks.ROLLER_MILL).add(ModBlocks.DRILL)
-                .add(ModBlocks.COPPER_WIRE).add(ModBlocks.FIRE_BRICKS);
+                .add(ModBlocks.COPPER_WIRE).add(ModBlocks.FIRE_BRICKS).add(ModBlocks.FIREBOX).add(ModBlocks.FOUNDRY)
+                .add(ModBlocks.CLINKER_BRICKS).add(ModBlocks.COKE_OVEN)
+                .add(ModBlocks.TERRACOTTA_PIPE).add(ModBlocks.STEEL_PIPE)
+                .add(ModBlocks.LIMESTONE).add(ModBlocks.LIMESTONE_SLAB).add(ModBlocks.LIMESTONE_STAIRS).add(ModBlocks.LIMESTONE_WALL)
+                .add(ModBlocks.IRON_SHEETMETAL).add(ModBlocks.IRON_SHEETMETAL_SLAB).add(ModBlocks.IRON_SHEETMETAL_STAIRS)
+                .add(ModBlocks.EXPOSED_IRON_SHEETMETAL).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS)
+                .add(ModBlocks.WEATHERED_IRON_SHEETMETAL).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS)
+                .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
-                .add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.FIRE_CLAY);
+                .add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.FIRE_CLAY).add(ModBlocks.CLAY_PIPE);
 
         getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
-                .add(ModBlocks.CRANK).add(ModBlocks.WOODEN_SHAFT);
+                .add(ModBlocks.CRANK).add(ModBlocks.WOODEN_SHAFT).add(ModBlocks.CONVEYOR_BELT).add(ModBlocks.NAILED_ACACIA_PLANKS)
+                .add(ModBlocks.NAILED_BAMBOO_PLANKS).add(ModBlocks.NAILED_BIRCH_PLANKS).add(ModBlocks.NAILED_CHERRY_PLANKS)
+                .add(ModBlocks.NAILED_CRIMSON_PLANKS).add(ModBlocks.NAILED_DARK_OAK_PLANKS).add(ModBlocks.NAILED_JUNGLE_PLANKS)
+                .add(ModBlocks.NAILED_MANGROVE_PLANKS).add(ModBlocks.NAILED_OAK_PLANKS).add(ModBlocks.NAILED_SPRUCE_PLANKS).add(ModBlocks.NAILED_WARPED_PLANKS);
 
         getOrCreateTagBuilder(BlockTags.WALLS)
                 .add(ModBlocks.LIMESTONE_WALL);

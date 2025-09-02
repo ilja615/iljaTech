@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "iljatech:block/iron_sheetmetal",
+    "side": "iljatech:block/iron_sheetmetal",
+    "top": "iljatech:block/iron_sheetmetal"
+  }
+}

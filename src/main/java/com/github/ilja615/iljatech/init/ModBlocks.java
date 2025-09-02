@@ -13,6 +13,9 @@ import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlock;
 import com.github.ilja615.iljatech.blocks.pipe.ClayPipeBlock;
 import com.github.ilja615.iljatech.blocks.pipe.PipeBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
+import com.github.ilja615.iljatech.blocks.rusty.RustingBlock;
+import com.github.ilja615.iljatech.blocks.rusty.RustingSlabBlock;
+import com.github.ilja615.iljatech.blocks.rusty.RustingStairsBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
@@ -68,6 +71,21 @@ public class ModBlocks {
     public static final Block LIMESTONE_SLAB = registerWithItem("limestone_slab", new SlabBlock(AbstractBlock.Settings.copy(LIMESTONE)));
     public static final Block LIMESTONE_STAIRS = registerWithItem("limestone_stairs", new StairsBlock(LIMESTONE.getDefaultState(), AbstractBlock.Settings.copy(LIMESTONE)));
     public static final Block LIMESTONE_WALL = registerWithItem("limestone_wall", new WallBlock(AbstractBlock.Settings.copy(LIMESTONE)));
+
+    public static final Block IRON_SHEETMETAL = registerWithItem("iron_sheetmetal", new RustingBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(2.0F, 4.0F).mapColor(MapColor.IRON_GRAY).sounds(BlockSoundGroup.COPPER)));
+    public static final Block IRON_SHEETMETAL_SLAB = registerWithItem("iron_sheetmetal_slab", new RustingSlabBlock(AbstractBlock.Settings.copy(IRON_SHEETMETAL)));
+    public static final Block IRON_SHEETMETAL_STAIRS = registerWithItem("iron_sheetmetal_stairs", new RustingStairsBlock(IRON_SHEETMETAL.getDefaultState(), AbstractBlock.Settings.copy(IRON_SHEETMETAL)));
+    public static final Block EXPOSED_IRON_SHEETMETAL = registerWithItem("exposed_iron_sheetmetal", new RustingBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(2.0F, 4.0F).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY).sounds(BlockSoundGroup.COPPER)));
+    public static final Block EXPOSED_IRON_SHEETMETAL_SLAB = registerWithItem("exposed_iron_sheetmetal_slab", new RustingSlabBlock(AbstractBlock.Settings.copy(EXPOSED_IRON_SHEETMETAL)));
+    public static final Block EXPOSED_IRON_SHEETMETAL_STAIRS = registerWithItem("exposed_iron_sheetmetal_stairs", new RustingStairsBlock(EXPOSED_IRON_SHEETMETAL.getDefaultState(), AbstractBlock.Settings.copy(EXPOSED_IRON_SHEETMETAL)));
+    public static final Block WEATHERED_IRON_SHEETMETAL = registerWithItem("weathered_iron_sheetmetal", new RustingBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(2.0F, 4.0F).mapColor(MapColor.DIRT_BROWN).sounds(BlockSoundGroup.COPPER)));
+    public static final Block WEATHERED_IRON_SHEETMETAL_SLAB = registerWithItem("weathered_iron_sheetmetal_slab", new RustingSlabBlock(AbstractBlock.Settings.copy(WEATHERED_IRON_SHEETMETAL)));
+    public static final Block WEATHERED_IRON_SHEETMETAL_STAIRS = registerWithItem("weathered_iron_sheetmetal_stairs", new RustingStairsBlock(WEATHERED_IRON_SHEETMETAL.getDefaultState(), AbstractBlock.Settings.copy(WEATHERED_IRON_SHEETMETAL)));
+    public static final Block RUSTY_IRON_SHEETMETAL = registerWithItem("rusty_iron_sheetmetal", new RustingBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(2.0F, 4.0F).mapColor(MapColor.BROWN).sounds(BlockSoundGroup.COPPER)));
+    public static final Block RUSTY_IRON_SHEETMETAL_SLAB = registerWithItem("rusty_iron_sheetmetal_slab", new RustingSlabBlock(AbstractBlock.Settings.copy(RUSTY_IRON_SHEETMETAL)));
+    public static final Block RUSTY_IRON_SHEETMETAL_STAIRS = registerWithItem("rusty_iron_sheetmetal_stairs", new RustingStairsBlock(RUSTY_IRON_SHEETMETAL.getDefaultState(), AbstractBlock.Settings.copy(RUSTY_IRON_SHEETMETAL)));
+
+    public static final Block WOODEN_SCAFFOLDING = registerWithItem("wooden_scaffold", new Block(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS).nonOpaque()));
 
     public static final Block CRANK = registerWithItem("crank", new CrankBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).pistonBehavior(PistonBehavior.DESTROY).noCollision()));
     public static final Block GEARBOX = registerWithItem("gearbox", new GearBoxBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));

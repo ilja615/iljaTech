@@ -87,7 +87,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.crank", "Crank");
         this.add("block.iljatech.gearbox", "Gear Box");
         this.add("block.iljatech.wooden_shaft", "Wooden Shaft");
-        this.add("block.iljatech.roller_mill", "Roller Mill");
+        this.add("block.iljatech.roller_mill", "Wire Roller");
         this.add("block.iljatech.drill", "Drill");
         this.add("block.iljatech.turbine", "Turbine");
         this.add("block.iljatech.iron_rod", "Iron Rod");
@@ -99,6 +99,19 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.steel_pipe", "Steel Pipe");
         this.add("block.iljatech.funnel", "Funnel");
         this.add("block.iljatech.conveyor_belt", "Conveyor Belt");
+        this.add("block.iljatech.iron_sheetmetal", "Iron Sheetmetal");
+        this.add("block.iljatech.iron_sheetmetal_slab", "Iron Sheetmetal Slab");
+        this.add("block.iljatech.iron_sheetmetal_stairs", "Iron Sheetmetal Stairs");
+        this.add("block.iljatech.exposed_iron_sheetmetal", "Exposed Iron Sheetmetal");
+        this.add("block.iljatech.exposed_iron_sheetmetal_slab", "Exposed Iron Sheetmetal Slab");
+        this.add("block.iljatech.exposed_iron_sheetmetal_stairs", "Exposed Iron Sheetmetal Stairs");
+        this.add("block.iljatech.weathered_iron_sheetmetal", "Weathered Iron Sheetmetal");
+        this.add("block.iljatech.weathered_iron_sheetmetal_slab", "Weathered Iron Sheetmetal Slab");
+        this.add("block.iljatech.weathered_iron_sheetmetal_stairs", "Weathered Iron Sheetmetal Stairs");
+        this.add("block.iljatech.rusty_iron_sheetmetal", "Rusty Iron Sheetmetal");
+        this.add("block.iljatech.rusty_iron_sheetmetal_slab", "Rusty Iron Sheetmetal Slab");
+        this.add("block.iljatech.rusty_iron_sheetmetal_stairs", "Rusty Iron Sheetmetal Stairs");
+        this.add("block.iljatech.wooden_scaffold", "Wooden Scaffolding");
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");

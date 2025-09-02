@@ -58,19 +58,25 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
             toRemove.clear();
         }
 
-        if (ticks++ >= 20) {
-            ticks = 0;
+        if (ticks == 0) {
             Box box = ITEM_AREA_SHAPE.offset(pos.getX(), pos.getY() + 0.5d, pos.getZ());
             for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, EntityPredicates.VALID_ENTITY)) {
                 if (!itemEntity.isOnGround() || world.getBlockState(pos).get(ConveyorBeltBlock.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.OFF)
                     break;
-                STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(1), pos.toCenterPos().add(0, 0.75d, 0)));
-                flag = true;
-                if (itemEntity.getStack().getCount() == 1)
+
+                ticks = 20;
+                int count = itemEntity.getStack().getCount();
+                if (count > 16) {
+                    itemEntity.getStack().decrement(16);
+                    STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(16), pos.toCenterPos().add(0, 0.75d, 0)));
+                } else {
                     itemEntity.kill();
-                else
-                    itemEntity.getStack().decrement(1);
+                    STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(count), pos.toCenterPos().add(0, 0.75d, 0)));
+                }
+                flag = true;
             }
+        } else if (ticks >0) {
+            ticks--;
         }
 
         List<Pair<Integer, Pair<ItemStack, Vec3d>>> updates = new ArrayList<>();
@@ -107,10 +113,9 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
                         rmbe.getInventory().setStack(0, itemStack);
                         toRemove.add(i); // schedule removal from conveyor
                     } else if (input.isOf(itemStack.getItem()) && input.getCount() < input.getMaxCount()) {
-                        input.increment(1);
+                        rmbe.getInventory().setStack(0, input.copyWithCount(input.getCount() + 1));
                         toRemove.add(i); // schedule removal from conveyor
                     }
-                    rmbe.setDirection(nextDir);
                 }
                 updates.add(new Pair<>(i, new Pair<>(itemStack, newPos))); // schedule update
             } else {
