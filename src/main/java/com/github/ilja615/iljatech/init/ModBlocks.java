@@ -16,6 +16,7 @@ import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingSlabBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingStairsBlock;
+import com.github.ilja615.iljatech.blocks.stampinghammer.HammerBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
@@ -106,6 +107,8 @@ public class ModBlocks {
     public static final Block COPPER_WIRE = registerWithItem("copper_wire", new WireBlock(AbstractBlock.Settings.copy(Blocks.RAIL)));
     public static final Block IRON_PLATE = registerWithItem("iron_plate", new PlateBlock(AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(2.5F, 6.0F).sounds(BlockSoundGroup.METAL)));
     public static final Block IRON_ROD = registerWithItem("iron_rod", new AxisRodBlock(AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.METAL)));
+
+    public static final Block STEEL_BLOCK = registerWithItem("steel_block", new HammerBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(6.0F, 12.0F).mapColor(MapColor.DEEPSLATE_GRAY).sounds(BlockSoundGroup.ANVIL)));
 
     public static <T extends Block> T register(String name, T block) {
         return Registry.register(Registries.BLOCK, Identifier.of(IljaTech.MOD_ID, name), block);

@@ -26,7 +26,8 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
 
         getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
-                .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE);
+                .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE)
+                .add(ModBlocks.STEEL_BLOCK);
 
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
                 .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
@@ -41,7 +42,8 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.IRON_SHEETMETAL).add(ModBlocks.IRON_SHEETMETAL_SLAB).add(ModBlocks.IRON_SHEETMETAL_STAIRS)
                 .add(ModBlocks.EXPOSED_IRON_SHEETMETAL).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS)
                 .add(ModBlocks.WEATHERED_IRON_SHEETMETAL).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS)
-                .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
+                .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS)
+                .add(ModBlocks.STEEL_BLOCK);
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
                 .add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.FIRE_CLAY).add(ModBlocks.CLAY_PIPE);

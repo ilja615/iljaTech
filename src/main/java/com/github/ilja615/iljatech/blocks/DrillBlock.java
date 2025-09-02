@@ -40,7 +40,7 @@ public class DrillBlock extends Block implements MechPwrAccepter {
     @Override
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         return (WallMountedBlock.canPlaceAt(world, pos, state.get(FACING).getOpposite())
-        || world.getBlockState(pos).isOf(Blocks.HONEY_BLOCK));
+        || world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isOf(Blocks.HONEY_BLOCK));
     }
 
     @Override

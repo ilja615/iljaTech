@@ -87,6 +87,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         slabDrops(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB);
         addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
         addDrop(ModBlocks.WOODEN_SCAFFOLDING);
+        addDrop(ModBlocks.STEEL_BLOCK);
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {
