@@ -37,7 +37,7 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
     private final List<Integer> toRemove = new ArrayList<>();
     private int ticks = 0;
 
-    private final static Codec<Pair<ItemStack, Vec3d>> CODEC = Codec.mapPair(ItemStack.CODEC.fieldOf("item"), Vec3d.CODEC.fieldOf("pos")).codec();
+    private final static Codec<Pair<ItemStack, Vec3d>> CODEC = Codec.mapPair(ItemStack.CODEC.fieldOf("item"), Vec3d.CODEC.fieldOf("offset")).codec();
 
     float VELOCITY = 0.07f;
 
@@ -48,6 +48,9 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
     @Override
     public void tick() {
         boolean flag = false;
+        Direction nextDir = getCachedState().get(ConveyorBeltBlock.FACING);
+        BlockState state1 = world.getBlockState(pos.offset(nextDir));
+        boolean onSlab = getCachedState().get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.BOTTOM_SLAB;
 
         if (!toRemove.isEmpty()) {
             Collections.sort(toRemove);
@@ -61,68 +64,76 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
         if (ticks == 0) {
             Box box = ITEM_AREA_SHAPE.offset(pos.getX(), pos.getY() + 0.5d, pos.getZ());
             for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, EntityPredicates.VALID_ENTITY)) {
-                if (!itemEntity.isOnGround() || world.getBlockState(pos).get(ConveyorBeltBlock.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.OFF)
+                if (!itemEntity.isOnGround() || getCachedState().get(ConveyorBeltBlock.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.OFF)
                     break;
 
                 ticks = 20;
                 int count = itemEntity.getStack().getCount();
+                Vec3d relPos = new Vec3d(getXforProgress(nextDir, 0.0f), 0.75d, getZforProgress(nextDir, 0.0f));
                 if (count > 16) {
                     itemEntity.getStack().decrement(16);
-                    STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(16), pos.toCenterPos().add(0, 0.75d, 0)));
+                    STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(16), relPos));
                 } else {
                     itemEntity.kill();
-                    STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(count), pos.toCenterPos().add(0, 0.75d, 0)));
+                    STACKS.add(new Pair<>(itemEntity.getStack().copyWithCount(count), relPos));
                 }
                 flag = true;
             }
-        } else if (ticks >0) {
+        } else if (ticks > 0) {
             ticks--;
         }
 
         List<Pair<Integer, Pair<ItemStack, Vec3d>>> updates = new ArrayList<>();
 
-        for(int i = 0; i < STACKS.size(); ++i) {
-            Pair<ItemStack, Vec3d> pair = STACKS.get(i);
-            ItemStack itemStack = pair.getFirst();
-            Vec3d itemPos = pair.getSecond();
-            BlockPos under = BlockPos.ofFloored(itemPos.add(0, -1.0, 0));
-            if (world.getBlockState(under).getBlock() instanceof ConveyorBeltBlock && world.getBlockState(under).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.TOP_SLAB)
-                under = under.up();
-            if (world.getBlockState(under).getBlock() instanceof ConveyorBeltBlock && world.getBlockState(under).get(ConveyorBeltBlock.ON_OFF_PWR) != MechPwrAccepter.OnOffPwr.OFF) {
-                Direction nextDir = world.getBlockState(under).get(ConveyorBeltBlock.FACING);
-                double progress = 0.0d;
-                if (nextDir.getVector().getComponentAlongAxis(nextDir.getAxis()) == 1) {
-                    progress = itemPos.getComponentAlongAxis(nextDir.getAxis()) - under.getComponentAlongAxis(nextDir.getAxis());
-                }
-                if (nextDir.getVector().getComponentAlongAxis(nextDir.getAxis()) == -1) {
-                    progress =  under.getComponentAlongAxis(nextDir.getAxis()) + 1.0d - itemPos.getComponentAlongAxis(nextDir.getAxis());
-                }
+        if (getCachedState().get(ConveyorBeltBlock.ON_OFF_PWR) != MechPwrAccepter.OnOffPwr.OFF) {
+            for (int i = 0; i < STACKS.size(); ++i) {
+                Pair<ItemStack, Vec3d> pair = STACKS.get(i);
+                ItemStack itemStack = pair.getFirst();
+                Vec3d offset = pair.getSecond();
+                float progress = getProgressForOffset(nextDir, offset);
+                if (progress < 1.0 - VELOCITY) {
+                    progress += VELOCITY;
 
-                BlockState state1 = world.getBlockState(under.offset(nextDir));
-                boolean up = state1.isOf(ModBlocks.CONVEYOR_BELT) && (state1.get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.TOP_SLAB || state1.get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.DIAGONAL) && state1.get(ConveyorBeltBlock.FACING) == nextDir;
-                boolean onSlab = world.getBlockState(under).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.BOTTOM_SLAB;
+                    boolean up = state1.isOf(ModBlocks.CONVEYOR_BELT) && state1.get(ConveyorBeltBlock.FACING) == nextDir
+                            && (state1.get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.TOP_SLAB
+                            || state1.get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.DIAGONAL);
 
-                Vec3d newPos = new Vec3d(
-                        nextDir.getAxis() == Direction.Axis.X ? itemPos.getX() + nextDir.getOffsetX() * VELOCITY : Math.floor(itemPos.getX()) + 0.5d,
-                        under.getY() + 1.25d - (onSlab ? 0.5d : 0) + (up ? 0.5d * progress : 0),
-                        nextDir.getAxis() == Direction.Axis.Z ? itemPos.getZ() + nextDir.getOffsetZ() * VELOCITY : Math.floor(itemPos.getZ()) + 0.5d);
+                    Vec3d newPos = new Vec3d(
+                            getXforProgress(nextDir, progress),
+                            1.25d - (onSlab ? 0.5d : 0) + (up ? 0.5d * progress : 0),
+                            getZforProgress(nextDir, progress));
 
-                if (world.getBlockEntity(under.up()) instanceof RollerMillBlockEntity rmbe) {
-                    ItemStack input = rmbe.getInventory().getStack(0);
-                    if (input.isEmpty()) {
-                        rmbe.getInventory().setStack(0, itemStack);
-                        toRemove.add(i); // schedule removal from conveyor
-                    } else if (input.isOf(itemStack.getItem()) && input.getCount() < input.getMaxCount()) {
-                        rmbe.getInventory().setStack(0, input.copyWithCount(input.getCount() + 1));
-                        toRemove.add(i); // schedule removal from conveyor
+                    if (world.getBlockEntity(pos.up()) instanceof RollerMillBlockEntity rmbe) {
+                        ItemStack input = rmbe.getInventory().getStack(0);
+                        if (input.isEmpty()) {
+                            rmbe.getInventory().setStack(0, itemStack);
+                            toRemove.add(i); // schedule removal from conveyor
+                        } else if (input.isOf(itemStack.getItem()) && input.getCount() < input.getMaxCount()) {
+                            rmbe.getInventory().setStack(0, input.copyWithCount(input.getCount() + 1));
+                            toRemove.add(i); // schedule removal from conveyor
+                        }
+                    }
+                    updates.add(new Pair<>(i, new Pair<>(itemStack, newPos))); // schedule update
+                } else {
+                    if (state1.isOf(ModBlocks.CONVEYOR_BELT)) {
+                        BlockPos nextPos = pos.offset(nextDir);
+                        if (state1.get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.TOP_SLAB) {
+                            nextPos = nextPos.up();
+                        }
+                        if (world.getBlockEntity(nextPos) instanceof ConveyorBeltBlockEntity cbbe) {
+                            Vec3d relPos = new Vec3d(getXforProgress(nextDir, 0.0f), 0.75d, getZforProgress(nextDir, 0.0f));
+                            // Transfer it to the next conveyor belt block
+                            cbbe.STACKS.add(new Pair<>(itemStack, relPos));
+                            updates.add(new Pair<>(i, new Pair<>(itemStack, new Vec3d(0.5d, (onSlab ? 0.0d : 0.5d), 0.5d)))); // hide it inside the block for when removal doesnt sync
+                            toRemove.add(i); // schedule removal
+                        }
+                    } else {
+                        // The end of the belt
+                        world.spawnEntity(new ItemEntity(world, pos.offset(nextDir).getX() + 0.5d, pos.getY() + 1.25d, pos.offset(nextDir).getZ() + 0.5d, itemStack, nextDir.getOffsetX() * 0.1f, 0, nextDir.getOffsetZ() * 0.1f));
+                        updates.add(new Pair<>(i, new Pair<>(itemStack, new Vec3d(0.5d, (onSlab ? 0.0d : 0.5d), 0.5d)))); // hide it inside the block for when removal doesnt sync
+                        toRemove.add(i); // schedule removal
                     }
                 }
-                updates.add(new Pair<>(i, new Pair<>(itemStack, newPos))); // schedule update
-            } else {
-                world.spawnEntity(new ItemEntity(world, itemPos.getX(), itemPos.getY(), itemPos.getZ(), itemStack));
-                boolean slab = world.getBlockState(pos).isOf(ModBlocks.CONVEYOR_BELT) && world.getBlockState(pos).get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.BOTTOM_SLAB;
-                updates.add(new Pair<>(i, new Pair<>(itemStack, pos.toCenterPos().add(0.0d, (slab ? -0.5d : 0.0d), 0.0d)))); // hide it for when removal doesnt sync
-                toRemove.add(i); // schedule removal
             }
         }
         // apply changes after the foreach otherwise there is maybe ConcurrentModificationException
@@ -131,6 +142,41 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
         if (!toRemove.isEmpty() || !updates.isEmpty() || flag) {
             update();
         }
+    }
+
+    public double getXforProgress(Direction direction, float progress) {
+        if (direction.getAxis() == Direction.Axis.X) {
+            if (direction.getOffsetX() == 1) {
+                return progress;
+            } else
+                return 1.0f - progress;
+        } else
+            return 0.5f;
+    }
+
+    public double getZforProgress(Direction direction, float progress) {
+        if (direction.getAxis() == Direction.Axis.Z) {
+            if (direction.getOffsetZ() == 1) {
+                return progress;
+            } else
+                return 1.0f - progress;
+        } else
+            return 0.5f;
+    }
+
+    public float getProgressForOffset(Direction direction, Vec3d offset) {
+        if (direction.getAxis() == Direction.Axis.X) {
+            if (direction.getOffsetX() == 1) {
+                return (float) offset.getX();
+            } else
+                return 1.0f - (float) offset.getX();
+        } else if (direction.getAxis() == Direction.Axis.Z) {
+            if (direction.getOffsetZ() == 1) {
+                return (float) offset.getZ();
+            } else
+                return 1.0f - (float) offset.getZ();
+        }
+        return 0.5f;
     }
 
     @Override

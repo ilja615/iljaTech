@@ -36,7 +36,7 @@ public class ConveyorBeltRenderer implements BlockEntityRenderer<ConveyorBeltBlo
             Vec3d itemPos = pair.getSecond();
             if (!itemStack.isEmpty()) {
                 matrices.push();
-                matrices.translate(itemPos.getX() - entity.getPos().getX(), itemPos.getY() - entity.getPos().getY(), itemPos.getZ() - entity.getPos().getZ());
+                matrices.translate(itemPos.getX(), itemPos.getY(), itemPos.getZ());
                 matrices.scale(SIZE, SIZE, SIZE);
                 this.context.getItemRenderer().renderItem(itemStack, ModelTransformationMode.FIXED,
                         light, overlay, matrices, vertexConsumers, world, 0);
