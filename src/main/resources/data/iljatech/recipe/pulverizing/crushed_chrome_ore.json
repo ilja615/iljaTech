@@ -1,0 +1,10 @@
+{
+  "type": "iljatech:pulverizing",
+  "ingredient": {
+    "item": "iljatech:raw_chrome"
+  },
+  "result": {
+    "count": 2,
+    "id": "iljatech:crushed_chrome_ore"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "facing=east,half=1,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_1"
+    },
+    "facing=east,half=1,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_1_on"
+    },
+    "facing=east,half=1,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_1_on"
+    },
+    "facing=east,half=2,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_2"
+    },
+    "facing=east,half=2,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_2_on"
+    },
+    "facing=east,half=2,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_2_on"
+    },
+    "facing=north,half=1,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_1",
+      "y": 270
+    },
+    "facing=north,half=1,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_1_on",
+      "y": 270
+    },
+    "facing=north,half=1,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_1_on",
+      "y": 270
+    },
+    "facing=north,half=2,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_2",
+      "y": 270
+    },
+    "facing=north,half=2,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_2_on",
+      "y": 270
+    },
+    "facing=north,half=2,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_2_on",
+      "y": 270
+    },
+    "facing=south,half=1,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_1",
+      "y": 90
+    },
+    "facing=south,half=1,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_1_on",
+      "y": 90
+    },
+    "facing=south,half=1,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_1_on",
+      "y": 90
+    },
+    "facing=south,half=2,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_2",
+      "y": 90
+    },
+    "facing=south,half=2,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_2_on",
+      "y": 90
+    },
+    "facing=south,half=2,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_2_on",
+      "y": 90
+    },
+    "facing=west,half=1,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_1",
+      "y": 180
+    },
+    "facing=west,half=1,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_1_on",
+      "y": 180
+    },
+    "facing=west,half=1,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_1_on",
+      "y": 180
+    },
+    "facing=west,half=2,on_off_pwr=off": {
+      "model": "iljatech:block/pulverizer_mill_2",
+      "y": 180
+    },
+    "facing=west,half=2,on_off_pwr=scheduled_stop": {
+      "model": "iljatech:block/pulverizer_mill_2_on",
+      "y": 180
+    },
+    "facing=west,half=2,on_off_pwr=on": {
+      "model": "iljatech:block/pulverizer_mill_2_on",
+      "y": 180
+    }
+  }
+}

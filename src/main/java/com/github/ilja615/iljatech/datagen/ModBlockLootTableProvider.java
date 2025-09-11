@@ -1,21 +1,23 @@
 package com.github.ilja615.iljatech.datagen;
 
+import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlock;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Items;
+import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.predicate.StatePredicate;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 
@@ -80,6 +82,9 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.IRON_SHEETMETAL);
         slabDrops(ModBlocks.IRON_SHEETMETAL_SLAB);
         addDrop(ModBlocks.IRON_SHEETMETAL_STAIRS);
+        addDrop(ModBlocks.EXPOSED_IRON_SHEETMETAL);
+        slabDrops(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB);
+        addDrop(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS);
         addDrop(ModBlocks.WEATHERED_IRON_SHEETMETAL);
         slabDrops(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB);
         addDrop(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS);
@@ -88,6 +93,11 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
         addDrop(ModBlocks.WOODEN_SCAFFOLDING);
         addDrop(ModBlocks.STEEL_BLOCK);
+        pulverizerMillDrops(ModBlocks.PULVERIZER_MILL);
+    }
+
+    public LootTable.Builder pulverizerMillDrops(Block block) {
+        return LootTable.builder().pool((LootPool.Builder)this.addSurvivesExplosionCondition(block, LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F)).with(ItemEntry.builder(block).conditionally(BlockStatePropertyLootCondition.builder(block).properties(StatePredicate.Builder.create().exactMatch(PulverizerMillBlock.HALF, Integer.valueOf(2)))))));
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {

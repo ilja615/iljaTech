@@ -12,6 +12,7 @@ import com.github.ilja615.iljatech.blocks.funnel.FunnelBlock;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlock;
 import com.github.ilja615.iljatech.blocks.pipe.ClayPipeBlock;
 import com.github.ilja615.iljatech.blocks.pipe.PipeBlock;
+import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingSlabBlock;
@@ -97,6 +98,7 @@ public class ModBlocks {
     public static final Block WINDMILL = registerWithItem("windmill", new WindmillBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD)));
     public static final Block WINDMILL_BLADE = registerWithItem("windmill_blade", new Block(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block CONVEYOR_BELT = registerWithItem("conveyor_belt", new ConveyorBeltBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block PULVERIZER_MILL = registerWithItem("pulverizer_mill", new PulverizerMillBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque()));
 
     public static final Block STEEL_PIPE = registerWithItem("steel_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).nonOpaque()));
     public static final Block FUNNEL = registerWithItem("funnel", new FunnelBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.DECORATED_POT).nonOpaque()));

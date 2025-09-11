@@ -43,7 +43,7 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.EXPOSED_IRON_SHEETMETAL).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB).add(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS)
                 .add(ModBlocks.WEATHERED_IRON_SHEETMETAL).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS)
                 .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS)
-                .add(ModBlocks.STEEL_BLOCK);
+                .add(ModBlocks.STEEL_BLOCK).add(ModBlocks.PULVERIZER_MILL);
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
                 .add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.FIRE_CLAY).add(ModBlocks.CLAY_PIPE);

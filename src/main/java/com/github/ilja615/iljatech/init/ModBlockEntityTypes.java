@@ -8,8 +8,8 @@ import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.github.ilja615.iljatech.blocks.funnel.FunnelBlockEntity;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
+import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
-import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -42,6 +42,8 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(FunnelBlockEntity::new, ModBlocks.FUNNEL).build());
     public static final BlockEntityType<ConveyorBeltBlockEntity> CONVEYOR_BELT = register("conveyor_belt",
             FabricBlockEntityTypeBuilder.create(ConveyorBeltBlockEntity::new, ModBlocks.CONVEYOR_BELT).build());
+    public static final BlockEntityType<PulverizerMillBlockEntity> PULVERIZER_MILL = register("pulverizer_mill",
+            FabricBlockEntityTypeBuilder.create(PulverizerMillBlockEntity::new, ModBlocks.PULVERIZER_MILL).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
@@ -49,9 +51,10 @@ public class ModBlockEntityTypes {
         ItemStorage.SIDED.registerForBlockEntity(FoundryBlockEntity::getInventoryProvider, ModBlockEntityTypes.FOUNDRY);
         ItemStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getInventoryProvider, ModBlockEntityTypes.COKE_OVEN);
         ItemStorage.SIDED.registerForBlockEntity(ItemHatchBlockEntity::getInventoryProvider, ModBlockEntityTypes.ITEM_HATCH);
+        ItemStorage.SIDED.registerForBlockEntity(PulverizerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.PULVERIZER_MILL);
+
         FluidStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getFluidTankProvider, ModBlockEntityTypes.COKE_OVEN);
         FluidStorage.SIDED.registerForBlockEntity(FunnelBlockEntity::getFluidTankProvider, ModBlockEntityTypes.FUNNEL);
-
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType<T> type) {

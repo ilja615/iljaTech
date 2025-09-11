@@ -26,7 +26,7 @@ public class IljaTechClient implements ClientModInitializer {
 		// Block render layers
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
 				ModBlocks.DRILL, ModBlocks.ROLLER_MILL, ModBlocks.COPPER_WIRE, ModBlocks.STOKED_FIRE, ModBlocks.COKE_OVEN,
-				ModBlocks.WOODEN_SCAFFOLDING);
+				ModBlocks.WOODEN_SCAFFOLDING, ModBlocks.PULVERIZER_MILL);
 
 		// Block entity renderers
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.ROLLER_MILL, RollerMillRenderer::new);

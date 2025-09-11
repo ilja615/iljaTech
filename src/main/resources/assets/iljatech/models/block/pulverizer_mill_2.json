@@ -1,0 +1,52 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "iljatech:block/pulverizer_mill_off",
+		"1": "iljatech:block/pulverizer_mill_end",
+		"3": "iljatech:block/pulverizer_mill_thin_off",
+		"6": "iljatech:block/pulverizer_mill_support",
+		"particle": "iljatech:block/pulverizer_mill_off"
+	},
+	"elements": [
+		{
+			"from": [8, 4, 4],
+			"to": [16, 12, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 8, 8, 0], "texture": "#3"},
+				"east": {"uv": [13, 3, 3, 13], "texture": "#1"},
+				"south": {"uv": [8, 0, 0, 8], "texture": "#3"},
+				"west": {"uv": [3, 3, 13, 13], "texture": "#1"},
+				"up": {"uv": [8, 0, 0, 8], "texture": "#3"},
+				"down": {"uv": [8, 0, 0, 8], "texture": "#3"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [8, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 2, 0]},
+			"faces": {
+				"north": {"uv": [0, 16, 8, 0], "texture": "#0"},
+				"east": {"uv": [16, 0, 0, 16], "texture": "#1"},
+				"south": {"uv": [8, 0, 0, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"up": {"uv": [8, 0, 0, 16], "texture": "#0"},
+				"down": {"uv": [8, 0, 0, 16], "texture": "#0"}
+			}
+		},
+		{
+			"from": [12, 0, 0],
+			"to": [16, 4, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [13, 4, 0]},
+			"faces": {
+				"north": {"uv": [10, 12, 14, 16], "texture": "#6"},
+				"east": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#6"},
+				"south": {"uv": [10, 12, 14, 16], "texture": "#6"},
+				"west": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#6"},
+				"up": {"uv": [6, 0, 2, 16], "texture": "#6"},
+				"down": {"uv": [6, 0, 10, 16], "texture": "#6"}
+			}
+		}
+	]
+}

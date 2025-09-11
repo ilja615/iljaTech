@@ -113,6 +113,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.rusty_iron_sheetmetal_stairs", "Rusty Iron Sheetmetal Stairs");
         this.add("block.iljatech.wooden_scaffold", "Wooden Scaffolding");
         this.add("block.iljatech.steel_block", "Steel Block");
+        this.add("block.iljatech.pulverizer_mill", "Pulverizer Mill");
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
