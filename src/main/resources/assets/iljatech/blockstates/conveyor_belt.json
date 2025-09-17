@@ -1,184 +1,376 @@
 {
   "variants": {
-    "facing=east,on_off_pwr=off,type=normal": {
+    "facing=east,on_off_pwr=off,type=normal,powered=false": {
       "model": "iljatech:block/conveyor_belt_off",
       "y": 90
     },
-    "facing=east,on_off_pwr=scheduled_stop,type=normal": {
+    "facing=east,on_off_pwr=off,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_off",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=scheduled_stop,type=normal,powered=false": {
       "model": "iljatech:block/conveyor_belt_on",
       "y": 90
     },
-    "facing=east,on_off_pwr=on,type=normal": {
+    "facing=east,on_off_pwr=scheduled_stop,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=on,type=normal,powered=false": {
       "model": "iljatech:block/conveyor_belt_on",
       "y": 90
     },
-    "facing=north,on_off_pwr=off,type=normal": {
+    "facing=east,on_off_pwr=on,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 270
+    },
+    "facing=north,on_off_pwr=off,type=normal,powered=false": {
       "model": "iljatech:block/conveyor_belt_off"
     },
-    "facing=north,on_off_pwr=scheduled_stop,type=normal": {
-      "model": "iljatech:block/conveyor_belt_on"
-    },
-    "facing=north,on_off_pwr=on,type=normal": {
-      "model": "iljatech:block/conveyor_belt_on"
-    },
-    "facing=south,on_off_pwr=off,type=normal": {
+    "facing=north,on_off_pwr=off,type=normal,powered=true": {
       "model": "iljatech:block/conveyor_belt_off",
       "y": 180
     },
-    "facing=south,on_off_pwr=scheduled_stop,type=normal": {
+    "facing=north,on_off_pwr=scheduled_stop,type=normal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_on"
+    },
+    "facing=north,on_off_pwr=scheduled_stop,type=normal,powered=true": {
       "model": "iljatech:block/conveyor_belt_on",
       "y": 180
     },
-    "facing=south,on_off_pwr=on,type=normal": {
+    "facing=north,on_off_pwr=on,type=normal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_on"
+    },
+    "facing=north,on_off_pwr=on,type=normal,powered=true": {
       "model": "iljatech:block/conveyor_belt_on",
       "y": 180
     },
-    "facing=west,on_off_pwr=off,type=normal": {
+    "facing=south,on_off_pwr=off,type=normal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_off",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=off,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_off",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=normal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=on,type=normal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=on,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 0
+    },
+    "facing=west,on_off_pwr=off,type=normal,powered=false": {
       "model": "iljatech:block/conveyor_belt_off",
       "y": 270
     },
-    "facing=west,on_off_pwr=scheduled_stop,type=normal": {
+    "facing=west,on_off_pwr=off,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_off",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=scheduled_stop,type=normal,powered=false": {
       "model": "iljatech:block/conveyor_belt_on",
       "y": 270
     },
-    "facing=west,on_off_pwr=on,type=normal": {
+    "facing=west,on_off_pwr=scheduled_stop,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=on,type=normal,powered=false": {
       "model": "iljatech:block/conveyor_belt_on",
       "y": 270
     },
-    "facing=east,on_off_pwr=off,type=diagonal": {
+    "facing=west,on_off_pwr=on,type=normal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_on",
+      "y": 90
+    },
+    "facing=east,on_off_pwr=off,type=diagonal,powered=false": {
       "model": "iljatech:block/conveyor_belt_diag_off",
       "y": 90
     },
-    "facing=east,on_off_pwr=scheduled_stop,type=diagonal": {
+    "facing=east,on_off_pwr=off,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_off",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=scheduled_stop,type=diagonal,powered=false": {
       "model": "iljatech:block/conveyor_belt_diag_on",
       "y": 90
     },
-    "facing=east,on_off_pwr=on,type=diagonal": {
+    "facing=east,on_off_pwr=scheduled_stop,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=on,type=diagonal,powered=false": {
       "model": "iljatech:block/conveyor_belt_diag_on",
       "y": 90
     },
-    "facing=north,on_off_pwr=off,type=diagonal": {
+    "facing=east,on_off_pwr=on,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 270
+    },
+    "facing=north,on_off_pwr=off,type=diagonal,powered=false": {
       "model": "iljatech:block/conveyor_belt_diag_off"
     },
-    "facing=north,on_off_pwr=scheduled_stop,type=diagonal": {
-      "model": "iljatech:block/conveyor_belt_diag_on"
-    },
-    "facing=north,on_off_pwr=on,type=diagonal": {
-      "model": "iljatech:block/conveyor_belt_diag_on"
-    },
-    "facing=south,on_off_pwr=off,type=diagonal": {
+    "facing=north,on_off_pwr=off,type=diagonal,powered=true": {
       "model": "iljatech:block/conveyor_belt_diag_off",
       "y": 180
     },
-    "facing=south,on_off_pwr=scheduled_stop,type=diagonal": {
+    "facing=north,on_off_pwr=scheduled_stop,type=diagonal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_diag_on"
+    },
+    "facing=north,on_off_pwr=scheduled_stop,type=diagonal,powered=true": {
       "model": "iljatech:block/conveyor_belt_diag_on",
       "y": 180
     },
-    "facing=south,on_off_pwr=on,type=diagonal": {
+    "facing=north,on_off_pwr=on,type=diagonal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_diag_on"
+    },
+    "facing=north,on_off_pwr=on,type=diagonal,powered=true": {
       "model": "iljatech:block/conveyor_belt_diag_on",
       "y": 180
     },
-    "facing=west,on_off_pwr=off,type=diagonal": {
+    "facing=south,on_off_pwr=off,type=diagonal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_diag_off",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=off,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_off",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=diagonal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=on,type=diagonal,powered=false": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=on,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 0
+    },
+    "facing=west,on_off_pwr=off,type=diagonal,powered=false": {
       "model": "iljatech:block/conveyor_belt_diag_off",
       "y": 270
     },
-    "facing=west,on_off_pwr=scheduled_stop,type=diagonal": {
+    "facing=west,on_off_pwr=off,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_off",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=scheduled_stop,type=diagonal,powered=false": {
       "model": "iljatech:block/conveyor_belt_diag_on",
       "y": 270
     },
-    "facing=west,on_off_pwr=on,type=diagonal": {
+    "facing=west,on_off_pwr=scheduled_stop,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=on,type=diagonal,powered=false": {
       "model": "iljatech:block/conveyor_belt_diag_on",
       "y": 270
     },
-    "facing=east,on_off_pwr=off,type=top_slab": {
+    "facing=west,on_off_pwr=on,type=diagonal,powered=true": {
+      "model": "iljatech:block/conveyor_belt_diag_on",
+      "y": 90
+    },
+    "facing=east,on_off_pwr=off,type=top_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_top",
       "y": 90
     },
-    "facing=east,on_off_pwr=scheduled_stop,type=top_slab": {
+    "facing=east,on_off_pwr=off,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=scheduled_stop,type=top_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_top",
       "y": 90
     },
-    "facing=east,on_off_pwr=on,type=top_slab": {
+    "facing=east,on_off_pwr=scheduled_stop,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=on,type=top_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_top",
       "y": 90
     },
-    "facing=north,on_off_pwr=off,type=top_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_top"
-    },
-    "facing=north,on_off_pwr=scheduled_stop,type=top_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_top"
-    },
-    "facing=north,on_off_pwr=on,type=top_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_top"
-    },
-    "facing=south,on_off_pwr=off,type=top_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_top",
-      "y": 180
-    },
-    "facing=south,on_off_pwr=scheduled_stop,type=top_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_top",
-      "y": 180
-    },
-    "facing=south,on_off_pwr=on,type=top_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_top",
-      "y": 180
-    },
-    "facing=west,on_off_pwr=off,type=top_slab": {
+    "facing=east,on_off_pwr=on,type=top_slab,powered=true": {
       "model": "iljatech:block/conveyor_belt_slab_top",
       "y": 270
     },
-    "facing=west,on_off_pwr=scheduled_stop,type=top_slab": {
+    "facing=north,on_off_pwr=off,type=top_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_top"
+    },
+    "facing=north,on_off_pwr=off,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 180
+    },
+    "facing=north,on_off_pwr=scheduled_stop,type=top_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_top"
+    },
+    "facing=north,on_off_pwr=scheduled_stop,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 180
+    },
+    "facing=north,on_off_pwr=on,type=top_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_top"
+    },
+    "facing=north,on_off_pwr=on,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=off,type=top_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=off,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=top_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=on,type=top_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=on,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 0
+    },
+    "facing=west,on_off_pwr=off,type=top_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_top",
       "y": 270
     },
-    "facing=west,on_off_pwr=on,type=top_slab": {
+    "facing=west,on_off_pwr=off,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=scheduled_stop,type=top_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_top",
       "y": 270
     },
-    "facing=east,on_off_pwr=off,type=bottom_slab": {
+    "facing=west,on_off_pwr=scheduled_stop,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=on,type=top_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 270
+    },
+    "facing=west,on_off_pwr=on,type=top_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_top",
+      "y": 90
+    },
+    "facing=east,on_off_pwr=off,type=bottom_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_off",
       "y": 90
     },
-    "facing=east,on_off_pwr=scheduled_stop,type=bottom_slab": {
+    "facing=east,on_off_pwr=off,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_off",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=scheduled_stop,type=bottom_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_on",
       "y": 90
     },
-    "facing=east,on_off_pwr=on,type=bottom_slab": {
+    "facing=east,on_off_pwr=scheduled_stop,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 270
+    },
+    "facing=east,on_off_pwr=on,type=bottom_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_on",
       "y": 90
     },
-    "facing=north,on_off_pwr=off,type=bottom_slab": {
+    "facing=east,on_off_pwr=on,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 270
+    },
+    "facing=north,on_off_pwr=off,type=bottom_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_off"
     },
-    "facing=north,on_off_pwr=scheduled_stop,type=bottom_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_bottom_on"
-    },
-    "facing=north,on_off_pwr=on,type=bottom_slab": {
-      "model": "iljatech:block/conveyor_belt_slab_bottom_on"
-    },
-    "facing=south,on_off_pwr=off,type=bottom_slab": {
+    "facing=north,on_off_pwr=off,type=bottom_slab,powered=true": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_off",
       "y": 180
     },
-    "facing=south,on_off_pwr=scheduled_stop,type=bottom_slab": {
+    "facing=north,on_off_pwr=scheduled_stop,type=bottom_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on"
+    },
+    "facing=north,on_off_pwr=scheduled_stop,type=bottom_slab,powered=true": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_on",
       "y": 180
     },
-    "facing=south,on_off_pwr=on,type=bottom_slab": {
+    "facing=north,on_off_pwr=on,type=bottom_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on"
+    },
+    "facing=north,on_off_pwr=on,type=bottom_slab,powered=true": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_on",
       "y": 180
     },
-    "facing=west,on_off_pwr=off,type=bottom_slab": {
+    "facing=south,on_off_pwr=off,type=bottom_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_off",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=off,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_off",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=bottom_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=scheduled_stop,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 0
+    },
+    "facing=south,on_off_pwr=on,type=bottom_slab,powered=false": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 180
+    },
+    "facing=south,on_off_pwr=on,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 0
+    },
+    "facing=west,on_off_pwr=off,type=bottom_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_off",
       "y": 270
     },
-    "facing=west,on_off_pwr=scheduled_stop,type=bottom_slab": {
+    "facing=west,on_off_pwr=off,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_off",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=scheduled_stop,type=bottom_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_on",
       "y": 270
     },
-    "facing=west,on_off_pwr=on,type=bottom_slab": {
+    "facing=west,on_off_pwr=scheduled_stop,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 90
+    },
+    "facing=west,on_off_pwr=on,type=bottom_slab,powered=false": {
       "model": "iljatech:block/conveyor_belt_slab_bottom_on",
       "y": 270
+    },
+    "facing=west,on_off_pwr=on,type=bottom_slab,powered=true": {
+      "model": "iljatech:block/conveyor_belt_slab_bottom_on",
+      "y": 90
     }
   }
 }

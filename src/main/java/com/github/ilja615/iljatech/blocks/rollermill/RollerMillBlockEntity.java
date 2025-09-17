@@ -50,7 +50,7 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
 
     @Override
     public void tick() {
-        if (this.world == null)
+        if (this.world == null || this.world.isClient())
             return;
 
         ItemStack stack0 = this.inventory.getStack(0);

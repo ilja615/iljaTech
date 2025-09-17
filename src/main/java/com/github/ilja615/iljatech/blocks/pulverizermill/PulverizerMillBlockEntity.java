@@ -2,6 +2,7 @@ package com.github.ilja615.iljatech.blocks.pulverizermill;
 
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
+import com.github.ilja615.iljatech.init.ModSounds;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.block.Block;
@@ -18,6 +19,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -44,18 +46,33 @@ public class PulverizerMillBlockEntity  extends BlockEntity implements TickableB
 
     @Override
     public void tick() {
-        if (this.world == null)
+        if (this.world == null || this.world.isClient())
             return;
 
         ItemStack stack0 = this.inventory.getStack(0);
         if (stack0.isEmpty()) {
             this.ticks = 0;
         }
+        List<RecipeEntry<PulverizingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.PULVERIZING_TYPE);
+        if (ticks > 0 && ticks % 10 == 0) {
+            for (RecipeEntry<PulverizingRecipe> rr : recipes)
+            {
+                PulverizingRecipe r = rr.value();
+                ItemStack resultingStack = r.output().copy();
+                if (r.stack().getMatchingStacks()[0].isEmpty())
+                    continue;
+
+                if (r.stack().getMatchingStacks()[0].getItem() == stack0.getItem())
+                {
+                    world.playSound(null, pos, ModSounds.ORE_CRUSHING, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    break;
+                }
+            }
+        }
         if (ticks++ > 100) {
             this.ticks = 0;
 
             Direction direction = this.getCachedState().get(PulverizerMillBlock.FACING);
-            List<RecipeEntry<PulverizingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.PULVERIZING_TYPE);
             for (RecipeEntry<PulverizingRecipe> rr : recipes)
             {
                 PulverizingRecipe r = rr.value();

@@ -34,7 +34,7 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
     Box ITEM_AREA_SHAPE = (Box) Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 10.0, 16.0).getBoundingBoxes().get(0);
 
     private final List<Pair<ItemStack, Vec3d>> STACKS = new ArrayList<>();
-    private final List<Integer> toRemove = new ArrayList<>();
+    public final List<Integer> toRemove = new ArrayList<>();
     private int ticks = 0;
 
     private final static Codec<Pair<ItemStack, Vec3d>> CODEC = Codec.mapPair(ItemStack.CODEC.fieldOf("item"), Vec3d.CODEC.fieldOf("offset")).codec();
@@ -49,6 +49,8 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
     public void tick() {
         boolean flag = false;
         Direction nextDir = getCachedState().get(ConveyorBeltBlock.FACING);
+        if (getCachedState().get(ConveyorBeltBlock.POWERED))
+            nextDir = nextDir.getOpposite();
         BlockState state1 = world.getBlockState(pos.offset(nextDir));
         boolean onSlab = getCachedState().get(ConveyorBeltBlock.CONVEYOR_BELT_STATE) == ConveyorBeltBlock.ConveyorBeltState.BOTTOM_SLAB;
 
@@ -238,7 +240,7 @@ public class ConveyorBeltBlockEntity extends BlockEntity implements TickableBloc
         return nbt;
     }
 
-    private void update() {
+    public void update() {
         markDirty();
         if (world != null)
             world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);

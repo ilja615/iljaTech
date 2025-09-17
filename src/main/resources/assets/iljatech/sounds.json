@@ -16,6 +16,18 @@
     "sounds": [
       "iljatech:bellows_exhale"
     ]
+  },
+  "stamping_hammer_block": {
+    "subtitle": "subtitles.iljatech.stamping_hammer_block",
+    "sounds": [
+      "iljatech:stamping_hammer_block"
+    ]
+  },
+  "ore_crushing": {
+    "subtitle": "subtitles.iljatech.ore_crushing",
+    "sounds": [
+      "iljatech:ore_crushing"
+    ]
   }
 }
 

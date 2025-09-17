@@ -117,6 +117,10 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
+        this.add("subtitles.iljatech.hammer", "Hammer");
+        this.add("subtitles.iljatech.stamping_hammer_block", "Clang! (from Steel Block)");
+        this.add("subtitles.iljatech.ore_crushing", "Crushing");
+
         this.add("container.iljatech.foundry", "Foundry");
         this.add("container.iljatech.coke_oven", "Coke Oven");
         this.add("container.iljatech.item_hatch", "Item Hatch");

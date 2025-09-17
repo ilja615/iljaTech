@@ -35,7 +35,7 @@ public class RollerMillBlock extends Block implements BlockEntityProvider, MechP
     protected static final VoxelShape SIDE_SHAPE_2_Z = Block.createCuboidShape(15.99, 0.0, 0.0, 16.0, 16.0, 16.0);
     protected static final VoxelShape ROLLER_1_X = Block.createCuboidShape(5.0, 2.0, 0.5, 11.0, 8.0, 15.5);
     protected static final VoxelShape ROLLER_2_X = Block.createCuboidShape(5.0, 10.0, 0.5, 11.0, 16.0, 15.5);
-    protected static final VoxelShape ROLLER_1_Z = Block.createCuboidShape(0.5, 2.0, 5.0, 15.5, 18.0, 11.0);
+    protected static final VoxelShape ROLLER_1_Z = Block.createCuboidShape(0.5, 2.0, 5.0, 15.5, 8.0, 11.0);
     protected static final VoxelShape ROLLER_2_Z = Block.createCuboidShape(0.5, 10.0, 5.0, 15.5, 16.0, 11.0);
     private static final VoxelShape X_AXIS_SHAPE = VoxelShapes.union(SIDE_SHAPE_1_X, SIDE_SHAPE_2_X, ROLLER_1_X, ROLLER_2_X);
     private static final VoxelShape Z_AXIS_SHAPE = VoxelShapes.union(SIDE_SHAPE_1_Z, SIDE_SHAPE_2_Z, ROLLER_1_Z, ROLLER_2_Z);

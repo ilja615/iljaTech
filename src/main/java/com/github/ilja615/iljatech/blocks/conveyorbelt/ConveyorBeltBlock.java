@@ -6,11 +6,11 @@ import com.github.ilja615.iljatech.energy.MechPwrSender;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -18,12 +18,14 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -33,6 +35,8 @@ import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 
 public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEntityProvider, MechPwrAccepter, MechPwrSender {
@@ -41,13 +45,15 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
 
     protected static final VoxelShape TOP_SHAPE = Block.createCuboidShape(0.0, 8.0, 0.0, 16.0, 16.0, 16.0);
     protected static final VoxelShape BOTTOM_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
+    public static final BooleanProperty POWERED = Properties.POWERED;
 
     public ConveyorBeltBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(FACING, Direction.NORTH)
                 .with(ON_OFF_PWR, OFF)
-                .with(CONVEYOR_BELT_STATE, ConveyorBeltState.NORMAL));
+                .with(CONVEYOR_BELT_STATE, ConveyorBeltState.NORMAL)
+                .with(POWERED, false));
     }
 
     @Nullable
@@ -100,12 +106,26 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ON_OFF_PWR, CONVEYOR_BELT_STATE);
+        builder.add(FACING, ON_OFF_PWR, CONVEYOR_BELT_STATE, POWERED);
     }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite()).with(POWERED, ctx.getWorld().isReceivingRedstonePower(ctx.getBlockPos()));
+    }
+
+    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+        if (!world.isClient) {
+            boolean bl = state.get(POWERED);
+            if (bl != world.isReceivingRedstonePower(pos)) {
+                if (bl) {
+                    world.scheduleBlockTick(pos, this, 4);
+                } else {
+                    world.setBlockState(pos, state.cycle(POWERED), Block.NOTIFY_LISTENERS);
+                }
+            }
+
+        }
     }
 
     @Override
@@ -158,32 +178,44 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
         super.scheduledTick(state, world, pos, random);
         if (state.getBlock() != this) { return; }
 
+        if (state.get(POWERED) && !world.isReceivingRedstonePower(pos)) {
+            world.setBlockState(pos, state.cycle(POWERED), Block.NOTIFY_LISTENERS);
+            state = state.cycle(POWERED);
+        }
+
         // Check if a stop was scheduled and then stop
         if (state.get(ON_OFF_PWR) == SCHEDULED_STOP) {
             world.setBlockState(pos, state.with(ON_OFF_PWR, OFF));
-        }
-        else if (state.get(ON_OFF_PWR) == ON) {
-            // Relay power to other conveyor belts
-            Direction dir = state.get(FACING);
-            if (state.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.TOP_SLAB)
-                // Top slab should relay upwards
-                dir = Direction.UP;
+        } else if (state.get(ON_OFF_PWR) == ON) {
+            Direction facing = state.get(FACING);
+            if (state.get(POWERED))
+                facing = facing.getOpposite();
 
-            Block other = world.getBlockState(pos.offset(dir)).getBlock();
+            // Top slab should just relay upwards
+            if (state.get(CONVEYOR_BELT_STATE) == ConveyorBeltState.TOP_SLAB) {
+                Block otherHalf = world.getBlockState(pos.offset(Direction.UP)).getBlock();
+                if (otherHalf instanceof ConveyorBeltBlock && ((MechPwrAccepter)otherHalf).acceptsPower(world, pos.offset(Direction.UP), Direction.DOWN)) {
+                    sendPower(world, pos, Direction.UP, 1);
+                    return;
+                }
+            }
+
+            // Activate the machine above
             Block upBlock = world.getBlockState(pos.up()).getBlock();
             if (upBlock instanceof RollerMillBlock) {
-                if (world.getBlockState(pos.up()).get(FACING) != dir)
-                    world.setBlockState(pos.up(), world.getBlockState(pos.up()).with(FACING, dir));
+                if (world.getBlockState(pos.up()).get(FACING) != facing)
+                    // Align
+                    world.setBlockState(pos.up(), world.getBlockState(pos.up()).with(FACING, facing));
                 if (((MechPwrAccepter)upBlock).acceptsPower(world, pos.up(), Direction.DOWN))
                     sendPower(world, pos, Direction.UP, 1);
             }
 
-            if (other instanceof MechPwrAccepter && ((MechPwrAccepter)other).acceptsPower(world, pos.offset(dir), dir.getOpposite())) {
-                // Can only relay to other conveyor belts
-                if (other instanceof ConveyorBeltBlock)
-                    sendPower(world, pos, dir, 1);
+            // Send power to the conveyor belt after this one
+            BlockState other = world.getBlockState(pos.offset(facing));
+            if (other.isOf(ModBlocks.CONVEYOR_BELT) && ((ConveyorBeltBlock)other.getBlock()).acceptsPower(world, pos.offset(facing), facing.getOpposite())) {
+                sendPower(world, pos, facing, 1);
             } else {
-                // There was nowhere to output to...
+                // There was nowhere to relay power to...
                 // Scheduling to stop
                 world.setBlockState(pos, state.with(ON_OFF_PWR, SCHEDULED_STOP));
                 world.scheduleBlockTick(pos, this, 10);
@@ -203,6 +235,21 @@ public class ConveyorBeltBlock extends HorizontalFacingBlock implements BlockEnt
         } else {
             return false;
         }
+    }
+
+    protected boolean hasComparatorOutput(BlockState state) {
+        return true;
+    }
+
+    protected int getComparatorOutput(BlockState state, World world, BlockPos pos) {
+        if (world.getBlockEntity(pos) instanceof ConveyorBeltBlockEntity conveyorBeltBlockEntity) {
+            int n = 0;
+            for (Pair<ItemStack, Vec3d> pair : conveyorBeltBlockEntity.getStacks()) {
+                n += pair.getFirst().getCount();
+            }
+            return Math.min(n, 15);
+        }
+        return 0;
     }
 
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
