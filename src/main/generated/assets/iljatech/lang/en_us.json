@@ -18,6 +18,8 @@
   "block.iljatech.fire_bricks": "Fire Bricks",
   "block.iljatech.fire_clay": "Fire Clay",
   "block.iljatech.firebox": "Firebox",
+  "block.iljatech.flax": "Flax",
+  "block.iljatech.flax_seeds": "Flax Seeds",
   "block.iljatech.foundry": "Foundry",
   "block.iljatech.funnel": "Funnel",
   "block.iljatech.gearbox": "Gear Box",
@@ -110,5 +112,8 @@
   "item.iljatech.tin_ingot": "Tin Ingot",
   "itemGroup.iljatech.stuff": "iljaTech Stuff",
   "subtitles.iljatech.bellows_exhale": "Bellows Exhale",
-  "subtitles.iljatech.bellows_inhale": "Bellows Inhale"
+  "subtitles.iljatech.bellows_inhale": "Bellows Inhale",
+  "subtitles.iljatech.hammer": "Hammer",
+  "subtitles.iljatech.ore_crushing": "Crushing",
+  "subtitles.iljatech.stamping_hammer_block": "Clang! (from Steel Block)"
 }

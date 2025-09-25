@@ -112,6 +112,9 @@ public class ModBlocks {
 
     public static final Block STEEL_BLOCK = registerWithItem("steel_block", new HammerBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(6.0F, 12.0F).mapColor(MapColor.DEEPSLATE_GRAY).sounds(BlockSoundGroup.ANVIL)));
 
+    public static final Block FLAX_SEEDS = registerWithItem("flax_seeds", new FlaxBlock(AbstractBlock.Settings.create().mapColor(MapColor.GREEN).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.CROP).pistonBehavior(PistonBehavior.DESTROY)));
+    public static final Block FLAX = registerWithItem("flax", new TallPlantBlock(AbstractBlock.Settings.create().mapColor(MapColor.GREEN).noCollision().breakInstantly().sounds(BlockSoundGroup.CROP).pistonBehavior(PistonBehavior.DESTROY)));
+
     public static <T extends Block> T register(String name, T block) {
         return Registry.register(Registries.BLOCK, Identifier.of(IljaTech.MOD_ID, name), block);
     }

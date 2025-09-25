@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "iljatech:block/flax_bottom7"
+    },
+    "half=upper": {
+      "model": "iljatech:block/flax_top7"
+    }
+  }
+}

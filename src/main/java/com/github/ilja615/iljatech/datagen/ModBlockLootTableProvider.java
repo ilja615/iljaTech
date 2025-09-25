@@ -1,16 +1,22 @@
 package com.github.ilja615.iljatech.datagen;
 
+import com.github.ilja615.iljatech.blocks.FlaxBlock;
 import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlock;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CropBlock;
+import net.minecraft.block.TallPlantBlock;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
+import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
@@ -94,6 +100,9 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.WOODEN_SCAFFOLDING);
         addDrop(ModBlocks.STEEL_BLOCK);
         pulverizerMillDrops(ModBlocks.PULVERIZER_MILL);
+        LootCondition.Builder flaxLootConditionBuilder = BlockStatePropertyLootCondition.builder(ModBlocks.FLAX_SEEDS).properties(StatePredicate.Builder.create().exactMatch(FlaxBlock.AGE, 7).exactMatch(FlaxBlock.HALF, DoubleBlockHalf.UPPER));
+        addDrop(ModBlocks.FLAX_SEEDS, cropDrops(ModBlocks.FLAX_SEEDS, ModBlocks.FLAX.asItem(), ModBlocks.FLAX_SEEDS.asItem(), flaxLootConditionBuilder));
+        addDrop(ModBlocks.FLAX, (block) -> this.dropsWithProperty(block, TallPlantBlock.HALF, DoubleBlockHalf.LOWER));
     }
 
     public LootTable.Builder pulverizerMillDrops(Block block) {

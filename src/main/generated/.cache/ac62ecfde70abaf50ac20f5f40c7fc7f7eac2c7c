@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-11T12:18:13.7924181	iljaTech/Block Loot Tables
+// 1.21.1	2025-09-25T19:50:45.293262	iljaTech/Block Loot Tables
 4c9b36712616cf5756adeefba44f857460f506bc data\iljatech\loot_table\blocks\raw_aluminium_ore.json
 e65752538de5a5f6e65661be3a6d1a496f128e59 data\iljatech\loot_table\blocks\weathered_iron_sheetmetal.json
 581687b1ad96b482fde4d14ab9ac6ed85588c2af data\iljatech\loot_table\blocks\limestone_wall.json
@@ -19,6 +19,7 @@ c00df05e6dec0509b6cf8d84f95207acc768c322 data\iljatech\loot_table\blocks\nailed_
 fe93bd1f90eb42cbb3ae61614e15749e89646e64 data\iljatech\loot_table\blocks\crank.json
 d18223b5025743154ababb8af1171736a121a27a data\iljatech\loot_table\blocks\iron_sheetmetal_stairs.json
 26e3c4ac2fa251e97c06d0bf38417506a36ca5af data\iljatech\loot_table\blocks\roller_mill.json
+072a13ad9a47d5616dd685e79952e163fb49c9aa data\iljatech\loot_table\blocks\flax.json
 db18894d0050cf9e458d3bc40717ae17802c7d0b data\iljatech\loot_table\blocks\deepslate_tin_ore.json
 87e766e364b1550ddf3ab4b73e2ef8e005cab8ed data\iljatech\loot_table\blocks\gearbox.json
 5f92787e37645e694b50243f3bf21e50ef481f22 data\iljatech\loot_table\blocks\gravel_aluminium_ore.json
@@ -52,6 +53,7 @@ c01c68bdb5e22e3ea2a999522d0a5502a0829200 data\iljatech\loot_table\blocks\nailed_
 3954b81e6b61657093cf15dd0818c1d71aa6b785 data\iljatech\loot_table\blocks\coke_oven.json
 1df3f4126494757d42690941628b4a86334ab426 data\iljatech\loot_table\blocks\limestone_stairs.json
 3079e838a5dc875a73416740a1917c52ab9978b3 data\iljatech\loot_table\blocks\conveyor_belt.json
+6ee4303493ab4ad21629ace558fbeb955abaf454 data\iljatech\loot_table\blocks\flax_seeds.json
 a795b91f5c4558dcacbff0013e2a51496c761205 data\iljatech\loot_table\blocks\wooden_shaft.json
 d63a4dbf18fbd3e924401a99e0760533930f2152 data\iljatech\loot_table\blocks\turbine.json
 fdc2e5a6e33215da300c4f31bb043e3805a62845 data\iljatech\loot_table\blocks\iron_rod.json

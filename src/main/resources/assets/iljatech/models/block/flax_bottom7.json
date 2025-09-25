@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "iljatech:block/flax_bottom7"
+  }
+}

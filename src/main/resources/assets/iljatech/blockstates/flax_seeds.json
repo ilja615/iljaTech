@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "half=lower,age=0": {
+      "model": "iljatech:block/flax_bottom0"
+    },
+    "half=lower,age=1": {
+      "model": "iljatech:block/flax_bottom1"
+    },
+    "half=lower,age=2": {
+      "model": "iljatech:block/flax_bottom2"
+    },
+    "half=lower,age=3": {
+      "model": "iljatech:block/flax_bottom3"
+    },
+    "half=lower,age=4": {
+      "model": "iljatech:block/flax_bottom4"
+    },
+    "half=lower,age=5": {
+      "model": "iljatech:block/flax_bottom5"
+    },
+    "half=lower,age=6": {
+      "model": "iljatech:block/flax_bottom6"
+    },
+    "half=lower,age=7": {
+      "model": "iljatech:block/flax_bottom7"
+    },
+    "half=upper,age=0": {
+      "model": "iljatech:block/flax_top0"
+    },
+    "half=upper,age=1": {
+      "model": "iljatech:block/flax_top1"
+    },
+    "half=upper,age=2": {
+      "model": "iljatech:block/flax_top2"
+    },
+    "half=upper,age=3": {
+      "model": "iljatech:block/flax_top3"
+    },
+    "half=upper,age=4": {
+      "model": "iljatech:block/flax_top4"
+    },
+    "half=upper,age=5": {
+      "model": "iljatech:block/flax_top5"
+    },
+    "half=upper,age=6": {
+      "model": "iljatech:block/flax_top6"
+    },
+    "half=upper,age=7": {
+      "model": "iljatech:block/flax_top7"
+    }
+  }
+}
