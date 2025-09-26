@@ -47,6 +47,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("item.iljatech.ferrous_slag", "Ferrous Slag");
         this.add("item.iljatech.steel_bloom", "Steel Bloom");
         this.add("item.iljatech.creosote_oil_bucket", "Bucket of Creosote Oil");
+        this.add("item.iljatech.seed_oil_bucket", "Bucket of Seed Oil");
         this.add("block.iljatech.tin_ore", "Tin Ore");
         this.add("block.iljatech.nickel_ore", "Nickel Ore");
         this.add("block.iljatech.chrome_ore", "Chrome Ore");
@@ -96,6 +97,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.copper_rod", "Copper Rod");
         this.add("block.iljatech.copper_wire", "Copper Wire");
         this.add("block.iljatech.creosote_oil", "Creosote Oil");
+        this.add("block.iljatech.seed_oil", "Seed Oil");
         this.add("block.iljatech.steel_pipe", "Steel Pipe");
         this.add("block.iljatech.funnel", "Funnel");
         this.add("block.iljatech.conveyor_belt", "Conveyor Belt");
@@ -116,6 +118,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.pulverizer_mill", "Pulverizer Mill");
         this.add("block.iljatech.flax_seeds", "Flax Seeds");
         this.add("block.iljatech.flax", "Flax");
+        this.add("block.iljatech.squeezer", "Squeezer");
 
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
@@ -126,6 +129,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("container.iljatech.foundry", "Foundry");
         this.add("container.iljatech.coke_oven", "Coke Oven");
         this.add("container.iljatech.item_hatch", "Item Hatch");
+        this.add("container.iljatech.squeezer", "Squeezer");
     }
 
     @Override

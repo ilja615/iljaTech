@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "press=0": {
+      "model": "iljatech:block/squeezer_0"
+    },
+    "press=1": {
+      "model": "iljatech:block/squeezer_1"
+    },
+    "press=2": {
+      "model": "iljatech:block/squeezer_2"
+    },
+    "press=3": {
+      "model": "iljatech:block/squeezer_1"
+    }
+  }
+}

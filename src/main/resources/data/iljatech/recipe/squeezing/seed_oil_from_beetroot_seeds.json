@@ -1,0 +1,10 @@
+{
+  "type": "iljatech:squeezing",
+  "ingredient": {
+    "item": "minecraft:beetroot_seeds"
+  },
+  "fluid_output": {
+    "fluid": "iljatech:seed_oil"
+  },
+  "fluid_amount": 9100
+}

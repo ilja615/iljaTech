@@ -9,6 +9,7 @@ import com.github.ilja615.iljatech.renderer.WindmillRenderer;
 import com.github.ilja615.iljatech.screen.CokeOvenScreen;
 import com.github.ilja615.iljatech.screen.FoundryScreen;
 import com.github.ilja615.iljatech.screen.ItemHatchScreen;
+import com.github.ilja615.iljatech.screen.SqueezerScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -40,6 +41,7 @@ public class IljaTechClient implements ClientModInitializer {
 		HandledScreens.register(ModScreenHandlerTypes.FOUNDRY, FoundryScreen::new);
 		HandledScreens.register(ModScreenHandlerTypes.COKE_OVEN, CokeOvenScreen::new);
 		HandledScreens.register(ModScreenHandlerTypes.ITEM_HATCH, ItemHatchScreen::new);
+		HandledScreens.register(ModScreenHandlerTypes.SQUEEZER, SqueezerScreen::new);
 
 		// Register fluid render handlers
 		FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.STILL_CREOSOTE_OIL, ModFluids.FLOWING_CREOSOTE_OIL, new SimpleFluidRenderHandler(
@@ -47,9 +49,15 @@ public class IljaTechClient implements ClientModInitializer {
 				Identifier.of("iljatech:block/oil_flowing"),
 				0x452514
 		));
+		FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.STILL_SEED_OIL, ModFluids.FLOWING_SEED_OIL, new SimpleFluidRenderHandler(
+				Identifier.of("iljatech:block/oil_still"),
+				Identifier.of("iljatech:block/oil_flowing"),
+				0xd9be77
+		));
 
 		// Fluid render layers
 		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
-				ModFluids.STILL_CREOSOTE_OIL, ModFluids.FLOWING_CREOSOTE_OIL);
+				ModFluids.STILL_CREOSOTE_OIL, ModFluids.FLOWING_CREOSOTE_OIL,
+				ModFluids.STILL_SEED_OIL, ModFluids.FLOWING_SEED_OIL);
 	}
 }

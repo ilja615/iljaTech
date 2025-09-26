@@ -45,6 +45,7 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.FERROUS_SLAG, Models.GENERATED);
         itemModelGenerator.register(ModItems.STEEL_BLOOM, Models.GENERATED);
         itemModelGenerator.register(ModFluids.CREOSOTE_OIL_BUCKET, Models.GENERATED);
+        itemModelGenerator.register(ModFluids.SEED_OIL_BUCKET, Models.GENERATED);
     }
 
     @Override
