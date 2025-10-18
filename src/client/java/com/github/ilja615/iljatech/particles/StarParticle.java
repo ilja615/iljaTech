@@ -11,7 +11,7 @@ public class StarParticle extends SpriteBillboardParticle {
 
     protected StarParticle(ClientWorld clientWorld, double x, double y, double z) {
         super(clientWorld, x, y, z);
-        this.maxAge = 15;
+        this.maxAge = 25;
     }
 
     @Override

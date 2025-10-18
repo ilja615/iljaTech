@@ -1,4 +1,4 @@
-// 1.21.1	2025-09-25T22:26:56.0916716	iljaTech/Block Loot Tables
+// 1.21.1	2025-10-17T17:02:03.841396	iljaTech/Block Loot Tables
 4c9b36712616cf5756adeefba44f857460f506bc data\iljatech\loot_table\blocks\raw_aluminium_ore.json
 e65752538de5a5f6e65661be3a6d1a496f128e59 data\iljatech\loot_table\blocks\weathered_iron_sheetmetal.json
 581687b1ad96b482fde4d14ab9ac6ed85588c2af data\iljatech\loot_table\blocks\limestone_wall.json
@@ -35,8 +35,10 @@ ace315a8d92b425889b2ec54a069adfc200a761b data\iljatech\loot_table\blocks\copper_
 cc14c921e441c1e9e5f903dd69aff5bf6956765d data\iljatech\loot_table\blocks\red_sandstone_aluminium_ore.json
 124c9717afb38dabba769bf7827531fe2612aa57 data\iljatech\loot_table\blocks\steel_block.json
 61354b9631fae11ffe3551df13aae5c7bc189824 data\iljatech\loot_table\blocks\item_hatch.json
+b8ab45a3503487b8051955d775c566bdf6d2e894 data\iljatech\loot_table\blocks\tin_plate.json
 8b53f56177286772b68cbb5d7a5d1539ede7f21b data\iljatech\loot_table\blocks\chrome_ore.json
 0383e498227d31b1014c086788d3ac1f48c624d6 data\iljatech\loot_table\blocks\nickel_ore.json
+d4b9fc7ef295d4c351558270db059f01c78ddfb2 data\iljatech\loot_table\blocks\squeezer.json
 98eaa1c60b37bd60b1ff732427811aac26ac8eb4 data\iljatech\loot_table\blocks\rusty_iron_sheetmetal_stairs.json
 9f0f8e8b4728806998a84eb2f7f4759f86c5e05a data\iljatech\loot_table\blocks\funnel.json
 8d870d68b7ba954472cf7bf8c9b200683029d7e5 data\iljatech\loot_table\blocks\nailed_jungle_planks.json
@@ -50,6 +52,7 @@ bd26728678afe85db667f18bc18f4b19bea24d0c data\iljatech\loot_table\blocks\sandsto
 4c4c975477e52a512c44d3db7ff99459e054b4fc data\iljatech\loot_table\blocks\steel_pipe.json
 354354d1918b2d2e79e087089606d1a82086961e data\iljatech\loot_table\blocks\fire_clay.json
 c01c68bdb5e22e3ea2a999522d0a5502a0829200 data\iljatech\loot_table\blocks\nailed_warped_planks.json
+151dfb41914b372969e8aec107302a152f2eaf98 data\iljatech\loot_table\blocks\spinning_frame.json
 3954b81e6b61657093cf15dd0818c1d71aa6b785 data\iljatech\loot_table\blocks\coke_oven.json
 1df3f4126494757d42690941628b4a86334ab426 data\iljatech\loot_table\blocks\limestone_stairs.json
 3079e838a5dc875a73416740a1917c52ab9978b3 data\iljatech\loot_table\blocks\conveyor_belt.json

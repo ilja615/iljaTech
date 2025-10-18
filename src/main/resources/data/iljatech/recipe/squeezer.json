@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "X": {
+      "item": "iljatech:tin_plate"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "/ /",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:squeezer"
+  }
+}

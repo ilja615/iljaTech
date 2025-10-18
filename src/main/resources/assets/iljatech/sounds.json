@@ -28,6 +28,13 @@
     "sounds": [
       "iljatech:ore_crushing"
     ]
+  },
+  "saw": {
+    "subtitle": "subtitles.iljatech.saw",
+    "sounds": [
+      "iljatech:saw0",
+      "iljatech:saw1"
+    ]
   }
 }
 

@@ -27,8 +27,14 @@ import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.SCHEDU
 
 public class SqueezerBlock  extends Block implements BlockEntityProvider, MechPwrAccepter {
     public static final IntProperty PRESS = IntProperty.of("press", 0, 3);
-    protected static final VoxelShape SHAPE_1 = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0);
-    protected static final VoxelShape SHAPE_2 = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
+    protected static final VoxelShape SHAPE_1_BASE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0);
+    protected static final VoxelShape SHAPE_2_BASE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
+    protected static final VoxelShape ROD_0 = Block.createCuboidShape(0.0, 0.0, 0.0, 2.0, 16.0, 2.0);
+    protected static final VoxelShape ROD_1 = Block.createCuboidShape(14.0, 0.0, 0.0, 16.0, 16.0, 2.0);
+    protected static final VoxelShape ROD_2 = Block.createCuboidShape(0.0, 0.0, 14.0, 2.0, 16.0, 16.0);
+    protected static final VoxelShape ROD_3 = Block.createCuboidShape(14.0, 0.0, 14.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SHAPE_1 = VoxelShapes.union(ROD_0, ROD_1, ROD_2, ROD_3, SHAPE_1_BASE);
+    protected static final VoxelShape SHAPE_2 = VoxelShapes.union(ROD_0, ROD_1, ROD_2, ROD_3, SHAPE_2_BASE);
 
     public SqueezerBlock(Settings settings) {
         super(settings);

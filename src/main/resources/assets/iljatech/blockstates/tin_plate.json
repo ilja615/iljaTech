@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "iljatech:block/tin_plate", "uvlock": true
+    },
+    "facing=up": {
+      "model": "iljatech:block/tin_plate", "x": 180, "uvlock": true
+    },
+    "facing=north": {
+      "model": "iljatech:block/tin_plate", "x": -90, "uvlock": true
+    },
+    "facing=east": {
+      "model": "iljatech:block/tin_plate", "x": -90, "y": 90, "uvlock": true
+    },
+    "facing=south": {
+      "model": "iljatech:block/tin_plate", "x": -90, "y": 180, "uvlock": true
+    },
+    "facing=west": {
+      "model": "iljatech:block/tin_plate", "x": -90, "y": 270, "uvlock": true
+    }
+  }
+}

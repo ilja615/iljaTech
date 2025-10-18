@@ -48,6 +48,9 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("item.iljatech.steel_bloom", "Steel Bloom");
         this.add("item.iljatech.creosote_oil_bucket", "Bucket of Creosote Oil");
         this.add("item.iljatech.seed_oil_bucket", "Bucket of Seed Oil");
+        this.add("item.iljatech.cloth", "Textile Cloth");
+        this.add("item.iljatech.flax_fiber", "Flax Fiber");
+        this.add("item.iljatech.blue_print", "Blueprint");
         this.add("block.iljatech.tin_ore", "Tin Ore");
         this.add("block.iljatech.nickel_ore", "Nickel Ore");
         this.add("block.iljatech.chrome_ore", "Chrome Ore");
@@ -72,6 +75,17 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.nailed_oak_planks", "Nailed Oak Planks");
         this.add("block.iljatech.nailed_spruce_planks", "Nailed Spruce Planks");
         this.add("block.iljatech.nailed_warped_planks", "Nailed Warped Planks");
+        this.add("block.iljatech.frame_acacia", "Acacia Frame");
+        this.add("block.iljatech.frame_bamboo", "Bamboo Frame");
+        this.add("block.iljatech.frame_birch", "Birch Frame");
+        this.add("block.iljatech.frame_cherry", "Cherry Frame");
+        this.add("block.iljatech.frame_crimson", "Crimson Frame");
+        this.add("block.iljatech.frame_dark_oak", "Dark Oak Frame");
+        this.add("block.iljatech.frame_jungle", "Jungle Frame");
+        this.add("block.iljatech.frame_mangrove", "Mangrove Frame");
+        this.add("block.iljatech.frame_oak", "Oak Frame");
+        this.add("block.iljatech.frame_spruce", "Spruce Frame");
+        this.add("block.iljatech.frame_warped", "Warped Frame");
         this.add("block.iljatech.fire_clay", "Fire Clay");
         this.add("block.iljatech.fire_bricks", "Fire Bricks");
         this.add("block.iljatech.clinker_bricks", "Clinker Bricks");
@@ -93,6 +107,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.turbine", "Turbine");
         this.add("block.iljatech.iron_rod", "Iron Rod");
         this.add("block.iljatech.iron_plate", "Iron Plate");
+        this.add("block.iljatech.tin_plate", "Tin Plate");
         this.add("item.iljatech.iron_nails", "Iron Nails");
         this.add("block.iljatech.copper_rod", "Copper Rod");
         this.add("block.iljatech.copper_wire", "Copper Wire");
@@ -119,13 +134,14 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.flax_seeds", "Flax Seeds");
         this.add("block.iljatech.flax", "Flax");
         this.add("block.iljatech.squeezer", "Squeezer");
-
+        this.add("block.iljatech.spinning_frame", "Spinning Frame");
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
         this.add("subtitles.iljatech.hammer", "Hammer");
         this.add("subtitles.iljatech.stamping_hammer_block", "Clang! (from Steel Block)");
         this.add("subtitles.iljatech.ore_crushing", "Crushing");
+        this.add("subtitles.iljatech.saw", "Saw");
         this.add("container.iljatech.foundry", "Foundry");
         this.add("container.iljatech.coke_oven", "Coke Oven");
         this.add("container.iljatech.item_hatch", "Item Hatch");

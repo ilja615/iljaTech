@@ -103,6 +103,9 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         LootCondition.Builder flaxLootConditionBuilder = BlockStatePropertyLootCondition.builder(ModBlocks.FLAX_SEEDS).properties(StatePredicate.Builder.create().exactMatch(FlaxBlock.AGE, 7).exactMatch(FlaxBlock.HALF, DoubleBlockHalf.UPPER));
         addDrop(ModBlocks.FLAX_SEEDS, cropDrops(ModBlocks.FLAX_SEEDS, ModBlocks.FLAX.asItem(), ModBlocks.FLAX_SEEDS.asItem(), flaxLootConditionBuilder));
         addDrop(ModBlocks.FLAX, (block) -> this.dropsWithProperty(block, TallPlantBlock.HALF, DoubleBlockHalf.LOWER));
+        addDrop(ModBlocks.SQUEEZER);
+        addDrop(ModBlocks.SPINNING_FRAME);
+        addDrop(ModBlocks.TIN_PLATE);
     }
 
     public LootTable.Builder pulverizerMillDrops(Block block) {

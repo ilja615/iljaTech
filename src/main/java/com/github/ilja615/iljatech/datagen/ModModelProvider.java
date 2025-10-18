@@ -46,6 +46,9 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.STEEL_BLOOM, Models.GENERATED);
         itemModelGenerator.register(ModFluids.CREOSOTE_OIL_BUCKET, Models.GENERATED);
         itemModelGenerator.register(ModFluids.SEED_OIL_BUCKET, Models.GENERATED);
+        itemModelGenerator.register(ModItems.CLOTH, Models.GENERATED);
+        itemModelGenerator.register(ModItems.FLAX_FIBER, Models.GENERATED);
+        itemModelGenerator.register(ModItems.BLUE_PRINT, Models.GENERATED);
     }
 
     @Override
@@ -73,6 +76,18 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_OAK_PLANKS);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_SPRUCE_PLANKS);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.NAILED_WARPED_PLANKS);
+
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ACACIA_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.BAMBOO_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.BIRCH_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.CHERRY_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.CRIMSON_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DARK_OAK_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.JUNGLE_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.MANGROVE_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.OAK_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.SPRUCE_FRAME);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.WARPED_FRAME);
 
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.FIRE_CLAY);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ITEM_HATCH);

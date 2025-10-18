@@ -17,6 +17,7 @@ import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingSlabBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingStairsBlock;
+import com.github.ilja615.iljatech.blocks.spinningframe.SpinningFrameBlock;
 import com.github.ilja615.iljatech.blocks.squeezer.SqueezerBlock;
 import com.github.ilja615.iljatech.blocks.stampinghammer.HammerBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
@@ -60,6 +61,18 @@ public class ModBlocks {
     public static final Block NAILED_SPRUCE_PLANKS = registerWithItem("nailed_spruce_planks", new Block(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS)));
     public static final Block NAILED_WARPED_PLANKS = registerWithItem("nailed_warped_planks", new Block(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS)));
 
+    public static final Block ACACIA_FRAME = registerWithItem("frame_acacia", new Block(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS).nonOpaque()));
+    public static final Block BAMBOO_FRAME = registerWithItem("frame_bamboo", new Block(AbstractBlock.Settings.copy(Blocks.BAMBOO_PLANKS).nonOpaque()));
+    public static final Block BIRCH_FRAME = registerWithItem("frame_birch", new Block(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS).nonOpaque()));
+    public static final Block CHERRY_FRAME = registerWithItem("frame_cherry", new Block(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS).nonOpaque()));
+    public static final Block CRIMSON_FRAME = registerWithItem("frame_crimson", new Block(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS).nonOpaque()));
+    public static final Block DARK_OAK_FRAME = registerWithItem("frame_dark_oak", new Block(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS).nonOpaque()));
+    public static final Block JUNGLE_FRAME = registerWithItem("frame_jungle", new Block(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS).nonOpaque()));
+    public static final Block MANGROVE_FRAME = registerWithItem("frame_mangrove", new Block(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS).nonOpaque()));
+    public static final Block OAK_FRAME = registerWithItem("frame_oak", new Block(AbstractBlock.Settings.copy(Blocks.OAK_PLANKS).nonOpaque()));
+    public static final Block SPRUCE_FRAME = registerWithItem("frame_spruce", new Block(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS).nonOpaque()));
+    public static final Block WARPED_FRAME = registerWithItem("frame_warped", new Block(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS).nonOpaque()));
+
     public static final Block BELLOWS = registerWithItem("bellows", new BellowsBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block STOKED_FIRE = registerWithItem("stoked_fire", new StokedFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.BRIGHT_RED).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));
     public static final Block FOUNDRY = registerWithItem("foundry", new FoundryBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.TERRACOTTA_WHITE).luminance(state -> state.get(FoundryBlock.LIT) ? 8 : 0)));
@@ -100,7 +113,8 @@ public class ModBlocks {
     public static final Block WINDMILL_BLADE = registerWithItem("windmill_blade", new Block(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block CONVEYOR_BELT = registerWithItem("conveyor_belt", new ConveyorBeltBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block PULVERIZER_MILL = registerWithItem("pulverizer_mill", new PulverizerMillBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque()));
-    public static final Block SQUEEZER = registerWithItem("squeezer", new SqueezerBlock(AbstractBlock.Settings.create().mapColor(MapColor.DEEPSLATE_GRAY).strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque()));
+    public static final Block SQUEEZER = registerWithItem("squeezer", new SqueezerBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block SPINNING_FRAME = registerWithItem("spinning_frame", new SpinningFrameBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 3.0F).sounds(BlockSoundGroup.WOOD)));
 
     public static final Block STEEL_PIPE = registerWithItem("steel_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).nonOpaque()));
     public static final Block FUNNEL = registerWithItem("funnel", new FunnelBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.DECORATED_POT).nonOpaque()));
@@ -111,6 +125,7 @@ public class ModBlocks {
     public static final Block COPPER_WIRE = registerWithItem("copper_wire", new WireBlock(AbstractBlock.Settings.copy(Blocks.RAIL)));
     public static final Block IRON_PLATE = registerWithItem("iron_plate", new PlateBlock(AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(2.5F, 6.0F).sounds(BlockSoundGroup.METAL)));
     public static final Block IRON_ROD = registerWithItem("iron_rod", new AxisRodBlock(AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.METAL)));
+    public static final Block TIN_PLATE = registerWithItem("tin_plate", new PlateBlock(AbstractBlock.Settings.create().mapColor(MapColor.IRON_GRAY).requiresTool().strength(2.5F, 6.0F).sounds(BlockSoundGroup.METAL)));
 
     public static final Block STEEL_BLOCK = registerWithItem("steel_block", new HammerBlock(AbstractBlock.Settings.copy(Blocks.IRON_BLOCK).strength(6.0F, 12.0F).mapColor(MapColor.DEEPSLATE_GRAY).sounds(BlockSoundGroup.ANVIL)));
 

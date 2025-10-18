@@ -13,6 +13,7 @@ public class ModSounds {
     public static SoundEvent BELLOWS_EXHALE = register("bellows_exhale");
     public static SoundEvent STAMPING_HAMMER_BLOCK = register("stamping_hammer_block");
     public static SoundEvent ORE_CRUSHING = register("ore_crushing");
+    public static SoundEvent SAW = register("saw");
 
     public static SoundEvent register(String name) {
         return Registry.register(Registries.SOUND_EVENT, Identifier.of(IljaTech.MOD_ID, name), SoundEvent.of(Identifier.of(IljaTech.MOD_ID, name)));

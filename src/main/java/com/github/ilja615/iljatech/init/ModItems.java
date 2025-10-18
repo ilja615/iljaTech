@@ -55,6 +55,9 @@ public class ModItems {
     public static final Item FERROUS_SLAG = register("ferrous_slag", new Item(new Item.Settings()));
     public static final Item SILICATE_SLAG = register("silicate_slag", new Item(new Item.Settings()));
     public static final Item STEEL_BLOOM = register("steel_bloom", new Item(new Item.Settings()));
+    public static final Item CLOTH = register("cloth", new Item(new Item.Settings()));
+    public static final Item FLAX_FIBER = register("flax_fiber", new Item(new Item.Settings()));
+    public static final Item BLUE_PRINT = register("blue_print", new Item(new Item.Settings()));
 
     public static <T extends Item> T register(String name, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(IljaTech.MOD_ID, name), item);
