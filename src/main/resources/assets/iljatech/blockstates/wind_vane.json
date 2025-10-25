@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "wind_direction=n": {
+      "model": "iljatech:block/wind_vane_n"
+    },
+    "wind_direction=ne": {
+      "model": "iljatech:block/wind_vane_ne"
+    },
+    "wind_direction=e": {
+      "model": "iljatech:block/wind_vane_e"
+    },
+    "wind_direction=se": {
+      "model": "iljatech:block/wind_vane_se"
+    },
+    "wind_direction=s": {
+      "model": "iljatech:block/wind_vane_s"
+    },
+    "wind_direction=sw": {
+      "model": "iljatech:block/wind_vane_sw"
+    },
+    "wind_direction=w": {
+      "model": "iljatech:block/wind_vane_w"
+    },
+    "wind_direction=nw": {
+      "model": "iljatech:block/wind_vane_nw"
+    }
+  }
+}

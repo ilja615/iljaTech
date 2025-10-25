@@ -3,7 +3,6 @@ package com.github.ilja615.iljatech;
 import com.github.ilja615.iljatech.init.*;
 import com.github.ilja615.iljatech.worldgen.BiomeModificationEvent;
 import net.fabricmc.api.ModInitializer;
-
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;

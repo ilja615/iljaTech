@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=1": {
+      "model": "iljatech:block/sawdust_0"
+    },
+    "level=2": {
+      "model": "iljatech:block/sawdust_1"
+    },
+    "level=3": {
+      "model": "iljatech:block/sawdust_2"
+    },
+    "level=4": {
+      "model": "iljatech:block/sawdust_3"
+    }
+  }
+}

@@ -68,6 +68,7 @@
   "block.iljatech.rusty_iron_sheetmetal_slab": "Rusty Iron Sheetmetal Slab",
   "block.iljatech.rusty_iron_sheetmetal_stairs": "Rusty Iron Sheetmetal Stairs",
   "block.iljatech.sandstone_aluminium_ore": "Sandstone Aluminium Ore",
+  "block.iljatech.sawdust": "Sawdust",
   "block.iljatech.seed_oil": "Seed Oil",
   "block.iljatech.spinning_frame": "Spinning Frame",
   "block.iljatech.squeezer": "Squeezer",
@@ -80,6 +81,7 @@
   "block.iljatech.weathered_iron_sheetmetal": "Weathered Iron Sheetmetal",
   "block.iljatech.weathered_iron_sheetmetal_slab": "Weathered Iron Sheetmetal Slab",
   "block.iljatech.weathered_iron_sheetmetal_stairs": "Weathered Iron Sheetmetal Stairs",
+  "block.iljatech.wind_vane": "Wind Vane",
   "block.iljatech.wooden_scaffold": "Wooden Scaffolding",
   "block.iljatech.wooden_shaft": "Wooden Shaft",
   "book.iljatech.iljatech.boiling.egg.description": "An entry showcasing boiled egg.",
@@ -135,5 +137,6 @@
   "subtitles.iljatech.bellows_inhale": "Bellows Inhale",
   "subtitles.iljatech.hammer": "Hammer",
   "subtitles.iljatech.ore_crushing": "Crushing",
+  "subtitles.iljatech.saw": "Saw",
   "subtitles.iljatech.stamping_hammer_block": "Clang! (from Steel Block)"
 }

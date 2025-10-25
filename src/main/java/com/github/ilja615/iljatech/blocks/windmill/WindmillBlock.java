@@ -11,10 +11,16 @@ import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Pair;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,5 +50,16 @@ public class WindmillBlock extends Block implements BlockEntityProvider, MechPwr
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return TickableBlockEntity.getTicker(world);
+    }
+
+    @Override
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (world instanceof ServerWorld) {
+            Vec2f vector = Wind.getWindVectorAt(world, world.getWorldChunk(pos).getPos().x, world.getWorldChunk(pos).getPos().z);
+            Pair<WindDirection, Double> wind = Wind.getWindFromVector(vector);
+            System.out.println(wind.getLeft().asString());
+        }
+
+        return super.onUse(state, world, pos, player, hit);
     }
 }

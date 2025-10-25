@@ -1,23 +1,26 @@
 package com.github.ilja615.iljatech.datagen;
 
 import com.github.ilja615.iljatech.blocks.FlaxBlock;
+import com.github.ilja615.iljatech.blocks.SawDustBlock;
 import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlock;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.TallPlantBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
+import net.minecraft.loot.condition.EntityPropertiesLootCondition;
 import net.minecraft.loot.condition.LootCondition;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.entry.AlternativeEntry;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.entry.LeafEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
@@ -28,6 +31,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.IntStream;
 
 public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
     public ModBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
@@ -106,6 +110,12 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.SQUEEZER);
         addDrop(ModBlocks.SPINNING_FRAME);
         addDrop(ModBlocks.TIN_PLATE);
+        addDrop(ModBlocks.WIND_VANE);
+        addDrop(ModBlocks.SAWDUST, (block) -> {
+            return LootTable.builder().pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F)).with((LootPoolEntry.Builder) this.applyExplosionDecay(block, ItemEntry.builder(block).apply(IntStream.rangeClosed(1, 4).boxed().toList(), (amount) -> {
+                return SetCountLootFunction.builder(ConstantLootNumberProvider.create((float)amount)).conditionally(BlockStatePropertyLootCondition.builder(block).properties(StatePredicate.Builder.create().exactMatch(SawDustBlock.LEVEL, amount)));
+            }))));
+        });
     }
 
     public LootTable.Builder pulverizerMillDrops(Block block) {

@@ -21,6 +21,7 @@ import com.github.ilja615.iljatech.blocks.spinningframe.SpinningFrameBlock;
 import com.github.ilja615.iljatech.blocks.squeezer.SqueezerBlock;
 import com.github.ilja615.iljatech.blocks.stampinghammer.HammerBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
+import com.github.ilja615.iljatech.blocks.windmill.WindVaneBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
 import net.minecraft.block.*;
@@ -73,6 +74,8 @@ public class ModBlocks {
     public static final Block SPRUCE_FRAME = registerWithItem("frame_spruce", new Block(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS).nonOpaque()));
     public static final Block WARPED_FRAME = registerWithItem("frame_warped", new Block(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS).nonOpaque()));
 
+    public static final Block SAWDUST = registerWithItem("sawdust", new SawDustBlock(AbstractBlock.Settings.copy(Blocks.SAND).nonOpaque()));
+
     public static final Block BELLOWS = registerWithItem("bellows", new BellowsBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block STOKED_FIRE = registerWithItem("stoked_fire", new StokedFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.BRIGHT_RED).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));
     public static final Block FOUNDRY = registerWithItem("foundry", new FoundryBlock(AbstractBlock.Settings.copy(Blocks.BRICKS).mapColor(MapColor.TERRACOTTA_WHITE).luminance(state -> state.get(FoundryBlock.LIT) ? 8 : 0)));
@@ -115,6 +118,7 @@ public class ModBlocks {
     public static final Block PULVERIZER_MILL = registerWithItem("pulverizer_mill", new PulverizerMillBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque()));
     public static final Block SQUEEZER = registerWithItem("squeezer", new SqueezerBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block SPINNING_FRAME = registerWithItem("spinning_frame", new SpinningFrameBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 3.0F).sounds(BlockSoundGroup.WOOD)));
+    public static final Block WIND_VANE = registerWithItem("wind_vane", new WindVaneBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
 
     public static final Block STEEL_PIPE = registerWithItem("steel_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).nonOpaque()));
     public static final Block FUNNEL = registerWithItem("funnel", new FunnelBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.DECORATED_POT).nonOpaque()));

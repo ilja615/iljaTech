@@ -133,6 +133,8 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.pulverizer_mill", "Pulverizer Mill");
         this.add("block.iljatech.flax_seeds", "Flax Seeds");
         this.add("block.iljatech.flax", "Flax");
+        this.add("block.iljatech.wind_vane", "Wind Vane");
+        this.add("block.iljatech.sawdust", "Sawdust");
         this.add("block.iljatech.squeezer", "Squeezer");
         this.add("block.iljatech.spinning_frame", "Spinning Frame");
         this.add("effect.iljatech.stunned", "Stunned");
