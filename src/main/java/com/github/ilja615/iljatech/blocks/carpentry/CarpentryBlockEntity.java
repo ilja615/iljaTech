@@ -57,14 +57,12 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
     private final SingleFluidStorage fluidStorage = SingleFluidStorage.withFixedCapacity(
             FluidConstants.BUCKET * 16,
             this::update);
-    private final ContainerItemContext fluidItemContext = ContainerItemContext.ofSingleSlot(InventoryStorage.of(inventory, null).getSlot(6));
-
 
     public CarpentryBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.CARPENTRY, pos, state);
     }
 
-    private void update() {
+    protected void update() {
         markDirty();
         if (world != null)
             world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
@@ -124,14 +122,6 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
             }
         }
         return false;
-    }
-
-
-    public boolean isValid(ItemStack stack, int slot) {
-        if(stack.isEmpty()) return true;
-
-        Storage<FluidVariant> storage = ContainerItemContext.withConstant(stack).find(FluidStorage.ITEM);
-        return storage != null;
     }
 
     @Override

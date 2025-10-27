@@ -1,11 +1,19 @@
 package com.github.ilja615.iljatech.screen.widget;
 
+import com.github.ilja615.iljatech.screen.CarpentryScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.BeaconScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.network.packet.c2s.play.UpdateBeaconC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
+
+@Environment(EnvType.CLIENT)
 public class ConditionalButtonWidget extends ClickableWidget {
     private Identifier texture;
     private int u;
@@ -23,7 +31,6 @@ public class ConditionalButtonWidget extends ClickableWidget {
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        super.onClick(mouseX, mouseY);
         this.action.run();
     }
 

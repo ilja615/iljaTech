@@ -4,13 +4,15 @@ import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.carpentry.CarpentryScreenHandler;
 import com.github.ilja615.iljatech.screen.widget.ConditionalButtonWidget;
 import com.github.ilja615.iljatech.screen.widget.FluidWidget;
+import com.github.ilja615.iljatech.util.FluidItemSlot;
+import com.github.ilja615.iljatech.util.MaxStackSize1Slot;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.BeaconScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.text.Text;
@@ -30,9 +32,7 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
         handler.addListener(new ScreenHandlerListener() {
             public void onSlotUpdate(ScreenHandler handlerx, int slotId, ItemStack stack) {
             }
-
             public void onPropertyUpdate(ScreenHandler handlerx, int property, int value) {
-
             }
         });
     }
@@ -50,9 +50,19 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
         addDrawable(new FluidWidget(this.handler.getBlockEntity().getFluidStorage(),
                 this.x + 26, this.y + 17, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 79, this.y + 16, 18, 18, TEXTURE, 176, 0, this.handler::hammer));
+        this.addButton(new ConditionalButtonWidget(this.x + 79, this.y + 16, 18, 18, TEXTURE, 176, 0, this::hammer));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 79, this.y + 52, 18, 18, TEXTURE, 176, 18, this.handler::saw));
+        this.addButton(new ConditionalButtonWidget(this.x + 79, this.y + 52, 18, 18, TEXTURE, 176, 18, this::saw));
+    }
+
+    public void hammer() {
+        this.handler.changeLayoutSlots(0);
+        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 0));
+    }
+
+    public void saw() {
+        this.handler.changeLayoutSlots(1);
+        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 1));
     }
 
     @Override
