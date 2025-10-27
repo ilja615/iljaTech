@@ -4,6 +4,7 @@ import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.*;
 import com.github.ilja615.iljatech.blocks.AxisRodBlock;
 import com.github.ilja615.iljatech.blocks.bellows.BellowsBlock;
+import com.github.ilja615.iljatech.blocks.carpentry.CarpentryBlock;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlock;
 import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlock;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
@@ -75,6 +76,7 @@ public class ModBlocks {
     public static final Block WARPED_FRAME = registerWithItem("frame_warped", new Block(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS).nonOpaque()));
 
     public static final Block SAWDUST = registerWithItem("sawdust", new SawDustBlock(AbstractBlock.Settings.copy(Blocks.SAND).nonOpaque()));
+    public static final Block CARPENTRY = registerWithItem("carpentry", new CarpentryBlock(AbstractBlock.Settings.copy(Blocks.OAK_PLANKS)));
 
     public static final Block BELLOWS = registerWithItem("bellows", new BellowsBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block STOKED_FIRE = registerWithItem("stoked_fire", new StokedFireBlock(AbstractBlock.Settings.create().mapColor(MapColor.BRIGHT_RED).replaceable().noCollision().breakInstantly().luminance(state -> 15).sounds(BlockSoundGroup.WOOL).pistonBehavior(PistonBehavior.DESTROY)));

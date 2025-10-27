@@ -2,6 +2,7 @@ package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.bellows.BellowsBlockEntity;
+import com.github.ilja615.iljatech.blocks.carpentry.CarpentryBlockEntity;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlockEntity;
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
@@ -50,6 +51,8 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(SqueezerBlockEntity::new, ModBlocks.SQUEEZER).build());
     public static final BlockEntityType<SpinningFrameBlockEntity> SPINNING_FRAME = register("spinning_frame",
             FabricBlockEntityTypeBuilder.create(SpinningFrameBlockEntity::new, ModBlocks.SPINNING_FRAME).build());
+    public static final BlockEntityType<CarpentryBlockEntity> CARPENTRY = register("carpentry",
+            FabricBlockEntityTypeBuilder.create(CarpentryBlockEntity::new, ModBlocks.CARPENTRY).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
@@ -60,10 +63,12 @@ public class ModBlockEntityTypes {
         ItemStorage.SIDED.registerForBlockEntity(PulverizerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.PULVERIZER_MILL);
         ItemStorage.SIDED.registerForBlockEntity(SqueezerBlockEntity::getInventoryProvider, ModBlockEntityTypes.SQUEEZER);
         ItemStorage.SIDED.registerForBlockEntity(SpinningFrameBlockEntity::getInventoryProvider, ModBlockEntityTypes.SPINNING_FRAME);
+        ItemStorage.SIDED.registerForBlockEntity(CarpentryBlockEntity::getInventoryProvider, ModBlockEntityTypes.CARPENTRY);
 
         FluidStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getFluidTankProvider, ModBlockEntityTypes.COKE_OVEN);
         FluidStorage.SIDED.registerForBlockEntity(FunnelBlockEntity::getFluidTankProvider, ModBlockEntityTypes.FUNNEL);
         FluidStorage.SIDED.registerForBlockEntity(SqueezerBlockEntity::getFluidTankProvider, ModBlockEntityTypes.SQUEEZER);
+        FluidStorage.SIDED.registerForBlockEntity(CarpentryBlockEntity::getFluidTankProvider, ModBlockEntityTypes.CARPENTRY);
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType<T> type) {

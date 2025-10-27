@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
+import com.github.ilja615.iljatech.blocks.carpentry.CarpentryScreenHandler;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenScreenHandler;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryScreenHandler;
@@ -26,6 +27,8 @@ public class ModScreenHandlerTypes {
             register("item_hatch", ItemHatchScreenHandler::new, BlockPosPayload.PACKET_CODEC);
     public static final ScreenHandlerType<SqueezerScreenHandler> SQUEEZER =
             register("squeezer", SqueezerScreenHandler::new, BlockPosPayload.PACKET_CODEC);
+    public static final ScreenHandlerType<CarpentryScreenHandler> CARPENTRY =
+            register("carpentry", CarpentryScreenHandler::new, BlockPosPayload.PACKET_CODEC);
 
     public static <T extends ScreenHandler, D extends CustomPayload> ExtendedScreenHandlerType<T, D> register(String name, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, PacketCodec<? super RegistryByteBuf, D> codec) {
         return Registry.register(Registries.SCREEN_HANDLER, Identifier.of(IljaTech.MOD_ID, name), new ExtendedScreenHandlerType<>(factory, codec));

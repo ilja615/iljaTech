@@ -26,7 +26,7 @@ public class WindVaneBlock extends Block {
         World world = ctx.getWorld();
         BlockPos pos = ctx.getBlockPos();
         if (world instanceof ServerWorld) {
-            Vec2f vector = Wind.getWindVectorAt(world, pos.getX(), pos.getZ());
+            Vec2f vector = Wind.getWindVectorAt(world, world.getWorldChunk(pos).getPos().x, world.getWorldChunk(pos).getPos().z);
             Pair<WindDirection, Double> wind = Wind.getWindFromVector(vector);
             return this.getDefaultState().with(WIND_DIRECTION, wind.getLeft());
         }

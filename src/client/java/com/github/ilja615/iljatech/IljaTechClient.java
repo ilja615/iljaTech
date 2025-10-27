@@ -7,10 +7,7 @@ import com.github.ilja615.iljatech.particles.SteamParticle;
 import com.github.ilja615.iljatech.renderer.ConveyorBeltRenderer;
 import com.github.ilja615.iljatech.renderer.RollerMillRenderer;
 import com.github.ilja615.iljatech.renderer.WindmillRenderer;
-import com.github.ilja615.iljatech.screen.CokeOvenScreen;
-import com.github.ilja615.iljatech.screen.FoundryScreen;
-import com.github.ilja615.iljatech.screen.ItemHatchScreen;
-import com.github.ilja615.iljatech.screen.SqueezerScreen;
+import com.github.ilja615.iljatech.screen.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -47,6 +44,7 @@ public class IljaTechClient implements ClientModInitializer {
 		HandledScreens.register(ModScreenHandlerTypes.COKE_OVEN, CokeOvenScreen::new);
 		HandledScreens.register(ModScreenHandlerTypes.ITEM_HATCH, ItemHatchScreen::new);
 		HandledScreens.register(ModScreenHandlerTypes.SQUEEZER, SqueezerScreen::new);
+		HandledScreens.register(ModScreenHandlerTypes.CARPENTRY, CarpentryScreen::new);
 
 		// Register fluid render handlers
 		FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.STILL_CREOSOTE_OIL, ModFluids.FLOWING_CREOSOTE_OIL, new SimpleFluidRenderHandler(
