@@ -48,26 +48,37 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
         this.buttons.clear();
 
         addDrawable(new FluidWidget(this.handler.getBlockEntity().getFluidStorage(),
-                this.x + 26, this.y + 17, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
+                this.x + 109, this.y + 20, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 79, this.y + 16, 18, 18, TEXTURE, 176, 0, this::hammer));
+        this.addButton(new ConditionalButtonWidget(this.x + 43, this.y + 16, 18, 18, TEXTURE, 176, 0, this::hammer));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 79, this.y + 52, 18, 18, TEXTURE, 176, 18, this::saw));
+        this.addButton(new ConditionalButtonWidget(this.x + 61, this.y + 16, 18, 18, TEXTURE, 176, 18, this::saw));
+
+        this.addButton(new ConditionalButtonWidget(this.x + 7, this.y + 43, 18, 18, TEXTURE, 176, 36, this::grid));
     }
 
     public void hammer() {
-        this.handler.changeLayoutSlots(0);
         this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 0));
     }
 
     public void saw() {
-        this.handler.changeLayoutSlots(1);
         this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 1));
+    }
+
+    public void grid() {
+        this.handler.changeLayoutSlots((this.handler.getLayout() + 1) % 2);
+        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 2));
     }
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        context.drawTexture(TEXTURE,this.x + 7, this.y + 34, 176, 54 + 36*((CarpentryScreenHandler) this.handler).getLayout(), 72, 36);
+        context.drawTexture(TEXTURE,this.x + 25, this.y + 34, 176, 54 + 36*((CarpentryScreenHandler) this.handler).getLayout(), 72, 36);
+    }
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+        drawMouseoverTooltip(context, mouseX, mouseY);
     }
 }

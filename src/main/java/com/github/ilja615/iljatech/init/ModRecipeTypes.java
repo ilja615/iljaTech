@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
+import com.github.ilja615.iljatech.blocks.carpentry.CarpentryRecipe;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokingRecipe;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryRecipe;
 import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizingRecipe;
@@ -27,6 +28,7 @@ public class ModRecipeTypes {
     public static final RecipeType<PulverizingRecipe> PULVERIZING_TYPE = register("pulverizing", new PulverizingRecipe.Serializer());
     public static final RecipeType<SqueezingRecipe> SQUEEZING_TYPE = register("squeezing", new SqueezingRecipe.Serializer());
     public static final RecipeType<SpinningRecipe> SPINNING_TYPE = register("spinning", new SpinningRecipe.Serializer());
+    public static final RecipeType<CarpentryRecipe> CARPENTRY_TYPE = register("carpentry", new CarpentryRecipe.Serializer());
 
     public static void registerIngredientTypes()
     {

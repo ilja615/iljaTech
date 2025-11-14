@@ -2,11 +2,10 @@ package com.github.ilja615.iljatech.blocks.carpentry;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.blocks.SawDustBlock;
-import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModItems;
-import com.github.ilja615.iljatech.init.ModSounds;
+import com.github.ilja615.iljatech.blocks.squeezer.SqueezingRecipe;
+import com.github.ilja615.iljatech.init.*;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
+import com.github.ilja615.iljatech.util.CountedIngredient;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -15,6 +14,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,6 +28,8 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
@@ -40,6 +42,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPosPayload> {
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".carpentry");
@@ -69,7 +75,47 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
     }
 
     public void hammer() {
-        this.setLayout(0);
+        // Recipe detection and handling
+        if (!inventory.getStack(4).isEmpty() && inventory.getStack(4).isOf(ModItems.IRON_NAILS)) {
+            CraftingRecipeInput input = CraftingRecipeInput.create(2, 2, Arrays.asList(
+                    inventory.getStack(0), inventory.getStack(1), inventory.getStack(2), inventory.getStack(3)
+            ));
+            List<RecipeEntry<CarpentryRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.CARPENTRY_TYPE);
+            for (RecipeEntry<CarpentryRecipe> rr : recipes) {
+                CarpentryRecipe r = rr.value();
+
+                ItemStack output = r.result().copy();
+
+                if (!output.isEmpty() && r.matches(input, world) && r.tool().equals("hammer") && getLayout() == 0
+                        && fluidStorage.amount >= r.fluidAmount() && (fluidStorage.variant.getFluid().matchesType(ModFluids.STILL_CREOSOTE_OIL) || fluidStorage.variant.getFluid().matchesType(ModFluids.STILL_SEED_OIL))) {
+                    // The recipe is finished. The output is handled.
+                    if (inventory.getStack(5).isEmpty()) { // 3 is output slot
+                        // In this case a new result ItemStack is added with 1 of the result.
+                        inventory.setStack(5, output);
+                        inventory.getHeldStacks().subList(0, 4).forEach(itemStack -> {
+                            itemStack.decrement(1);
+                        });
+                        fluidStorage.amount -= r.fluidAmount();
+                        world.playSound(null, pos, ModSounds.HAMMER, SoundCategory.PLAYERS, 1f, 1f);
+                        inventory.getStack(4).decrement(1); // use nails
+                    } else if (inventory.getStack(5).getItem() == output.getItem() &&
+                            inventory.getStack(5).getCount() + output.getCount() <= inventory.getStack(5).getMaxCount()) {
+                        // In this case the result ItemStack is added to what was already there
+                        inventory.getStack(5).increment(output.getCount());
+                        inventory.getHeldStacks().subList(0, 4).forEach(itemStack -> {
+                            itemStack.decrement(1);
+                        });
+                        fluidStorage.amount -= r.fluidAmount();
+                        world.playSound(null, pos, ModSounds.HAMMER, SoundCategory.PLAYERS, 1f, 1f);
+                        inventory.getStack(4).decrement(1); // use nails
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        // Planks to nailed boards conversion
         for (int i = 0; i <= 3; i++) {
             if (inventory.getStack(i).isIn(ItemTags.PLANKS)) {
                 if (!inventory.getStack(4).isEmpty() && inventory.getStack(4).isOf(ModItems.IRON_NAILS)) {
@@ -88,7 +134,43 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
     }
 
     public void saw() {
-        this.setLayout(1);
+        // Recipe detection and handling
+        CraftingRecipeInput input = CraftingRecipeInput.create(2, 2, Arrays.asList(
+                inventory.getStack(0), inventory.getStack(1), inventory.getStack(2), inventory.getStack(3)
+        ));
+        List<RecipeEntry<CarpentryRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.CARPENTRY_TYPE);
+        for (RecipeEntry<CarpentryRecipe> rr : recipes)
+        {
+            CarpentryRecipe r = rr.value();
+
+            ItemStack output = r.result().copy();
+
+            if (!output.isEmpty() && r.matches(input, world) && r.tool().equals("saw") && getLayout() == 1
+                    && fluidStorage.amount >= r.fluidAmount() && (fluidStorage.variant.getFluid().matchesType(ModFluids.STILL_CREOSOTE_OIL) || fluidStorage.variant.getFluid().matchesType(ModFluids.STILL_SEED_OIL)))
+            {
+                // The recipe is finished. The output is handled.
+                if (inventory.getStack(5).isEmpty()) { // 3 is output slot
+                    // In this case a new result ItemStack is added with 1 of the result.
+                    inventory.setStack(5, output);
+                    inventory.getHeldStacks().subList(0, 4).forEach(itemStack -> {
+                        itemStack.decrement(1);
+                    });
+                    fluidStorage.amount -= r.fluidAmount();
+                } else if (inventory.getStack(5).getItem() == output.getItem() &&
+                        inventory.getStack(5).getCount() + output.getCount() <= inventory.getStack(5).getMaxCount()) {
+                    // In this case the result ItemStack is added to what was already there
+                    inventory.getStack(5).increment(output.getCount());
+                    inventory.getHeldStacks().subList(0, 4).forEach(itemStack -> {
+                        itemStack.decrement(1);
+                    });
+                    fluidStorage.amount -= r.fluidAmount();
+                }
+
+                break;
+            }
+        }
+
+        // Planks to frames conversion
         for (int i = 0; i <= 3; i++) {
             if (inventory.getStack(i).isIn(ItemTags.PLANKS)) {
                 String key = inventory.getStack(i).getItem().getTranslationKey();
@@ -104,11 +186,17 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
         }
     }
 
+    public void grid() {
+        this.setLayout((this.layout + 1) % 2);
+    }
+
     public static boolean createSawdust (World world, BlockPos pos) {
         return createSawdust(world, pos, Direction.Type.HORIZONTAL.random(world.random), 0.35f);
     }
 
     public static boolean createSawdust (World world, BlockPos pos, Direction direction, float chance) {
+        if (world.random.nextFloat() > chance)
+            return false;
         BlockState state = world.getBlockState(pos.offset(direction));
         if (state.isAir() || state.isReplaceable()) {
             world.setBlockState(pos.offset(direction), ModBlocks.SAWDUST.getDefaultState());
@@ -168,7 +256,7 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
     }
 
     public void setLayout(int layout) {
-        if (layout >= 0 && layout < 3) {
+        if (layout >= 0 && layout < 4) {
             this.layout = layout;
             this.update();
         }

@@ -1,0 +1,21 @@
+{
+  "type": "iljatech:carpentry",
+  "tool": "hammer",
+  "key": {
+    "#": {
+      "tag": "iljatech:wooden_frames"
+    },
+    "X": {
+      "item": "iljatech:cloth"
+    }
+  },
+  "pattern": [
+    "XX",
+    "##"
+  ],
+  "result": {
+    "count": 8,
+    "id": "iljatech:conveyor_belt"
+  },
+  "fluid_amount": 27000
+}

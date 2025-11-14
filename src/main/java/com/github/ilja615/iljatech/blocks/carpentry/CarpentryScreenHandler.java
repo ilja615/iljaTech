@@ -1,13 +1,21 @@
 package com.github.ilja615.iljatech.blocks.carpentry;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
+import com.github.ilja615.iljatech.init.ModFluids;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.FluidItemSlot;
 import com.github.ilja615.iljatech.util.MaxStackSize1Slot;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -36,36 +44,82 @@ public class CarpentryScreenHandler extends ScreenHandler {
         this.inventory = inventory;
 
         if (blockEntity.getLayout() == 0) {
-            addSlot(new MaxStackSize1Slot(inventory, 0, 17, 35));
-            addSlot(new MaxStackSize1Slot(inventory, 1, 35, 35));
-            addSlot(new MaxStackSize1Slot(inventory, 2, 17, 53));
-            addSlot(new MaxStackSize1Slot(inventory, 3, 35, 53));
+            addSlot(new MaxStackSize1Slot(inventory, 0, 44, 35));
+            addSlot(new MaxStackSize1Slot(inventory, 1, 62, 35));
+            addSlot(new MaxStackSize1Slot(inventory, 2, 44, 53));
+            addSlot(new MaxStackSize1Slot(inventory, 3, 62, 53));
         }
         if (blockEntity.getLayout() == 1) {
-            addSlot(new MaxStackSize1Slot(inventory, 0, 26, 35));
-            addSlot(new MaxStackSize1Slot(inventory, 1, 44, 44));
-            addSlot(new MaxStackSize1Slot(inventory, 2, 26, 53));
-            addSlot(new MaxStackSize1Slot(inventory, 3, 8, 44));
+            addSlot(new MaxStackSize1Slot(inventory, 0, 53, 35));
+            addSlot(new MaxStackSize1Slot(inventory, 1, 71, 44));
+            addSlot(new MaxStackSize1Slot(inventory, 2, 35, 44));
+            addSlot(new MaxStackSize1Slot(inventory, 3, 53, 53));
         }
-        addSlot(new Slot(inventory, 4, 62, 17)); // Nails slot
-        addSlot(new Slot(inventory, 5, 140, 35){ // Output slot
+        if (blockEntity.getLayout() == 2) {
+            addSlot(new MaxStackSize1Slot(inventory, 0, 26, 44));
+            addSlot(new MaxStackSize1Slot(inventory, 1, 44, 44));
+            addSlot(new MaxStackSize1Slot(inventory, 2, 62, 44));
+            addSlot(new MaxStackSize1Slot(inventory, 3, 80, 44));
+        }
+        addSlot(new Slot(inventory, 4, 26, 17)); // Nails slot
+        addSlot(new Slot(inventory, 5, 140, 44){ // Output slot
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;
             }
         });
-        addSlot(new FluidItemSlot(inventory, blockEntity.getFluidStorage(), blockEntity::update, 6, 26, 17)); // Fluid slot
+        addSlot(new FluidItemSlot(inventory, blockEntity.getFluidStorage(), blockEntity::update, 6, 109, 17)); // Fluid slot
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
     }
 
     @Override
-    public void setStackInSlot(int slot, int revision, ItemStack stack) {
-        super.setStackInSlot(slot, revision, stack);
-
-        if (slot == 6 && this.getSlot(6) instanceof FluidItemSlot fluidItemSlot) {
-            fluidItemSlot.onSlotUpdate(stack);
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+        ItemStack cursorStack = this.getCursorStack();
+        if (slotIndex == 6) {
+            Storage<FluidVariant> itemFluidStorage = ContainerItemContext.ofPlayerCursor(player, this).find(FluidStorage.ITEM);
+            if (itemFluidStorage != null) {
+                if (button == 0) {
+                    // Left click is try add fluid into slot
+                    itemFluidStorage.iterator().forEachRemaining(fluidVariantStorageView -> {
+                        if (fluidVariantStorageView.getAmount() > 0.0f) {
+                            long acceptedAmount = 0;
+                            long transferredAmount = 0;
+                            try(Transaction transaction = Transaction.openOuter()) {
+                                acceptedAmount = this.blockEntity.getFluidStorage().insert(fluidVariantStorageView.getResource(), fluidVariantStorageView.getAmount(), transaction);
+                                System.out.println(acceptedAmount);
+                                if (acceptedAmount > 0.0f) {
+                                    transferredAmount = itemFluidStorage.extract(fluidVariantStorageView.getResource(), acceptedAmount, transaction);
+                                    System.out.println(transferredAmount);
+                                    if (transferredAmount == acceptedAmount) {
+                                        transaction.commit();
+                                        this.blockEntity.update();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else if (button == 1 && this.blockEntity.getFluidStorage().getAmount() > 0.0f) {
+                    // Right click is try retreive fluid from slot
+                    long acceptedAmount = 0;
+                    long transferredAmount = 0;
+                    try(Transaction transaction = Transaction.openOuter()) {
+                        acceptedAmount = itemFluidStorage.insert(this.blockEntity.getFluidStorage().variant, FluidConstants.BUCKET, transaction);
+                        System.out.println(acceptedAmount);
+                        if (acceptedAmount > 0.0f) {
+                            transferredAmount = this.blockEntity.getFluidStorage().extract(this.blockEntity.getFluidStorage().variant, acceptedAmount, transaction);
+                            System.out.println(transferredAmount);
+                            if (transferredAmount == acceptedAmount) {
+                                transaction.commit();
+                                this.blockEntity.update();
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            super.onSlotClick(slotIndex, button, actionType, player);
         }
     }
 
@@ -74,6 +128,7 @@ public class CarpentryScreenHandler extends ScreenHandler {
         switch (id) {
             case 0 -> {hammer(); return true;}
             case 1 -> {saw(); return true;}
+            case 2 -> {grid(); return true;}
             default -> {
                 return false;
             }
@@ -82,17 +137,24 @@ public class CarpentryScreenHandler extends ScreenHandler {
 
     public void changeLayoutSlots(int layout) {
         if (layout == 0) {
-            this.slots.set(0, new MaxStackSize1Slot(this.inventory, 0, 17, 35));
-            this.slots.set(1, new MaxStackSize1Slot(this.inventory, 1, 35, 35));
-            this.slots.set(2, new MaxStackSize1Slot(this.inventory, 2, 17, 53));
-            this.slots.set(3, new MaxStackSize1Slot(this.inventory, 3, 35, 53));
+            this.slots.set(0,new MaxStackSize1Slot(inventory, 0, 44, 35));
+            this.slots.set(1,new MaxStackSize1Slot(inventory, 1, 62, 35));
+            this.slots.set(2,new MaxStackSize1Slot(inventory, 2, 44, 53));
+            this.slots.set(3,new MaxStackSize1Slot(inventory, 3, 62, 53));
         }
         if (layout == 1) {
-            this.slots.set(0, new MaxStackSize1Slot(this.inventory, 0, 26, 35));
-            this.slots.set(1, new MaxStackSize1Slot(this.inventory, 1, 44, 44));
-            this.slots.set(2, new MaxStackSize1Slot(this.inventory, 2, 26, 53));
-            this.slots.set(3, new MaxStackSize1Slot(this.inventory, 3, 8, 44));
+            this.slots.set(0,new MaxStackSize1Slot(inventory, 0, 53, 35));
+            this.slots.set(1,new MaxStackSize1Slot(inventory, 1, 71, 44));
+            this.slots.set(2,new MaxStackSize1Slot(inventory, 2, 35, 44));
+            this.slots.set(3,new MaxStackSize1Slot(inventory, 3, 53, 53));
         }
+        if (layout == 2) {
+            this.slots.set(0,new MaxStackSize1Slot(inventory, 0, 26, 44));
+            this.slots.set(1,new MaxStackSize1Slot(inventory, 1, 44, 44));
+            this.slots.set(2,new MaxStackSize1Slot(inventory, 2, 62, 44));
+            this.slots.set(3,new MaxStackSize1Slot(inventory, 3, 80, 44));
+        }
+        this.inventory.markDirty();
     }
 
     public void hammer() {
@@ -102,6 +164,11 @@ public class CarpentryScreenHandler extends ScreenHandler {
 
     public void saw() {
         this.blockEntity.saw();
+        this.inventory.markDirty();
+    }
+
+    public void grid() {
+        this.blockEntity.grid();
         this.inventory.markDirty();
     }
 

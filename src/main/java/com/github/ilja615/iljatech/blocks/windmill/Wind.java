@@ -46,7 +46,8 @@ public class Wind {
         return new Pair<WindDirection, Double>(wd, 1.0d);
     }
 
-    public static Vec2f getWindVectorAt(World world, int chunkX, int chunkZ) {
+    public static Vec2f
+    getWindVectorAt(World world, int chunkX, int chunkZ) {
         if (world instanceof ServerWorld serverWorld) {
             long seed = serverWorld.getSeed();
 
@@ -61,5 +62,11 @@ public class Wind {
             return new Vec2f((float) u, (float) v);
         }
         return Vec2f.ZERO;
+    }
+
+    public static Vec2f getWindDirectionUnitVectorAt(World world, int chunkX, int chunkZ) {
+        Vec2f raw = getWindVectorAt(world, chunkX, chunkZ);
+        WindDirection windDirection = getWindFromVector(raw).getLeft();
+        return windDirection.getUnitVector();
     }
 }

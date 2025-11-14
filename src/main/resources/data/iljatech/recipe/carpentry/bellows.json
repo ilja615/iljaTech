@@ -1,21 +1,21 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "redstone",
+  "type": "iljatech:carpentry",
+  "tool": "saw",
   "key": {
     "#": {
-      "tag": "minecraft:planks"
+      "tag": "iljatech:nailed_wooden_boards"
     },
-    "X": {
+    "L": {
       "item": "minecraft:leather"
     }
   },
   "pattern": [
-    "###",
-    "XXX",
-    "###"
+    "L#",
+    "#L"
   ],
   "result": {
     "count": 1,
     "id": "iljatech:bellows"
-  }
+  },
+  "fluid_amount": 8100
 }
