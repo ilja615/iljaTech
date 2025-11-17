@@ -11,6 +11,8 @@ public class Wind {
     public static PerlinNoiseSampler X_NOISE = null;
     public static PerlinNoiseSampler Z_NOISE = null;
 
+    public static long seed;
+
     private static final double TAN1_8 = 0.41421356237;
     private static final double TAN3_8 = 2.41421356237;
     private static final double TAN5_8 = -2.41421356237;
@@ -48,23 +50,23 @@ public class Wind {
 
     public static Vec2f
     getWindVectorAt(World world, int chunkX, int chunkZ) {
-        if (world instanceof ServerWorld serverWorld) {
-            long seed = serverWorld.getSeed();
+        if (world != null && world instanceof ServerWorld serverWorld)
+            seed = serverWorld.getSeed();
 
-            if (X_NOISE == null || Z_NOISE == null) {
-                X_NOISE = new PerlinNoiseSampler(Random.create(seed));
-                Z_NOISE = new PerlinNoiseSampler(Random.create(-1*seed));
-            }
-
-            double u = X_NOISE.sample(chunkX / 16.0d, 64.0, chunkZ / 16.0d);
-            double v = Z_NOISE.sample(chunkX / 16.0d, 64.0, chunkZ / 16.0d);
-
-            return new Vec2f((float) u, (float) v);
+        if (X_NOISE == null || Z_NOISE == null) {
+            X_NOISE = new PerlinNoiseSampler(Random.create(seed));
+            Z_NOISE = new PerlinNoiseSampler(Random.create(-1*seed));
         }
-        return Vec2f.ZERO;
+
+        double u = X_NOISE.sample(chunkX / 16.0d, 64.0, chunkZ / 16.0d);
+        double v = Z_NOISE.sample(chunkX / 16.0d, 64.0, chunkZ / 16.0d);
+
+        return new Vec2f((float) u, (float) v);
     }
 
     public static Vec2f getWindDirectionUnitVectorAt(World world, int chunkX, int chunkZ) {
+        if (world != null && world instanceof ServerWorld serverWorld)
+            seed = serverWorld.getSeed();
         Vec2f raw = getWindVectorAt(world, chunkX, chunkZ);
         WindDirection windDirection = getWindFromVector(raw).getLeft();
         return windDirection.getUnitVector();

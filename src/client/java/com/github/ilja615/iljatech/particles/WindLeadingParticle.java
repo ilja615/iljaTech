@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.particles;
 
 import com.github.ilja615.iljatech.blocks.windmill.Wind;
+import com.github.ilja615.iljatech.init.ModParticles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;
@@ -12,31 +13,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import org.joml.Quaternionf;
 
-public class WindParticle extends AnimatedParticle {
+public class WindLeadingParticle extends WindParticle {
 
-    public WindParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
-        super(world, x, y, z, spriteProvider, (float) velocityY);
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.velocityZ = velocityZ;
-        this.maxAge = 60;
-        this.scale = 0.5f;
-        this.setSpriteForAge(spriteProvider);
-    }
-
-    @Override
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
-    }
-
-    @Override
-    public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
-        Quaternionf quaternion = new Quaternionf();
-        Vec2f vector = Wind.getWindDirectionUnitVectorAt(null,(int) x >> 4, (int) z >> 4);
-        quaternion.rotationY( (float)MathHelper.atan2(-vector.y, vector.x));
-        this.method_60373(vertexConsumer, camera, quaternion, tickDelta);
-        quaternion.rotateY(-3.1415927F);
-        this.method_60373(vertexConsumer, camera, quaternion, tickDelta);
+    public WindLeadingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
+        super(world, x, y, z, velocityX, velocityY, velocityZ, spriteProvider);
+        this.maxAge = 80;
     }
 
     @Override
@@ -49,6 +30,11 @@ public class WindParticle extends AnimatedParticle {
             this.markDead();
         } else {
             this.setSpriteForAge(this.spriteProvider);
+            Vec2f vector = Wind.getWindDirectionUnitVectorAt(null,(int) x >> 4, (int) z >> 4);
+            if (this.age % 3 == 0) {
+                world.addParticle(ModParticles.WIND, x, y, z, 0, 0, 0);
+                this.move(vector.x, 0.0f, vector.y);
+            }
         }
     }
 
@@ -61,7 +47,7 @@ public class WindParticle extends AnimatedParticle {
         }
 
         public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            WindParticle windParticle = new WindParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
+            WindLeadingParticle windParticle = new WindLeadingParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
             return windParticle;
         }
     }

@@ -1,9 +1,12 @@
 package com.github.ilja615.iljatech;
 
+import com.github.ilja615.iljatech.blocks.windmill.Wind;
 import com.github.ilja615.iljatech.color.SpinningFrameColorProvider;
 import com.github.ilja615.iljatech.init.*;
+import com.github.ilja615.iljatech.network.WindRandomizerSeedS2CPayload;
 import com.github.ilja615.iljatech.particles.StarParticle;
 import com.github.ilja615.iljatech.particles.SteamParticle;
+import com.github.ilja615.iljatech.particles.WindLeadingParticle;
 import com.github.ilja615.iljatech.particles.WindParticle;
 import com.github.ilja615.iljatech.renderer.ConveyorBeltRenderer;
 import com.github.ilja615.iljatech.renderer.RollerMillRenderer;
@@ -11,6 +14,7 @@ import com.github.ilja615.iljatech.renderer.WindmillRenderer;
 import com.github.ilja615.iljatech.screen.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
@@ -40,6 +44,7 @@ public class IljaTechClient implements ClientModInitializer {
 		ParticleFactoryRegistry.getInstance().register(ModParticles.STAR, StarParticle.Factory::new);
 		ParticleFactoryRegistry.getInstance().register(ModParticles.STEAM, SteamParticle.Factory::new);
 		ParticleFactoryRegistry.getInstance().register(ModParticles.WIND, WindParticle.Factory::new);
+		ParticleFactoryRegistry.getInstance().register(ModParticles.WIND_LEADING, WindLeadingParticle.Factory::new);
 
 		// Bind screen to Handler
 		HandledScreens.register(ModScreenHandlerTypes.FOUNDRY, FoundryScreen::new);
@@ -67,5 +72,10 @@ public class IljaTechClient implements ClientModInitializer {
 
 		// Color
 		ColorProviderRegistry.BLOCK.register(new SpinningFrameColorProvider(), ModBlocks.SPINNING_FRAME);
+
+		// Packet receiver
+		ClientPlayNetworking.registerGlobalReceiver(WindRandomizerSeedS2CPayload.ID, (payload, context) -> {
+			Wind.seed = payload.seed();
+		});
 	}
 }
