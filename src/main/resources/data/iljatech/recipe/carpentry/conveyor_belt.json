@@ -1,6 +1,6 @@
 {
   "type": "iljatech:carpentry",
-  "tool": "hammer",
+  "layout": 2,
   "key": {
     "#": {
       "tag": "iljatech:wooden_frames"

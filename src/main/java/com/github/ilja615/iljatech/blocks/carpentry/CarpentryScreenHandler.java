@@ -2,6 +2,7 @@ package com.github.ilja615.iljatech.blocks.carpentry;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModFluids;
+import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.FluidItemSlot;
@@ -22,6 +23,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.util.Pair;
 
 import java.util.Optional;
 
@@ -54,12 +56,6 @@ public class CarpentryScreenHandler extends ScreenHandler {
             addSlot(new MaxStackSize1Slot(inventory, 1, 71, 44));
             addSlot(new MaxStackSize1Slot(inventory, 2, 35, 44));
             addSlot(new MaxStackSize1Slot(inventory, 3, 53, 53));
-        }
-        if (blockEntity.getLayout() == 2) {
-            addSlot(new MaxStackSize1Slot(inventory, 0, 26, 44));
-            addSlot(new MaxStackSize1Slot(inventory, 1, 44, 44));
-            addSlot(new MaxStackSize1Slot(inventory, 2, 62, 44));
-            addSlot(new MaxStackSize1Slot(inventory, 3, 80, 44));
         }
         addSlot(new Slot(inventory, 4, 26, 17)); // Nails slot
         addSlot(new Slot(inventory, 5, 140, 44){ // Output slot
@@ -129,6 +125,7 @@ public class CarpentryScreenHandler extends ScreenHandler {
             case 0 -> {hammer(); return true;}
             case 1 -> {saw(); return true;}
             case 2 -> {grid(); return true;}
+            case 3 -> {finish(); return true;}
             default -> {
                 return false;
             }
@@ -148,12 +145,6 @@ public class CarpentryScreenHandler extends ScreenHandler {
             this.slots.set(2,new MaxStackSize1Slot(inventory, 2, 35, 44));
             this.slots.set(3,new MaxStackSize1Slot(inventory, 3, 53, 53));
         }
-        if (layout == 2) {
-            this.slots.set(0,new MaxStackSize1Slot(inventory, 0, 26, 44));
-            this.slots.set(1,new MaxStackSize1Slot(inventory, 1, 44, 44));
-            this.slots.set(2,new MaxStackSize1Slot(inventory, 2, 62, 44));
-            this.slots.set(3,new MaxStackSize1Slot(inventory, 3, 80, 44));
-        }
         this.inventory.markDirty();
     }
 
@@ -167,9 +158,32 @@ public class CarpentryScreenHandler extends ScreenHandler {
         this.inventory.markDirty();
     }
 
+    public void finish() {
+        this.blockEntity.finish();
+        this.inventory.markDirty();
+    }
+
     public void grid() {
         this.blockEntity.grid();
         this.inventory.markDirty();
+    }
+
+    public Pair<Boolean, String> canHammer() {
+        if (!inventory.getStack(4).isEmpty() && inventory.getStack(4).isOf(ModItems.IRON_NAILS)) {
+            return new Pair<>(true, "");
+        } else {
+            return new Pair<>(false, "Missing Nails");
+        }
+    }
+
+    public Pair<Boolean, String> canFinish() {
+        this.blockEntity.checkRecipes();
+        String craftingStatus = this.blockEntity.getCraftingStatus();
+        if (craftingStatus.isEmpty()) {
+            return new Pair<>(true, "");
+        } else {
+            return new Pair<>(false, craftingStatus);
+        }
     }
 
     private void addPlayerInventory(PlayerInventory playerInv) {

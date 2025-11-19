@@ -1,26 +1,23 @@
 package com.github.ilja615.iljatech.blocks.carpentry;
 
-import com.github.ilja615.iljatech.blocks.foundry.FoundryRecipe;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.recipe.input.RecipeInput;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
-public record CarpentryRecipe(String tool, RawShapedRecipe raw, ItemStack result, int fluidAmount) implements Recipe<CraftingRecipeInput> {
+public record CarpentryRecipe(int layout, RawShapedRecipe raw, ItemStack result, int fluidAmount) implements Recipe<CraftingRecipeInput> {
 
     public static final MapCodec<CarpentryRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Codec.STRING.fieldOf("tool").forGetter(CarpentryRecipe::tool),
+                    Codec.INT.fieldOf("layout").forGetter(CarpentryRecipe::layout),
                     RawShapedRecipe.CODEC.forGetter(CarpentryRecipe::raw),
                     ItemStack.CODEC.fieldOf("result").forGetter(CarpentryRecipe::result),
                     Codec.INT.fieldOf("fluid_amount").forGetter(CarpentryRecipe::fluidAmount)
@@ -28,8 +25,8 @@ public record CarpentryRecipe(String tool, RawShapedRecipe raw, ItemStack result
     );
 
     public static final PacketCodec<RegistryByteBuf, CarpentryRecipe> PACKET_CODEC = PacketCodec.tuple(
-            PacketCodecs.STRING,
-            CarpentryRecipe::tool,
+            PacketCodecs.INTEGER,
+            CarpentryRecipe::layout,
             RawShapedRecipe.PACKET_CODEC,
             CarpentryRecipe::raw,
             ItemStack.PACKET_CODEC,
