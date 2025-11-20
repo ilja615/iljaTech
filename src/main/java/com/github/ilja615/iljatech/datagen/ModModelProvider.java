@@ -93,8 +93,6 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ITEM_HATCH);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.STEEL_BLOCK);
 
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.WOODEN_SCAFFOLDING);
-
         var limestoneFamily = new BlockFamily.Builder(ModBlocks.LIMESTONE)
                 .slab(ModBlocks.LIMESTONE_SLAB)
                 .stairs(ModBlocks.LIMESTONE_STAIRS)

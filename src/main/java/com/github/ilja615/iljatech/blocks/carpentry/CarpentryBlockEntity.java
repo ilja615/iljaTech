@@ -150,6 +150,7 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
                     itemStack.decrement(1);
                 });
                 fluidStorage.amount -= r.fluidAmount();
+                this.craftingStatus = "No recipe match.";
             } else if (inventory.getStack(5).getItem() == output.getItem() &&
                     inventory.getStack(5).getCount() + output.getCount() <= inventory.getStack(5).getMaxCount()) {
                 // In this case the result ItemStack is added to what was already there
@@ -158,6 +159,7 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
                     itemStack.decrement(1);
                 });
                 fluidStorage.amount -= r.fluidAmount();
+                this.craftingStatus = "No recipe match.";
             }
         }
     }

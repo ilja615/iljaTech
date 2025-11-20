@@ -101,7 +101,7 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
         addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL);
         slabDrops(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB);
         addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
-        addDrop(ModBlocks.WOODEN_SCAFFOLDING);
+        addDrop(ModBlocks.CHAIR);
         addDrop(ModBlocks.STEEL_BLOCK);
         pulverizerMillDrops(ModBlocks.PULVERIZER_MILL);
         LootCondition.Builder flaxLootConditionBuilder = BlockStatePropertyLootCondition.builder(ModBlocks.FLAX_SEEDS).properties(StatePredicate.Builder.create().exactMatch(FlaxBlock.AGE, 7).exactMatch(FlaxBlock.HALF, DoubleBlockHalf.UPPER));

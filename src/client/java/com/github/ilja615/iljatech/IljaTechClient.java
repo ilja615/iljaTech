@@ -10,6 +10,7 @@ import com.github.ilja615.iljatech.particles.WindLeadingParticle;
 import com.github.ilja615.iljatech.particles.WindParticle;
 import com.github.ilja615.iljatech.renderer.ConveyorBeltRenderer;
 import com.github.ilja615.iljatech.renderer.RollerMillRenderer;
+import com.github.ilja615.iljatech.renderer.SeatEntityRenderer;
 import com.github.ilja615.iljatech.renderer.WindmillRenderer;
 import com.github.ilja615.iljatech.screen.*;
 import net.fabricmc.api.ClientModInitializer;
@@ -18,6 +19,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
@@ -30,7 +32,7 @@ public class IljaTechClient implements ClientModInitializer {
 		// Block render layers
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
 				ModBlocks.DRILL, ModBlocks.ROLLER_MILL, ModBlocks.COPPER_WIRE, ModBlocks.STOKED_FIRE, ModBlocks.COKE_OVEN,
-				ModBlocks.WOODEN_SCAFFOLDING, ModBlocks.PULVERIZER_MILL, ModBlocks.FLAX_SEEDS, ModBlocks.FLAX, ModBlocks.SPINNING_FRAME,
+				ModBlocks.PULVERIZER_MILL, ModBlocks.FLAX_SEEDS, ModBlocks.FLAX, ModBlocks.SPINNING_FRAME,
 				ModBlocks.ACACIA_FRAME, ModBlocks.BAMBOO_FRAME, ModBlocks.BIRCH_FRAME, ModBlocks.CHERRY_FRAME, ModBlocks.CRIMSON_FRAME,
 				ModBlocks.DARK_OAK_FRAME, ModBlocks.JUNGLE_FRAME, ModBlocks.MANGROVE_FRAME, ModBlocks.OAK_FRAME, ModBlocks.SPRUCE_FRAME, ModBlocks.WARPED_FRAME,
 				ModBlocks.SAWDUST);
@@ -77,5 +79,8 @@ public class IljaTechClient implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(WindRandomizerSeedS2CPayload.ID, (payload, context) -> {
 			Wind.seed = payload.seed();
 		});
+
+		// Entity Renderers
+		EntityRendererRegistry.register(ModEntities.SEAT, SeatEntityRenderer::new);
 	}
 }

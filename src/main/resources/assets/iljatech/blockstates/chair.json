@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "iljatech:block/chair",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "iljatech:block/chair"
+    },
+    "facing=south": {
+      "model": "iljatech:block/chair",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "iljatech:block/chair",
+      "y": 270
+    }
+  }
+}

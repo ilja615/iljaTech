@@ -106,8 +106,6 @@ public class ModBlocks {
     public static final Block RUSTY_IRON_SHEETMETAL_SLAB = registerWithItem("rusty_iron_sheetmetal_slab", new RustingSlabBlock(AbstractBlock.Settings.copy(RUSTY_IRON_SHEETMETAL)));
     public static final Block RUSTY_IRON_SHEETMETAL_STAIRS = registerWithItem("rusty_iron_sheetmetal_stairs", new RustingStairsBlock(RUSTY_IRON_SHEETMETAL.getDefaultState(), AbstractBlock.Settings.copy(RUSTY_IRON_SHEETMETAL)));
 
-    public static final Block WOODEN_SCAFFOLDING = registerWithItem("wooden_scaffold", new Block(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS).nonOpaque()));
-
     public static final Block CRANK = registerWithItem("crank", new CrankBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).pistonBehavior(PistonBehavior.DESTROY).noCollision()));
     public static final Block GEARBOX = registerWithItem("gearbox", new GearBoxBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block WOODEN_SHAFT = registerWithItem("wooden_shaft", new WoodenShaftBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
@@ -121,6 +119,8 @@ public class ModBlocks {
     public static final Block SQUEEZER = registerWithItem("squeezer", new SqueezerBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block SPINNING_FRAME = registerWithItem("spinning_frame", new SpinningFrameBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 3.0F).sounds(BlockSoundGroup.WOOD)));
     public static final Block WIND_VANE = registerWithItem("wind_vane", new WindVaneBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+
+    public static final Block CHAIR = registerWithItem("chair", new ChairBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(1.0F, 4.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
 
     public static final Block STEEL_PIPE = registerWithItem("steel_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).nonOpaque()));
     public static final Block FUNNEL = registerWithItem("funnel", new FunnelBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.DECORATED_POT).nonOpaque()));

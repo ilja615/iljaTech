@@ -90,6 +90,7 @@ public class CarpentryScreenHandler extends ScreenHandler {
                                     System.out.println(transferredAmount);
                                     if (transferredAmount == acceptedAmount) {
                                         transaction.commit();
+                                        this.inventory.markDirty();
                                         this.blockEntity.update();
                                     }
                                 }
@@ -108,6 +109,7 @@ public class CarpentryScreenHandler extends ScreenHandler {
                             System.out.println(transferredAmount);
                             if (transferredAmount == acceptedAmount) {
                                 transaction.commit();
+                                this.inventory.markDirty();
                                 this.blockEntity.update();
                             }
                         }
@@ -177,6 +179,7 @@ public class CarpentryScreenHandler extends ScreenHandler {
     }
 
     public Pair<Boolean, String> canFinish() {
+        this.inventory.markDirty();
         this.blockEntity.checkRecipes();
         String craftingStatus = this.blockEntity.getCraftingStatus();
         if (craftingStatus.isEmpty()) {
