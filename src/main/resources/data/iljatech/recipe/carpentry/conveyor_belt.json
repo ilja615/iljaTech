@@ -1,6 +1,5 @@
 {
   "type": "iljatech:carpentry",
-  "layout": 0,
   "key": {
     "#": {
       "tag": "iljatech:wooden_frames"
@@ -10,11 +9,11 @@
     }
   },
   "pattern": [
-    "XX",
-    "##"
+    "X ",
+    " #"
   ],
   "result": {
-    "count": 8,
+    "count": 6,
     "id": "iljatech:conveyor_belt"
   },
   "fluid_amount": 27000

@@ -34,7 +34,13 @@ public class CarpentryScreenHandler extends ScreenHandler {
 
     // Client Constructor
     public CarpentryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
-        this(syncId, playerInventory, (CarpentryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()), new SimpleInventory(7));
+        super(ModScreenHandlerTypes.CARPENTRY, syncId);
+
+        this.blockEntity = (CarpentryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos());
+        this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
+        this.inventory = new CarpentryInventory(this,7);
+
+        addSlots(playerInventory);
     }
 
     // Main Constructor - (Directly called from server)
@@ -45,29 +51,32 @@ public class CarpentryScreenHandler extends ScreenHandler {
         this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
         this.inventory = inventory;
 
-        if (blockEntity.getLayout() == 0) {
-            addSlot(new MaxStackSize1Slot(inventory, 0, 44, 35));
-            addSlot(new MaxStackSize1Slot(inventory, 1, 62, 35));
-            addSlot(new MaxStackSize1Slot(inventory, 2, 44, 53));
-            addSlot(new MaxStackSize1Slot(inventory, 3, 62, 53));
-        }
-        if (blockEntity.getLayout() == 1) {
-            addSlot(new MaxStackSize1Slot(inventory, 0, 53, 35));
-            addSlot(new MaxStackSize1Slot(inventory, 1, 71, 44));
-            addSlot(new MaxStackSize1Slot(inventory, 2, 35, 44));
-            addSlot(new MaxStackSize1Slot(inventory, 3, 53, 53));
-        }
-        addSlot(new Slot(inventory, 4, 26, 17)); // Nails slot
-        addSlot(new Slot(inventory, 5, 140, 44){ // Output slot
+        addSlots(playerInventory);
+    }
+
+    private void addSlots(PlayerInventory playerInventory) {
+        addSlot(new MaxStackSize1Slot(inventory, 0, 44, 26));
+        addSlot(new MaxStackSize1Slot(inventory, 1, 62, 35));
+        addSlot(new MaxStackSize1Slot(inventory, 2, 26, 35));
+        addSlot(new MaxStackSize1Slot(inventory, 3, 44, 44));
+        addSlot(new Slot(inventory, 4, 8, 17)); // Nails slot
+        addSlot(new Slot(inventory, 5, 148, 35){ // Output slot
             @Override
             public boolean canInsert(ItemStack stack) {
                 return false;
             }
         });
-        addSlot(new FluidItemSlot(inventory, blockEntity.getFluidStorage(), blockEntity::update, 6, 109, 17)); // Fluid slot
+        addSlot(new FluidItemSlot(inventory, blockEntity.getFluidStorage(), blockEntity::update, 6, 103, 17)); // Fluid slot
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
+    }
+
+    @Override
+    public void onContentChanged(Inventory inventory) {
+        this.inventory.markDirty();
+        this.blockEntity.checkRecipes();
+        super.onContentChanged(inventory);
     }
 
     @Override
@@ -126,28 +135,11 @@ public class CarpentryScreenHandler extends ScreenHandler {
         switch (id) {
             case 0 -> {hammer(); return true;}
             case 1 -> {saw(); return true;}
-            case 2 -> {grid(); return true;}
-            case 3 -> {finish(); return true;}
+            case 2 -> {finish(); return true;}
             default -> {
                 return false;
             }
         }
-    }
-
-    public void changeLayoutSlots(int layout) {
-        if (layout == 0) {
-            this.slots.set(0,new MaxStackSize1Slot(inventory, 0, 44, 35));
-            this.slots.set(1,new MaxStackSize1Slot(inventory, 1, 62, 35));
-            this.slots.set(2,new MaxStackSize1Slot(inventory, 2, 44, 53));
-            this.slots.set(3,new MaxStackSize1Slot(inventory, 3, 62, 53));
-        }
-        if (layout == 1) {
-            this.slots.set(0,new MaxStackSize1Slot(inventory, 0, 53, 35));
-            this.slots.set(1,new MaxStackSize1Slot(inventory, 1, 71, 44));
-            this.slots.set(2,new MaxStackSize1Slot(inventory, 2, 35, 44));
-            this.slots.set(3,new MaxStackSize1Slot(inventory, 3, 53, 53));
-        }
-        this.inventory.markDirty();
     }
 
     public void hammer() {
@@ -165,11 +157,6 @@ public class CarpentryScreenHandler extends ScreenHandler {
         this.inventory.markDirty();
     }
 
-    public void grid() {
-        this.blockEntity.grid();
-        this.inventory.markDirty();
-    }
-
     public Pair<Boolean, String> canHammer() {
         if (!inventory.getStack(4).isEmpty() && inventory.getStack(4).isOf(ModItems.IRON_NAILS)) {
             return new Pair<>(true, "");
@@ -180,7 +167,6 @@ public class CarpentryScreenHandler extends ScreenHandler {
 
     public Pair<Boolean, String> canFinish() {
         this.inventory.markDirty();
-        this.blockEntity.checkRecipes();
         String craftingStatus = this.blockEntity.getCraftingStatus();
         if (craftingStatus.isEmpty()) {
             return new Pair<>(true, "");
@@ -217,7 +203,30 @@ public class CarpentryScreenHandler extends ScreenHandler {
         return this.blockEntity;
     }
 
-    public int getLayout() {
-        return this.blockEntity.getLayout();
+    private static class CarpentryInventory extends SimpleInventory {
+        private final ScreenHandler handler;
+
+        public CarpentryInventory(CarpentryScreenHandler handler, int size) {
+            super(size);
+            this.handler = handler;
+        }
+
+        @Override
+        public ItemStack addStack(ItemStack stack) {
+            this.handler.onContentChanged(this);
+            return super.addStack(stack);
+        }
+
+        @Override
+        public ItemStack removeStack(int slot) {
+            this.handler.onContentChanged(this);
+            return super.removeStack(slot);
+        }
+
+        @Override
+        public void setStack(int slot, ItemStack stack) {
+            this.handler.onContentChanged(this);
+            super.setStack(slot, stack);
+        }
     }
 }

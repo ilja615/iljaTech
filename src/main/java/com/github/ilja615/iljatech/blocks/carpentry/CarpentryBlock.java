@@ -23,6 +23,7 @@ public class CarpentryBlock extends Block implements BlockEntityProvider {
         if(!world.isClient) {
             if(world.getBlockEntity(pos) instanceof CarpentryBlockEntity carpentryBlockEntity) {
                 player.openHandledScreen(carpentryBlockEntity);
+                carpentryBlockEntity.checkRecipes();
             }
         }
 

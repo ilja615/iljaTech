@@ -14,10 +14,9 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
-public record CarpentryRecipe(int layout, RawShapedRecipe raw, ItemStack result, int fluidAmount) implements Recipe<CraftingRecipeInput> {
+public record CarpentryRecipe(RawShapedRecipe raw, ItemStack result, int fluidAmount) implements Recipe<CraftingRecipeInput> {
 
     public static final MapCodec<CarpentryRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Codec.INT.fieldOf("layout").forGetter(CarpentryRecipe::layout),
                     RawShapedRecipe.CODEC.forGetter(CarpentryRecipe::raw),
                     ItemStack.CODEC.fieldOf("result").forGetter(CarpentryRecipe::result),
                     Codec.INT.fieldOf("fluid_amount").forGetter(CarpentryRecipe::fluidAmount)
@@ -25,8 +24,6 @@ public record CarpentryRecipe(int layout, RawShapedRecipe raw, ItemStack result,
     );
 
     public static final PacketCodec<RegistryByteBuf, CarpentryRecipe> PACKET_CODEC = PacketCodec.tuple(
-            PacketCodecs.INTEGER,
-            CarpentryRecipe::layout,
             RawShapedRecipe.PACKET_CODEC,
             CarpentryRecipe::raw,
             ItemStack.PACKET_CODEC,

@@ -41,7 +41,6 @@ import java.util.List;
 
 public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPosPayload> {
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".carpentry");
-    private int layout = 0;
     private String craftingStatus = "No recipe match.";
 
     private final SimpleInventory inventory = new SimpleInventory(7) {
@@ -80,6 +79,7 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
 
                     inventory.setStack(i, new ItemStack(Registries.BLOCK.get(id).asItem(), 1));
                     inventory.getStack(4).decrement(1);
+                    checkRecipes();
                     break;
                 }
             }
@@ -98,13 +98,10 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
 
                 createSawdust(world, pos);
                 inventory.setStack(i, new ItemStack(Registries.BLOCK.get(id).asItem(), 1));
+                checkRecipes();
                 break;
             }
         }
-    }
-
-    public void grid() {
-        this.setLayout((this.layout + 1) % 2);
     }
 
     public CarpentryRecipe checkRecipes() {
@@ -120,12 +117,13 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
 
             ItemStack output = r.result().copy();
 
-            if (!output.isEmpty() && r.matches(input, world) && r.layout() == getLayout()) {
+            if (!output.isEmpty() && r.matches(input, world)) {
                 if (fluidStorage.amount >= r.fluidAmount() && (fluidStorage.variant.getFluid().matchesType(ModFluids.STILL_CREOSOTE_OIL) || fluidStorage.variant.getFluid().matchesType(ModFluids.STILL_SEED_OIL))) {
                     checkedRecipe = r;
                     this.craftingStatus = "";
                 } else {
                     this.craftingStatus = "Needs "+(int) (r.fluidAmount() * 1000.0f / FluidConstants.BUCKET)+" mB oil.";
+                    update();
                     return null;
                 }
 
@@ -135,6 +133,7 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
         if (checkedRecipe == null) {
             this.craftingStatus = "No recipe match.";
         }
+        update();
         return checkedRecipe;
     }
 
@@ -151,6 +150,7 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
                 });
                 fluidStorage.amount -= r.fluidAmount();
                 this.craftingStatus = "No recipe match.";
+                update();
             } else if (inventory.getStack(5).getItem() == output.getItem() &&
                     inventory.getStack(5).getCount() + output.getCount() <= inventory.getStack(5).getMaxCount()) {
                 // In this case the result ItemStack is added to what was already there
@@ -160,6 +160,7 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
                 });
                 fluidStorage.amount -= r.fluidAmount();
                 this.craftingStatus = "No recipe match.";
+                update();
             }
         }
     }
@@ -189,7 +190,8 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
-        this.layout = nbt.getInt("Layout");
+
+        this.craftingStatus = nbt.getString("CraftingStatus");
 
         if (nbt.contains("Inventory", NbtElement.COMPOUND_TYPE))
             Inventories.readNbt(nbt.getCompound("Inventory"), this.inventory.getHeldStacks(), registryLookup);
@@ -201,7 +203,8 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);
-        nbt.putInt("Layout", this.layout);
+
+        nbt.putString("CraftingStatus", this.craftingStatus);
 
         var inventoryNbt = new NbtCompound();
         Inventories.writeNbt(inventoryNbt, this.inventory.getHeldStacks(), registryLookup);
@@ -223,17 +226,6 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
         var nbt = super.toInitialChunkDataNbt(registryLookup);
         writeNbt(nbt, registryLookup);
         return nbt;
-    }
-
-    public int getLayout() {
-        return this.layout;
-    }
-
-    public void setLayout(int layout) {
-        if (layout >= 0 && layout < 4) {
-            this.layout = layout;
-            this.update();
-        }
     }
 
     public InventoryStorage getInventoryProvider(Direction direction) {

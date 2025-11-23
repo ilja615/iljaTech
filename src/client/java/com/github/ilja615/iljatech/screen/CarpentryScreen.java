@@ -7,11 +7,13 @@ import com.github.ilja615.iljatech.screen.widget.FluidWidget;
 import com.github.ilja615.iljatech.util.FluidItemSlot;
 import com.github.ilja615.iljatech.util.MaxStackSize1Slot;
 import com.google.common.collect.Lists;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
@@ -49,15 +51,13 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
         this.buttons.clear();
 
         addDrawable(new FluidWidget(this.handler.getBlockEntity().getFluidStorage(),
-                this.x + 109, this.y + 17, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
+                this.x + 103, this.y + 17, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 43, this.y + 16, 18, 18, TEXTURE, 176, 0, this::hammer, this.handler::canHammer));
+        this.addButton(new ConditionalButtonWidget(this.x + 7, this.y + 34, 18, 18, TEXTURE, 176, 0, this::hammer, this.handler::canHammer));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 61, this.y + 16, 18, 18, TEXTURE, 176, 18, this::saw, () -> new Pair<>(true, "")));
+        this.addButton(new ConditionalButtonWidget(this.x + 7, this.y + 52, 18, 18, TEXTURE, 176, 18, this::saw, () -> new Pair<>(true, "")));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 7, this.y + 43, 18, 18, TEXTURE, 176, 36, this::grid, () -> new Pair<>(true, "")));
-
-        this.addButton(new ConditionalButtonWidget(this.x + 108, this.y + 43, 18, 18, TEXTURE, 176, 54, this::finish, this.handler::canFinish));
+        this.addButton(new ConditionalButtonWidget(this.x + 102, this.y + 34, 18, 18, TEXTURE, 176, 36, this::finish, this.handler::canFinish));
     }
 
     public void hammer() {
@@ -68,19 +68,13 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
         this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 1));
     }
 
-    public void grid() {
-        this.handler.changeLayoutSlots((this.handler.getLayout() + 1) % 2);
-        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 2));
-    }
-
     public void finish() {
-        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 3));
+        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 2));
     }
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        context.drawTexture(TEXTURE,this.x + 25, this.y + 34, 176, 72 + 36*((CarpentryScreenHandler) this.handler).getLayout(), 72, 36);
     }
 
     @Override

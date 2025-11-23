@@ -24,7 +24,7 @@ public class SeatEntity extends Entity
     public SeatEntity(World world, BlockPos source, Direction direction) {
         this(world);
         this.setPos(source.getX() + 0.5, source.getY() + 0.5, source.getZ() + 0.5);
-        this.setRotation(direction.getOpposite().asRotation(), 0F);
+        this.setRotation(direction.asRotation(), 0F);
     }
 
     @Override
