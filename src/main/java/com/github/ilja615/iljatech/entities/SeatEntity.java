@@ -47,15 +47,10 @@ public class SeatEntity extends Entity
                 return vec3d;
             }
         }
+        // Fallback option
         pos = this.getBlockPos();
-        d = this.getWorld().getDismountHeight(pos);
-        if (Dismounting.canDismountInBlock(d)) {
-            Vec3d vec3d = Vec3d.ofCenter(pos, d);
-            if (Dismounting.canPlaceEntityAt(this.getWorld(), passenger, passenger.getBoundingBox().offset(vec3d))) {
-                return vec3d;
-            }
-        }
-        return super.updatePassengerForDismount(passenger);
+        Vec3d vec3d = Vec3d.ofCenter(pos, 1.0d);
+        return vec3d;
     }
 
     @Override

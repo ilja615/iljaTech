@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "iljatech:block/windmill_sail_reinforced",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "iljatech:block/windmill_sail_reinforced"
+    },
+    "facing=south": {
+      "model": "iljatech:block/windmill_sail_reinforced",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "iljatech:block/windmill_sail_reinforced",
+      "y": 270
+    }
+  }
+}

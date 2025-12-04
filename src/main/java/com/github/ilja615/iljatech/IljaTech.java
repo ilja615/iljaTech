@@ -45,18 +45,18 @@ public class IljaTech implements ModInitializer {
 
 		ModBlockEntityTypes.registerStorages();
 
-//		ServerTickEvents.START_WORLD_TICK.register(world -> {
-//			if (world.random.nextFloat() < 0.04f) {
-//				world.getPlayers().forEach(player -> {
-//					BlockPos origin = player.getBlockPos().add(world.random.nextInt(33) - 16, 0, + world.random.nextInt(33) - 16);
-//					int x = origin.getX();
-//					int z = origin.getZ();
-//					Vec2f wind = Wind.getWindDirectionUnitVectorAt(world, x >> 4, z >> 4);
-//					world.spawnParticles(ModParticles.WIND_LEADING, x + world.random.nextDouble() - 0.5d, world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, x, z) + world.random.nextDouble() * 2.0d + 2.0d, z + world.random.nextDouble() - 0.5d,
-//							0, wind.x, 0.0d, wind.y, 0.5d);
-//				});
-//			}
-//		});
+		ServerTickEvents.START_WORLD_TICK.register(world -> {
+			if (world.random.nextFloat() < 0.05f) {
+				world.getPlayers().forEach(player -> {
+					BlockPos origin = player.getBlockPos().add(world.random.nextInt(65) - 32, 0, + world.random.nextInt(65) - 32);
+					int x = origin.getX();
+					int z = origin.getZ();
+					Vec2f wind = Wind.getWindDirectionUnitVectorAt(world, x >> 4, z >> 4);
+					world.spawnParticles(ModParticles.WIND_LEADING, x + world.random.nextDouble() - 0.5d, world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, x, z) + world.random.nextDouble() * 2.0d + 3.0d, z + world.random.nextDouble() - 0.5d,
+							0, wind.x, 0.0d, wind.y, 0.5d);
+				});
+			}
+		});
 
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			long seed = server.getOverworld().getSeed();

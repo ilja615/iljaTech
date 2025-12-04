@@ -2,19 +2,16 @@
   "type": "iljatech:carpentry",
   "key": {
     "#": {
-      "tag": "iljatech:wooden_frames"
-    },
-    "X": {
       "tag": "iljatech:nailed_wooden_boards"
     }
   },
   "pattern": [
-    "X ",
-    " #"
+    "#",
+    "#"
   ],
   "result": {
-    "count": 3,
-    "id": "iljatech:chair"
+    "count": 8,
+    "id": "iljatech:wooden_shaft"
   },
   "fluid_amount": 8100
 }

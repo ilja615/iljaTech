@@ -17,6 +17,8 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -32,12 +34,6 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
         super(handler, inventory, title);
         this.backgroundWidth = 176;
         this.backgroundHeight = 166;
-        handler.addListener(new ScreenHandlerListener() {
-            public void onSlotUpdate(ScreenHandler handlerx, int slotId, ItemStack stack) {
-            }
-            public void onPropertyUpdate(ScreenHandler handlerx, int property, int value) {
-            }
-        });
     }
 
     private <T extends ClickableWidget> void addButton(T button) {
@@ -75,6 +71,14 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+    }
+
+    @Override
+    protected void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType) {
+        super.onMouseClick(slot, slotId, button, actionType);
+        if (slot != null) {
+            this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 3));
+        }
     }
 
     @Override

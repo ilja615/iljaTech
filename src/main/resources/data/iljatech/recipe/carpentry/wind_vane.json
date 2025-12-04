@@ -2,19 +2,19 @@
   "type": "iljatech:carpentry",
   "key": {
     "#": {
-      "tag": "iljatech:wooden_frames"
+      "tag": "iljatech:nailed_wooden_boards"
     },
     "X": {
-      "tag": "iljatech:nailed_wooden_boards"
+      "item": "iljatech:cloth"
     }
   },
   "pattern": [
-    "X ",
+    "XX",
     " #"
   ],
   "result": {
-    "count": 3,
-    "id": "iljatech:chair"
+    "count": 2,
+    "id": "iljatech:wind_vane"
   },
   "fluid_amount": 8100
 }

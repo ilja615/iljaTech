@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "iljatech:block/windmill_on",
+      "y": 90
+    },
+    "facing=north": {
       "model": "iljatech:block/windmill_on"
+    },
+    "facing=south": {
+      "model": "iljatech:block/windmill_on",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "iljatech:block/windmill_on",
+      "y": 270
     }
   }
 }

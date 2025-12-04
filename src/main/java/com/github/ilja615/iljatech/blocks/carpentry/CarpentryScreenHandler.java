@@ -38,7 +38,7 @@ public class CarpentryScreenHandler extends ScreenHandler {
 
         this.blockEntity = (CarpentryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos());
         this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
-        this.inventory = new CarpentryInventory(this,7);
+        this.inventory = new SimpleInventory(7);
 
         addSlots(playerInventory);
     }
@@ -70,13 +70,6 @@ public class CarpentryScreenHandler extends ScreenHandler {
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
-    }
-
-    @Override
-    public void onContentChanged(Inventory inventory) {
-        this.inventory.markDirty();
-        this.blockEntity.checkRecipes();
-        super.onContentChanged(inventory);
     }
 
     @Override
@@ -136,6 +129,7 @@ public class CarpentryScreenHandler extends ScreenHandler {
             case 0 -> {hammer(); return true;}
             case 1 -> {saw(); return true;}
             case 2 -> {finish(); return true;}
+            case 3 -> {this.inventory.markDirty(); blockEntity.checkRecipes(); return true;}
             default -> {
                 return false;
             }
@@ -203,30 +197,30 @@ public class CarpentryScreenHandler extends ScreenHandler {
         return this.blockEntity;
     }
 
-    private static class CarpentryInventory extends SimpleInventory {
-        private final ScreenHandler handler;
-
-        public CarpentryInventory(CarpentryScreenHandler handler, int size) {
-            super(size);
-            this.handler = handler;
-        }
-
-        @Override
-        public ItemStack addStack(ItemStack stack) {
-            this.handler.onContentChanged(this);
-            return super.addStack(stack);
-        }
-
-        @Override
-        public ItemStack removeStack(int slot) {
-            this.handler.onContentChanged(this);
-            return super.removeStack(slot);
-        }
-
-        @Override
-        public void setStack(int slot, ItemStack stack) {
-            this.handler.onContentChanged(this);
-            super.setStack(slot, stack);
-        }
-    }
+//    private static class CarpentryInventory extends SimpleInventory {
+//        private final ScreenHandler handler;
+//
+//        public CarpentryInventory(CarpentryScreenHandler handler, int size) {
+//            super(size);
+//            this.handler = handler;
+//        }
+//
+//        @Override
+//        public ItemStack addStack(ItemStack stack) {
+//            this.handler.onContentChanged(this);
+//            return super.addStack(stack);
+//        }
+//
+//        @Override
+//        public ItemStack removeStack(int slot) {
+//            this.handler.onContentChanged(this);
+//            return super.removeStack(slot);
+//        }
+//
+//        @Override
+//        public void setStack(int slot, ItemStack stack) {
+//            this.handler.onContentChanged(this);
+//            super.setStack(slot, stack);
+//        }
+//    }
 }

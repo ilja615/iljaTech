@@ -105,6 +105,8 @@ public class CarpentryBlockEntity extends BlockEntity implements ExtendedScreenH
     }
 
     public CarpentryRecipe checkRecipes() {
+        if (this.world == null || this.world.isClient)
+            return null;
         CarpentryRecipe checkedRecipe = null;
         // Recipe detection and handling
         CraftingRecipeInput input = CraftingRecipeInput.create(2, 2, Arrays.asList(

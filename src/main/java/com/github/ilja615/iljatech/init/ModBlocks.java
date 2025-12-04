@@ -24,6 +24,7 @@ import com.github.ilja615.iljatech.blocks.stampinghammer.HammerBlock;
 import com.github.ilja615.iljatech.blocks.turbine.TurbineBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindVaneBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlock;
+import com.github.ilja615.iljatech.blocks.windmill.WindmillSailBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
@@ -112,8 +113,9 @@ public class ModBlocks {
     public static final Block ROLLER_MILL = registerWithItem("roller_mill", new RollerMillBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
     public static final Block DRILL = registerWithItem("drill", new DrillBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque()));
     public static final Block TURBINE = registerWithItem("turbine", new TurbineBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER)));
-    public static final Block WINDMILL = registerWithItem("windmill", new WindmillBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD)));
-    public static final Block WINDMILL_BLADE = registerWithItem("windmill_blade", new Block(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block WINDMILL = registerWithItem("windmill", new WindmillBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block WINDMILL_SAIL = registerWithItem("windmill_sail", new WindmillSailBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block WINDMILL_SAIL_REINFORCED = registerWithItem("windmill_sail_reinforced", new WindmillSailBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block CONVEYOR_BELT = registerWithItem("conveyor_belt", new ConveyorBeltBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block PULVERIZER_MILL = registerWithItem("pulverizer_mill", new PulverizerMillBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.METAL).nonOpaque()));
     public static final Block SQUEEZER = registerWithItem("squeezer", new SqueezerBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
@@ -121,6 +123,7 @@ public class ModBlocks {
     public static final Block WIND_VANE = registerWithItem("wind_vane", new WindVaneBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
 
     public static final Block CHAIR = registerWithItem("chair", new ChairBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(1.0F, 4.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block RESEARCH_TABLE = registerWithItem("research_table", new Block(AbstractBlock.Settings.create().mapColor(MapColor.BLUE).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
 
     public static final Block STEEL_PIPE = registerWithItem("steel_pipe", new PipeBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).nonOpaque()));
     public static final Block FUNNEL = registerWithItem("funnel", new FunnelBlock(AbstractBlock.Settings.create().mapColor(MapColor.DIRT_BROWN).requiresTool().strength(1.0F, 2.0F).sounds(BlockSoundGroup.DECORATED_POT).nonOpaque()));

@@ -1,5 +1,9 @@
 {
   "textures": [
-    "iljatech:wind_streak_0"
+    "iljatech:wind_streak_down",
+    "iljatech:wind_streak_slightly_down",
+    "iljatech:wind_streak_0",
+    "iljatech:wind_streak_slightly_up",
+    "iljatech:wind_streak_up"
   ]
 }

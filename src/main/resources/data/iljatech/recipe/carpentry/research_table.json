@@ -5,7 +5,7 @@
       "tag": "iljatech:wooden_frames"
     },
     "X": {
-      "tag": "iljatech:nailed_wooden_boards"
+      "item": "iljatech:blue_print"
     }
   },
   "pattern": [
@@ -13,8 +13,8 @@
     " #"
   ],
   "result": {
-    "count": 3,
-    "id": "iljatech:chair"
+    "count": 1,
+    "id": "iljatech:research_table"
   },
-  "fluid_amount": 8100
+  "fluid_amount": 27000
 }

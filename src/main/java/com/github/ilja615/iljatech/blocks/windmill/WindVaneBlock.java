@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks.windmill;
 
+import com.github.ilja615.iljatech.init.ModParticles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -20,6 +22,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
@@ -104,5 +107,15 @@ public class WindVaneBlock extends Block {
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(WIND_DIRECTION, HALF);
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        super.randomDisplayTick(state, world, pos, random);
+        if (state.get(HALF) != DoubleBlockHalf.UPPER)
+            return;
+        if (world.random.nextFloat() < 0.1f) {
+            world.addParticle(ModParticles.WIND_LEADING, pos.getX() + 0.5d, pos.getY() + 0.8d, pos.getZ() + 0.5d, 0.0, 0.0, 0.0);
+        }
     }
 }

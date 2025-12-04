@@ -4,6 +4,7 @@ import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.energy.MechPwrSender;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -12,15 +13,32 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrSender
 {
     public static final EnumProperty<Direction> FACING = Properties.FACING;
+    protected static final VoxelShape Y_SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
+    protected static final VoxelShape Z_SHAPE = Block.createCuboidShape(6.0, 6.0, 0.0, 10.0, 10.0, 16.0);
+    protected static final VoxelShape X_SHAPE = Block.createCuboidShape(0.0, 6.0, 6.0, 16.0, 10.0, 10.0);
 
     public WoodenShaftBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(MECH_PWR, 0).with(FACING, Direction.UP).with(SCHEDULE_STOP, false));
+    }
+
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        switch ((state.get(FACING)).getAxis()) {
+            case X:
+            default:
+                return X_SHAPE;
+            case Z:
+                return Z_SHAPE;
+            case Y:
+                return Y_SHAPE;
+        }
     }
 
     @Override
@@ -50,9 +68,17 @@ public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrS
     @Override
     public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom)
     {
-        // Gearbox can only accept power from its input facing direction
         BlockState state = world.getBlockState(thisPos);
-        return (state.getProperties().contains(FACING) && state.get(FACING) == sideFrom && state.getProperties().contains(MECH_PWR));
+        if (state.getProperties().contains(FACING) && state.getProperties().contains(MECH_PWR)) {
+            if (state.get(FACING) == sideFrom) {
+                return true;
+            }
+            if (state.get(FACING) == sideFrom.getOpposite() && state.get(MECH_PWR) == 0 && !state.get(SCHEDULE_STOP)) {
+                world.setBlockState(thisPos, state.with(FACING, sideFrom));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
