@@ -72,7 +72,14 @@ public class WindmillBlock extends HorizontalFacingBlock implements BlockEntityP
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        toggle(state, world, pos);
+        if (world instanceof ServerWorld) {
+            Vec2f vector = Wind.getWindVectorAt(world, world.getWorldChunk(pos).getPos().x, world.getWorldChunk(pos).getPos().z);
+            Pair<WindDirection, Double> wind = Wind.getWindFromVector(vector);
+            if (wind.getLeft().alignsWith(state.get(FACING).getOpposite()))
+                toggle(state, world, pos);
+            else
+                world.setBlockState(pos, state.with(ON_OFF_PWR, OFF));
+        }
         return ActionResult.SUCCESS;
     }
 

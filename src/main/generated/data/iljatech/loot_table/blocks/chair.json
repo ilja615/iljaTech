@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "iljatech:wooden_scaffold"
+          "name": "iljatech:chair"
         }
       ],
       "rolls": 1.0

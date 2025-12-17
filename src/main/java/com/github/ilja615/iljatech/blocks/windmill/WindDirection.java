@@ -4,6 +4,8 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
 
+import java.util.Arrays;
+
 public enum WindDirection implements StringIdentifiable {
     N("n", new Vec2f(0, -1), new Direction[]{Direction.NORTH}),
     NE("ne", new Vec2f(0.70710678118f, -0.70710678118f), new Direction[]{Direction.NORTH, Direction.EAST}),
@@ -26,6 +28,14 @@ public enum WindDirection implements StringIdentifiable {
 
     public Vec2f getUnitVector() {
         return unitVector;
+    }
+
+    public Direction[] getDirections() {
+        return directions;
+    }
+
+    public boolean alignsWith(Direction direction) {
+        return Arrays.asList(directions).contains(direction);
     }
 
     @Override

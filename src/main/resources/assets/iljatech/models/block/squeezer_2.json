@@ -3,7 +3,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "iljatech:block/squeezer_side_2",
-		"1": "iljatech:block/squeezer_top",
+		"2": "iljatech:block/squeezer",
 		"particle": "iljatech:block/squeezer_side_2"
 	},
 	"elements": [
@@ -63,8 +63,8 @@
 				"east": {"uv": [0, 7, 16, 16], "texture": "#0", "cullface": "east"},
 				"south": {"uv": [0, 7, 16, 16], "texture": "#0", "cullface": "south"},
 				"west": {"uv": [0, 7, 16, 16], "texture": "#0"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#1", "cullface": "up"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+				"up": {"uv": [0, 0, 16, 16], "texture": "#2", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#2"}
 			}
 		}
 	],

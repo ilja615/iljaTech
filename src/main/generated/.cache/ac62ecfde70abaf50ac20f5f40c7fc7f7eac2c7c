@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-09T11:40:06.8258144	iljaTech/Block Loot Tables
+// 1.21.1	2025-12-17T17:27:58.8382451	iljaTech/Block Loot Tables
 4c9b36712616cf5756adeefba44f857460f506bc data\iljatech\loot_table\blocks\raw_aluminium_ore.json
 e65752538de5a5f6e65661be3a6d1a496f128e59 data\iljatech\loot_table\blocks\weathered_iron_sheetmetal.json
 581687b1ad96b482fde4d14ab9ac6ed85588c2af data\iljatech\loot_table\blocks\limestone_wall.json
@@ -33,7 +33,6 @@ b1b58a8dc6202c24d6f7db95ba97b90c8477bad6 data\iljatech\loot_table\blocks\nailed_
 981ad5d6feb5a2e184c2ea39b9d210925bbf6ac2 data\iljatech\loot_table\blocks\firebox.json
 ace315a8d92b425889b2ec54a069adfc200a761b data\iljatech\loot_table\blocks\copper_rod.json
 83105986289ac41d337c2ce7f781f12ab0e2badd data\iljatech\loot_table\blocks\raw_chrome_ore.json
-73fe72e684ed646d909a199e9f4cd8599832899c data\iljatech\loot_table\blocks\wooden_scaffold.json
 cc14c921e441c1e9e5f903dd69aff5bf6956765d data\iljatech\loot_table\blocks\red_sandstone_aluminium_ore.json
 124c9717afb38dabba769bf7827531fe2612aa57 data\iljatech\loot_table\blocks\steel_block.json
 61354b9631fae11ffe3551df13aae5c7bc189824 data\iljatech\loot_table\blocks\item_hatch.json
@@ -50,6 +49,7 @@ eccfd8d77767bdd722926fd48bf95bc8e5675c10 data\iljatech\loot_table\blocks\foundry
 5331250b2b2ef996fbf69d00e0de6c296ea9c008 data\iljatech\loot_table\blocks\raw_nickel_ore.json
 b558b798224a4fe7025f20c8e109932ca9efda36 data\iljatech\loot_table\blocks\deepslate_chrome_ore.json
 bd26728678afe85db667f18bc18f4b19bea24d0c data\iljatech\loot_table\blocks\sandstone_aluminium_ore.json
+a44e39a4c46b8824a216319e3fc328377ff535d0 data\iljatech\loot_table\blocks\chair.json
 604922295e45c157b65bf58e5fc71acd9d8f3398 data\iljatech\loot_table\blocks\nailed_oak_planks.json
 4c4c975477e52a512c44d3db7ff99459e054b4fc data\iljatech\loot_table\blocks\steel_pipe.json
 354354d1918b2d2e79e087089606d1a82086961e data\iljatech\loot_table\blocks\fire_clay.json

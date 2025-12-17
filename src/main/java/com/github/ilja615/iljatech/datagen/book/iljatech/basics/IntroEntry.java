@@ -1,17 +1,18 @@
-package com.github.ilja615.iljatech.datagen.book.iljatech.boiling;
+package com.github.ilja615.iljatech.datagen.book.iljatech.basics;
 
 import com.github.ilja615.iljatech.init.ModItems;
 import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.EntryBackground;
 import com.klikli_dev.modonomicon.api.datagen.EntryProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
+import com.klikli_dev.modonomicon.api.datagen.book.page.BookCraftingRecipePageModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookTextPageModel;
 import com.mojang.datafixers.util.Pair;
 
-public class BoiledEggEntry extends EntryProvider {
-    public static final String ID = "egg";
+public class IntroEntry  extends EntryProvider {
+    public static final String ID = "intro";
 
-    public BoiledEggEntry(CategoryProvider parent) {
+    public IntroEntry(CategoryProvider parent) {
         super(parent);
     }
 
@@ -22,34 +23,32 @@ public class BoiledEggEntry extends EntryProvider {
                 .withText(this.context().pageText())
         );
 
-        this.pageTitle("BOILING Egg");
-        // \s tells java to keep the spaces at the end of the line. Otherwise it will remove.
-        // Due to markdown using multiple spaces to indicate a line break, we need to keep the spaces.
+        this.pageTitle(this.entryName());
         this.pageText("""
-                This is how you can boil an egg.   \s
-                You should put it in a cauldron   \s
-                and then heat it.
+                The world around me is fascinating, and yet full of unanswered questions...   \s
+                Why does metal soften at the kiss of a flame?   \s
+                Why does wood bend one way but snap in another?   \s
+                By studying why different materials and forms of energy behave and interact as they do, I will be able to leverage them.
                 """);
 
         this.page("page2", () -> BookTextPageModel.create()
                 .withText(this.context().pageText())
         );
+
         this.pageText("""
-                You can heat it with a   \s
-                stoked fire or a {0}
-                """,
-                this.color("Firebox!", 0x55FF55)
-        );
+                So, I decided to put together this book, in which I can keep writing my notes as I learn, in one collected place.
+                Perhaps in doing so, I will also gain clarity on the path forward; everything I still must learn.
+                """);
     }
 
     @Override
     protected String entryName() {
-        return "Boiling Egg Entry";
+        return "Research Notes";
     }
 
     @Override
     protected String entryDescription() {
-        return "An entry showcasing boiled egg.";
+        return "On this notebook...";
     }
 
     @Override
@@ -59,7 +58,7 @@ public class BoiledEggEntry extends EntryProvider {
 
     @Override
     protected BookIconModel entryIcon() {
-        return BookIconModel.create(ModItems.BOILED_EGG);
+        return BookIconModel.create(ModItems.BOOK);
     }
 
     @Override

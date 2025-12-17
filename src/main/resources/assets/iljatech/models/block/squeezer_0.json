@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "iljatech:block/squeezer_side_0",
-		"1": "iljatech:block/squeezer_top",
 		"3": "iljatech:block/squeezer_inside",
+		"4": "iljatech:block/squeezer",
 		"particle": "iljatech:block/squeezer_side_0"
 	},
 	"elements": [
@@ -17,7 +17,7 @@
 				"south": {"uv": [0, 7, 16, 16], "texture": "#0", "cullface": "south"},
 				"west": {"uv": [0, 7, 16, 16], "texture": "#0"},
 				"up": {"uv": [0, 0, 16, 16], "texture": "#3", "cullface": "up"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+				"down": {"uv": [0, 0, 16, 16], "texture": "#4"}
 			}
 		},
 		{
@@ -25,12 +25,12 @@
 			"to": [15.01, 15.99, 15.01],
 			"rotation": {"angle": 0, "axis": "y", "origin": [2, 14, 2]},
 			"faces": {
-				"north": {"uv": [1, 0, 15, 2], "texture": "#1"},
-				"east": {"uv": [1, 0, 15, 2], "texture": "#1"},
-				"south": {"uv": [1, 0, 15, 2], "texture": "#1"},
-				"west": {"uv": [1, 0, 15, 2], "texture": "#1"},
-				"up": {"uv": [1, 1, 15, 15], "texture": "#1"},
-				"down": {"uv": [1, 1, 15, 15], "texture": "#1"}
+				"north": {"uv": [1, 0, 15, 2], "texture": "#4"},
+				"east": {"uv": [1, 0, 15, 2], "texture": "#4"},
+				"south": {"uv": [1, 0, 15, 2], "texture": "#4"},
+				"west": {"uv": [1, 0, 15, 2], "texture": "#4"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#4"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#4"}
 			}
 		},
 		{

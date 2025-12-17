@@ -90,8 +90,7 @@ public class WindmillRenderer  implements BlockEntityRenderer<WindmillBlockEntit
         int n = Z_FRAME_0.length;
         for (int i = 0; i < n; i++) {
             String row;
-            if (entity.getCachedState().get(MechPwrAccepter.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.ON)
-                time = (int) entity.getWorld().getTime() % 16;
+            time = entity.getTicks();
             if (time < 4) {
                 row = Z_FRAME_0[i];
             } else if (time < 8) {

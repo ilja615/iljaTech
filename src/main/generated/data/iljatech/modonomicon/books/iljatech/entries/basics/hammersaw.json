@@ -1,0 +1,59 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "basics",
+  "description": "book.iljatech.iljatech.basics.hammersaw.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "iljatech:iron_saw"
+  },
+  "name": "book.iljatech.iljatech.basics.hammersaw.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.basics.hammersaw.page1.text",
+      "title": "book.iljatech.iljatech.basics.hammersaw.page1.title",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "recipe_id_1": "iljatech:iron_hammer",
+      "text": "book.iljatech.iljatech.basics.hammersaw.page2.text",
+      "title1": "",
+      "title2": ""
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "recipe_id_1": "iljatech:iron_plate",
+      "recipe_id_2": "iljatech:iron_saw",
+      "text": "",
+      "title1": "",
+      "title2": ""
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "basics/intro",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 1,
+  "x": -1,
+  "y": 0
+}

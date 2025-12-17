@@ -1,16 +1,10 @@
 package com.github.ilja615.iljatech.datagen.book;
 
 import com.github.ilja615.iljatech.IljaTech;
-import com.github.ilja615.iljatech.datagen.book.iljatech.BoilingCategory;
+import com.github.ilja615.iljatech.datagen.book.iljatech.BasicsCategory;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconLanguageProvider;
 import com.klikli_dev.modonomicon.api.datagen.SingleBookSubProvider;
-import com.klikli_dev.modonomicon.api.datagen.book.BookCommandModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookModel;
-import com.klikli_dev.modonomicon.datagen.book.demo.ConditionalCategory;
-import com.klikli_dev.modonomicon.datagen.book.demo.FeaturesCategory;
-import com.klikli_dev.modonomicon.datagen.book.demo.FormattingCategory;
-import com.klikli_dev.modonomicon.datagen.book.demo.IndexModeCategory;
-import com.klikli_dev.modonomicon.datagen.book.demo.features.ConditionRootEntry;
 import net.minecraft.util.Identifier;
 
 public class IljaTechBook extends SingleBookSubProvider {
@@ -28,18 +22,18 @@ public class IljaTechBook extends SingleBookSubProvider {
 
     @Override
     protected void generateCategories() {
-        //for the two big categories we use the category provider
-        var boilingCategory = this.add(new BoilingCategory(this).generate());
+        var basicsCategory = this.add(new BasicsCategory(this).generate());
     }
 
     @Override
     protected String bookName() {
-        return "IljaTech Book";
+        return "Engineer's Journal (Unfinished)";
     }
 
     @Override
     protected String bookTooltip() {
-        return "A book for IljaTech research";
+        return "A collection of my notes, on\n how the world around me behaves\n and my designs of technology that leverage this...";
+
     }
 
     @Override
@@ -48,6 +42,7 @@ public class IljaTechBook extends SingleBookSubProvider {
                 .withBookTextOffsetX(5)
                 .withBookTextOffsetY(0)
                 .withBookTextOffsetWidth(-5)
+                .withAutoAddReadConditions(true)
                 .withAllowOpenBooksWithInvalidLinks(true);
     }
 }

@@ -8,11 +8,11 @@
   "display_mode": "node",
   "entry_textures": "modonomicon:textures/gui/entry_textures.png",
   "icon": {
-    "item": "minecraft:cauldron"
+    "item": "iljatech:iron_hammer"
   },
   "max_scroll_x": 512,
   "max_scroll_y": 512,
-  "name": "book.iljatech.iljatech.boiling.name",
+  "name": "book.iljatech.iljatech.basics.name",
   "show_category_button": true,
   "sort_number": 0
 }

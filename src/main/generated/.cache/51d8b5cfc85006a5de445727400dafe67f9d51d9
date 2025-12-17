@@ -1,4 +1,11 @@
-// 1.21.1	2025-11-09T11:40:06.8218115	iljaTech/Books: iljatech
-4a2fcd2301c0592b9185afbda548dc131a161ec0 data\iljatech\modonomicon\books\iljatech\categories\boiling.json
-70c37055ae197659e298215bbc36d414301a4c5a data\iljatech\modonomicon\books\iljatech\entries\boiling\egg.json
-609cc99a0dcba50e546c2cc0819df4596b82298e data\iljatech\modonomicon\books\iljatech\book.json
+// 1.21.1	2025-12-17T17:27:58.8337281	iljaTech/Books: iljatech
+e61ee66be03938605af3d7be2b553f0245d95e75 data\iljatech\modonomicon\books\iljatech\categories\basics.json
+8a877a1dd8c08118b78dba6dc4682cd1cf898fb2 data\iljatech\modonomicon\books\iljatech\entries\basics\research.json
+27dcd18ab1bd05c4f971f3e490219a2c13eaf4e5 data\iljatech\modonomicon\books\iljatech\entries\basics\mech.json
+07eebc9f8e32194b6286e2cead8380ef7f5f3d3b data\iljatech\modonomicon\books\iljatech\entries\basics\hammersaw.json
+9fbe3aa31d7ce2613c4fcd76185e470683d83b3c data\iljatech\modonomicon\books\iljatech\entries\basics\carpentry.json
+08c66ac20863772be5460b0e3f365506ba7c5b78 data\iljatech\modonomicon\books\iljatech\entries\basics\squeezer.json
+73d155659d7555754ff4f67200c9c07133fada1f data\iljatech\modonomicon\books\iljatech\entries\basics\spinning.json
+f12e26f44c5c28c5476bdc9bdcffe2ce19c01c53 data\iljatech\modonomicon\books\iljatech\entries\basics\intro.json
+8d7c6a13344497f8ab59205aa8efdff7369fea16 data\iljatech\modonomicon\books\iljatech\entries\basics\flax.json
+b8fae3ac94d0b8082fe4ea24ca877ed02b94edf7 data\iljatech\modonomicon\books\iljatech\book.json

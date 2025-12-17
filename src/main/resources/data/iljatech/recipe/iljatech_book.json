@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "iljatech:blue_print"
+    },
+    {
+      "item": "iljatech:blue_print"
+    },
+    {
+      "item": "iljatech:blue_print"
+    }
+  ],
+  "result": {
+    "id": "modonomicon:modonomicon",
+    "components": {
+      "modonomicon:book_id": "iljatech:book"
+    }
+  }
+}

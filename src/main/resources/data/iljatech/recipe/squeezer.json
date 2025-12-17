@@ -5,17 +5,17 @@
     "#": {
       "tag": "minecraft:planks"
     },
-    "X": {
-      "item": "iljatech:tin_plate"
+    "I": {
+      "item": "iljatech:iron_plate"
     },
-    "/": {
-      "item": "minecraft:stick"
+    "X": {
+      "tag": "iljatech:wooden_frames"
     }
   },
   "pattern": [
-    "XXX",
-    "/ /",
-    "###"
+    "XIX",
+    "# #",
+    "#I#"
   ],
   "result": {
     "count": 1,
