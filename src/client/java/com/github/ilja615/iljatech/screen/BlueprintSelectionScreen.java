@@ -43,7 +43,6 @@ public class BlueprintSelectionScreen extends HandledScreen<BlueprintTableScreen
     @Override
     protected void init() {
         super.init();
-        this.handler.updateUnlocks();
     }
 
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -61,7 +60,7 @@ public class BlueprintSelectionScreen extends HandledScreen<BlueprintTableScreen
         if (this.scrollOffset % 2 == 0) {
             for (int i = this.scrollOffset/2 * 3; i < this.scrollOffset/2 * 3 + 6 && i < handler.getAvailableRecipeCount(); i++) {
                 mx = mouseX - (double)(this.x + 9 + (i % 3)*26);
-                my = mouseY - (double)(this.y + i < this.scrollOffset/2 * 3 + 3 ? 16 : 43);
+                my = mouseY - (double)(this.y + (i < this.scrollOffset/2 * 3 + 3 ? 16 : 43));
                 if (mx >= 0.0 && my >= 0.0 && mx < 16.0 && my < 18.0 && ((BlueprintTableScreenHandler)this.handler).onButtonClick(this.client.player, i)) {
                     MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
                     this.client.interactionManager.clickButton(((BlueprintTableScreenHandler)this.handler).syncId, i);
@@ -96,8 +95,6 @@ public class BlueprintSelectionScreen extends HandledScreen<BlueprintTableScreen
             this.scrollAmount = ((float)mouseY - (float)i - 7.5F) / ((float)(j - i) - 15.0F);
             this.scrollAmount = MathHelper.clamp(this.scrollAmount, 0.0F, 1.0F);
             this.scrollOffset = (int)((double)(this.scrollAmount * (float)this.getMaxScroll()) + 0.5);
-            this.handler.setScrollOffset(this.scrollOffset);
-            this.client.interactionManager.clickButton(((BlueprintTableScreenHandler)this.handler).syncId, 1000);
             return true;
         } else {
             return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
@@ -110,8 +107,6 @@ public class BlueprintSelectionScreen extends HandledScreen<BlueprintTableScreen
         float f = (float)verticalAmount / (float)i;
         this.scrollAmount = MathHelper.clamp(this.scrollAmount - f, 0.0F, 1.0F);
         this.scrollOffset = (int)((double)(this.scrollAmount * (float)i) + 0.5);
-        this.handler.setScrollOffset(this.scrollOffset);
-        this.client.interactionManager.clickButton(((BlueprintTableScreenHandler)this.handler).syncId, 1000);
         return true;
     }
 
@@ -173,9 +168,8 @@ public class BlueprintSelectionScreen extends HandledScreen<BlueprintTableScreen
 
             context.getMatrices().push();
             context.getMatrices().translate(0.0F, 0.0F, 400.0F);
-            int n = handler.getSelected() - this.scrollOffset/2 * 3;
-            int bits = this.handler.getUnlocks();
-            String text =  ((bits & (1 << n)) != 0) ? "Already unlocked" : ("Costs " + cost + "pts.");
+
+            String text = "Costs " + cost + "pts.";
             context.drawText(textRenderer, text, this.x + 105, this.y + 23, 16777215 , true);
             text = "Your pts: " + handler.getPoints();
             context.drawText(textRenderer, text, this.x + 105, this.y + 32, 16777215 , true);
@@ -185,33 +179,19 @@ public class BlueprintSelectionScreen extends HandledScreen<BlueprintTableScreen
 
     private void renderRecipeIcons(DrawContext context) {
         List<RecipeEntry<BlueprintingRecipe>> list = this.handler.getAvailableRecipes();
-        int bits = this.handler.getUnlocks();
-        int n = 0;
         if (this.scrollOffset % 2 == 0) {
             for (int i = this.scrollOffset/2 * 3; i < this.scrollOffset/2 * 3 + 6 && i < handler.getAvailableRecipeCount(); i++) {
                 int bx = this.x + 14 + (i % 3)*26;
-                int by = this.y + i < this.scrollOffset/2 * 3 + 3 ? 21 : 48;
+                int by = this.y + (i < this.scrollOffset/2 * 3 + 3 ? 21 : 48);
                 BlueprintingRecipe r = list.get(i).value();
                 context.drawItem(r.output().copy(), bx, by);
-
-                // draw the checkmark if this is unlocked
-                if ((bits & (1 << n)) != 0)
-                    context.drawTexture(TEXTURE, bx+11, by+14, 176, 67, 10, 10);
-                n++;
             }
         } else {
             for (int i = this.scrollOffset * 3 - 3; i < this.scrollOffset * 3 + 3 && i < handler.getAvailableRecipeCount(); i++) {
                 int bx = this.x + 14 + (i % 3) * 26;
-                int cy = this.y + (n < 3 ? 22 : 49);
-                if (n >= 3) {
-                    BlueprintingRecipe r = list.get(i).value();
-                    context.drawItem(r.output().copy(), bx, 35);
-                }
-
-                // draw the checkmark if this is unlocked
-                if ((bits & (1 << n)) != 0)
-                    context.drawTexture(TEXTURE, bx+11, cy, 176, 67, 10, 10);
-                n++;
+                int by = this.y + 35;
+                BlueprintingRecipe r = list.get(i).value();
+                context.drawItem(r.output().copy(), bx, by);
             }
         }
     }

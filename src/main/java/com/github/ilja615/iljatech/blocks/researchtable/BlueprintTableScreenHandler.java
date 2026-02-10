@@ -32,8 +32,6 @@ public class BlueprintTableScreenHandler extends ScreenHandler {
     private final PlayerEntity player;
     private final Property selected;
     private final Property points;
-    private final Property scrollOffset;
-    private final Property unlocks;
 
     private List<RecipeEntry<BlueprintingRecipe>> availableRecipes;
 
@@ -48,8 +46,6 @@ public class BlueprintTableScreenHandler extends ScreenHandler {
 
         this.selected = Property.create();
         this.points = Property.create();
-        this.unlocks = Property.create();
-        this.scrollOffset = Property.create();
         this.context = ScreenHandlerContext.create(playerInventory.player.getWorld(), pos);
 
         this.player = playerInventory.player;
@@ -61,13 +57,9 @@ public class BlueprintTableScreenHandler extends ScreenHandler {
 
         this.addProperty(this.selected);
         this.addProperty(this.points);
-        this.addProperty(this.unlocks);
-        this.addProperty(this.scrollOffset);
 
         this.points.set(this.player.getAttached(ModDataAttachments.RESEARCH_PNTS));
         this.selected.set(999);
-        this.unlocks.set(0);
-        this.scrollOffset.set(0);
     }
 
     private void addPlayerInventory(PlayerInventory playerInv) {
@@ -89,10 +81,6 @@ public class BlueprintTableScreenHandler extends ScreenHandler {
             this.selected.set(i);
             return true;
         }
-        if (i == 1000) {
-            // it means the scrolling bar was moved!
-            updateUnlocks();
-        }
         if (i == 999) {
             // it means the "Ok"/Unlock button was pressed
             BlueprintingRecipe r = getAvailableRecipes().get(this.getSelected()).value();
@@ -104,17 +92,11 @@ public class BlueprintTableScreenHandler extends ScreenHandler {
                 this.points.set(newPts);
                 player.setAttached(ModDataAttachments.RESEARCH_PNTS, newPts);
                 ModCriteria.BLUEPRINT_UNLOCK.trigger(serverPlayer, r.output());
-                updateUnlocks();
 
                 return true;
             }
         }
         return false;
-    }
-
-    public boolean isAlreadyUnlocked(ServerPlayerEntity serverPlayer, int i) {
-        BlueprintingRecipe r = getAvailableRecipes().get(i).value();
-        return isAlreadyUnlocked(serverPlayer, r.output());
     }
 
     public boolean isAlreadyUnlocked(ServerPlayerEntity serverPlayer, ItemStack itemStack) {
@@ -143,36 +125,6 @@ public class BlueprintTableScreenHandler extends ScreenHandler {
 
     public int getSelected() {
         return this.selected.get();
-    }
-
-    public void setScrollOffset(int value0) {
-        this.scrollOffset.set(value0);
-    }
-
-    public void updateUnlocks() {
-        int bits = 0;
-        int so = scrollOffset.get();
-        MinecraftServer server = player.getServer();
-        if (server == null)
-            return;
-
-        ServerPlayerEntity serverPlayer = server.getPlayerManager().getPlayer(player.getUuid());
-
-        // no need to check if the scrollOffset % 0 == 2 like in the screen, because it will show the checkmark any ways
-        int n = 0;
-        for (int i = so * 3; i < so * 3 + 6 && i < getAvailableRecipeCount(); i++) {
-            if (isAlreadyUnlocked(serverPlayer, i))
-                bits |= 1 << n; // Set n-th bit to 1
-            else
-                bits &= ~(1 << n); // Clear n-th bit to 0
-
-            n++;
-        }
-        this.unlocks.set(bits);
-    }
-
-    public int getUnlocks() {
-        return this.unlocks.get();
     }
 
     public List<RecipeEntry<BlueprintingRecipe>> getAvailableRecipes() {

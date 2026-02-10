@@ -40,7 +40,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
         return Advancement.Builder.create()
                 .display(
                         item, // The display icon
-                        Text.literal("Researched "+name), // The title
+                        Text.literal(name+" Researched"), // The title
                         Text.literal("Unlocked "+str+" with the blueprinting"), // The description
                         Identifier.of("textures/gui/advancements/backgrounds/adventure.png"), // Background image used
                         AdvancementFrame.TASK, // Options: TASK, CHALLENGE, GOAL
