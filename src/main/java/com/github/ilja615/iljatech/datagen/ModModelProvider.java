@@ -49,6 +49,8 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.CLOTH, Models.GENERATED);
         itemModelGenerator.register(ModItems.FLAX_FIBER, Models.GENERATED);
         itemModelGenerator.register(ModItems.BLUE_PRINT, Models.GENERATED);
+        itemModelGenerator.register(ModItems.WINDMILL_PART, Models.GENERATED);
+
     }
 
     @Override

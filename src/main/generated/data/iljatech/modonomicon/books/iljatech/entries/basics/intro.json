@@ -30,10 +30,35 @@
       "text": "book.iljatech.iljatech.basics.intro.page2.text",
       "title": "",
       "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:image",
+      "anchor": "",
+      "border": false,
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "images": [
+        "iljatech:textures/gui/book/entry_types_explanation.png"
+      ],
+      "text": "book.iljatech.iljatech.basics.intro.page3.text",
+      "title": "book.iljatech.iljatech.basics.intro.page3.title",
+      "use_legacy_rendering": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.basics.intro.page4.text",
+      "title": "",
+      "use_markdown_in_title": false
     }
   ],
   "show_when_any_parent_unlocked": false,
   "sort_number": 0,
-  "x": -4,
+  "x": -7,
   "y": 0
 }

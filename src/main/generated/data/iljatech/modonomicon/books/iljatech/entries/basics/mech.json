@@ -21,15 +21,16 @@
       "use_markdown_in_title": false
     },
     {
-      "type": "modonomicon:text",
+      "type": "modonomicon:crafting_recipe",
       "anchor": "",
       "condition": {
         "type": "modonomicon:none"
       },
-      "show_title_separator": true,
-      "text": "book.iljatech.iljatech.basics.mech.page2.text",
-      "title": "",
-      "use_markdown_in_title": false
+      "recipe_id_1": "iljatech:crank",
+      "recipe_id_2": "iljatech:wooden_shaft",
+      "text": "",
+      "title1": "",
+      "title2": ""
     }
   ],
   "parents": [
@@ -37,7 +38,7 @@
       "draw_arrow": true,
       "entry": "basics/hammersaw",
       "line_enabled": true,
-      "line_reversed": false
+      "line_reversed": true
     }
   ],
   "show_when_any_parent_unlocked": false,

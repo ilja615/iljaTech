@@ -5,8 +5,12 @@ import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.EntryBackground;
 import com.klikli_dev.modonomicon.api.datagen.EntryProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
+import com.klikli_dev.modonomicon.api.datagen.book.page.BookCraftingRecipePageModel;
+import com.klikli_dev.modonomicon.api.datagen.book.page.BookSpotlightPageModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookTextPageModel;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.item.Items;
+import net.minecraft.recipe.Ingredient;
 
 public class FlaxEntry extends EntryProvider {
     public static final String ID = "flax";
@@ -17,8 +21,9 @@ public class FlaxEntry extends EntryProvider {
 
     @Override
     protected void generatePages() {
-        this.page("page1", () -> BookTextPageModel.create()
+        this.page("page1", () -> BookSpotlightPageModel.create()
                 .withTitle(this.context().pageTitle())
+                .withItem(Ingredient.ofItems(ModBlocks.FLAX))
                 .withText(this.context().pageText())
         );
 
@@ -27,9 +32,16 @@ public class FlaxEntry extends EntryProvider {
                 When I found this plant and cut it down, its stems seem to be very tough.
                 Upon a closer look, I can see how the stem is composed of individual fibers.
                 The strength of these fibers must be what made the stems so tough.
-                Also, its pretty blue fibers will be a good source of dye that I need for my blueprints...
                 """);
 
+        this.page("crafting1", () -> BookTextPageModel.create()
+                .withText(this.context().pageText())
+        );
+
+        this.pageText("""
+                Also, its blue flowers will be a good source for the {0} that I need for my blueprints...
+                """,
+                this.itemLink(Items.BLUE_DYE));
     }
 
     @Override

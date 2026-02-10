@@ -10,19 +10,31 @@
   "name": "book.iljatech.iljatech.basics.flax.name",
   "pages": [
     {
+      "type": "modonomicon:spotlight",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "item": {
+        "item": "iljatech:flax"
+      },
+      "text": "book.iljatech.iljatech.basics.flax.page1.text",
+      "title": "book.iljatech.iljatech.basics.flax.page1.title"
+    },
+    {
       "type": "modonomicon:text",
       "anchor": "",
       "condition": {
         "type": "modonomicon:none"
       },
       "show_title_separator": true,
-      "text": "book.iljatech.iljatech.basics.flax.page1.text",
-      "title": "book.iljatech.iljatech.basics.flax.page1.title",
+      "text": "book.iljatech.iljatech.basics.flax.crafting1.text",
+      "title": "",
       "use_markdown_in_title": false
     }
   ],
   "show_when_any_parent_unlocked": false,
-  "sort_number": 6,
-  "x": 5,
-  "y": 2
+  "sort_number": 7,
+  "x": 3,
+  "y": 1
 }

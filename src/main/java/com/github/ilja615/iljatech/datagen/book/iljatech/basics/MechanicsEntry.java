@@ -6,6 +6,7 @@ import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.EntryBackground;
 import com.klikli_dev.modonomicon.api.datagen.EntryProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
+import com.klikli_dev.modonomicon.api.datagen.book.page.BookCraftingRecipePageModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookTextPageModel;
 import com.mojang.datafixers.util.Pair;
 
@@ -24,17 +25,15 @@ public class MechanicsEntry extends EntryProvider {
         );
 
         this.pageTitle(this.entryName());
-        // Maybe should use [](item://iljatech:crank)
         this.pageText("""
-            Rotational force seems to be the simplest form of useful work. With a {0} I can turn axles to drive more complex machinery.   \s
-            My first attempt should be a {1} capable of stretching metal ingots into rods.
-            If I cut these rods into nails, I will be able to use my hammer for more woodworking.""",
-            this.color("hand-crank", 0xFF5555),
-            this.color("roller mill", 0xFF5555)
+            Rotational force seems to be the simplest form of useful work.
+            With a hand-crank I can turn axles to drive more complex machinery.   \s
+            """
         );
 
-        this.page("page2", () -> BookTextPageModel.create()
-                .withText(this.context().pageText())
+        this.page("page2", () -> BookCraftingRecipePageModel.create()
+                .withRecipeId1("iljatech:crank")
+                .withRecipeId2("iljatech:wooden_shaft")
         );
     }
 
@@ -45,7 +44,7 @@ public class MechanicsEntry extends EntryProvider {
 
     @Override
     protected String entryDescription() {
-        return "On the Basic of Mechanical Power...";
+        return "On the Basics of Mechanical Power...";
     }
 
     @Override

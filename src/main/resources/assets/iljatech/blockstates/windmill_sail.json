@@ -1,18 +1,48 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,variant=0": {
       "model": "iljatech:block/windmill_sail",
       "y": 90
     },
-    "facing=north": {
+    "facing=north,variant=0": {
       "model": "iljatech:block/windmill_sail"
     },
-    "facing=south": {
+    "facing=south,variant=0": {
       "model": "iljatech:block/windmill_sail",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,variant=0": {
       "model": "iljatech:block/windmill_sail",
+      "y": 270
+    },
+    "facing=east,variant=1": {
+      "model": "iljatech:block/windmill_sail_smearframe",
+      "y": 90
+    },
+    "facing=north,variant=1": {
+      "model": "iljatech:block/windmill_sail_smearframe"
+    },
+    "facing=south,variant=1": {
+      "model": "iljatech:block/windmill_sail_smearframe",
+      "y": 180
+    },
+    "facing=west,variant=1": {
+      "model": "iljatech:block/windmill_sail_smearframe",
+      "y": 270
+    },
+    "facing=east,variant=2": {
+      "model": "iljatech:block/windmill_sail_reinforced",
+      "y": 90
+    },
+    "facing=north,variant=2": {
+      "model": "iljatech:block/windmill_sail_reinforced"
+    },
+    "facing=south,variant=2": {
+      "model": "iljatech:block/windmill_sail_reinforced",
+      "y": 180
+    },
+    "facing=west,variant=2": {
+      "model": "iljatech:block/windmill_sail_reinforced",
       "y": 270
     }
   }

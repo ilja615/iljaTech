@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "pulverizer_mill": {
+      "conditions": {
+        "item": {
+          "items": "iljatech:pulverizer_mill"
+        }
+      },
+      "trigger": "iljatech:blueprint_unlock"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": "Unlocked pulverizer_mill with the blueprinting",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "iljatech:bellows"
+    },
+    "title": "Researched Pulverizer_mill"
+  },
+  "requirements": [
+    [
+      "pulverizer_mill"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

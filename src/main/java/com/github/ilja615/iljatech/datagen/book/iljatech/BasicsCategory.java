@@ -6,6 +6,7 @@ import com.github.ilja615.iljatech.init.ModItems;
 import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.SingleBookSubProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookCategoryModel;
+import com.klikli_dev.modonomicon.api.datagen.book.BookEntryParentModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
 import net.minecraft.util.Identifier;
 
@@ -20,12 +21,12 @@ public class BasicsCategory extends CategoryProvider {
     protected String[] generateEntryMap() {
         return new String[]{
                 "_____________________",
-                "_____________________",
-                "_________m__s________",
-                "_____________________",
-                "______i__t_____c__r__",
-                "_____________________",
-                "_______________f__ş__",
+                "____________ŕ________",
+                "_________m___________",
+                "____________s__c__r__",
+                "___i__t______________",
+                "_____________f_______",
+                "_______________ş_____",
                 "_____________________",
                 "_____________________"
         };
@@ -38,32 +39,35 @@ public class BasicsCategory extends CategoryProvider {
         hammerSawEntry.withParent(introEntry);
 
         var mechanicsEntry = this.add(new MechanicsEntry(this).generate('m'));
-        mechanicsEntry.withParent(hammerSawEntry);
+        mechanicsEntry.withParent(BookEntryParentModel.create( hammerSawEntry.getId()).withLineReversed(true));
 
         var squeezerEntry = this.add(new SqueezerEntry(this).generate('s'));
-        squeezerEntry.withParent(mechanicsEntry);
+        squeezerEntry.withParent(BookEntryParentModel.create( mechanicsEntry.getId()).withLineReversed(false));
+        var rollerEntry = this.add(new RollerEntry(this).generate('ŕ'));
+        rollerEntry.withParent(mechanicsEntry);
 
         var carpentryEntry = this.add(new CarpentryEntry(this).generate('c'));
         carpentryEntry.withParent(squeezerEntry);
+        carpentryEntry.withParent(BookEntryParentModel.create( rollerEntry.getId()).withLineReversed(false));
         var researchEntry = this.add(new ResearchEntry(this).generate('r'));
         researchEntry.withParent(carpentryEntry);
 
         var flaxEntry = this.add(new FlaxEntry(this).generate('f'));
         var spinningEntry = this.add(new SpinningEntry(this).generate('ş'));
-        spinningEntry.withParent(flaxEntry);
-        spinningEntry.addParent(this.parent(carpentryEntry).withLineReversed(true));
+        spinningEntry.withParent(carpentryEntry);
+        spinningEntry.addParent(this.parent(flaxEntry).withLineReversed(false));
     }
 
     @Override
     protected BookCategoryModel additionalSetup(BookCategoryModel category) {
-        return super.additionalSetup(category);
-//                .withEntryTextures(Identifier.of(IljaTech.MOD_ID, "textures/gui/entry_textures.png"))
-//                .withBackground(Identifier.of(IljaTech.MOD_ID, "textures/gui/book_background.png"));
+        return super.additionalSetup(category)
+                .withEntryTextures(Identifier.of(IljaTech.MOD_ID, "textures/gui/book/entry_textures.png"))
+                .withBackground(Identifier.of(IljaTech.MOD_ID, "textures/gui/book/book_background.png"));
     }
 
     @Override
     protected String categoryName() {
-        return "Early Fundamentals...";
+        return "Early Fundamentals";
     }
 
     @Override

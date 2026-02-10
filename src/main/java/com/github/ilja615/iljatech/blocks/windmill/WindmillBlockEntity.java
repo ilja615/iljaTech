@@ -64,6 +64,11 @@ public class WindmillBlockEntity extends BlockEntity implements TickableBlockEnt
         nbt.putInt("Ticks", this.ticks);
     }
 
+    @Override
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        return createNbt(registryLookup);
+    }
+
     @Nullable
     @Override
     public Packet<ClientPlayPacketListener> toUpdatePacket() {

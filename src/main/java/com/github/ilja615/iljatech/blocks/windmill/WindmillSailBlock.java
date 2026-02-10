@@ -14,6 +14,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
@@ -28,10 +29,10 @@ import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.OFF;
 
 public class WindmillSailBlock extends HorizontalFacingBlock {
     public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
-
+    public static final IntProperty VARIANT = IntProperty.of("variant", 0, 2);
     public WindmillSailBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(VARIANT, 0));
     }
 
     @Override
@@ -41,7 +42,7 @@ public class WindmillSailBlock extends HorizontalFacingBlock {
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, VARIANT);
     }
 
     @Override

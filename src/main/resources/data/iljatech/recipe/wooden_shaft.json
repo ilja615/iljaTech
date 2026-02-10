@@ -4,10 +4,13 @@
   "key": {
     "#": {
       "tag": "minecraft:planks"
+    },
+    "S": {
+      "item": "iljatech:iron_saw"
     }
   },
   "pattern": [
-    "  #",
+    " S#",
     " # ",
     "#  "
   ],

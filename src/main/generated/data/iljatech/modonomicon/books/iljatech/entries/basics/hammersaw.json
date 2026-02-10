@@ -27,7 +27,8 @@
         "type": "modonomicon:none"
       },
       "recipe_id_1": "iljatech:iron_hammer",
-      "text": "book.iljatech.iljatech.basics.hammersaw.page2.text",
+      "recipe_id_2": "iljatech:iron_plate",
+      "text": "",
       "title1": "",
       "title2": ""
     },
@@ -37,11 +38,24 @@
       "condition": {
         "type": "modonomicon:none"
       },
-      "recipe_id_1": "iljatech:iron_plate",
       "recipe_id_2": "iljatech:iron_saw",
-      "text": "",
+      "text": "book.iljatech.iljatech.basics.hammersaw.page3.text",
       "title1": "",
       "title2": ""
+    },
+    {
+      "type": "modonomicon:image",
+      "anchor": "",
+      "border": false,
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "images": [
+        "iljatech:textures/gui/book/interaction_saw_wooden_frame.png"
+      ],
+      "text": "",
+      "title": "book.iljatech.iljatech.basics.hammersaw.tutorial1.title",
+      "use_legacy_rendering": false
     }
   ],
   "parents": [
@@ -54,6 +68,6 @@
   ],
   "show_when_any_parent_unlocked": false,
   "sort_number": 1,
-  "x": -1,
+  "x": -4,
   "y": 0
 }

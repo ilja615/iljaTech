@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "bellows": {
+      "conditions": {
+        "item": {
+          "items": "iljatech:bellows"
+        }
+      },
+      "trigger": "iljatech:blueprint_unlock"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": "Unlocked bellows with the blueprinting",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "iljatech:bellows"
+    },
+    "title": "Researched Bellows"
+  },
+  "requirements": [
+    [
+      "bellows"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

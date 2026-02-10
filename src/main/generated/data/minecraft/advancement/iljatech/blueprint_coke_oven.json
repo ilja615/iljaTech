@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "coke_oven": {
+      "conditions": {
+        "item": {
+          "items": "iljatech:coke_oven"
+        }
+      },
+      "trigger": "iljatech:blueprint_unlock"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": "Unlocked coke_oven with the blueprinting",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "iljatech:bellows"
+    },
+    "title": "Researched Coke_oven"
+  },
+  "requirements": [
+    [
+      "coke_oven"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,36 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 2,
+  "category": "pyrometallurgy",
+  "description": "book.iljatech.iljatech.pyrometallurgy.pulverizer.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "iljatech:pulverizer_mill"
+  },
+  "name": "book.iljatech.iljatech.pyrometallurgy.pulverizer.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.pyrometallurgy.pulverizer.page1.text",
+      "title": "book.iljatech.iljatech.pyrometallurgy.pulverizer.page1.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/steel",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 10,
+  "x": 8,
+  "y": 2
+}

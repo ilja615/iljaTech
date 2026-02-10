@@ -1,11 +1,11 @@
 {
   "background_u_index": 0,
-  "background_v_index": 0,
+  "background_v_index": 2,
   "category": "basics",
   "description": "book.iljatech.iljatech.basics.spinning.description",
   "hide_while_locked": false,
   "icon": {
-    "item": "iljatech:raw_tin"
+    "item": "iljatech:spinning_frame"
   },
   "name": "book.iljatech.iljatech.basics.spinning.name",
   "pages": [
@@ -24,19 +24,19 @@
   "parents": [
     {
       "draw_arrow": true,
-      "entry": "basics/flax",
+      "entry": "basics/carpentry",
       "line_enabled": true,
       "line_reversed": false
     },
     {
       "draw_arrow": true,
-      "entry": "basics/carpentry",
+      "entry": "basics/flax",
       "line_enabled": true,
-      "line_reversed": true
+      "line_reversed": false
     }
   ],
   "show_when_any_parent_unlocked": false,
-  "sort_number": 7,
-  "x": 8,
+  "sort_number": 8,
+  "x": 5,
   "y": 2
 }

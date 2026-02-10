@@ -7,6 +7,7 @@ import com.klikli_dev.modonomicon.api.datagen.EntryBackground;
 import com.klikli_dev.modonomicon.api.datagen.EntryProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookCraftingRecipePageModel;
+import com.klikli_dev.modonomicon.api.datagen.book.page.BookImagePageModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookTextPageModel;
 import com.mojang.datafixers.util.Pair;
 
@@ -26,21 +27,40 @@ public class SqueezerEntry extends EntryProvider {
 
         this.pageTitle(this.entryName());
         this.pageText("""
-                With the hand crank finished, I wanted to see what else I could do with simple rotational force.
-                While browsing my storage, I noticed a greasy smear on the bottom of the chest, seemingly coming from some seeds that had been crushed under the weight of the other items.
-                Curious... If pressure alone can do that, then perhaps I can squeeze out more of this oily substance.
+                I noticed a greasy substance exists inside seeds.
+                I am curious if by applying enough pressure, I can squeeze this out.
+                A small machine should do the trick.
+                It should consist of a basin where I put the seeds and let the oil accumulate, and a movable plate which I
                 """);
 
-        this.page("page2", () -> BookCraftingRecipePageModel.create()
+        this.page("crafting1", () -> BookCraftingRecipePageModel.create()
                 .withRecipeId1("iljatech:squeezer")
                 .withText(this.context().pageText())
         );
 
         this.pageText("""
-                A small machine should do the trick.
-                A basin where I feed the seeds and collect the oil, and a movable plate which I will press down, by applying mechanical power with the crank.
+                will press down, by applying mechanical power with the crank.
                 By releasing power it should come up again.
                 """);
+
+        this.page("tutorial1", () -> BookImagePageModel.create()
+                        .withTitle(this.context().pageTitle())
+                        .withImages(this.modLoc("textures/gui/book/setup_squeezer.png")))
+                .withBorder(false);
+        this.pageTitle("Working Setup");
+
+
+                this.page("page2", () -> BookTextPageModel.create()
+                .withText(this.context().pageText())
+        );
+
+        this.pageTitle(this.entryName());
+        this.pageText(
+                """
+                    When I want to press a lot of seeds, I should repeatedly power and de-power the squeezer in an {0} way to make it go up and down.
+                    """,
+                this.color("alternating", 0xFF5555)
+        );
     }
 
     @Override
@@ -50,12 +70,12 @@ public class SqueezerEntry extends EntryProvider {
 
     @Override
     protected String entryDescription() {
-        return "On the Squeezing Press Device...";
+        return "Design for a Squeezing Press";
     }
 
     @Override
     protected Pair<Integer, Integer> entryBackground() {
-        return EntryBackground.DEFAULT;
+        return Pair.of(0, 2);
     }
 
     @Override

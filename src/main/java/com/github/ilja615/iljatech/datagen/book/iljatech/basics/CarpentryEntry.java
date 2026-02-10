@@ -25,8 +25,7 @@ public class CarpentryEntry extends EntryProvider {
         this.pageTitle(this.entryName());
         this.pageText("""
                 My latest invention was a success, but for making more complicated designs I am going to need a proper workspace.
-                My next efforts should focus towards making a desk.
-                For making a sturdy desk, I should first make a carpentry bench where I can more efficiently use my hammer and saw.
+                I should first make a carpentry bench where I can more efficiently use my hammer and saw.
                 I should also be able to preserve the wood with the new oil I have extracted.
                 """);
 

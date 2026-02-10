@@ -24,60 +24,60 @@ import java.util.ArrayList;
 public class WindmillRenderer  implements BlockEntityRenderer<WindmillBlockEntity> {
     private final BlockEntityRendererFactory.Context context;
     private final static String[] Z_FRAME_0 = new String[]{
-            "      21     ",
-            "      211    ",
-            "      211    ",
-            "      211    ",
-            " 111  21     ",
-            "11111 2      ",
+            "      201    ",
+            "      2001   ",
+            "      2001   ",
+            " 11_  200_   ",
+            "1000_ 20_    ",
+            "00000_2_     ",
             "222222*222222",
-            "      2 11111",
-            "     12  111 ",
-            "    112      ",
-            "    112      ",
-            "    112      ",
-            "     12      "};
+            "     _2_00000",
+            "    _02 _0001",
+            "   _002  _11 ",
+            "   1002      ",
+            "   1002      ",
+            "    102      "};
     private final static String[] Z_FRAME_1 = new String[]{
-            "             ",
-            "    211      ",
-            "    2111     ",
-            "     211     ",
-            "     21   22 ",
-            "  11  2 2211 ",
-            " 11112*21111 ",
-            " 1122 2  11  ",
-            " 22   12     ",
-            "     112     ",
-            "     1112    ",
-            "      112    ",
-            "             "};
+            "     11      ",
+            "    2001     ",
+            "    2000_    ",
+            "     200_    ",
+            "  __ 20_  22 ",
+            " 100__2_22001",
+            "100002*200001",
+            "10022_2__001 ",
+            " 22  _02 __  ",
+            "    _002     ",
+            "    _0002    ",
+            "     1002    ",
+            "      11     "};
     private final static String[] Z_FRAME_2 = new String[]{
-            "             ",
-            "   11        ",
-            "  2111    2  ",
-            "   211   211 ",
-            "    21  2111 ",
-            "     2 2111  ",
-            "      *      ",
-            "  1112 2     ",
-            " 1112  12    ",
-            " 112   112   ",
-            "  2    1112  ",
-            "        11   ",
-            "             "};
+            "    1        ",
+            "   001       ",
+            "  2000_   2  ",
+            "   200_  200 ",
+            "    20_ 20001",
+            "     2_20001 ",
+            "  ____*____  ",
+            " 10002_2     ",
+            "10002 _02    ",
+            " 002  _002   ",
+            "  2   _0002  ",
+            "       100   ",
+            "        1    "};
     private final static String[] Z_FRAME_3 = new String[]{
             "             ",
-            "       21    ",
-            "       211   ",
-            "  11  2111   ",
-            " 1111 211    ",
-            " 2211 2      ",
-            "   222*222   ",
-            "      2 1122 ",
-            "    112 1111 ",
-            "   1112  11  ",
-            "   112       ",
-            "    12       ",
+            "  11    201  ",
+            " 100_   2001 ",
+            " 0000_ 20001 ",
+            " 2200_ 200_  ",
+            "   222_2__   ",
+            "     _*_     ",
+            "   __2_222   ",
+            "  _002 _0022 ",
+            " 10002 _0000 ",
+            " 1002   _001 ",
+            "  102    11  ",
             "             "};
     private int time = 0;
 
@@ -103,21 +103,22 @@ public class WindmillRenderer  implements BlockEntityRenderer<WindmillBlockEntit
 
             Direction.Axis a = entity.getCachedState().get(WindmillBlock.FACING).getAxis();
             int m = entity.getCachedState().get(WindmillBlock.FACING).getDirection().offset();
+            boolean on = entity.getCachedState().get(MechPwrAccepter.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.ON;
             for (int j = 0; j < n; j++) {
                 char ch = row.toCharArray()[j];
                 int x = a == Direction.Axis.X ? 0 : m * (i - (n - 1) / 2);
                 int y = j-(n-1)/2;
                 int z = a == Direction.Axis.Z ? 0 : m * (i - (n - 1) / 2);
-                if (ch == '1') {
+                if (ch == '0' || ch == '2') {
                     matrices.push();
                     matrices.translate(x,y, z);
                     this.context.getRenderManager().renderBlock(ModBlocks.WINDMILL_SAIL.getDefaultState().with(WindmillSailBlock.FACING, entity.getCachedState().get(WindmillBlock.FACING)), entity.getPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getCutout()), false, entity.getWorld().random);
                     matrices.pop();
                 }
-                if (ch == '2') {
+                if (on && ch == '1') {
                     matrices.push();
                     matrices.translate(x,y, z);
-                    this.context.getRenderManager().renderBlock(ModBlocks.WINDMILL_SAIL_REINFORCED.getDefaultState().with(WindmillSailBlock.FACING, entity.getCachedState().get(WindmillBlock.FACING)), entity.getPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getCutout()), false, entity.getWorld().random);
+                    this.context.getRenderManager().renderBlock(ModBlocks.WINDMILL_SAIL.getDefaultState().with(WindmillSailBlock.VARIANT, 1).with(WindmillSailBlock.FACING, entity.getCachedState().get(WindmillBlock.FACING)), entity.getPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getTranslucent()), false, entity.getWorld().random);
                     matrices.pop();
                 }
             }

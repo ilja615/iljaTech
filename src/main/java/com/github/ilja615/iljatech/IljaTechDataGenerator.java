@@ -27,6 +27,7 @@ public class IljaTechDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(ModWorldGenerator::new);
 		pack.addProvider(ModRecipeProvider::new);
 		pack.addProvider((FabricDataOutput output) -> new ModMultiblockProvider(output));
+		pack.addProvider(ModAdvancementProvider::new);
 
 		//We use a language cache that the book provider can write into
 		var enUsCache = new LanguageProviderCache("en_us");

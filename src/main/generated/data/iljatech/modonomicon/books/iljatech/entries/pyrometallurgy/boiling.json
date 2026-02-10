@@ -1,0 +1,42 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "pyrometallurgy",
+  "description": "book.iljatech.iljatech.pyrometallurgy.boiling.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "minecraft:cauldron"
+  },
+  "name": "book.iljatech.iljatech.pyrometallurgy.boiling.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.pyrometallurgy.boiling.page1.text",
+      "title": "book.iljatech.iljatech.pyrometallurgy.boiling.page1.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/bellows",
+      "line_enabled": true,
+      "line_reversed": false
+    },
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/firebox",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 3,
+  "x": -1,
+  "y": -2
+}

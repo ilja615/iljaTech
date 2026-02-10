@@ -1,0 +1,48 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 1,
+  "category": "pyrometallurgy",
+  "description": "book.iljatech.iljatech.pyrometallurgy.steel.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "iljatech:steel_ingot"
+  },
+  "name": "book.iljatech.iljatech.pyrometallurgy.steel.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.pyrometallurgy.steel.page1.text",
+      "title": "book.iljatech.iljatech.pyrometallurgy.steel.page1.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/pyrolysis",
+      "line_enabled": true,
+      "line_reversed": false
+    },
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/limestone",
+      "line_enabled": true,
+      "line_reversed": true
+    },
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/foundry",
+      "line_enabled": true,
+      "line_reversed": true
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 9,
+  "x": 5,
+  "y": 2
+}

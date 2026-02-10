@@ -24,7 +24,7 @@ public class ResearchEntry extends EntryProvider {
 
         this.pageTitle(this.entryName());
         this.pageText("""
-                
+                My next efforts should focus towards making a desk.
                 """);
 
     }
@@ -36,12 +36,12 @@ public class ResearchEntry extends EntryProvider {
 
     @Override
     protected String entryDescription() {
-        return "On the design of a desk for further studying...";
+        return "Design for a Research Desk";
     }
 
     @Override
     protected Pair<Integer, Integer> entryBackground() {
-        return EntryBackground.DEFAULT;
+        return Pair.of(0, 1);
     }
 
     @Override

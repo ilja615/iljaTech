@@ -1,10 +1,12 @@
 package com.github.ilja615.iljatech.datagen.book.iljatech.basics;
 
+import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.EntryBackground;
 import com.klikli_dev.modonomicon.api.datagen.EntryProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
+import com.klikli_dev.modonomicon.api.datagen.book.page.BookImagePageModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookTextPageModel;
 import com.mojang.datafixers.util.Pair;
 
@@ -24,9 +26,9 @@ public class SpinningEntry extends EntryProvider {
 
         this.pageTitle(this.entryName());
         this.pageText("""
-                If I succeed in extracting the fibers from flax stems, I could then weave these to make cloth.
+                The fibers from the flax stems almost resemble strings. I could then weave these to make cloth.
+                I think it will be not only soft, but also durable, thanks to the sturdiness of these fibers.
                 """);
-
     }
 
     @Override
@@ -36,17 +38,17 @@ public class SpinningEntry extends EntryProvider {
 
     @Override
     protected String entryDescription() {
-        return "On the Spinning of Flax into Fibers...";
+        return "Design for Fiber Spinning Frame";
     }
 
     @Override
     protected Pair<Integer, Integer> entryBackground() {
-        return EntryBackground.DEFAULT;
+        return Pair.of(0, 2);
     }
 
     @Override
     protected BookIconModel entryIcon() {
-        return BookIconModel.create(ModItems.RAW_TIN_ORE);
+        return BookIconModel.create(ModBlocks.SPINNING_FRAME);
     }
 
     @Override

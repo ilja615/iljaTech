@@ -1,6 +1,6 @@
 {
   "background_u_index": 0,
-  "background_v_index": 0,
+  "background_v_index": 2,
   "category": "basics",
   "description": "book.iljatech.iljatech.basics.squeezer.description",
   "hide_while_locked": false,
@@ -27,9 +27,34 @@
         "type": "modonomicon:none"
       },
       "recipe_id_1": "iljatech:squeezer",
-      "text": "book.iljatech.iljatech.basics.squeezer.page2.text",
+      "text": "book.iljatech.iljatech.basics.squeezer.crafting1.text",
       "title1": "",
       "title2": ""
+    },
+    {
+      "type": "modonomicon:image",
+      "anchor": "",
+      "border": false,
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "images": [
+        "iljatech:textures/gui/book/setup_squeezer.png"
+      ],
+      "text": "",
+      "title": "book.iljatech.iljatech.basics.squeezer.tutorial1.title",
+      "use_legacy_rendering": false
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.basics.squeezer.page2.text",
+      "title": "",
+      "use_markdown_in_title": false
     }
   ],
   "parents": [
@@ -43,5 +68,5 @@
   "show_when_any_parent_unlocked": false,
   "sort_number": 3,
   "x": 2,
-  "y": -2
+  "y": -1
 }

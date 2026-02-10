@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "iljatech:windmill_part"
+    },
+    "G": {
+      "item": "iljatech:bronze_gear"
+    }
+  },
+  "pattern": [
+    "###",
+    "#G#",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:windmill"
+  }
+}

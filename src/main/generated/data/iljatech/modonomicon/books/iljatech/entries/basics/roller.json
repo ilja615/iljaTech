@@ -1,0 +1,87 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 2,
+  "category": "basics",
+  "description": "book.iljatech.iljatech.basics.roller.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "iljatech:roller_mill"
+  },
+  "name": "book.iljatech.iljatech.basics.roller.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.basics.roller.page1.text",
+      "title": "book.iljatech.iljatech.basics.roller.page1.title",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "recipe_id_1": "iljatech:iron_cylinder",
+      "recipe_id_2": "iljatech:roller_mill",
+      "text": "",
+      "title1": "",
+      "title2": ""
+    },
+    {
+      "type": "modonomicon:image",
+      "anchor": "",
+      "border": false,
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "images": [
+        "iljatech:textures/gui/book/setup_roller_mill.png"
+      ],
+      "text": "book.iljatech.iljatech.basics.roller.tutorial1.text",
+      "title": "book.iljatech.iljatech.basics.roller.tutorial1.title",
+      "use_legacy_rendering": false
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "recipe_id_1": "iljatech:iron_nails",
+      "text": "book.iljatech.iljatech.basics.roller.crafting1.text",
+      "title1": "",
+      "title2": ""
+    },
+    {
+      "type": "modonomicon:image",
+      "anchor": "",
+      "border": false,
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "images": [
+        "iljatech:textures/gui/book/interaction_hammer_nailed_wooden_board.png"
+      ],
+      "text": "",
+      "title": "book.iljatech.iljatech.basics.roller.tutorial2.title",
+      "use_legacy_rendering": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "basics/mech",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 4,
+  "x": 2,
+  "y": -3
+}

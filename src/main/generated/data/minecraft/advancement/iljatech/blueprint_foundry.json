@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "foundry": {
+      "conditions": {
+        "item": {
+          "items": "iljatech:foundry"
+        }
+      },
+      "trigger": "iljatech:blueprint_unlock"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": "Unlocked foundry with the blueprinting",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "iljatech:bellows"
+    },
+    "title": "Researched Foundry"
+  },
+  "requirements": [
+    [
+      "foundry"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -51,6 +51,8 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("item.iljatech.cloth", "Textile Cloth");
         this.add("item.iljatech.flax_fiber", "Flax Fiber");
         this.add("item.iljatech.blue_print", "Blueprint");
+        this.add("item.iljatech.windmill_part", "Wind-Sail");
+        this.add("item.iljatech.iron_cylinder", "Iron Cylinder");
         this.add("block.iljatech.tin_ore", "Tin Ore");
         this.add("block.iljatech.nickel_ore", "Nickel Ore");
         this.add("block.iljatech.chrome_ore", "Chrome Ore");
@@ -137,6 +139,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.sawdust", "Sawdust");
         this.add("block.iljatech.squeezer", "Squeezer");
         this.add("block.iljatech.spinning_frame", "Spinning Frame");
+        this.add("block.iljatech.research_table", "Research Table");
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
@@ -148,6 +151,10 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("container.iljatech.coke_oven", "Coke Oven");
         this.add("container.iljatech.item_hatch", "Item Hatch");
         this.add("container.iljatech.squeezer", "Squeezer");
+        this.add("container.iljatech.carpentry", "Carpentry");
+        this.add("container.iljatech.research", "Research");
+
+
     }
 
     @Override

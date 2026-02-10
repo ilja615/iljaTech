@@ -38,6 +38,8 @@ public class IljaTech implements ModInitializer {
 		ModFluids.load();
 		ModNetworking.load();
 		ModEntities.load();
+		ModDataAttachments.load();
+		ModCriteria.load();
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);
@@ -45,6 +47,7 @@ public class IljaTech implements ModInitializer {
 
 		ModBlockEntityTypes.registerStorages();
 
+		// TODO: move the wind code elsewhere
 		ServerTickEvents.START_WORLD_TICK.register(world -> {
 			if (world.random.nextFloat() < 0.05f) {
 				world.getPlayers().forEach(player -> {
