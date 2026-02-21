@@ -55,7 +55,7 @@ import java.util.List;
 public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
     public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".coke_oven");
-    public static final int PROCESS_TIME = 120; // 12000 ticks is ten minutes
+    public static final int PROCESS_TIME = 12000; // 12000 ticks is ten minutes
     private final SimpleInventory inventory = new SimpleInventory(3) {
         @Override
         public void markDirty() {

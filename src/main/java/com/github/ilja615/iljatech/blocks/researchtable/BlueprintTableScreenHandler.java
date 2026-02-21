@@ -58,6 +58,7 @@ public class BlueprintTableScreenHandler extends ScreenHandler {
         this.addProperty(this.selected);
         this.addProperty(this.points);
 
+        // TODO: gui wont open if the player has not yet any research pts (null value error)
         this.points.set(this.player.getAttached(ModDataAttachments.RESEARCH_PNTS));
         this.selected.set(999);
     }

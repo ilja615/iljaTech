@@ -1,9 +1,16 @@
 package com.github.ilja615.iljatech.worldgen;
 
 import com.github.ilja615.iljatech.IljaTech;
+import com.github.ilja615.iljatech.blocks.FlaxBlock;
 import com.github.ilja615.iljatech.init.ModBlocks;
+import com.github.ilja615.iljatech.init.ModFeatures;
+import com.github.ilja615.iljatech.worldgen.featureconfigs.DoubleBlockFeatureConfig;
+import com.github.ilja615.iljatech.worldgen.features.DoubleBlockFeature;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SweetBerryBushBlock;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.registry.Registerable;
+import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
@@ -14,6 +21,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.stateprovider.PredicatedStateProvider;
 
 import java.util.List;
@@ -26,8 +34,12 @@ public class ModConfiguredFeatures {
     public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_large_gravel_aluminium_ore");
     public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_CHROME_ORE_KEY = registerKey("overworld_chrome_ore");
     public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_FIRE_CLAY_KEY = registerKey("overworld_fire_clay");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_LIMESTONE_KEY = registerKey("overworld_limestone");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_FLAX_KEY = registerKey("overworld_flax");
 
     public static void bootStrap(Registerable<ConfiguredFeature<?, ?>> context) {
+        RegistryEntryLookup<Feature<?>> registryLookup = context.getRegistryLookup(RegistryKeys.FEATURE);
+
         RuleTest stoneOreReplaceables = new TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslateOreReplaceables = new TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
         RuleTest sandStoneOreReplaceables = new BlockMatchRuleTest(Blocks.SANDSTONE);
@@ -56,6 +68,13 @@ public class ModConfiguredFeatures {
         context.register(OVERWORLD_CHROME_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldChromeTargets, 5)));
         context.register(OVERWORLD_FIRE_CLAY_KEY, new ConfiguredFeature<>(Feature.DISK, new DiskFeatureConfig(
                         PredicatedStateProvider.of(ModBlocks.FIRE_CLAY), BlockPredicate.matchingBlocks(List.of(Blocks.DIRT, ModBlocks.FIRE_CLAY)), UniformIntProvider.create(2, 3), 1)));
+        context.register(OVERWORLD_LIMESTONE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(ruleTest, ModBlocks.LIMESTONE.getDefaultState(), 64)));
+        context.register(OVERWORLD_FLAX_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(
+                ((DoubleBlockFeature) ModFeatures.DOUBLE_BLOCK),
+                new DoubleBlockFeatureConfig(BlockStateProvider.of(ModBlocks.FLAX_SEEDS.getDefaultState().with(FlaxBlock.AGE, 7).with(FlaxBlock.HALF, DoubleBlockHalf.LOWER)),
+                        BlockStateProvider.of(ModBlocks.FLAX_SEEDS.getDefaultState().with(FlaxBlock.AGE, 7).with(FlaxBlock.HALF, DoubleBlockHalf.UPPER))), List.of(Blocks.GRASS_BLOCK),
+                48)));
+
     }
 
     private static RegistryKey<ConfiguredFeature<?, ?>> registerKey(String name) {

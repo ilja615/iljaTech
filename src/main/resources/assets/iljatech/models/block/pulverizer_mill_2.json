@@ -3,7 +3,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "iljatech:block/pulverizer_mill_off",
-		"1": "iljatech:block/pulverizer_mill_end_off",
+		"1": "iljatech:block/pulverizer_mill_end",
 		"particle": "iljatech:block/pulverizer_mill_off"
 	},
 	"elements": [

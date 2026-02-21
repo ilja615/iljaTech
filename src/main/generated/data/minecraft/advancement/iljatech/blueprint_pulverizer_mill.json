@@ -16,9 +16,9 @@
     "hidden": true,
     "icon": {
       "count": 1,
-      "id": "iljatech:bellows"
+      "id": "iljatech:pulverizer_mill"
     },
-    "title": "Researched Pulverizer_mill"
+    "title": "Pulverizer Mill Researched"
   },
   "requirements": [
     [

@@ -24,6 +24,8 @@ public class ModPlacedFeatures {
     public static final RegistryKey<PlacedFeature> OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_large_gravel_aluminium_ore");
     public static final RegistryKey<PlacedFeature> OVERWORLD_CHROME_ORE_KEY = registerKey("overworld_chrome_ore");
     public static final RegistryKey<PlacedFeature> OVERWORLD_FIRE_CLAY_KEY = registerKey("overworld_fire_clay");
+    public static final RegistryKey<PlacedFeature> OVERWORLD_LIMESTONE_KEY = registerKey("overworld_limestone");
+    public static final RegistryKey<PlacedFeature> OVERWORLD_FLAX_KEY = registerKey("overworld_flax");
 
     public static void bootStrap(Registerable<PlacedFeature> context) {
         RegistryEntryLookup<ConfiguredFeature<?, ?>> registryLookup = context.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
@@ -55,6 +57,14 @@ public class ModPlacedFeatures {
         context.register(OVERWORLD_FIRE_CLAY_KEY, new PlacedFeature(
                 registryLookup.getOrThrow(ModConfiguredFeatures.OVERWORLD_FIRE_CLAY_KEY),
                 List.of(SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BlockFilterPlacementModifier.of(BlockPredicate.matchingFluids(Fluids.WATER)), BiomePlacementModifier.of())));
+        context.register(OVERWORLD_LIMESTONE_KEY, new PlacedFeature(
+                registryLookup.getOrThrow(ModConfiguredFeatures.OVERWORLD_LIMESTONE_KEY),
+                List.copyOf(Modifiers.modifiersWithRarity(4,
+                        HeightRangePlacementModifier.uniform(YOffset.fixed(-32), YOffset.fixed(180))))));
+        context.register(OVERWORLD_FLAX_KEY, new PlacedFeature(
+                registryLookup.getOrThrow(ModConfiguredFeatures.OVERWORLD_FLAX_KEY),
+                List.of(RarityFilterPlacementModifier.of(4), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of())));
+
     }
 
     private static RegistryKey<PlacedFeature> registerKey(String name) {

@@ -20,6 +20,7 @@ import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingSlabBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingStairsBlock;
+import com.github.ilja615.iljatech.blocks.sifter.SifterBlock;
 import com.github.ilja615.iljatech.blocks.spinningframe.SpinningFrameBlock;
 import com.github.ilja615.iljatech.blocks.squeezer.SqueezerBlock;
 import com.github.ilja615.iljatech.blocks.stampinghammer.HammerBlock;
@@ -122,6 +123,7 @@ public class ModBlocks {
     public static final Block SQUEEZER = registerWithItem("squeezer", new SqueezerBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block SPINNING_FRAME = registerWithItem("spinning_frame", new SpinningFrameBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).strength(1.0F, 3.0F).sounds(BlockSoundGroup.WOOD)));
     public static final Block WIND_VANE = registerWithItem("wind_vane", new WindVaneBlock(AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block SIFTER = registerWithItem("sifter", new SifterBlock(AbstractBlock.Settings.create().mapColor(MapColor.ORANGE).requiresTool().strength(3.0F, 6.0F).sounds(BlockSoundGroup.COPPER).nonOpaque()));
 
     public static final Block CHAIR = registerWithItem("chair", new ChairBlock(AbstractBlock.Settings.create().mapColor(MapColor.BROWN).strength(1.0F, 4.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));
     public static final Block RESEARCH_TABLE = registerWithItem("research_table", new ResearchTableBlock(AbstractBlock.Settings.create().mapColor(MapColor.BLUE).strength(3.0F, 6.0F).sounds(BlockSoundGroup.WOOD).nonOpaque()));

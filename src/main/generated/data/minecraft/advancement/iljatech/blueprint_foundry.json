@@ -16,9 +16,9 @@
     "hidden": true,
     "icon": {
       "count": 1,
-      "id": "iljatech:bellows"
+      "id": "iljatech:foundry"
     },
-    "title": "Researched Foundry"
+    "title": "Foundry Researched"
   },
   "requirements": [
     [

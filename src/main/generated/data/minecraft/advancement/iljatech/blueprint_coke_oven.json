@@ -16,9 +16,9 @@
     "hidden": true,
     "icon": {
       "count": 1,
-      "id": "iljatech:bellows"
+      "id": "iljatech:coke_oven"
     },
-    "title": "Researched Coke_oven"
+    "title": "Coke Oven Researched"
   },
   "requirements": [
     [

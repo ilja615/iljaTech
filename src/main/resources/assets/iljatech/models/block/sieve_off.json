@@ -2,10 +2,10 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "iljatech:block/sieve_top_on",
-		"1": "iljatech:block/sieve_side_on",
+		"0": "iljatech:block/sieve_top_off",
+		"1": "iljatech:block/sieve_side_off",
 		"2": "iljatech:block/sieve_bottom",
-		"particle": "iljatech:block/sieve_top_on"
+		"particle": "iljatech:block/sieve_top_off"
 	},
 	"elements": [
 		{

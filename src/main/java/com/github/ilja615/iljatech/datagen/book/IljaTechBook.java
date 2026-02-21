@@ -29,12 +29,12 @@ public class IljaTechBook extends SingleBookSubProvider {
 
     @Override
     protected String bookName() {
-        return "Engineer's Journal of Inventions";
+        return "Engineer's Notebook";
     }
 
     @Override
     protected String bookTooltip() {
-        return "Collection of my notes and blueprints";
+        return "Collection of personal research notes & blueprints";
     }
 
     @Override

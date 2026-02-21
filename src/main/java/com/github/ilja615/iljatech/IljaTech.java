@@ -40,6 +40,7 @@ public class IljaTech implements ModInitializer {
 		ModEntities.load();
 		ModDataAttachments.load();
 		ModCriteria.load();
+		ModFeatures.load();
 
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);

@@ -2,6 +2,7 @@ package com.github.ilja615.iljatech.worldgen;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.world.gen.GenerationStep;
 
 public class BiomeModificationEvent {
@@ -40,6 +41,16 @@ public class BiomeModificationEvent {
                 BiomeSelectors.foundInOverworld(),
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_FIRE_CLAY_KEY
+        );
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInOverworld(),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                ModPlacedFeatures.OVERWORLD_LIMESTONE_KEY
+        );
+        BiomeModifications.addFeature(
+                BiomeSelectors.tag(BiomeTags.IS_FOREST),
+                GenerationStep.Feature.VEGETAL_DECORATION,
+                ModPlacedFeatures.OVERWORLD_FLAX_KEY
         );
     }
 }
