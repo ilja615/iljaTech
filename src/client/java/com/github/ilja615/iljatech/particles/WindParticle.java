@@ -1,6 +1,8 @@
 package com.github.ilja615.iljatech.particles;
 
 import com.github.ilja615.iljatech.blocks.windmill.Wind;
+import com.github.ilja615.iljatech.blocks.windmill.WindDirection;
+import com.github.ilja615.iljatech.blocks.windmill.WindParticleType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;
@@ -22,7 +24,7 @@ public class WindParticle extends AnimatedParticle {
     private int deltaY;
     private final static float INCREMENT = 0.25f;
 
-    public WindParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
+    public WindParticle(WindDirection direction, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
         super(world, x, y, z, spriteProvider, (float) velocityY);
         this.velocityX = velocityX;
         this.velocityY = velocityY;
@@ -31,7 +33,9 @@ public class WindParticle extends AnimatedParticle {
         this.scale = 0.5f;
         this.alpha = 0.0f;
 
-        this.vector = Wind.getWindDirectionUnitVectorAt(null,(int) x >> 4, (int) z >> 4);
+        //this.vector = Wind.getWindDirectionUnitVectorAt(null,(int) x >> 4, (int) z >> 4);
+        this.vector = direction.getUnitVector();
+
         int heightY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, (int) this.x, (int) this.z);
         this.deltaY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, (int) (this.x + this.vector.x * 4), (int) (this.z + this.vector.y * 4)) - heightY;
         if (deltaY > 1 && deltaY <= 4) {
@@ -108,15 +112,15 @@ public class WindParticle extends AnimatedParticle {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class Factory implements ParticleFactory<SimpleParticleType> {
+    public static class Factory implements ParticleFactory<WindParticleType> {
         private final SpriteProvider spriteProvider;
 
         public Factory(SpriteProvider spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            WindParticle windParticle = new WindParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
+        public Particle createParticle(WindParticleType windParticleType, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+            WindParticle windParticle = new WindParticle(windParticleType.getDirection(), clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
             return windParticle;
         }
     }

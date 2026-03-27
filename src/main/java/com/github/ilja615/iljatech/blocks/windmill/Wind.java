@@ -71,4 +71,12 @@ public class Wind {
         WindDirection windDirection = getWindFromVector(raw).getLeft();
         return windDirection.getUnitVector();
     }
+
+    public static WindDirection getWindDirectionAt(World world, int chunkX, int chunkZ) {
+        if (world != null && world instanceof ServerWorld serverWorld)
+            seed = serverWorld.getSeed();
+        Vec2f raw = getWindVectorAt(world, chunkX, chunkZ);
+        WindDirection windDirection = getWindFromVector(raw).getLeft();
+        return windDirection;
+    }
 }
