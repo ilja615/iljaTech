@@ -14,6 +14,7 @@ import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.Heightmap;
+import org.joml.Vector2f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +51,12 @@ public class IljaTech implements ModInitializer {
 
 		// TODO: move the wind code elsewhere
 		ServerTickEvents.START_WORLD_TICK.register(world -> {
-			if (world.random.nextFloat() < 0.05f) {
+			if (world.random.nextFloat() < 0.005f) {
 				world.getPlayers().forEach(player -> {
 					BlockPos origin = player.getBlockPos().add(world.random.nextInt(65) - 32, 0, + world.random.nextInt(65) - 32);
 					int x = origin.getX();
 					int z = origin.getZ();
-					Vec2f wind = Wind.getWindDirectionUnitVectorAt(world, x >> 4, z >> 4);
+					Vector2f wind = Wind.getWindDirectionUnitVectorAt(world, x >> 4, z >> 4);
 					world.spawnParticles(ModParticles.WIND_LEADING, x + world.random.nextDouble() - 0.5d, world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, x, z) + world.random.nextDouble() * 2.0d + 3.0d, z + world.random.nextDouble() - 0.5d,
 							0, wind.x, 0.0d, wind.y, 0.5d);
 				});

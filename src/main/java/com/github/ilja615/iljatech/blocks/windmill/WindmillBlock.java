@@ -29,6 +29,7 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.MECH_PWR;
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.ON_OFF_PWR;
@@ -73,7 +74,7 @@ public class WindmillBlock extends HorizontalFacingBlock implements BlockEntityP
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (world instanceof ServerWorld) {
-            Vec2f vector = Wind.getWindVectorAt(world, world.getWorldChunk(pos).getPos().x, world.getWorldChunk(pos).getPos().z);
+            Vector2f vector = Wind.getWindVectorAt(world, world.getWorldChunk(pos).getPos().x, world.getWorldChunk(pos).getPos().z);
             Pair<WindDirection, Double> wind = Wind.getWindFromVector(vector);
             if (wind.getLeft().alignsWith(state.get(FACING).getOpposite()))
                 toggle(state, world, pos);

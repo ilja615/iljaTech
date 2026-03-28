@@ -26,6 +26,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 
 public class WindVaneBlock extends Block {
     public static final EnumProperty<WindDirection> WIND_DIRECTION = EnumProperty.of("wind_direction", WindDirection.class);
@@ -68,7 +69,7 @@ public class WindVaneBlock extends Block {
         World world = ctx.getWorld();
         BlockPos pos = ctx.getBlockPos();
         if (world instanceof ServerWorld) {
-            Vec2f vector = Wind.getWindVectorAt(world, world.getWorldChunk(pos).getPos().x, world.getWorldChunk(pos).getPos().z);
+            Vector2f vector = Wind.getWindVectorAt(world, world.getWorldChunk(pos).getPos().x, world.getWorldChunk(pos).getPos().z);
             Pair<WindDirection, Double> wind = Wind.getWindFromVector(vector);
             return this.getDefaultState().with(WIND_DIRECTION, wind.getLeft());
         }
@@ -115,6 +116,8 @@ public class WindVaneBlock extends Block {
         if (state.get(HALF) != DoubleBlockHalf.UPPER)
             return;
         if (world.random.nextFloat() < 0.1f) {
+//            Vector2f d = Wind.getWindDirectionAt(null,(int) pos.getX() >> 4, (int) pos.getZ() >> 4).getUnitVector();
+//            WindParticleEffect parameters = new WindParticleEffect(d);
             world.addParticle(ModParticles.WIND_LEADING, pos.getX() + 0.5d, pos.getY() + 0.8d, pos.getZ() + 0.5d, 0.0, 0.0, 0.0);
         }
     }

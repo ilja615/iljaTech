@@ -2,29 +2,28 @@ package com.github.ilja615.iljatech.particles;
 
 import com.github.ilja615.iljatech.blocks.windmill.Wind;
 import com.github.ilja615.iljatech.blocks.windmill.WindDirection;
-import com.github.ilja615.iljatech.blocks.windmill.WindParticleType;
+import com.github.ilja615.iljatech.blocks.windmill.WindParticleEffect;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import org.joml.Quaternionf;
-import org.joml.Vector3d;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class WindParticle extends AnimatedParticle {
 
-    private Vec2f vector;
+    private Vector2f vector;
     private int deltaY;
     private final static float INCREMENT = 0.25f;
 
-    public WindParticle(WindDirection direction, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
+    public WindParticle(WindParticleEffect parameters, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
         super(world, x, y, z, spriteProvider, (float) velocityY);
         this.velocityX = velocityX;
         this.velocityY = velocityY;
@@ -34,7 +33,7 @@ public class WindParticle extends AnimatedParticle {
         this.alpha = 0.0f;
 
         //this.vector = Wind.getWindDirectionUnitVectorAt(null,(int) x >> 4, (int) z >> 4);
-        this.vector = direction.getUnitVector();
+        this.vector = parameters.getDirection();
 
         int heightY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, (int) this.x, (int) this.z);
         this.deltaY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, (int) (this.x + this.vector.x * 4), (int) (this.z + this.vector.y * 4)) - heightY;
@@ -112,15 +111,15 @@ public class WindParticle extends AnimatedParticle {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class Factory implements ParticleFactory<WindParticleType> {
+    public static class Factory implements ParticleFactory<WindParticleEffect> {
         private final SpriteProvider spriteProvider;
 
         public Factory(SpriteProvider spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(WindParticleType windParticleType, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            WindParticle windParticle = new WindParticle(windParticleType.getDirection(), clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
+        public Particle createParticle(WindParticleEffect parameters, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+            WindParticle windParticle = new WindParticle(parameters, clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
             return windParticle;
         }
     }
