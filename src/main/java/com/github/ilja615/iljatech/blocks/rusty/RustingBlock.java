@@ -1,28 +1,26 @@
 package com.github.ilja615.iljatech.blocks.rusty;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class RustingBlock extends Block implements Rusting {
 
-    public RustingBlock(Settings settings) {
+    public RustingBlock(Properties settings) {
         super(settings);
     }
 
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         tryRust(state, world, pos, random);
     }
 
-    protected boolean hasRandomTicks(BlockState state) {
+    protected boolean isRandomlyTicking(BlockState state) {
         return getRustyLevel(state) < 3;
     }
 }

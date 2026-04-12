@@ -6,44 +6,44 @@ import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.init.ModSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.inventory.StackReference;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.item.*;
-import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.minecraft.item.Item.BASE_ATTACK_DAMAGE_MODIFIER_ID;
-import static net.minecraft.item.Item.BASE_ATTACK_SPEED_MODIFIER_ID;
+import static net.minecraft.world.item.Item.BASE_ATTACK_DAMAGE_ID;
+import static net.minecraft.world.item.Item.BASE_ATTACK_SPEED_ID;
 
 public class HammerItem extends Item implements FabricItem {
 
@@ -60,128 +60,128 @@ public class HammerItem extends Item implements FabricItem {
         BLOCK_CRACKING_MAP = Collections.unmodifiableMap(aMap);
     }
 
-    public HammerItem(Item.Settings settings) {
+    public HammerItem(Item.Properties settings) {
         super(settings);
     }
 
     @Override
-    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (attacker instanceof PlayerEntity playerAttacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (attacker instanceof Player playerAttacker) {
             // I want to make it so it only works when the weapon cooldown was fully charged but idk how.
 //            System.out.println(playerAttacker.getAttackCooldownProgress(0.0F));
-            target.addStatusEffect(new StatusEffectInstance(ModEffects.STUNNED, 30));
+            target.addEffect(new MobEffectInstance(ModEffects.STUNNED, 30));
         }
-        stack.damage(1, attacker, EquipmentSlot.MAINHAND);
-        if (!attacker.getWorld().isClient) {
-            attacker.getWorld().playSound(null, target.getBlockPos(), ModSounds.HAMMER, SoundCategory.PLAYERS, 2.5f, 1.5f);
+        stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
+        if (!attacker.level().isClientSide) {
+            attacker.level().playSound(null, target.blockPosition(), ModSounds.HAMMER, SoundSource.PLAYERS, 2.5f, 1.5f);
         }
-        return super.postHit(stack, target, attacker);
+        return super.hurtEnemy(stack, target, attacker);
     }
 
     @Override
-    public boolean hasRecipeRemainder() {
+    public boolean hasCraftingRemainingItem() {
         return true;
     }
 
     @Override
     public ItemStack getRecipeRemainder(ItemStack stack) {
-        if (stack.getDamage() < stack.getMaxDamage() - 1) {
+        if (stack.getDamageValue() < stack.getMaxDamage() - 1) {
             ItemStack moreDamaged = stack.copy();
-            moreDamaged.setDamage(stack.getDamage() + 1);
+            moreDamaged.setDamageValue(stack.getDamageValue() + 1);
             return moreDamaged;
         }
         return ItemStack. EMPTY;
     }
 
-    public static AttributeModifiersComponent createAttributeModifiers(ToolMaterial material, float baseAttackDamage, float attackSpeed) {
-        return AttributeModifiersComponent.builder()
+    public static ItemAttributeModifiers createAttributeModifiers(Tier material, float baseAttackDamage, float attackSpeed) {
+        return ItemAttributeModifiers.builder()
             .add(
-                EntityAttributes.GENERIC_ATTACK_DAMAGE,
-                new EntityAttributeModifier(
-                        BASE_ATTACK_DAMAGE_MODIFIER_ID, (double)((float)baseAttackDamage + material.getAttackDamage()), EntityAttributeModifier.Operation.ADD_VALUE
+                Attributes.ATTACK_DAMAGE,
+                new AttributeModifier(
+                        BASE_ATTACK_DAMAGE_ID, (double)((float)baseAttackDamage + material.getAttackDamageBonus()), AttributeModifier.Operation.ADD_VALUE
                 ),
-                AttributeModifierSlot.MAINHAND
+                EquipmentSlotGroup.MAINHAND
             )
             .add(
-                EntityAttributes.GENERIC_ATTACK_SPEED,
-                new EntityAttributeModifier(BASE_ATTACK_SPEED_MODIFIER_ID, (double)attackSpeed, EntityAttributeModifier.Operation.ADD_VALUE),
-                AttributeModifierSlot.MAINHAND
+                Attributes.ATTACK_SPEED,
+                new AttributeModifier(BASE_ATTACK_SPEED_ID, (double)attackSpeed, AttributeModifier.Operation.ADD_VALUE),
+                EquipmentSlotGroup.MAINHAND
             )
             .build();
     }
 
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        if (remainingUseTicks >= 0 && user instanceof PlayerEntity playerEntity) {
+    public void onUseTick(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        if (remainingUseTicks >= 0 && user instanceof Player playerEntity) {
             HitResult hitResult = this.getHitResult(playerEntity);
             if (hitResult instanceof BlockHitResult blockHitResult) {
                 BlockPos blockPos = blockHitResult.getBlockPos();
                 BlockState blockState = world.getBlockState(blockPos);
-                if (hitResult.getType() == HitResult.Type.BLOCK && (blockState.isIn(BlockTags.PLANKS))) {
-                    if (playerEntity.getStackInHand(Hand.MAIN_HAND).getItem() instanceof HammerItem && playerEntity.getStackInHand(Hand.OFF_HAND) != null && playerEntity.getStackInHand(Hand.OFF_HAND).isOf(ModItems.IRON_NAILS)) {
-                        int i = this.getMaxUseTime(stack, user) - remainingUseTicks + 1;
+                if (hitResult.getType() == HitResult.Type.BLOCK && (blockState.is(BlockTags.PLANKS))) {
+                    if (playerEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof HammerItem && playerEntity.getItemInHand(InteractionHand.OFF_HAND) != null && playerEntity.getItemInHand(InteractionHand.OFF_HAND).is(ModItems.IRON_NAILS)) {
+                        int i = this.getUseDuration(stack, user) - remainingUseTicks + 1;
                         boolean bl = i % 10 == 5;
                         if (bl) {
-                            if (blockState.hasBlockBreakParticles() && blockState.getRenderType() != BlockRenderType.INVISIBLE) {
-                                BlockStateParticleEffect blockStateParticleEffect = new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState);
-                                Direction direction = blockHitResult.getSide();
-                                Vec3d vec3d = blockHitResult.getPos().offset(direction, 0.25d);
-                                for (int k = 0; k < world.getRandom().nextBetweenExclusive(2, 4); ++k) {
+                            if (blockState.shouldSpawnTerrainParticles() && blockState.getRenderShape() != RenderShape.INVISIBLE) {
+                                BlockParticleOption blockStateParticleEffect = new BlockParticleOption(ParticleTypes.BLOCK, blockState);
+                                Direction direction = blockHitResult.getDirection();
+                                Vec3 vec3d = blockHitResult.getLocation().relative(direction, 0.25d);
+                                for (int k = 0; k < world.getRandom().nextInt(2, 4); ++k) {
                                     world.addParticle(blockStateParticleEffect, vec3d.x + world.random.nextDouble() * 0.25 - 0.125, vec3d.y + world.random.nextDouble() * 0.25 - 0.125, vec3d.z + world.random.nextDouble() * 0.25 - 0.125, world.random.nextDouble() * 0.1 - 0.05, 0, world.random.nextDouble() * 0.1 - 0.05);
                                 }
                             }
 
-                            world.playSound(null, blockPos, ModSounds.HAMMER, SoundCategory.PLAYERS, 1f, 1f);
+                            world.playSound(null, blockPos, ModSounds.HAMMER, SoundSource.PLAYERS, 1f, 1f);
                         }
 
-                        if (!world.isClient() && remainingUseTicks == 1) {
-                            playerEntity.getStackInHand(Hand.OFF_HAND).decrementUnlessCreative(1, playerEntity);
+                        if (!world.isClientSide() && remainingUseTicks == 1) {
+                            playerEntity.getItemInHand(InteractionHand.OFF_HAND).consume(1, playerEntity);
 
-                            String key = blockState.getBlock().getTranslationKey();
+                            String key = blockState.getBlock().getDescriptionId();
                             String name = key.substring(key.lastIndexOf(".") + 1);
-                            Identifier id = Identifier.of(IljaTech.MOD_ID, "nailed_" + name);
+                            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "nailed_" + name);
 
-                            world.setBlockState(blockPos, Registries.BLOCK.get(id).getDefaultState());
+                            world.setBlockAndUpdate(blockPos, BuiltInRegistries.BLOCK.get(id).defaultBlockState());
 
-                            stack.damage(1, playerEntity, EquipmentSlot.MAINHAND);
+                            stack.hurtAndBreak(1, playerEntity, EquipmentSlot.MAINHAND);
                         }
                     }
                     return;
                 }
             }
 
-            user.stopUsingItem();
+            user.releaseUsingItem();
         } else {
-            user.stopUsingItem();
+            user.releaseUsingItem();
         }
     }
 
-    private HitResult getHitResult(PlayerEntity user) {
-        return ProjectileUtil.getCollision(user, (entity) -> {
-            return !entity.isSpectator() && entity.canHit();
-        }, user.getBlockInteractionRange());
+    private HitResult getHitResult(Player user) {
+        return ProjectileUtil.getHitResultOnViewVector(user, (entity) -> {
+            return !entity.isSpectator() && entity.isPickable();
+        }, user.blockInteractionRange());
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
         return 30;
     }
 
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        PlayerEntity playerEntity = context.getPlayer();
+    public InteractionResult useOn(UseOnContext context) {
+        Player playerEntity = context.getPlayer();
         if (playerEntity != null && this.getHitResult(playerEntity).getType() == HitResult.Type.BLOCK) {
-            playerEntity.setCurrentHand(context.getHand());
+            playerEntity.startUsingItem(context.getHand());
         }
-        World world = context.getWorld();
-        BlockPos pos = context.getBlockPos();
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
         BlockState state = world.getBlockState(pos);
         if (BLOCK_CRACKING_MAP.containsKey(state.getBlock())) {
-            world.setBlockState(pos, BLOCK_CRACKING_MAP.get(state.getBlock()).getDefaultState());
-            context.getStack().damage(1, context.getPlayer(), EquipmentSlot.MAINHAND);
-            if (!world.isClient) {
-                world.playSound(null, context.getBlockPos(), ModSounds.HAMMER, SoundCategory.PLAYERS, 1f, 1f);
+            world.setBlockAndUpdate(pos, BLOCK_CRACKING_MAP.get(state.getBlock()).defaultBlockState());
+            context.getItemInHand().hurtAndBreak(1, context.getPlayer(), EquipmentSlot.MAINHAND);
+            if (!world.isClientSide) {
+                world.playSound(null, context.getClickedPos(), ModSounds.HAMMER, SoundSource.PLAYERS, 1f, 1f);
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResult.CONSUME;
+        return InteractionResult.CONSUME;
     }
 }

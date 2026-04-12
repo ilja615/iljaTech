@@ -8,20 +8,23 @@ import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CauldronBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
 public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEntity {
@@ -39,20 +42,20 @@ public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEnti
     public void tick() {
         if (ticks++ % 20 == 0) {
             // Check if there is water above
-            if (!world.getFluidState(pos.up()).isOf(Fluids.WATER) && !world.getBlockState(pos.up()).isOf(Blocks.WATER_CAULDRON))
+            if (!level.getFluidState(worldPosition.above()).is(Fluids.WATER) && !level.getBlockState(worldPosition.above()).is(Blocks.WATER_CAULDRON))
                 return;
 
-            BlockPos.Mutable nextPos = new BlockPos.Mutable();
+            BlockPos.MutableBlockPos nextPos = new BlockPos.MutableBlockPos();
             Direction thisDirection = Direction.DOWN;
-            nextPos.set(pos.offset(thisDirection));
+            nextPos.set(worldPosition.relative(thisDirection));
             int niter = 0;
 
             // Pipe liquid transfer
             float hydrostaticPressure = 0.1f;
             while (niter < 100) {
-                if (!(world.getBlockState(nextPos).getBlock() instanceof PipeBlock))
+                if (!(level.getBlockState(nextPos).getBlock() instanceof PipeBlock))
                     break;
-                PipeShape pipeShape = world.getBlockState(nextPos).get(PipeBlock.PIPE_SHAPE);
+                PipeShape pipeShape = level.getBlockState(nextPos).getValue(PipeBlock.PIPE_SHAPE);
                 Direction pipeDir1 = pipeShape.getDirection1();
                 Direction pipeDir2 = pipeShape.getDirection2();
                 if (pipeDir1.getOpposite() == thisDirection) {
@@ -71,23 +74,23 @@ public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEnti
 
                 niter++;
             }
-            if (world.getBlockState(nextPos).isAir()) {
-                if (!world.isClient) {
-                    double px = thisDirection.getAxis() == Direction.Axis.X ? nextPos.getX() + 0.5d - 0.5d * thisDirection.getOffsetX() : nextPos.getX() + world.random.nextFloat() * 0.5f + 0.25f;
-                    double py = thisDirection.getAxis() == Direction.Axis.Y ? nextPos.getY() + 0.5d - 0.5d * thisDirection.getOffsetY() : nextPos.getY() + world.random.nextFloat() * 0.25f + 0.25f;
-                    double pz = thisDirection.getAxis() == Direction.Axis.Z ? nextPos.getZ() + 0.5d - 0.5d * thisDirection.getOffsetZ() : nextPos.getZ() + world.random.nextFloat() * 0.5f + 0.25f;
-                    ((ServerWorld) world).spawnParticles(ParticleTypes.DRIPPING_WATER, px, py, pz, world.random.nextInt(3), 0.1f, 0.1f, 0.1f, 0.0);
+            if (level.getBlockState(nextPos).isAir()) {
+                if (!level.isClientSide) {
+                    double px = thisDirection.getAxis() == Direction.Axis.X ? nextPos.getX() + 0.5d - 0.5d * thisDirection.getStepX() : nextPos.getX() + level.random.nextFloat() * 0.5f + 0.25f;
+                    double py = thisDirection.getAxis() == Direction.Axis.Y ? nextPos.getY() + 0.5d - 0.5d * thisDirection.getStepY() : nextPos.getY() + level.random.nextFloat() * 0.25f + 0.25f;
+                    double pz = thisDirection.getAxis() == Direction.Axis.Z ? nextPos.getZ() + 0.5d - 0.5d * thisDirection.getStepZ() : nextPos.getZ() + level.random.nextFloat() * 0.5f + 0.25f;
+                    ((ServerLevel) level).sendParticles(ParticleTypes.DRIPPING_WATER, px, py, pz, level.random.nextInt(3), 0.1f, 0.1f, 0.1f, 0.0);
                 }
             } else if (ticks >= 100 && hydrostaticPressure >= 0) {
                 ticks = 0;
-                if (world.getBlockState(pos.up()).isOf(Blocks.WATER_CAULDRON)) {
-                    LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(pos.up()), world, pos.up());
+                if (level.getBlockState(worldPosition.above()).is(Blocks.WATER_CAULDRON)) {
+                    LayeredCauldronBlock.lowerFillLevel(level.getBlockState(worldPosition.above()), level, worldPosition.above());
                 }
-                if (world.getBlockState(nextPos).getBlock() instanceof CauldronBlock) {
-                    world.setBlockState(nextPos, Blocks.WATER_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL, LeveledCauldronBlock.MIN_LEVEL));
-                } else if (world.getBlockState(nextPos).getBlock() instanceof LeveledCauldronBlock && world.getBlockState(nextPos).isOf(Blocks.WATER_CAULDRON)) {
-                    int level = world.getBlockState(nextPos).get(LeveledCauldronBlock.LEVEL);
-                    world.setBlockState(nextPos, Blocks.WATER_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL, Math.min(LeveledCauldronBlock.MAX_LEVEL, level + 1)));
+                if (level.getBlockState(nextPos).getBlock() instanceof CauldronBlock) {
+                    level.setBlockAndUpdate(nextPos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MIN_FILL_LEVEL));
+                } else if (level.getBlockState(nextPos).getBlock() instanceof LayeredCauldronBlock && level.getBlockState(nextPos).is(Blocks.WATER_CAULDRON)) {
+                    int level = level.getBlockState(nextPos).getValue(LayeredCauldronBlock.LEVEL);
+                    level.setBlockAndUpdate(nextPos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, Math.min(LayeredCauldronBlock.MAX_FILL_LEVEL, level + 1)));
                 }
                 update();
             }
@@ -96,30 +99,30 @@ public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEnti
 
 
     @Override
-    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
-        if (nbt.contains("FluidTank", NbtElement.COMPOUND_TYPE))
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.loadAdditional(nbt, registryLookup);
+        if (nbt.contains("FluidTank", Tag.TAG_COMPOUND))
             this.fluidStorage.readNbt(nbt.getCompound("FluidTank"), registryLookup);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
-        var fluidNbt = new NbtCompound();
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.saveAdditional(nbt, registryLookup);
+        var fluidNbt = new CompoundTag();
         this.fluidStorage.writeNbt(fluidNbt, registryLookup);
         nbt.put("FluidTank", fluidNbt);
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        var nbt = super.toInitialChunkDataNbt(registryLookup);
-        writeNbt(nbt, registryLookup);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+        var nbt = super.getUpdateTag(registryLookup);
+        saveAdditional(nbt, registryLookup);
         return nbt;
     }
 
@@ -133,8 +136,8 @@ public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEnti
 
 
     private void update() {
-        markDirty();
-        if (world != null)
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+        setChanged();
+        if (level != null)
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 }

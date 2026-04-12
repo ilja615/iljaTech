@@ -9,16 +9,16 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class FluidItemSlot extends Slot {
     private final ContainerItemContext fluidItemContext;
     private final SingleFluidStorage fluidStorage;
     private final Runnable onChange;
 
-    public FluidItemSlot(Inventory inventory, SingleFluidStorage fluidStorage, Runnable onChange, int index, int x, int y) {
+    public FluidItemSlot(Container inventory, SingleFluidStorage fluidStorage, Runnable onChange, int index, int x, int y) {
         super(inventory, index, x, y);
 
         this.onChange = onChange;
@@ -27,7 +27,7 @@ public class FluidItemSlot extends Slot {
     }
 
     @Override
-    public boolean canInsert(ItemStack stack) {
+    public boolean mayPlace(ItemStack stack) {
         return isValid(stack, 6);
     }
 

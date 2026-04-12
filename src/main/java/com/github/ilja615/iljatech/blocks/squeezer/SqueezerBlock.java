@@ -4,91 +4,95 @@ import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.SCHEDULED_STOP;
 
-public class SqueezerBlock  extends Block implements BlockEntityProvider, MechPwrAccepter {
-    public static final IntProperty PRESS = IntProperty.of("press", 0, 3);
-    protected static final VoxelShape SHAPE_1_BASE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 14.0, 16.0);
-    protected static final VoxelShape SHAPE_2_BASE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
-    protected static final VoxelShape ROD_0 = Block.createCuboidShape(0.0, 0.0, 0.0, 2.0, 16.0, 2.0);
-    protected static final VoxelShape ROD_1 = Block.createCuboidShape(14.0, 0.0, 0.0, 16.0, 16.0, 2.0);
-    protected static final VoxelShape ROD_2 = Block.createCuboidShape(0.0, 0.0, 14.0, 2.0, 16.0, 16.0);
-    protected static final VoxelShape ROD_3 = Block.createCuboidShape(14.0, 0.0, 14.0, 16.0, 16.0, 16.0);
-    protected static final VoxelShape SHAPE_1 = VoxelShapes.union(ROD_0, ROD_1, ROD_2, ROD_3, SHAPE_1_BASE);
-    protected static final VoxelShape SHAPE_2 = VoxelShapes.union(ROD_0, ROD_1, ROD_2, ROD_3, SHAPE_2_BASE);
+public class SqueezerBlock  extends Block implements EntityBlock, MechPwrAccepter {
+    public static final IntegerProperty PRESS = IntegerProperty.create("press", 0, 3);
+    protected static final VoxelShape SHAPE_1_BASE = Block.box(0.0, 0.0, 0.0, 16.0, 14.0, 16.0);
+    protected static final VoxelShape SHAPE_2_BASE = Block.box(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
+    protected static final VoxelShape ROD_0 = Block.box(0.0, 0.0, 0.0, 2.0, 16.0, 2.0);
+    protected static final VoxelShape ROD_1 = Block.box(14.0, 0.0, 0.0, 16.0, 16.0, 2.0);
+    protected static final VoxelShape ROD_2 = Block.box(0.0, 0.0, 14.0, 2.0, 16.0, 16.0);
+    protected static final VoxelShape ROD_3 = Block.box(14.0, 0.0, 14.0, 16.0, 16.0, 16.0);
+    protected static final VoxelShape SHAPE_1 = Shapes.or(ROD_0, ROD_1, ROD_2, ROD_3, SHAPE_1_BASE);
+    protected static final VoxelShape SHAPE_2 = Shapes.or(ROD_0, ROD_1, ROD_2, ROD_3, SHAPE_2_BASE);
 
-    public SqueezerBlock(Settings settings) {
+    public SqueezerBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(PRESS, 0).with(ON_OFF_PWR, OFF));
+        this.registerDefaultState(this.stateDefinition.any().setValue(PRESS, 0).setValue(ON_OFF_PWR, OFF));
     }
 
     @Override
-    public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom) {
+    public boolean acceptsPower(Level world, BlockPos thisPos, Direction sideFrom) {
         return world.getBlockState(thisPos).getProperties().contains(ON_OFF_PWR);
     }
 
     @Override
-    public void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount) {
+    public void receivePower(Level world, BlockPos thisPos, Direction sideFrom, int amount) {
         // When the squeezer is powered, it will squeeze
-        if (world.getBlockState(thisPos).get(PRESS) == 0) {
+        if (world.getBlockState(thisPos).getValue(PRESS) == 0) {
             this.squeeze(world.getBlockState(thisPos), world, thisPos);
         }
 
         // Schedules to stop
-        world.setBlockState(thisPos, world.getBlockState(thisPos).with(ON_OFF_PWR, ON));
-        world.scheduleBlockTick(thisPos, this, 10);
+        world.setBlockAndUpdate(thisPos, world.getBlockState(thisPos).setValue(ON_OFF_PWR, ON));
+        world.scheduleTick(thisPos, this, 10);
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        super.scheduledTick(state, world, pos, random);
+    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        super.tick(state, world, pos, random);
         if (state.getBlock() != this) {
             return;
         }
-        if (state.get(ON_OFF_PWR) == SCHEDULED_STOP) {
-            world.setBlockState(pos, state.with(ON_OFF_PWR, OFF));
+        if (state.getValue(ON_OFF_PWR) == SCHEDULED_STOP) {
+            world.setBlockAndUpdate(pos, state.setValue(ON_OFF_PWR, OFF));
 
             // When the squeezer is de-powered, it will decompress
-            if (world.getBlockState(pos).get(PRESS) == 2) {
+            if (world.getBlockState(pos).getValue(PRESS) == 2) {
                 this.decompress(world.getBlockState(pos), world, pos);
             }
         }
-        else if (state.get(ON_OFF_PWR) == ON){
-            world.scheduleBlockTick(pos, this, 10);
-            world.setBlockState(pos, state.with(ON_OFF_PWR, SCHEDULED_STOP));
+        else if (state.getValue(ON_OFF_PWR) == ON){
+            world.scheduleTick(pos, this, 10);
+            world.setBlockAndUpdate(pos, state.setValue(ON_OFF_PWR, SCHEDULED_STOP));
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(PRESS, ON_OFF_PWR);
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        int press = state.get(PRESS);
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        int press = state.getValue(PRESS);
         switch (press) {
             case 0:
-                return VoxelShapes.fullCube();
+                return Shapes.block();
             case 1:
                 return SHAPE_1;
             case 2:
@@ -96,19 +100,19 @@ public class SqueezerBlock  extends Block implements BlockEntityProvider, MechPw
             case 3:
                 return SHAPE_1;
             default:
-                return VoxelShapes.fullCube();
+                return Shapes.block();
         }
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if(!world.isClient) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if(!world.isClientSide) {
             if(world.getBlockEntity(pos) instanceof SqueezerBlockEntity squeezerBlockEntity) {
-                player.openHandledScreen(squeezerBlockEntity);
+                player.openMenu(squeezerBlockEntity);
             }
         }
 
-        return ActionResult.success(world.isClient);
+        return InteractionResult.sidedSuccess(world.isClientSide);
     }
 //
 //    @Override
@@ -128,20 +132,20 @@ public class SqueezerBlock  extends Block implements BlockEntityProvider, MechPw
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return ModBlockEntityTypes.SQUEEZER.instantiate(pos, state);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntityTypes.SQUEEZER.create(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return TickableBlockEntity.getTicker(world);
     }
 
     // Squeeze
-    public void squeeze(BlockState state, World world, BlockPos pos) {
-        if (state.get(PRESS) == 0) {
-            world.setBlockState(pos, state.with(PRESS, 1));
+    public void squeeze(BlockState state, Level world, BlockPos pos) {
+        if (state.getValue(PRESS) == 0) {
+            world.setBlockAndUpdate(pos, state.setValue(PRESS, 1));
             if (world.getBlockEntity(pos) instanceof SqueezerBlockEntity squeezerBlockEntity) {
                 squeezerBlockEntity.setTicks(5);
             }
@@ -149,9 +153,9 @@ public class SqueezerBlock  extends Block implements BlockEntityProvider, MechPw
     }
 
     // Decompress
-    public void decompress(BlockState state, World world, BlockPos pos) {
-        if (state.get(PRESS) == 2) {
-            world.setBlockState(pos, state.with(PRESS, 3));
+    public void decompress(BlockState state, Level world, BlockPos pos) {
+        if (state.getValue(PRESS) == 2) {
+            world.setBlockAndUpdate(pos, state.setValue(PRESS, 3));
             if (world.getBlockEntity(pos) instanceof SqueezerBlockEntity squeezerBlockEntity) {
                 squeezerBlockEntity.setTicks(5);
             }

@@ -8,30 +8,30 @@ import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.klikli_dev.modonomicon.api.ModonomiconAPI;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -39,12 +39,12 @@ import java.util.List;
 public class FoundryBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
     private int maxTicks = 0;
-    public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".foundry");
+    public static final Component TITLE = Component.translatable("container." + IljaTech.MOD_ID + ".foundry");
 
-    private final SimpleInventory inventory = new SimpleInventory(5) {
+    private final SimpleContainer inventory = new SimpleContainer(5) {
         @Override
-        public void markDirty() {
-            super.markDirty();
+        public void setChanged() {
+            super.setChanged();
             update();
         }
     };
@@ -56,22 +56,22 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
 
     @Override
     public void tick() {
-        Direction facing = world.getBlockState(pos).get(FoundryBlock.FACING);
+        Direction facing = level.getBlockState(worldPosition).getValue(FoundryBlock.FACING);
         FireboxBlock.Lit lit = validateHeatMultiblock();
         if (validateFoundryMultiblock()) {
             if (lit != FireboxBlock.Lit.OFF) {
-                List<RecipeEntry<FoundryRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.FOUNDRY_TYPE);
-                for (RecipeEntry<FoundryRecipe> rr : recipes)
+                List<RecipeHolder<FoundryRecipe>> recipes = level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.FOUNDRY_TYPE);
+                for (RecipeHolder<FoundryRecipe> rr : recipes)
                 {
                     FoundryRecipe r = rr.value();
                     // Gets the first 2 items and see if it matches with the recipe (second index is excl.)
-                    if (r.matches(new FoundryRecipe.InputContainer(inventory.getHeldStacks().subList(0, 2), inventory.getHeldStacks().get(2)), world)) {
+                    if (r.matches(new FoundryRecipe.InputContainer(inventory.getItems().subList(0, 2), inventory.getItems().get(2)), level)) {
                         // Display particles
-                        if (!world.isClient) {
-                            double x = pos.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52 * facing.getOffsetX() : world.random.nextDouble() * 0.6 - 0.3);
-                            double y = pos.getY() + 0.3125d + world.random.nextDouble() * 6.0d / 16.0d;
-                            double z = pos.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52 * facing.getOffsetZ() : world.random.nextDouble() * 0.6 - 0.3);
-                            ((ServerWorld) world).spawnParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
+                        if (!level.isClientSide) {
+                            double x = worldPosition.getX() + 0.5d + (facing.getAxis() == Direction.Axis.X ? 0.52 * facing.getStepX() : level.random.nextDouble() * 0.6 - 0.3);
+                            double y = worldPosition.getY() + 0.3125d + level.random.nextDouble() * 6.0d / 16.0d;
+                            double z = worldPosition.getZ() + 0.5d + (facing.getAxis() == Direction.Axis.Z ? 0.52 * facing.getStepZ() : level.random.nextDouble() * 0.6 - 0.3);
+                            ((ServerLevel) level).sendParticles(ParticleTypes.SMOKE, x, y, z, 1, 0.0f, 0.3f, 0.0f, 0.0);
                         }
                         // Update the processing time
                         this.maxTicks = r.processingTime();
@@ -80,41 +80,41 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
                         if (!output.isEmpty()) {
                             if (ticks++ > r.processingTime()) {
                                 // The recipe is finished. The output is handled.
-                                if (inventory.getStack(3).isEmpty()) { // 3 is output slot
+                                if (inventory.getItem(3).isEmpty()) { // 3 is output slot
                                     // In this case a new result ItemStack is added with 1 of the result.
                                     for (CountedIngredient ci : r.ingredients()) {
-                                        inventory.getHeldStacks().subList(0, 2).forEach(itemStack -> {
-                                            if (itemStack.isOf(ci.getMatchingStacks().get(0).getItem())) {
-                                                itemStack.decrement(ci.count());
+                                        inventory.getItems().subList(0, 2).forEach(itemStack -> {
+                                            if (itemStack.is(ci.getMatchingStacks().get(0).getItem())) {
+                                                itemStack.shrink(ci.count());
                                             }
                                         });
                                     }
-                                    inventory.setStack(3, output);
-                                } else if (inventory.getStack(3).getItem() == output.getItem() &&
-                                    inventory.getStack(3).getCount() + output.getCount() <= inventory.getStack(3).getMaxCount()) {
+                                    inventory.setItem(3, output);
+                                } else if (inventory.getItem(3).getItem() == output.getItem() &&
+                                    inventory.getItem(3).getCount() + output.getCount() <= inventory.getItem(3).getMaxStackSize()) {
                                     // In this case the result ItemStack is added to what was already there
                                     for (CountedIngredient ci : r.ingredients()) {
-                                        inventory.getHeldStacks().subList(0, 2).forEach(itemStack -> {
-                                            if (itemStack.isOf(ci.getMatchingStacks().get(0).getItem())) {
-                                                itemStack.decrement(ci.count());
+                                        inventory.getItems().subList(0, 2).forEach(itemStack -> {
+                                            if (itemStack.is(ci.getMatchingStacks().get(0).getItem())) {
+                                                itemStack.shrink(ci.count());
                                             }
                                         });
                                     }
-                                    inventory.getStack(3).increment(output.getCount());
+                                    inventory.getItem(3).grow(output.getCount());
                                 }
 
                                 // Subtracting the flux
-                                boolean providedFlux = r.flux().getMatchingStacks().stream().map(ItemStack::getItem).toList().contains(inventory.getStack(2).getItem());
-                                inventory.getStack(2).decrement(r.flux().count()); // 2 is flux slot
+                                boolean providedFlux = r.flux().getMatchingStacks().stream().map(ItemStack::getItem).toList().contains(inventory.getItem(2).getItem());
+                                inventory.getItem(2).shrink(r.flux().count()); // 2 is flux slot
 
                                 float slagChance = providedFlux ? r.slagChanceUsingFlux() : r.slagChanceWithoutFlux();
-                                if (world.random.nextFloat() <= slagChance) {
+                                if (level.random.nextFloat() <= slagChance) {
                                     ItemStack slag = r.slag().copy();
-                                    if (inventory.getStack(4).isEmpty()) { // 4 is slag slot
-                                        inventory.setStack(4, slag);
-                                    } else if (inventory.getStack(4).getItem() == slag.getItem() &&
-                                            inventory.getStack(4).getCount() + slag.getCount() <= inventory.getStack(4).getMaxCount()) {
-                                        inventory.getStack(4).increment(slag.getCount());
+                                    if (inventory.getItem(4).isEmpty()) { // 4 is slag slot
+                                        inventory.setItem(4, slag);
+                                    } else if (inventory.getItem(4).getItem() == slag.getItem() &&
+                                            inventory.getItem(4).getCount() + slag.getCount() <= inventory.getItem(4).getMaxStackSize()) {
+                                        inventory.getItem(4).grow(slag.getCount());
                                     }
                                 }
                                 this.ticks = 0;
@@ -138,18 +138,18 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     }
 
     public boolean validateFoundryMultiblock() {
-        Direction facing = world.getBlockState(pos).get(FoundryBlock.FACING);
-        BlockPos startPos = pos.offset(facing.getOpposite()).down();
-        return (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "foundry")).validate(world, startPos) != null);
+        Direction facing = level.getBlockState(worldPosition).getValue(FoundryBlock.FACING);
+        BlockPos startPos = worldPosition.relative(facing.getOpposite()).below();
+        return (ModonomiconAPI.get().getMultiblock(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "foundry")).validate(level, startPos) != null);
     }
 
     public FireboxBlock.Lit validateHeatMultiblock() {
-        Direction facing = world.getBlockState(pos).get(FoundryBlock.FACING);
-        if (world.getBlockState(pos.down(2)).getBlock() instanceof FireboxBlock) {
-            if (world.getBlockState(pos.down(2)).get(FireboxBlock.FACING) == facing) {
-                BlockPos startPos = pos.offset(facing.getOpposite()).down(2);
-                if (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "large_firebox")).validate(world, startPos) != null) {
-                    return world.getBlockState(pos.down(2)).get(FireboxBlock.LIT);
+        Direction facing = level.getBlockState(worldPosition).getValue(FoundryBlock.FACING);
+        if (level.getBlockState(worldPosition.below(2)).getBlock() instanceof FireboxBlock) {
+            if (level.getBlockState(worldPosition.below(2)).getValue(FireboxBlock.FACING) == facing) {
+                BlockPos startPos = worldPosition.relative(facing.getOpposite()).below(2);
+                if (ModonomiconAPI.get().getMultiblock(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "large_firebox")).validate(level, startPos) != null) {
+                    return level.getBlockState(worldPosition.below(2)).getValue(FireboxBlock.LIT);
                 }
             }
         }
@@ -157,31 +157,31 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     }
 
     @Override
-    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
         this.maxTicks = nbt.getInt("MaxTicks");
-        Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+        ContainerHelper.loadAllItems(nbt, this.inventory.getItems(), registryLookup);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.saveAdditional(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
         nbt.putInt("MaxTicks", this.maxTicks);
-        Inventories.writeNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+        ContainerHelper.saveAllItems(nbt, this.inventory.getItems(), registryLookup);
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        var nbt = super.toInitialChunkDataNbt(registryLookup);
-        writeNbt(nbt, registryLookup);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+        var nbt = super.getUpdateTag(registryLookup);
+        saveAdditional(nbt, registryLookup);
         return nbt;
     }
 
@@ -194,33 +194,33 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
     }
 
     private void update() {
-        markDirty();
-        if (world != null)
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+        setChanged();
+        if (level != null)
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
     public InventoryStorage getInventoryProvider(Direction direction) {
         return storage;
     }
 
-    public SimpleInventory getInventory() {
+    public SimpleContainer getInventory() {
         return this.inventory;
     }
 
 
     @Override
-    public BlockPosPayload getScreenOpeningData(ServerPlayerEntity player) {
-        return new BlockPosPayload(this.pos);
+    public BlockPosPayload getScreenOpeningData(ServerPlayer player) {
+        return new BlockPosPayload(this.worldPosition);
     }
 
     @Override
-    public Text getDisplayName() {
+    public Component getDisplayName() {
         return TITLE;
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new FoundryScreenHandler(syncId, playerInventory, this, this.inventory);
     }
 }

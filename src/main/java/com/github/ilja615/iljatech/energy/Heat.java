@@ -4,69 +4,68 @@ import com.github.ilja615.iljatech.blocks.turbine.TurbineBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeveledCauldronBlock;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
-
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.phys.AABB;
 
 public class Heat {
-    public static void emitHeat(World world, BlockPos blockPos) {
-        if (world.getBlockState(blockPos).isOf(Blocks.WATER_CAULDRON) && world.getBlockState(blockPos).getBlock() instanceof LeveledCauldronBlock) {
+    public static void emitHeat(Level world, BlockPos blockPos) {
+        if (world.getBlockState(blockPos).is(Blocks.WATER_CAULDRON) && world.getBlockState(blockPos).getBlock() instanceof LayeredCauldronBlock) {
             boolean flag = false;
             // Detect for the first turbine in 2-6 blocks up
             for (int y = 2; y <= 6; y++) {
                 // Check if there is turbine
-                if (world.getBlockState(blockPos.up(y)).isOf(ModBlocks.TURBINE) && world.getBlockEntity(blockPos.up(y)) instanceof TurbineBlockEntity turbineBlockEntity) {
+                if (world.getBlockState(blockPos.above(y)).is(ModBlocks.TURBINE) && world.getBlockEntity(blockPos.above(y)) instanceof TurbineBlockEntity turbineBlockEntity) {
 
                     // Check if there is no steam going to the turbine yet
                     if (turbineBlockEntity.getSteamY() == -1.0f) {
                         // If the turbine is found, set it so that there will go a steam cloud to that
                         turbineBlockEntity.setSteamY(blockPos.getY());
-                        LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(blockPos), world, blockPos);
+                        LayeredCauldronBlock.lowerFillLevel(world.getBlockState(blockPos), world, blockPos);
                         flag = true;
                     }
                     break;
                 }
 
                 // The steam can only go through air
-                if (!world.getBlockState(blockPos.up(y)).isAir()) {
+                if (!world.getBlockState(blockPos.above(y)).isAir()) {
                     break;
                 }
             }
 
             // Check boiling recipes and puff some steam particles in case there was no turbine
             if (!flag) {
-                LeveledCauldronBlock.decrementFluidLevel(world.getBlockState(blockPos), world, blockPos);
-                if (!world.isClient) {
-                    ((ServerWorld) world).spawnParticles(ModParticles.STEAM, blockPos.getX() + world.random.nextFloat() * 0.5f + 0.25f, blockPos.getY() + world.random.nextFloat() * 0.5f + 1.0f, blockPos.getZ() + world.random.nextFloat() * 0.5f + 0.25f, 5, 0.0f, 0.3f, 0.0f, 0.0);
+                LayeredCauldronBlock.lowerFillLevel(world.getBlockState(blockPos), world, blockPos);
+                if (!world.isClientSide) {
+                    ((ServerLevel) world).sendParticles(ModParticles.STEAM, blockPos.getX() + world.random.nextFloat() * 0.5f + 0.25f, blockPos.getY() + world.random.nextFloat() * 0.5f + 1.0f, blockPos.getZ() + world.random.nextFloat() * 0.5f + 0.25f, 5, 0.0f, 0.3f, 0.0f, 0.0);
                 }
 
-                List<ItemEntity> itemEntityList= world.getEntitiesByClass(ItemEntity.class, new Box(blockPos), EntityPredicates.EXCEPT_SPECTATOR);
+                List<ItemEntity> itemEntityList= world.getEntitiesOfClass(ItemEntity.class, new AABB(blockPos), EntitySelector.NO_SPECTATORS);
                 for (ItemEntity itemEntity : itemEntityList)
                 {
-                    if (itemEntity.getStack().isEmpty())
+                    if (itemEntity.getItem().isEmpty())
                         break;
 
-                    List<RecipeEntry<BoilingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.BOILING_TYPE);
-                    for (RecipeEntry<BoilingRecipe> rr : recipes)
+                    List<RecipeHolder<BoilingRecipe>> recipes = world.getRecipeManager().getAllRecipesFor(ModRecipeTypes.BOILING_TYPE);
+                    for (RecipeHolder<BoilingRecipe> rr : recipes)
                     {
                         BoilingRecipe r = rr.value();
                         ItemStack resultingStack = r.output().copy();
-                        if (r.stack().getMatchingStacks()[0].isEmpty() || itemEntity.getStack().isEmpty())
+                        if (r.stack().getItems()[0].isEmpty() || itemEntity.getItem().isEmpty())
                             continue;
 
-                        if (r.stack().getMatchingStacks()[0].getItem() == itemEntity.getStack().getItem())
+                        if (r.stack().getItems()[0].getItem() == itemEntity.getItem().getItem())
                         {
-                            itemEntity.getStack().decrement(1);
-                            world.spawnEntity(new ItemEntity(world, blockPos.getX() + 0.5d, blockPos.getY() + 1.0d, blockPos.getZ() + 0.5d, resultingStack));
+                            itemEntity.getItem().shrink(1);
+                            world.addFreshEntity(new ItemEntity(world, blockPos.getX() + 0.5d, blockPos.getY() + 1.0d, blockPos.getZ() + 0.5d, resultingStack));
                             break;
                         }
                     }

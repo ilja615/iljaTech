@@ -3,19 +3,18 @@ package com.github.ilja615.iljatech.datagen;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.BlockTags;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
-    public ModBlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public ModBlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-        getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL)
+    protected void addTags(HolderLookup.Provider wrapperLookup) {
+        tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
                 .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE)
                 .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
@@ -25,11 +24,11 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.WEATHERED_IRON_SHEETMETAL).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB).add(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS)
                 .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
 
-        getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
+        tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.CHROME_ORE).add(ModBlocks.DEEPSLATE_CHROME_ORE).add(ModBlocks.RAW_CHROME_ORE)
                 .add(ModBlocks.STEEL_BLOCK);
 
-        getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
+        tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.TIN_ORE).add(ModBlocks.DEEPSLATE_TIN_ORE).add(ModBlocks.RAW_TIN_ORE)
                 .add(ModBlocks.NICKEL_ORE).add(ModBlocks.DEEPSLATE_NICKEL_ORE).add(ModBlocks.RAW_NICKEL_ORE)
                 .add(ModBlocks.SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE).add(ModBlocks.RAW_ALUMINIUM_ORE)
@@ -45,17 +44,17 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.RUSTY_IRON_SHEETMETAL).add(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB).add(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS)
                 .add(ModBlocks.STEEL_BLOCK).add(ModBlocks.PULVERIZER_MILL);
 
-        getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
+        tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.FIRE_CLAY);
 
-        getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+        tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(ModBlocks.CRANK).add(ModBlocks.WOODEN_SHAFT).add(ModBlocks.CONVEYOR_BELT).add(ModBlocks.NAILED_ACACIA_PLANKS)
                 .add(ModBlocks.NAILED_BAMBOO_PLANKS).add(ModBlocks.NAILED_BIRCH_PLANKS).add(ModBlocks.NAILED_CHERRY_PLANKS)
                 .add(ModBlocks.NAILED_CRIMSON_PLANKS).add(ModBlocks.NAILED_DARK_OAK_PLANKS).add(ModBlocks.NAILED_JUNGLE_PLANKS)
                 .add(ModBlocks.NAILED_MANGROVE_PLANKS).add(ModBlocks.NAILED_OAK_PLANKS).add(ModBlocks.NAILED_SPRUCE_PLANKS).add(ModBlocks.NAILED_WARPED_PLANKS)
                 .add(ModBlocks.WOODEN_FUNNEL).add(ModBlocks.WOODEN_PIPE);
 
-        getOrCreateTagBuilder(BlockTags.WALLS)
+        tag(BlockTags.WALLS)
                 .add(ModBlocks.LIMESTONE_WALL);
     }
 }

@@ -2,35 +2,35 @@ package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.energy.MechPwrSender;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrSender
 {
-    public static final EnumProperty<Direction> FACING = Properties.FACING;
-    protected static final VoxelShape Y_SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
-    protected static final VoxelShape Z_SHAPE = Block.createCuboidShape(6.0, 6.0, 0.0, 10.0, 10.0, 16.0);
-    protected static final VoxelShape X_SHAPE = Block.createCuboidShape(0.0, 6.0, 6.0, 16.0, 10.0, 10.0);
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+    protected static final VoxelShape Y_SHAPE = Block.box(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
+    protected static final VoxelShape Z_SHAPE = Block.box(6.0, 6.0, 0.0, 10.0, 10.0, 16.0);
+    protected static final VoxelShape X_SHAPE = Block.box(0.0, 6.0, 6.0, 16.0, 10.0, 10.0);
 
-    public WoodenShaftBlock(Settings settings) {
+    public WoodenShaftBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(MECH_PWR, 0).with(FACING, Direction.UP).with(SCHEDULE_STOP, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(MECH_PWR, 0).setValue(FACING, Direction.UP).setValue(SCHEDULE_STOP, false));
     }
 
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        switch ((state.get(FACING)).getAxis()) {
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        switch ((state.getValue(FACING)).getAxis()) {
             case X:
             default:
                 return X_SHAPE;
@@ -42,39 +42,39 @@ public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrS
     }
 
     @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+    protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
         if (notify) {
-            world.setBlockState(pos, state.with(MECH_PWR, 0));
+            world.setBlockAndUpdate(pos, state.setValue(MECH_PWR, 0));
         }
-        super.onBlockAdded(state, world, pos, oldState, notify);
+        super.onPlace(state, world, pos, oldState, notify);
     }
 
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        if (ctx.getPlayer().isSneaking()) {
-            return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        if (ctx.getPlayer().isShiftKeyDown()) {
+            return this.defaultBlockState().setValue(FACING, ctx.getNearestLookingDirection().getOpposite());
         } else {
-            return this.getDefaultState().with(FACING, ctx.getSide().getOpposite());
+            return this.defaultBlockState().setValue(FACING, ctx.getClickedFace().getOpposite());
         }
     }
 
     @Override
-    public void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount)
+    public void receivePower(Level world, BlockPos thisPos, Direction sideFrom, int amount)
     {
         // Gearbox schedules to transfer the power after receiving it
-        world.scheduleBlockTick(thisPos, this, 10);
+        world.scheduleTick(thisPos, this, 10);
         MechPwrAccepter.super.receivePower(world, thisPos, sideFrom, amount);
     }
 
     @Override
-    public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom)
+    public boolean acceptsPower(Level world, BlockPos thisPos, Direction sideFrom)
     {
         BlockState state = world.getBlockState(thisPos);
         if (state.getProperties().contains(FACING) && state.getProperties().contains(MECH_PWR)) {
-            if (state.get(FACING) == sideFrom) {
+            if (state.getValue(FACING) == sideFrom) {
                 return true;
             }
-            if (state.get(FACING) == sideFrom.getOpposite() && state.get(MECH_PWR) == 0 && !state.get(SCHEDULE_STOP)) {
-                world.setBlockState(thisPos, state.with(FACING, sideFrom));
+            if (state.getValue(FACING) == sideFrom.getOpposite() && state.getValue(MECH_PWR) == 0 && !state.getValue(SCHEDULE_STOP)) {
+                world.setBlockAndUpdate(thisPos, state.setValue(FACING, sideFrom));
                 return true;
             }
         }
@@ -82,39 +82,39 @@ public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrS
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        super.scheduledTick(state, world, pos, random);
+    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        super.tick(state, world, pos, random);
         if (state.getBlock() != this) { return; }
 
         // Check if a stop was scheduled and then stop
-        if (state.get(SCHEDULE_STOP)) {
-            world.setBlockState(pos, state.with(MECH_PWR, 0).with(SCHEDULE_STOP, false));
+        if (state.getValue(SCHEDULE_STOP)) {
+            world.setBlockAndUpdate(pos, state.setValue(MECH_PWR, 0).setValue(SCHEDULE_STOP, false));
         }
-        else if (state.get(MECH_PWR) > 0) {
+        else if (state.getValue(MECH_PWR) > 0) {
             // Output to the other side
-            Direction dir = state.get(FACING).getOpposite();
-            Block other = world.getBlockState(pos.offset(dir)).getBlock();
+            Direction dir = state.getValue(FACING).getOpposite();
+            Block other = world.getBlockState(pos.relative(dir)).getBlock();
 
-            if (other instanceof MechPwrAccepter && ((MechPwrAccepter)other).acceptsPower(world, pos.offset(dir), dir.getOpposite())) {
-                sendPower(world, pos, dir, state.get(MECH_PWR));
+            if (other instanceof MechPwrAccepter && ((MechPwrAccepter)other).acceptsPower(world, pos.relative(dir), dir.getOpposite())) {
+                sendPower(world, pos, dir, state.getValue(MECH_PWR));
             } else {
                 // There was nowhere to output to...
                 // Scheduling to stop
-                world.setBlockState(pos, state.with(SCHEDULE_STOP, true));
-                world.scheduleBlockTick(pos, this, 10);
+                world.setBlockAndUpdate(pos, state.setValue(SCHEDULE_STOP, true));
+                world.scheduleTick(pos, this, 10);
             }
         }
     }
 
     @Override
-    public boolean sendPower(World world, BlockPos thisPos, Direction face, int amount)
+    public boolean sendPower(Level world, BlockPos thisPos, Direction face, int amount)
     {
         BlockState state = world.getBlockState(thisPos);
         if (MechPwrSender.super.sendPower(world, thisPos, face, amount))
         {
             // The gearbox sent its power and should schedule to stop now
-            world.setBlockState(thisPos, state.with(SCHEDULE_STOP, true));
-            world.scheduleBlockTick(thisPos, this, 10);
+            world.setBlockAndUpdate(thisPos, state.setValue(SCHEDULE_STOP, true));
+            world.scheduleTick(thisPos, this, 10);
             return true;
         } else {
             return false;
@@ -122,7 +122,7 @@ public class WoodenShaftBlock extends Block implements MechPwrAccepter, MechPwrS
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, MECH_PWR, SCHEDULE_STOP);
     }
 }

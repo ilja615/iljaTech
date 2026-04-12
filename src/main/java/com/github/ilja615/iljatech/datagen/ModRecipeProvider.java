@@ -4,28 +4,25 @@ import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.RecipeExporter;
-import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeProvider extends FabricRecipeProvider {
-    public ModRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public ModRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    public void generate(RecipeExporter exporter) {
+    public void buildRecipes(RecipeOutput exporter) {
         blockFwBwRecipes(ModItems.RAW_TIN_ORE, ModBlocks.RAW_TIN_ORE, exporter);
         blockFwBwRecipes(ModItems.RAW_NICKEL_ORE, ModBlocks.RAW_NICKEL_ORE, exporter);
         blockFwBwRecipes(ModItems.RAW_ALUMINIUM_ORE, ModBlocks.RAW_ALUMINIUM_ORE, exporter);
@@ -51,82 +48,82 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         slabStairRecipes(ModBlocks.RUSTY_IRON_SHEETMETAL, ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB, ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS, exporter);
         slabStairWallRecipes(ModBlocks.LIMESTONE, ModBlocks.LIMESTONE_SLAB, ModBlocks.LIMESTONE_STAIRS, ModBlocks.LIMESTONE_WALL, exporter);
 
-        RecipeProvider.offerSmelting(exporter, List.of(ModItems.FIRE_CLAY_BALL), RecipeCategory.MISC, ModItems.FIRE_BRICK, 0.4f, 200, "fire_brick");
+        RecipeProvider.oreSmelting(exporter, List.of(ModItems.FIRE_CLAY_BALL), RecipeCategory.MISC, ModItems.FIRE_BRICK, 0.4f, 200, "fire_brick");
 }
 
-    private static void blockFwBwRecipes(Item item, ItemConvertible block, RecipeExporter exporter) {
-        ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, block)
-                .input('#', item)
+    private static void blockFwBwRecipes(Item item, ItemLike block, RecipeOutput exporter) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, block)
+                .define('#', item)
                 .pattern("###")
                 .pattern("###")
                 .pattern("###")
-                .criterion(hasItem(item), conditionsFromItem(item))
-                .offerTo(exporter);
+                .unlockedBy(getHasName(item), has(item))
+                .save(exporter);
 
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, item, 9)
-                .input(block)
-                .criterion(hasItem(block), conditionsFromItem(block))
-                .offerTo(exporter);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, item, 9)
+                .requires(block)
+                .unlockedBy(getHasName(block), has(block))
+                .save(exporter);
     }
 
-    private static void oreSmeltingBlastingRecipes(List<ItemConvertible> ores, Item ingot, float xp, String group, RecipeExporter exporter) {
-        RecipeProvider.offerBlasting(exporter, ores, RecipeCategory.MISC, ingot, xp, 100, group);
-        RecipeProvider.offerSmelting(exporter, ores, RecipeCategory.MISC, ingot, xp, 200, group);    }
+    private static void oreSmeltingBlastingRecipes(List<ItemLike> ores, Item ingot, float xp, String group, RecipeOutput exporter) {
+        RecipeProvider.oreBlasting(exporter, ores, RecipeCategory.MISC, ingot, xp, 100, group);
+        RecipeProvider.oreSmelting(exporter, ores, RecipeCategory.MISC, ingot, xp, 200, group);    }
 
-    private static void plateRecipe(Item item, ItemConvertible plate, RecipeExporter exporter) {
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, plate)
-                .input('#', item)
-                .input('H', ModItems.IRON_HAMMER)
+    private static void plateRecipe(Item item, ItemLike plate, RecipeOutput exporter) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, plate)
+                .define('#', item)
+                .define('H', ModItems.IRON_HAMMER)
                 .pattern("H ")
                 .pattern("##")
-                .criterion(hasItem(item), conditionsFromItem(item))
-                .criterion(hasItem(ModItems.IRON_HAMMER), conditionsFromItem(ModItems.IRON_HAMMER))
-                .offerTo(exporter);
+                .unlockedBy(getHasName(item), has(item))
+                .unlockedBy(getHasName(ModItems.IRON_HAMMER), has(ModItems.IRON_HAMMER))
+                .save(exporter);
     }
 
-    private static void sheetMetalRecipes(ItemConvertible plate, ItemConvertible block, RecipeExporter exporter) {
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, block, 8)
-                .input('#', plate)
+    private static void sheetMetalRecipes(ItemLike plate, ItemLike block, RecipeOutput exporter) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block, 8)
+                .define('#', plate)
                 .pattern("##")
                 .pattern("##")
-                .criterion(hasItem(plate), conditionsFromItem(plate))
-                .offerTo(exporter);
+                .unlockedBy(getHasName(plate), has(plate))
+                .save(exporter);
     }
 
-    private static void slabStairRecipes(ItemConvertible block, ItemConvertible slab, ItemConvertible stairs, RecipeExporter exporter) {
-            ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, slab, 6)
-                .input('#', block)
+    private static void slabStairRecipes(ItemLike block, ItemLike slab, ItemLike stairs, RecipeOutput exporter) {
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, slab, 6)
+                .define('#', block)
                 .pattern("###")
-                .criterion(hasItem(block), conditionsFromItem(block))
-                .offerTo(exporter);
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, stairs, 4)
-                .input('#', block)
+                .unlockedBy(getHasName(block), has(block))
+                .save(exporter);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, stairs, 4)
+                .define('#', block)
                 .pattern("#  ")
                 .pattern("## ")
                 .pattern("###")
-                .criterion(hasItem(block), conditionsFromItem(block))
-                .offerTo(exporter);
+                .unlockedBy(getHasName(block), has(block))
+                .save(exporter);
     }
 
-    private static void slabStairWallRecipes(ItemConvertible block, ItemConvertible slab, ItemConvertible stairs, ItemConvertible wall, RecipeExporter exporter) {
+    private static void slabStairWallRecipes(ItemLike block, ItemLike slab, ItemLike stairs, ItemLike wall, RecipeOutput exporter) {
         slabStairRecipes(block, slab, stairs, exporter);
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, wall, 6)
-                .input('#', block)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, wall, 6)
+                .define('#', block)
                 .pattern("###")
                 .pattern("###")
-                .criterion(hasItem(block), conditionsFromItem(block))
-                .offerTo(exporter);
+                .unlockedBy(getHasName(block), has(block))
+                .save(exporter);
     }
 
-    private static void hammerRecipe(Item item, ItemConvertible output, RecipeExporter exporter) {
-        ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, output)
-                .input('#', item)
-                .input('H', ModItems.IRON_HAMMER)
+    private static void hammerRecipe(Item item, ItemLike output, RecipeOutput exporter) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
+                .define('#', item)
+                .define('H', ModItems.IRON_HAMMER)
                 .pattern("H")
                 .pattern("#")
-                .criterion(hasItem(item), conditionsFromItem(item))
-                .criterion(hasItem(ModItems.IRON_HAMMER), conditionsFromItem(ModItems.IRON_HAMMER))
-                .offerTo(exporter);
+                .unlockedBy(getHasName(item), has(item))
+                .unlockedBy(getHasName(ModItems.IRON_HAMMER), has(ModItems.IRON_HAMMER))
+                .save(exporter);
     }
 
     @Override

@@ -1,64 +1,61 @@
 package com.github.ilja615.iljatech.entities;
 
-import net.minecraft.entity.Dismounting;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import com.github.ilja615.iljatech.init.ModEntities;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class SeatEntity extends Entity
 {
-    public SeatEntity(World world) {
+    public SeatEntity(Level world) {
         super(ModEntities.SEAT, world);
-        this.noClip = true;
+        this.noPhysics = true;
     }
 
-    public SeatEntity(World world, BlockPos source, Direction direction) {
+    public SeatEntity(Level world, BlockPos source, Direction direction) {
         this(world);
-        this.setPos(source.getX() + 0.5, source.getY() + 0.5, source.getZ() + 0.5);
-        this.setRotation(direction.asRotation(), 0F);
+        this.setPosRaw(source.getX() + 0.5, source.getY() + 0.5, source.getZ() + 0.5);
+        this.setRot(direction.toYRot(), 0F);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(!this.getWorld().isClient()) {
-            if(!this.hasPassengers() || this.getWorld().isAir(this.getBlockPos())) {
+        if(!this.level().isClientSide()) {
+            if(!this.isVehicle() || this.level().isEmptyBlock(this.blockPosition())) {
                 this.remove(RemovalReason.DISCARDED);
             }
         }
     }
 
     @Override
-    public Vec3d updatePassengerForDismount(LivingEntity passenger) {
-        BlockPos pos = this.getBlockPos().offset(Direction.fromRotation(getYaw()));
-        double d = this.getWorld().getDismountHeight(pos);
-        if (Dismounting.canDismountInBlock(d)) {
-            Vec3d vec3d = Vec3d.ofCenter(pos, d);
-            if (Dismounting.canPlaceEntityAt(this.getWorld(), passenger, passenger.getBoundingBox().offset(vec3d))) {
+    public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+        BlockPos pos = this.blockPosition().relative(Direction.fromYRot(getYRot()));
+        double d = this.level().getBlockFloorHeight(pos);
+        if (DismountHelper.isBlockFloorValid(d)) {
+            Vec3 vec3d = Vec3.upFromBottomCenterOf(pos, d);
+            if (DismountHelper.canDismountTo(this.level(), passenger, passenger.getBoundingBox().move(vec3d))) {
                 return vec3d;
             }
         }
         // Fallback option
-        pos = this.getBlockPos();
-        Vec3d vec3d = Vec3d.ofCenter(pos, 1.0d);
+        pos = this.blockPosition();
+        Vec3 vec3d = Vec3.upFromBottomCenterOf(pos, 1.0d);
         return vec3d;
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {}
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {}
+    protected void readAdditionalSaveData(CompoundTag nbt) {}
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {}
+    protected void addAdditionalSaveData(CompoundTag nbt) {}
 }

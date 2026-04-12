@@ -4,110 +4,111 @@ import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.SCHEDULED_STOP;
 
-public class SpinningFrameBlock extends Block implements BlockEntityProvider, MechPwrAccepter {
-    public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
-    public static final BooleanProperty THREAD = BooleanProperty.of("thread");
+public class SpinningFrameBlock extends Block implements EntityBlock, MechPwrAccepter {
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
+    public static final BooleanProperty THREAD = BooleanProperty.create("thread");
 
-    public SpinningFrameBlock(Settings settings) {
+    public SpinningFrameBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(ON_OFF_PWR, OFF).with(FACING, Direction.NORTH).with(THREAD, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(ON_OFF_PWR, OFF).setValue(FACING, Direction.NORTH).setValue(THREAD, false));
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient)
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!world.isClientSide)
         {
             if (world.getBlockEntity(pos) instanceof SpinningFrameBlockEntity blockEntity && player != null) {
                 //player.sendMessage(Text.of("ticks: " + blockEntity.getTicks()), true);
-                return ActionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return ModBlockEntityTypes.SPINNING_FRAME.instantiate(pos, state);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntityTypes.SPINNING_FRAME.create(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return state.get(ON_OFF_PWR) != OnOffPwr.OFF ? TickableBlockEntity.getTicker(world) : null;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        return state.getValue(ON_OFF_PWR) != OnOffPwr.OFF ? TickableBlockEntity.getTicker(world) : null;
     }
 
     @Override
-    public void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount)
+    public void receivePower(Level world, BlockPos thisPos, Direction sideFrom, int amount)
     {
         // Schedules to stop
-        world.setBlockState(thisPos, world.getBlockState(thisPos).with(ON_OFF_PWR, ON));
-        world.scheduleBlockTick(thisPos, this, 10);
+        world.setBlockAndUpdate(thisPos, world.getBlockState(thisPos).setValue(ON_OFF_PWR, ON));
+        world.scheduleTick(thisPos, this, 10);
     }
 
     @Override
-    public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom) {
+    public boolean acceptsPower(Level world, BlockPos thisPos, Direction sideFrom) {
         return world.getBlockState(thisPos).getProperties().contains(ON_OFF_PWR);
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        super.scheduledTick(state, world, pos, random);
+    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        super.tick(state, world, pos, random);
         if (state.getBlock() != this) {
             return;
         }
-        if (state.get(ON_OFF_PWR) == SCHEDULED_STOP)
-            world.setBlockState(pos, state.with(ON_OFF_PWR, OFF));
-        else if (state.get(ON_OFF_PWR) == ON){
-            world.scheduleBlockTick(pos, this, 10);
-            world.setBlockState(pos, state.with(ON_OFF_PWR, SCHEDULED_STOP));
+        if (state.getValue(ON_OFF_PWR) == SCHEDULED_STOP)
+            world.setBlockAndUpdate(pos, state.setValue(ON_OFF_PWR, OFF));
+        else if (state.getValue(ON_OFF_PWR) == ON){
+            world.scheduleTick(pos, this, 10);
+            world.setBlockAndUpdate(pos, state.setValue(ON_OFF_PWR, SCHEDULED_STOP));
         }
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+    protected void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof SpinningFrameBlockEntity spinningFrameBlockEntity) {
-                ItemScatterer.spawn(world, pos, spinningFrameBlockEntity.getInventory());
-                world.updateComparators(pos, this);
+                Containers.dropContents(world, pos, spinningFrameBlockEntity.getInventory());
+                world.updateNeighbourForOutputSignal(pos, this);
             }
         }
-        super.onStateReplaced(state, world, pos, newState, moved);
+        super.onRemove(state, world, pos, newState, moved);
     }
 
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, ON_OFF_PWR, THREAD);
     }
 }

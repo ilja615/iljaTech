@@ -2,54 +2,54 @@ package com.github.ilja615.iljatech.worldgen;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.minecraft.registry.tag.BiomeTags;
-import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.levelgen.GenerationStep;
 
 public class BiomeModificationEvent {
     public static void load() {
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_TIN_ORE_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_NICKEL_ORE_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_SANDSTONE_ALUMINIUM_ORE_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_CHROME_ORE_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_FIRE_CLAY_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
-                GenerationStep.Feature.UNDERGROUND_ORES,
+                GenerationStep.Decoration.UNDERGROUND_ORES,
                 ModPlacedFeatures.OVERWORLD_LIMESTONE_KEY
         );
         BiomeModifications.addFeature(
                 BiomeSelectors.tag(BiomeTags.IS_FOREST),
-                GenerationStep.Feature.VEGETAL_DECORATION,
+                GenerationStep.Decoration.VEGETAL_DECORATION,
                 ModPlacedFeatures.OVERWORLD_FLAX_KEY
         );
     }

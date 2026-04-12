@@ -1,30 +1,30 @@
 package com.github.ilja615.iljatech.blocks.wire;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class WirePlacementHelper {
-    private final World world;
+    private final Level world;
     private final BlockPos pos;
     private final Block block;
     private BlockState state;
     private List<BlockPos> connections = new ArrayList<>();
 
-    public WirePlacementHelper(World world, BlockPos pos, BlockState state) {
+    public WirePlacementHelper(Level world, BlockPos pos, BlockState state) {
         this.world = world;
         this.pos = pos;
         this.state = state;
         this.block = state.getBlock();
         if (this.block instanceof WireBlock)
         {
-            WireShape wireshape = state.get(WireBlock.WIRE_SHAPE);
+            WireShape wireshape = state.getValue(WireBlock.WIRE_SHAPE);
             this.updateConnections(wireshape);
         }
     }
@@ -51,19 +51,19 @@ public class WirePlacementHelper {
                 break;
             case ASCENDING_EAST:
                 list.add(startPos.west());
-                list.add(startPos.east().up());
+                list.add(startPos.east().above());
                 break;
             case ASCENDING_WEST:
-                list.add(startPos.west().up());
+                list.add(startPos.west().above());
                 list.add(startPos.east());
                 break;
             case ASCENDING_NORTH:
-                list.add(startPos.north().up());
+                list.add(startPos.north().above());
                 list.add(startPos.south());
                 break;
             case ASCENDING_SOUTH:
                 list.add(startPos.north());
-                list.add(startPos.south().up());
+                list.add(startPos.south().above());
                 break;
             case SOUTH_EAST:
                 list.add(startPos.east());
@@ -104,7 +104,7 @@ public class WirePlacementHelper {
     }
 
     private boolean hasWire(BlockPos pos) {
-        return WireBlock.isWire(this.world, pos) || WireBlock.isWire(this.world, pos.up()) || WireBlock.isWire(this.world, pos.down());
+        return WireBlock.isWire(this.world, pos) || WireBlock.isWire(this.world, pos.above()) || WireBlock.isWire(this.world, pos.below());
     }
 
     @Nullable
@@ -113,12 +113,12 @@ public class WirePlacementHelper {
         if (WireBlock.isWire(blockstate)) {
             return new WirePlacementHelper(this.world, pos, blockstate);
         } else {
-            BlockPos $$1 = pos.up();
+            BlockPos $$1 = pos.above();
             blockstate = this.world.getBlockState($$1);
             if (WireBlock.isWire(blockstate)) {
                 return new WirePlacementHelper(this.world, $$1, blockstate);
             } else {
-                $$1 = pos.down();
+                $$1 = pos.below();
                 blockstate = this.world.getBlockState($$1);
                 return WireBlock.isWire(blockstate) ? new WirePlacementHelper(this.world, $$1, blockstate) : null;
             }
@@ -143,8 +143,8 @@ public class WirePlacementHelper {
     protected int countPotentialConnections() {
         int i = 0;
 
-        for(Direction direction : Direction.Type.HORIZONTAL) {
-            if (this.hasWire(this.pos.offset(direction))) {
+        for(Direction direction : Direction.Plane.HORIZONTAL) {
+            if (this.hasWire(this.pos.relative(direction))) {
                 ++i;
             }
         }
@@ -196,21 +196,21 @@ public class WirePlacementHelper {
         }
 
         if (wireshape == WireShape.NORTH_SOUTH) {
-            if (WireBlock.isWire(this.world, blockpos.up())) {
+            if (WireBlock.isWire(this.world, blockpos.above())) {
                 wireshape = WireShape.ASCENDING_NORTH;
             }
 
-            if (WireBlock.isWire(this.world, blockpos1.up())) {
+            if (WireBlock.isWire(this.world, blockpos1.above())) {
                 wireshape = WireShape.ASCENDING_SOUTH;
             }
         }
 
         if (wireshape == WireShape.EAST_WEST) {
-            if (WireBlock.isWire(this.world, blockpos3.up())) {
+            if (WireBlock.isWire(this.world, blockpos3.above())) {
                 wireshape = WireShape.ASCENDING_EAST;
             }
 
-            if (WireBlock.isWire(this.world, blockpos2.up())) {
+            if (WireBlock.isWire(this.world, blockpos2.above())) {
                 wireshape = WireShape.ASCENDING_WEST;
             }
         }
@@ -221,9 +221,9 @@ public class WirePlacementHelper {
 
         if (this.block instanceof WireBlock)
         {
-            this.state = this.state.with(WireBlock.WIRE_SHAPE, wireshape);
+            this.state = this.state.setValue(WireBlock.WIRE_SHAPE, wireshape);
         }
-        this.world.setBlockState(this.pos, this.state, 3);
+        this.world.setBlock(this.pos, this.state, 3);
     }
 
     private boolean hasNeighborWire(BlockPos p_55447_) {
@@ -281,21 +281,21 @@ public class WirePlacementHelper {
         }
 
         if (wireshape == WireShape.NORTH_SOUTH) {
-            if (WireBlock.isWire(this.world, northpos.up())) {
+            if (WireBlock.isWire(this.world, northpos.above())) {
                 wireshape = WireShape.ASCENDING_NORTH;
             }
 
-            if (WireBlock.isWire(this.world, southpos.up())) {
+            if (WireBlock.isWire(this.world, southpos.above())) {
                 wireshape = WireShape.ASCENDING_SOUTH;
             }
         }
 
         if (wireshape == WireShape.EAST_WEST) {
-            if (WireBlock.isWire(this.world, eastpos.up())) {
+            if (WireBlock.isWire(this.world, eastpos.above())) {
                 wireshape = WireShape.ASCENDING_EAST;
             }
 
-            if (WireBlock.isWire(this.world, westpos.up())) {
+            if (WireBlock.isWire(this.world, westpos.above())) {
                 wireshape = WireShape.ASCENDING_WEST;
             }
         }
@@ -303,10 +303,10 @@ public class WirePlacementHelper {
         this.updateConnections(wireshape);
         if (this.block instanceof WireBlock)
         {
-            this.state = this.state.with(WireBlock.WIRE_SHAPE, wireshape);
+            this.state = this.state.setValue(WireBlock.WIRE_SHAPE, wireshape);
         }
         if (forceUpdate || this.world.getBlockState(this.pos) != this.state) {
-            this.world.setBlockState(this.pos, this.state, 3);
+            this.world.setBlock(this.pos, this.state, 3);
 
             for(int i = 0; i < this.connections.size(); ++i) {
                 WirePlacementHelper wirestate = this.getWire(this.connections.get(i));

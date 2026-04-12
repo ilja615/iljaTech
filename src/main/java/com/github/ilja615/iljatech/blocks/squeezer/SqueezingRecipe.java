@@ -7,23 +7,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.input.RecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public record SqueezingRecipe(Ingredient ingredient, FluidVariant fluidOutput, int fluidAmount) implements Recipe<SqueezingRecipe.InputContainer> {
 
     public static final MapCodec<SqueezingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient")
+        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient")
                     .forGetter(SqueezingRecipe::ingredient),
         FluidVariant.CODEC.fieldOf("fluid_output")
                 .forGetter(SqueezingRecipe::fluidOutput),
@@ -35,39 +35,39 @@ public record SqueezingRecipe(Ingredient ingredient, FluidVariant fluidOutput, i
         )
     );
 
-    public static final PacketCodec<RegistryByteBuf, SqueezingRecipe> PACKET_CODEC = PacketCodec.tuple(
-        Ingredient.PACKET_CODEC,
+    public static final StreamCodec<RegistryFriendlyByteBuf, SqueezingRecipe> STREAM_CODEC = StreamCodec.composite(
+        Ingredient.CONTENTS_STREAM_CODEC,
         SqueezingRecipe::ingredient,
         FluidVariant.PACKET_CODEC,
         SqueezingRecipe::fluidOutput,
-        PacketCodecs.INTEGER,
+        ByteBufCodecs.INT,
         SqueezingRecipe::fluidAmount,
         SqueezingRecipe::new
     );
 
     @Override
-    public boolean matches(SqueezingRecipe.InputContainer input, World world) {
+    public boolean matches(SqueezingRecipe.InputContainer input, Level world) {
         return ingredient.test(input.stack());
     }
 
     @Override
-    public ItemStack craft(InputContainer input, RegistryWrapper.WrapperLookup registries) {
+    public ItemStack craft(InputContainer input, HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean fits(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+    public ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
         return ItemStack.EMPTY;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Registries.RECIPE_SERIALIZER.get(Registries.RECIPE_TYPE.getId(getType()));
+        return BuiltInRegistries.RECIPE_SERIALIZER.get(BuiltInRegistries.RECIPE_TYPE.getKey(getType()));
     }
 
     @Override
@@ -78,12 +78,12 @@ public record SqueezingRecipe(Ingredient ingredient, FluidVariant fluidOutput, i
     public record InputContainer(ItemStack stack) implements RecipeInput {
 
         @Override
-        public ItemStack getStackInSlot(int slot) {
+        public ItemStack getItem(int slot) {
             return ItemStack.EMPTY;
         }
 
         @Override
-        public int getSize() {
+        public int size() {
             return 0;
         }
     }
@@ -95,8 +95,8 @@ public record SqueezingRecipe(Ingredient ingredient, FluidVariant fluidOutput, i
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, SqueezingRecipe> packetCodec() {
-            return PACKET_CODEC;
+        public StreamCodec<RegistryFriendlyByteBuf, SqueezingRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

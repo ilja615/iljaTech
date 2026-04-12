@@ -8,12 +8,11 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.world.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.joml.Vector2f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +42,7 @@ public class IljaTech implements ModInitializer {
 		ModCriteria.load();
 		ModFeatures.load();
 
-		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> {
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
 			entries.addAfter(Items.PUMPKIN_PIE ,ModItems.BOILED_EGG);
 		});
 
@@ -52,20 +51,20 @@ public class IljaTech implements ModInitializer {
 		// TODO: move the wind code elsewhere
 		ServerTickEvents.START_WORLD_TICK.register(world -> {
 			if (world.random.nextFloat() < 0.005f) {
-				world.getPlayers().forEach(player -> {
-					BlockPos origin = player.getBlockPos().add(world.random.nextInt(65) - 32, 0, + world.random.nextInt(65) - 32);
+				world.players().forEach(player -> {
+					BlockPos origin = player.blockPosition().offset(world.random.nextInt(65) - 32, 0, + world.random.nextInt(65) - 32);
 					int x = origin.getX();
 					int z = origin.getZ();
 					Vector2f wind = Wind.getWindDirectionUnitVectorAt(world, x >> 4, z >> 4);
-					world.spawnParticles(ModParticles.WIND_LEADING, x + world.random.nextDouble() - 0.5d, world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, x, z) + world.random.nextDouble() * 2.0d + 3.0d, z + world.random.nextDouble() - 0.5d,
+					world.sendParticles(ModParticles.WIND_LEADING, x + world.random.nextDouble() - 0.5d, world.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) + world.random.nextDouble() * 2.0d + 3.0d, z + world.random.nextDouble() - 0.5d,
 							0, wind.x, 0.0d, wind.y, 0.5d);
 				});
 			}
 		});
 
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-			long seed = server.getOverworld().getSeed();
-			handler.sendPacket(new CustomPayloadS2CPacket(new WindRandomizerSeedS2CPayload(seed)));
+			long seed = server.overworld().getSeed();
+			handler.send(new ClientboundCustomPayloadPacket(new WindRandomizerSeedS2CPayload(seed)));
 		});
 	}
 }

@@ -6,35 +6,35 @@ import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class CokeOvenScreenHandler extends ScreenHandler {
+public class CokeOvenScreenHandler extends AbstractContainerMenu {
     private final CokeOvenBlockEntity blockEntity;
-    private final ScreenHandlerContext context;
+    private final ContainerLevelAccess context;
 
     // Client Constructor
-    public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
-        this(syncId, playerInventory, (CokeOvenBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()), new SimpleInventory(5));
+    public CokeOvenScreenHandler(int syncId, Inventory playerInventory, BlockPosPayload payload) {
+        this(syncId, playerInventory, (CokeOvenBlockEntity) playerInventory.player.level().getBlockEntity(payload.pos()), new SimpleContainer(5));
     }
 
     // Main Constructor - (Directly called from server)
-    public CokeOvenScreenHandler(int syncId, PlayerInventory playerInventory, CokeOvenBlockEntity blockEntity, SimpleInventory inventory) {
+    public CokeOvenScreenHandler(int syncId, Inventory playerInventory, CokeOvenBlockEntity blockEntity, SimpleContainer inventory) {
         super(ModScreenHandlerTypes.COKE_OVEN, syncId);
 
         this.blockEntity = blockEntity;
-        this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
+        this.context = ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos());
 
         addSlot(new Slot(inventory, 0, 44, 24));
         addSlot(new Slot(inventory, 1, 116, 24));
         addSlot(new Slot(inventory, 2, 116, 42) {
             @Override
-            public boolean canInsert(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return blockEntity.isValid(stack, 2);
             }
         });
@@ -43,7 +43,7 @@ public class CokeOvenScreenHandler extends ScreenHandler {
         addPlayerHotbar(playerInventory);
     }
 
-    private void addPlayerInventory(PlayerInventory playerInv) {
+    private void addPlayerInventory(Inventory playerInv) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addSlot(new Slot(playerInv, 9 + (column + (row * 9)), 8 + (column * 18), 84 + (row * 18)));
@@ -51,20 +51,20 @@ public class CokeOvenScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addPlayerHotbar(PlayerInventory playerInv) {
+    private void addPlayerHotbar(Inventory playerInv) {
         for (int column = 0; column < 9; column++) {
             addSlot(new Slot(playerInv, column, 8 + (column * 18), 142));
         }
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
+    public ItemStack quickMoveStack(Player player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return canUse(this.context, player, ModBlocks.COKE_OVEN);
+    public boolean stillValid(Player player) {
+        return stillValid(this.context, player, ModBlocks.COKE_OVEN);
     }
 
     public CokeOvenBlockEntity getBlockEntity() {

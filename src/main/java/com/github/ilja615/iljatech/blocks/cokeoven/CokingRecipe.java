@@ -6,18 +6,17 @@ import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.input.RecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public record CokingRecipe(CountedIngredient countedIngredient, ItemStack output, int fluidAmount) implements Recipe<CokingRecipe.InputContainer> {
 
@@ -34,39 +33,39 @@ public record CokingRecipe(CountedIngredient countedIngredient, ItemStack output
         )
     );
 
-    public static final PacketCodec<RegistryByteBuf, CokingRecipe> PACKET_CODEC = PacketCodec.tuple(
+    public static final StreamCodec<RegistryFriendlyByteBuf, CokingRecipe> STREAM_CODEC = StreamCodec.composite(
         CountedIngredient.PACKET_CODEC,
         CokingRecipe::countedIngredient,
-        ItemStack.PACKET_CODEC,
+        ItemStack.STREAM_CODEC,
         CokingRecipe::output,
-        PacketCodecs.INTEGER,
+        ByteBufCodecs.INT,
         CokingRecipe::fluidAmount,
         CokingRecipe::new
     );
 
     @Override
-    public boolean matches(InputContainer input, World world) {
+    public boolean matches(InputContainer input, Level world) {
         return countedIngredient.test(input.stack());
     }
 
     @Override
-    public ItemStack craft(InputContainer input, RegistryWrapper.WrapperLookup registries) {
+    public ItemStack craft(InputContainer input, HolderLookup.Provider registries) {
         return output.copy();
     }
 
     @Override
-    public boolean fits(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+    public ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
         return output.copy();
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Registries.RECIPE_SERIALIZER.get(Registries.RECIPE_TYPE.getId(getType()));
+        return BuiltInRegistries.RECIPE_SERIALIZER.get(BuiltInRegistries.RECIPE_TYPE.getKey(getType()));
     }
 
     @Override
@@ -77,12 +76,12 @@ public record CokingRecipe(CountedIngredient countedIngredient, ItemStack output
     public record InputContainer(ItemStack stack) implements RecipeInput {
 
         @Override
-        public ItemStack getStackInSlot(int slot) {
+        public ItemStack getItem(int slot) {
             return ItemStack.EMPTY;
         }
 
         @Override
-        public int getSize() {
+        public int size() {
             return 0;
         }
     }
@@ -94,8 +93,8 @@ public record CokingRecipe(CountedIngredient countedIngredient, ItemStack output
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, CokingRecipe> packetCodec() {
-            return PACKET_CODEC;
+        public StreamCodec<RegistryFriendlyByteBuf, CokingRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

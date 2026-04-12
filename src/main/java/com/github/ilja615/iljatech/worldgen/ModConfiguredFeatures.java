@@ -6,79 +6,82 @@ import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModFeatures;
 import com.github.ilja615.iljatech.worldgen.featureconfigs.DoubleBlockFeatureConfig;
 import com.github.ilja615.iljatech.worldgen.features.DoubleBlockFeature;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SweetBerryBushBlock;
-import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.structure.rule.BlockMatchRuleTest;
-import net.minecraft.structure.rule.RuleTest;
-import net.minecraft.structure.rule.TagMatchRuleTest;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.world.gen.blockpredicate.BlockPredicate;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
-import net.minecraft.world.gen.stateprovider.PredicatedStateProvider;
-
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import java.util.List;
 
 public class ModConfiguredFeatures {
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_TIN_ORE_KEY = registerKey("overworld_tin_ore");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_NICKEL_ORE_KEY = registerKey("overworld_nickel_ore");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_SANDSTONE_ALUMINIUM_ORE_KEY = registerKey("overworld_sandstone_aluminium_ore");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_gravel_aluminium_ore");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_large_gravel_aluminium_ore");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_CHROME_ORE_KEY = registerKey("overworld_chrome_ore");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_FIRE_CLAY_KEY = registerKey("overworld_fire_clay");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_LIMESTONE_KEY = registerKey("overworld_limestone");
-    public static final RegistryKey<ConfiguredFeature<?, ?>> OVERWORLD_FLAX_KEY = registerKey("overworld_flax");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_TIN_ORE_KEY = registerKey("overworld_tin_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_NICKEL_ORE_KEY = registerKey("overworld_nickel_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_SANDSTONE_ALUMINIUM_ORE_KEY = registerKey("overworld_sandstone_aluminium_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_gravel_aluminium_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY = registerKey("overworld_large_gravel_aluminium_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_CHROME_ORE_KEY = registerKey("overworld_chrome_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_FIRE_CLAY_KEY = registerKey("overworld_fire_clay");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_LIMESTONE_KEY = registerKey("overworld_limestone");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> OVERWORLD_FLAX_KEY = registerKey("overworld_flax");
 
-    public static void bootStrap(Registerable<ConfiguredFeature<?, ?>> context) {
-        RegistryEntryLookup<Feature<?>> registryLookup = context.getRegistryLookup(RegistryKeys.FEATURE);
+    public static void bootStrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+        HolderGetter<Feature<?>> registryLookup = context.lookup(Registries.FEATURE);
 
-        RuleTest stoneOreReplaceables = new TagMatchRuleTest(BlockTags.STONE_ORE_REPLACEABLES);
-        RuleTest deepslateOreReplaceables = new TagMatchRuleTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
-        RuleTest sandStoneOreReplaceables = new BlockMatchRuleTest(Blocks.SANDSTONE);
-        RuleTest gravelOreReplaceables = new BlockMatchRuleTest(Blocks.GRAVEL);
-        RuleTest ruleTest = new TagMatchRuleTest(BlockTags.BASE_STONE_OVERWORLD);
+        RuleTest stoneOreReplaceables = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
+        RuleTest deepslateOreReplaceables = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
+        RuleTest sandStoneOreReplaceables = new BlockMatchTest(Blocks.SANDSTONE);
+        RuleTest gravelOreReplaceables = new BlockMatchTest(Blocks.GRAVEL);
+        RuleTest ruleTest = new TagMatchTest(BlockTags.BASE_STONE_OVERWORLD);
 
-        List<OreFeatureConfig.Target> overworldTinTargets = List.of(
-                OreFeatureConfig.createTarget(stoneOreReplaceables, ModBlocks.TIN_ORE.getDefaultState()),
-                OreFeatureConfig.createTarget(deepslateOreReplaceables, ModBlocks.DEEPSLATE_TIN_ORE.getDefaultState()));
-        List<OreFeatureConfig.Target> overworldNickelTargets = List.of(
-                OreFeatureConfig.createTarget(stoneOreReplaceables, ModBlocks.NICKEL_ORE.getDefaultState()),
-                OreFeatureConfig.createTarget(deepslateOreReplaceables, ModBlocks.DEEPSLATE_NICKEL_ORE.getDefaultState()));
-        List<OreFeatureConfig.Target> overworldSandstoneAluminiumTargets = List.of(
-                OreFeatureConfig.createTarget(sandStoneOreReplaceables, ModBlocks.SANDSTONE_ALUMINIUM_ORE.getDefaultState()));
-        List<OreFeatureConfig.Target> overworldGravelAluminiumTargets = List.of(
-                OreFeatureConfig.createTarget(gravelOreReplaceables, ModBlocks.GRAVEL_ALUMINIUM_ORE.getDefaultState()));
-        List<OreFeatureConfig.Target> overworldChromeTargets = List.of(
-                OreFeatureConfig.createTarget(stoneOreReplaceables, ModBlocks.CHROME_ORE.getDefaultState()),
-                OreFeatureConfig.createTarget(deepslateOreReplaceables, ModBlocks.DEEPSLATE_CHROME_ORE.getDefaultState()));
+        List<OreConfiguration.TargetBlockState> overworldTinTargets = List.of(
+                OreConfiguration.target(stoneOreReplaceables, ModBlocks.TIN_ORE.defaultBlockState()),
+                OreConfiguration.target(deepslateOreReplaceables, ModBlocks.DEEPSLATE_TIN_ORE.defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> overworldNickelTargets = List.of(
+                OreConfiguration.target(stoneOreReplaceables, ModBlocks.NICKEL_ORE.defaultBlockState()),
+                OreConfiguration.target(deepslateOreReplaceables, ModBlocks.DEEPSLATE_NICKEL_ORE.defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> overworldSandstoneAluminiumTargets = List.of(
+                OreConfiguration.target(sandStoneOreReplaceables, ModBlocks.SANDSTONE_ALUMINIUM_ORE.defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> overworldGravelAluminiumTargets = List.of(
+                OreConfiguration.target(gravelOreReplaceables, ModBlocks.GRAVEL_ALUMINIUM_ORE.defaultBlockState()));
+        List<OreConfiguration.TargetBlockState> overworldChromeTargets = List.of(
+                OreConfiguration.target(stoneOreReplaceables, ModBlocks.CHROME_ORE.defaultBlockState()),
+                OreConfiguration.target(deepslateOreReplaceables, ModBlocks.DEEPSLATE_CHROME_ORE.defaultBlockState()));
 
-        context.register(OVERWORLD_TIN_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldTinTargets, 14)));
-        context.register(OVERWORLD_NICKEL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldNickelTargets, 8)));
-        context.register(OVERWORLD_SANDSTONE_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldSandstoneAluminiumTargets, 5)));
-        context.register(OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldGravelAluminiumTargets, 6)));
-        context.register(OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldGravelAluminiumTargets, 48)));
-        context.register(OVERWORLD_CHROME_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(overworldChromeTargets, 5)));
-        context.register(OVERWORLD_FIRE_CLAY_KEY, new ConfiguredFeature<>(Feature.DISK, new DiskFeatureConfig(
-                        PredicatedStateProvider.of(ModBlocks.FIRE_CLAY), BlockPredicate.matchingBlocks(List.of(Blocks.DIRT, ModBlocks.FIRE_CLAY)), UniformIntProvider.create(2, 3), 1)));
-        context.register(OVERWORLD_LIMESTONE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(ruleTest, ModBlocks.LIMESTONE.getDefaultState(), 64)));
-        context.register(OVERWORLD_FLAX_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(
+        context.register(OVERWORLD_TIN_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(overworldTinTargets, 14)));
+        context.register(OVERWORLD_NICKEL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(overworldNickelTargets, 8)));
+        context.register(OVERWORLD_SANDSTONE_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(overworldSandstoneAluminiumTargets, 5)));
+        context.register(OVERWORLD_GRAVEL_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(overworldGravelAluminiumTargets, 6)));
+        context.register(OVERWORLD_LARGE_GRAVEL_ALUMINIUM_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(overworldGravelAluminiumTargets, 48)));
+        context.register(OVERWORLD_CHROME_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(overworldChromeTargets, 5)));
+        context.register(OVERWORLD_FIRE_CLAY_KEY, new ConfiguredFeature<>(Feature.DISK, new DiskConfiguration(
+                        RuleBasedBlockStateProvider.simple(ModBlocks.FIRE_CLAY), BlockPredicate.matchesBlocks(List.of(Blocks.DIRT, ModBlocks.FIRE_CLAY)), UniformInt.of(2, 3), 1)));
+        context.register(OVERWORLD_LIMESTONE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(ruleTest, ModBlocks.LIMESTONE.defaultBlockState(), 64)));
+        context.register(OVERWORLD_FLAX_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, FeatureUtils.simplePatchConfiguration(
                 ((DoubleBlockFeature) ModFeatures.DOUBLE_BLOCK),
-                new DoubleBlockFeatureConfig(BlockStateProvider.of(ModBlocks.FLAX_SEEDS.getDefaultState().with(FlaxBlock.AGE, 7).with(FlaxBlock.HALF, DoubleBlockHalf.LOWER)),
-                        BlockStateProvider.of(ModBlocks.FLAX_SEEDS.getDefaultState().with(FlaxBlock.AGE, 7).with(FlaxBlock.HALF, DoubleBlockHalf.UPPER))), List.of(Blocks.GRASS_BLOCK),
+                new DoubleBlockFeatureConfig(BlockStateProvider.simple(ModBlocks.FLAX_SEEDS.defaultBlockState().setValue(FlaxBlock.AGE, 7).setValue(FlaxBlock.HALF, DoubleBlockHalf.LOWER)),
+                        BlockStateProvider.simple(ModBlocks.FLAX_SEEDS.defaultBlockState().setValue(FlaxBlock.AGE, 7).setValue(FlaxBlock.HALF, DoubleBlockHalf.UPPER))), List.of(Blocks.GRASS_BLOCK),
                 48)));
 
     }
 
-    private static RegistryKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of(IljaTech.MOD_ID, name));
+    private static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, name));
     }
 
 

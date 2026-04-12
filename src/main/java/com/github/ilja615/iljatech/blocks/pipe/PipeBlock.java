@@ -3,59 +3,58 @@ package com.github.ilja615.iljatech.blocks.pipe;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
 import com.github.ilja615.iljatech.blocks.wire.WirePlacementHelper;
 import com.github.ilja615.iljatech.blocks.wire.WireShape;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-
 import java.nio.channels.Pipe;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PipeBlock  extends Block {
-    public static final EnumProperty<PipeShape> PIPE_SHAPE = EnumProperty.of("pipe_shape", PipeShape.class);
+    public static final EnumProperty<PipeShape> PIPE_SHAPE = EnumProperty.create("pipe_shape", PipeShape.class);
 
     protected static final Map<Direction, VoxelShape> OUTLINE_SHAPES;
 
     static {
         Map<Direction, VoxelShape> tempMap = new EnumMap<>(Direction.class);
 
-        tempMap.put(Direction.UP, Block.createCuboidShape(3.0d, 13.0d, 3.0d, 13.0d, 16.0d, 13.0d));
-        tempMap.put(Direction.DOWN, Block.createCuboidShape(3.0d, 0.0d, 3.0d, 13.0d, 3.0d, 13.0d));
-        tempMap.put(Direction.WEST, Block.createCuboidShape(0.0d, 3.0d, 3.0d, 3.0d, 13.0d, 13.0d));
-        tempMap.put(Direction.EAST, Block.createCuboidShape(13.0d, 3.0d, 3.0d, 16.0d, 13.0d, 13.0d));
-        tempMap.put(Direction.NORTH, Block.createCuboidShape(3.0d, 3.0d, 0.0d, 13.0d, 13.0d, 3.0d));
-        tempMap.put(Direction.SOUTH, Block.createCuboidShape(3.0d, 3.0d, 13.0d, 13.0d, 13.0d, 16.0d));
+        tempMap.put(Direction.UP, Block.box(3.0d, 13.0d, 3.0d, 13.0d, 16.0d, 13.0d));
+        tempMap.put(Direction.DOWN, Block.box(3.0d, 0.0d, 3.0d, 13.0d, 3.0d, 13.0d));
+        tempMap.put(Direction.WEST, Block.box(0.0d, 3.0d, 3.0d, 3.0d, 13.0d, 13.0d));
+        tempMap.put(Direction.EAST, Block.box(13.0d, 3.0d, 3.0d, 16.0d, 13.0d, 13.0d));
+        tempMap.put(Direction.NORTH, Block.box(3.0d, 3.0d, 0.0d, 13.0d, 13.0d, 3.0d));
+        tempMap.put(Direction.SOUTH, Block.box(3.0d, 3.0d, 13.0d, 13.0d, 13.0d, 16.0d));
 
         OUTLINE_SHAPES = Collections.unmodifiableMap(tempMap);
     }
-    protected static final VoxelShape CORE_AABB = Block.createCuboidShape(3.0d, 3.0d, 3.0d, 13.0d, 13.0d, 13.0d);
+    protected static final VoxelShape CORE_AABB = Block.box(3.0d, 3.0d, 3.0d, 13.0d, 13.0d, 13.0d);
 
-    public PipeBlock(Settings settings) {
+    public PipeBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(PIPE_SHAPE, PipeShape.UP_DOWN));
+        this.registerDefaultState(this.stateDefinition.any().setValue(PIPE_SHAPE, PipeShape.UP_DOWN));
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext ctx) {
-        PipeShape pipeshape = state.get(PIPE_SHAPE);
-        return VoxelShapes.union(CORE_AABB, OUTLINE_SHAPES.get(pipeshape.getDirection1()), OUTLINE_SHAPES.get(pipeshape.getDirection2()));
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx) {
+        PipeShape pipeshape = state.getValue(PIPE_SHAPE);
+        return Shapes.or(CORE_AABB, OUTLINE_SHAPES.get(pipeshape.getDirection1()), OUTLINE_SHAPES.get(pipeshape.getDirection2()));
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockState blockstate = this.getDefaultState();
-        Direction dir1 = ctx.getSide().getOpposite();
-        Direction dir2 = ctx.getPlayerLookDirection().getOpposite();
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        BlockState blockstate = this.defaultBlockState();
+        Direction dir1 = ctx.getClickedFace().getOpposite();
+        Direction dir2 = ctx.getNearestLookingDirection().getOpposite();
         PipeShape pipeshape = null;
         if ((dir1 == Direction.NORTH && dir2 == Direction.SOUTH) || (dir2 == Direction.NORTH && dir1 == Direction.SOUTH))
             pipeshape = PipeShape.NORTH_SOUTH;
@@ -88,10 +87,10 @@ public class PipeBlock  extends Block {
         if ((dir1 == Direction.WEST && dir2 == Direction.DOWN) || (dir2 == Direction.WEST && dir1 == Direction.DOWN))
             pipeshape = PipeShape.WEST_DOWN;
 
-        return blockstate.with(PIPE_SHAPE, pipeshape);
+        return blockstate.setValue(PIPE_SHAPE, pipeshape);
     }
 
-    public static boolean isPipe(World world, BlockPos pos) {
+    public static boolean isPipe(Level world, BlockPos pos) {
         return isPipe(world.getBlockState(pos));
     }
 
@@ -100,7 +99,7 @@ public class PipeBlock  extends Block {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(PIPE_SHAPE);
     }
 }

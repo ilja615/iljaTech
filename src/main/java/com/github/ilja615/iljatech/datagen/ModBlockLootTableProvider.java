@@ -7,146 +7,142 @@ import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.condition.BlockStatePropertyLootCondition;
-import net.minecraft.loot.condition.EntityPropertiesLootCondition;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.entry.AlternativeEntry;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.entry.LeafEntry;
-import net.minecraft.loot.entry.LootPoolEntry;
-import net.minecraft.loot.function.ApplyBonusLootFunction;
-import net.minecraft.loot.function.SetCountLootFunction;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.loot.provider.number.UniformLootNumberProvider;
-import net.minecraft.predicate.StatePredicate;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.IntStream;
 
 public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
-    public ModBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public ModBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(dataOutput, registryLookup);
     }
 
     @Override
     public void generate() {
-        addDrop(ModBlocks.TIN_ORE, this::tinOreDrops);
-        addDrop(ModBlocks.DEEPSLATE_TIN_ORE, this::tinOreDrops);
-        addDrop(ModBlocks.NICKEL_ORE, this::nickelOreDrops);
-        addDrop(ModBlocks.DEEPSLATE_NICKEL_ORE, this::nickelOreDrops);
-        addDrop(ModBlocks.CHROME_ORE, oreDrops(ModBlocks.CHROME_ORE, ModItems.RAW_CHROME_ORE));
-        addDrop(ModBlocks.DEEPSLATE_CHROME_ORE, oreDrops(ModBlocks.DEEPSLATE_CHROME_ORE, ModItems.RAW_CHROME_ORE));
-        addDrop(ModBlocks.SANDSTONE_ALUMINIUM_ORE, oreDrops(ModBlocks.SANDSTONE_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
-        addDrop(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE, oreDrops(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
-        addDrop(ModBlocks.GRAVEL_ALUMINIUM_ORE, oreDrops(ModBlocks.GRAVEL_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
-        addDrop(ModBlocks.RAW_TIN_ORE);
-        addDrop(ModBlocks.RAW_NICKEL_ORE);
-        addDrop(ModBlocks.RAW_ALUMINIUM_ORE);
-        addDrop(ModBlocks.RAW_CHROME_ORE);
-        addDrop(ModBlocks.CRANK);
-        addDrop(ModBlocks.GEARBOX);
-        addDrop(ModBlocks.TURBINE);
-        addDrop(ModBlocks.WOODEN_SHAFT);
-        addDrop(ModBlocks.ROLLER_MILL);
-        addDrop(ModBlocks.DRILL);
-        addDrop(ModBlocks.IRON_PLATE);
-        addDrop(ModBlocks.COPPER_ROD);
-        addDrop(ModBlocks.IRON_ROD);
-        addDrop(ModBlocks.COPPER_WIRE);
-        addDrop(ModBlocks.NAILED_ACACIA_PLANKS);
-        addDrop(ModBlocks.NAILED_BAMBOO_PLANKS);
-        addDrop(ModBlocks.NAILED_BIRCH_PLANKS);
-        addDrop(ModBlocks.NAILED_CHERRY_PLANKS);
-        addDrop(ModBlocks.NAILED_CRIMSON_PLANKS);
-        addDrop(ModBlocks.NAILED_DARK_OAK_PLANKS);
-        addDrop(ModBlocks.NAILED_JUNGLE_PLANKS);
-        addDrop(ModBlocks.NAILED_MANGROVE_PLANKS);
-        addDrop(ModBlocks.NAILED_OAK_PLANKS);
-        addDrop(ModBlocks.NAILED_SPRUCE_PLANKS);
-        addDrop(ModBlocks.NAILED_WARPED_PLANKS);
-        addDrop(ModBlocks.BELLOWS);
-        addDrop(ModBlocks.FIRE_BRICKS);
-        addDrop(ModBlocks.CLINKER_BRICKS);
-        this.addDrop(ModBlocks.FIRE_CLAY, block -> this.drops(block, ModItems.FIRE_CLAY_BALL, ConstantLootNumberProvider.create(4.0F)));
-        addDrop(ModBlocks.FIREBOX);
-        addDrop(ModBlocks.FOUNDRY);
-        addDrop(ModBlocks.ITEM_HATCH, ModBlocks.COKE_OVEN);
-        addDrop(ModBlocks.COKE_OVEN);
-        addDrop(ModBlocks.LIMESTONE);
-        addDrop(ModBlocks.LIMESTONE_STAIRS);
-        addDrop(ModBlocks.LIMESTONE_WALL);
-        slabDrops(ModBlocks.LIMESTONE_SLAB);
-        addDrop(ModBlocks.FUNNEL);
-        addDrop(ModBlocks.WOODEN_FUNNEL);
-        addDrop(ModBlocks.STEEL_PIPE);
-        addDrop(ModBlocks.WOODEN_PIPE);
-        addDrop(ModBlocks.TERRACOTTA_PIPE);
-        addDrop(ModBlocks.CONVEYOR_BELT);
-        addDrop(ModBlocks.IRON_SHEETMETAL);
-        slabDrops(ModBlocks.IRON_SHEETMETAL_SLAB);
-        addDrop(ModBlocks.IRON_SHEETMETAL_STAIRS);
-        addDrop(ModBlocks.EXPOSED_IRON_SHEETMETAL);
-        slabDrops(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB);
-        addDrop(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS);
-        addDrop(ModBlocks.WEATHERED_IRON_SHEETMETAL);
-        slabDrops(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB);
-        addDrop(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS);
-        addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL);
-        slabDrops(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB);
-        addDrop(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
-        addDrop(ModBlocks.CHAIR);
-        addDrop(ModBlocks.STEEL_BLOCK);
+        add(ModBlocks.TIN_ORE, this::tinOreDrops);
+        add(ModBlocks.DEEPSLATE_TIN_ORE, this::tinOreDrops);
+        add(ModBlocks.NICKEL_ORE, this::nickelOreDrops);
+        add(ModBlocks.DEEPSLATE_NICKEL_ORE, this::nickelOreDrops);
+        add(ModBlocks.CHROME_ORE, createOreDrop(ModBlocks.CHROME_ORE, ModItems.RAW_CHROME_ORE));
+        add(ModBlocks.DEEPSLATE_CHROME_ORE, createOreDrop(ModBlocks.DEEPSLATE_CHROME_ORE, ModItems.RAW_CHROME_ORE));
+        add(ModBlocks.SANDSTONE_ALUMINIUM_ORE, createOreDrop(ModBlocks.SANDSTONE_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
+        add(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE, createOreDrop(ModBlocks.RED_SANDSTONE_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
+        add(ModBlocks.GRAVEL_ALUMINIUM_ORE, createOreDrop(ModBlocks.GRAVEL_ALUMINIUM_ORE, ModItems.RAW_ALUMINIUM_ORE));
+        dropSelf(ModBlocks.RAW_TIN_ORE);
+        dropSelf(ModBlocks.RAW_NICKEL_ORE);
+        dropSelf(ModBlocks.RAW_ALUMINIUM_ORE);
+        dropSelf(ModBlocks.RAW_CHROME_ORE);
+        dropSelf(ModBlocks.CRANK);
+        dropSelf(ModBlocks.GEARBOX);
+        dropSelf(ModBlocks.TURBINE);
+        dropSelf(ModBlocks.WOODEN_SHAFT);
+        dropSelf(ModBlocks.ROLLER_MILL);
+        dropSelf(ModBlocks.DRILL);
+        dropSelf(ModBlocks.IRON_PLATE);
+        dropSelf(ModBlocks.COPPER_ROD);
+        dropSelf(ModBlocks.IRON_ROD);
+        dropSelf(ModBlocks.COPPER_WIRE);
+        dropSelf(ModBlocks.NAILED_ACACIA_PLANKS);
+        dropSelf(ModBlocks.NAILED_BAMBOO_PLANKS);
+        dropSelf(ModBlocks.NAILED_BIRCH_PLANKS);
+        dropSelf(ModBlocks.NAILED_CHERRY_PLANKS);
+        dropSelf(ModBlocks.NAILED_CRIMSON_PLANKS);
+        dropSelf(ModBlocks.NAILED_DARK_OAK_PLANKS);
+        dropSelf(ModBlocks.NAILED_JUNGLE_PLANKS);
+        dropSelf(ModBlocks.NAILED_MANGROVE_PLANKS);
+        dropSelf(ModBlocks.NAILED_OAK_PLANKS);
+        dropSelf(ModBlocks.NAILED_SPRUCE_PLANKS);
+        dropSelf(ModBlocks.NAILED_WARPED_PLANKS);
+        dropSelf(ModBlocks.BELLOWS);
+        dropSelf(ModBlocks.FIRE_BRICKS);
+        dropSelf(ModBlocks.CLINKER_BRICKS);
+        this.add(ModBlocks.FIRE_CLAY, block -> this.createSingleItemTableWithSilkTouch(block, ModItems.FIRE_CLAY_BALL, ConstantValue.exactly(4.0F)));
+        dropSelf(ModBlocks.FIREBOX);
+        dropSelf(ModBlocks.FOUNDRY);
+        dropOther(ModBlocks.ITEM_HATCH, ModBlocks.COKE_OVEN);
+        dropSelf(ModBlocks.COKE_OVEN);
+        dropSelf(ModBlocks.LIMESTONE);
+        dropSelf(ModBlocks.LIMESTONE_STAIRS);
+        dropSelf(ModBlocks.LIMESTONE_WALL);
+        createSlabItemTable(ModBlocks.LIMESTONE_SLAB);
+        dropSelf(ModBlocks.FUNNEL);
+        dropSelf(ModBlocks.WOODEN_FUNNEL);
+        dropSelf(ModBlocks.STEEL_PIPE);
+        dropSelf(ModBlocks.WOODEN_PIPE);
+        dropSelf(ModBlocks.TERRACOTTA_PIPE);
+        dropSelf(ModBlocks.CONVEYOR_BELT);
+        dropSelf(ModBlocks.IRON_SHEETMETAL);
+        createSlabItemTable(ModBlocks.IRON_SHEETMETAL_SLAB);
+        dropSelf(ModBlocks.IRON_SHEETMETAL_STAIRS);
+        dropSelf(ModBlocks.EXPOSED_IRON_SHEETMETAL);
+        createSlabItemTable(ModBlocks.EXPOSED_IRON_SHEETMETAL_SLAB);
+        dropSelf(ModBlocks.EXPOSED_IRON_SHEETMETAL_STAIRS);
+        dropSelf(ModBlocks.WEATHERED_IRON_SHEETMETAL);
+        createSlabItemTable(ModBlocks.WEATHERED_IRON_SHEETMETAL_SLAB);
+        dropSelf(ModBlocks.WEATHERED_IRON_SHEETMETAL_STAIRS);
+        dropSelf(ModBlocks.RUSTY_IRON_SHEETMETAL);
+        createSlabItemTable(ModBlocks.RUSTY_IRON_SHEETMETAL_SLAB);
+        dropSelf(ModBlocks.RUSTY_IRON_SHEETMETAL_STAIRS);
+        dropSelf(ModBlocks.CHAIR);
+        dropSelf(ModBlocks.STEEL_BLOCK);
         pulverizerMillDrops(ModBlocks.PULVERIZER_MILL);
-        LootCondition.Builder flaxLootConditionBuilder = BlockStatePropertyLootCondition.builder(ModBlocks.FLAX_SEEDS).properties(StatePredicate.Builder.create().exactMatch(FlaxBlock.AGE, 7).exactMatch(FlaxBlock.HALF, DoubleBlockHalf.UPPER));
-        addDrop(ModBlocks.FLAX_SEEDS, cropDrops(ModBlocks.FLAX_SEEDS, ModBlocks.FLAX.asItem(), ModBlocks.FLAX_SEEDS.asItem(), flaxLootConditionBuilder));
-        addDrop(ModBlocks.FLAX, (block) -> this.dropsWithProperty(block, TallPlantBlock.HALF, DoubleBlockHalf.LOWER));
-        addDrop(ModBlocks.SQUEEZER);
-        addDrop(ModBlocks.SPINNING_FRAME);
-        addDrop(ModBlocks.TIN_PLATE);
-        addDrop(ModBlocks.WIND_VANE);
-        addDrop(ModBlocks.SAWDUST, (block) -> {
-            return LootTable.builder().pool(LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F)).with((LootPoolEntry.Builder) this.applyExplosionDecay(block, ItemEntry.builder(block).apply(IntStream.rangeClosed(1, 4).boxed().toList(), (amount) -> {
-                return SetCountLootFunction.builder(ConstantLootNumberProvider.create((float)amount)).conditionally(BlockStatePropertyLootCondition.builder(block).properties(StatePredicate.Builder.create().exactMatch(SawDustBlock.LEVEL, amount)));
+        LootItemCondition.Builder flaxLootConditionBuilder = LootItemBlockStatePropertyCondition.hasBlockStateProperties(ModBlocks.FLAX_SEEDS).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(FlaxBlock.AGE, 7).hasProperty(FlaxBlock.HALF, DoubleBlockHalf.UPPER));
+        add(ModBlocks.FLAX_SEEDS, createCropDrops(ModBlocks.FLAX_SEEDS, ModBlocks.FLAX.asItem(), ModBlocks.FLAX_SEEDS.asItem(), flaxLootConditionBuilder));
+        add(ModBlocks.FLAX, (block) -> this.createSinglePropConditionTable(block, DoublePlantBlock.HALF, DoubleBlockHalf.LOWER));
+        dropSelf(ModBlocks.SQUEEZER);
+        dropSelf(ModBlocks.SPINNING_FRAME);
+        dropSelf(ModBlocks.TIN_PLATE);
+        dropSelf(ModBlocks.WIND_VANE);
+        add(ModBlocks.SAWDUST, (block) -> {
+            return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add((LootPoolEntryContainer.Builder) this.applyExplosionDecay(block, LootItem.lootTableItem(block).apply(IntStream.rangeClosed(1, 4).boxed().toList(), (amount) -> {
+                return SetItemCountFunction.setCount(ConstantValue.exactly((float)amount)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SawDustBlock.LEVEL, amount)));
             }))));
         });
     }
 
     public LootTable.Builder pulverizerMillDrops(Block block) {
-        return LootTable.builder().pool((LootPool.Builder)this.addSurvivesExplosionCondition(block, LootPool.builder().rolls(ConstantLootNumberProvider.create(1.0F)).with(ItemEntry.builder(block).conditionally(BlockStatePropertyLootCondition.builder(block).properties(StatePredicate.Builder.create().exactMatch(PulverizerMillBlock.HALF, Integer.valueOf(2)))))));
+        return LootTable.lootTable().withPool((LootPool.Builder)this.applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(block).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(PulverizerMillBlock.HALF, Integer.valueOf(2)))))));
     }
 
     public LootTable.Builder tinOreDrops(Block drop) {
-        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
-        return this.dropsWithSilkTouch(
+        HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        return this.createSilkTouchDispatchTable(
                 drop,
-                (LootPoolEntry.Builder<?>)this.applyExplosionDecay(
+                (LootPoolEntryContainer.Builder<?>)this.applyExplosionDecay(
                         drop,
-                        ItemEntry.builder(ModItems.RAW_TIN_ORE)
-                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0F, 3.0F)))
-                                .apply(ApplyBonusLootFunction.oreDrops(impl.getOrThrow(Enchantments.FORTUNE)))
+                        LootItem.lootTableItem(ModItems.RAW_TIN_ORE)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 3.0F)))
+                                .apply(ApplyBonusCount.addOreBonusCount(impl.getOrThrow(Enchantments.FORTUNE)))
                 )
         );
     }
 
     public LootTable.Builder nickelOreDrops(Block drop) {
-        RegistryWrapper.Impl<Enchantment> impl = this.registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT);
-        return this.dropsWithSilkTouch(
+        HolderLookup.RegistryLookup<Enchantment> impl = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+        return this.createSilkTouchDispatchTable(
                 drop,
-                (LootPoolEntry.Builder<?>)this.applyExplosionDecay(
+                (LootPoolEntryContainer.Builder<?>)this.applyExplosionDecay(
                         drop,
-                        ItemEntry.builder(ModItems.RAW_NICKEL_ORE)
-                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0F, 4.0F)))
-                                .apply(ApplyBonusLootFunction.oreDrops(impl.getOrThrow(Enchantments.FORTUNE)))
+                        LootItem.lootTableItem(ModItems.RAW_NICKEL_ORE)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 4.0F)))
+                                .apply(ApplyBonusCount.addOreBonusCount(impl.getOrThrow(Enchantments.FORTUNE)))
                 )
         );
     }

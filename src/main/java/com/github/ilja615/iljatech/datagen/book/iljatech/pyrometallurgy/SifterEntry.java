@@ -41,7 +41,7 @@ public class SifterEntry extends EntryProvider {
 
     @Override
     protected Pair<Integer, Integer> entryBackground() {
-        return Pair.of(0, 1);
+        return Pair.of(0, 2);
     }
 
     @Override

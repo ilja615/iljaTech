@@ -6,18 +6,17 @@ import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.input.RecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public record BlueprintingRecipe(int pointsCost, ItemStack output) implements Recipe<RecipeInput> {
 
@@ -32,37 +31,37 @@ public record BlueprintingRecipe(int pointsCost, ItemStack output) implements Re
             )
     );
 
-    public static final PacketCodec<RegistryByteBuf, BlueprintingRecipe> PACKET_CODEC = PacketCodec.tuple(
-            PacketCodecs.INTEGER,
+    public static final StreamCodec<RegistryFriendlyByteBuf, BlueprintingRecipe> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT,
             BlueprintingRecipe::pointsCost,
-            ItemStack.PACKET_CODEC,
+            ItemStack.STREAM_CODEC,
             BlueprintingRecipe::output,
             BlueprintingRecipe::new
     );
 
     @Override
-    public boolean matches(RecipeInput input, World world) {
+    public boolean matches(RecipeInput input, Level world) {
         return true;
     }
 
     @Override
-    public ItemStack craft(RecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack assemble(RecipeInput input, HolderLookup.Provider lookup) {
         return null;
     }
 
     @Override
-    public boolean fits(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+    public ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
         return output.copy();
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Registries.RECIPE_SERIALIZER.get(Registries.RECIPE_TYPE.getId(getType()));
+        return BuiltInRegistries.RECIPE_SERIALIZER.get(BuiltInRegistries.RECIPE_TYPE.getKey(getType()));
     }
 
     @Override
@@ -77,8 +76,8 @@ public record BlueprintingRecipe(int pointsCost, ItemStack output) implements Re
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, BlueprintingRecipe> packetCodec() {
-            return PACKET_CODEC;
+        public StreamCodec<RegistryFriendlyByteBuf, BlueprintingRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

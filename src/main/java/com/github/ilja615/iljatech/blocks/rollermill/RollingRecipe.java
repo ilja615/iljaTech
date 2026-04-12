@@ -3,22 +3,22 @@ package com.github.ilja615.iljatech.blocks.rollermill;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.recipe.input.RecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public record RollingRecipe(Ingredient stack, ItemStack output) implements Recipe<RollingRecipe.InputContainer> {
 
     public static final MapCodec<RollingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient")
+        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient")
                 .forGetter(RollingRecipe::stack),
         ItemStack.CODEC.fieldOf("result")
                 .forGetter(RollingRecipe::output)
@@ -28,37 +28,37 @@ public record RollingRecipe(Ingredient stack, ItemStack output) implements Recip
         )
     );
 
-    public static final PacketCodec<RegistryByteBuf, RollingRecipe> PACKET_CODEC = PacketCodec.tuple(
-        Ingredient.PACKET_CODEC,
+    public static final StreamCodec<RegistryFriendlyByteBuf, RollingRecipe> STREAM_CODEC = StreamCodec.composite(
+        Ingredient.CONTENTS_STREAM_CODEC,
         RollingRecipe::stack,
-        ItemStack.PACKET_CODEC,
+        ItemStack.STREAM_CODEC,
         RollingRecipe::output,
         RollingRecipe::new
     );
 
     @Override
-    public boolean matches(InputContainer input, World world) {
+    public boolean matches(InputContainer input, Level world) {
         return stack.test(input.stack());
     }
 
     @Override
-    public ItemStack craft(InputContainer input, RegistryWrapper.WrapperLookup registries) {
+    public ItemStack craft(InputContainer input, HolderLookup.Provider registries) {
         return output.copy();
     }
 
     @Override
-    public boolean fits(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+    public ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
         return output.copy();
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Registries.RECIPE_SERIALIZER.get(Registries.RECIPE_TYPE.getId(getType()));
+        return BuiltInRegistries.RECIPE_SERIALIZER.get(BuiltInRegistries.RECIPE_TYPE.getKey(getType()));
     }
 
     @Override
@@ -69,12 +69,12 @@ public record RollingRecipe(Ingredient stack, ItemStack output) implements Recip
     public record InputContainer(ItemStack stack) implements RecipeInput {
 
         @Override
-        public ItemStack getStackInSlot(int slot) {
+        public ItemStack getItem(int slot) {
             return ItemStack.EMPTY;
         }
 
         @Override
-        public int getSize() {
+        public int size() {
             return 0;
         }
     }
@@ -86,8 +86,8 @@ public record RollingRecipe(Ingredient stack, ItemStack output) implements Recip
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, RollingRecipe> packetCodec() {
-            return PACKET_CODEC;
+        public StreamCodec<RegistryFriendlyByteBuf, RollingRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

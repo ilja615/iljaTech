@@ -2,83 +2,85 @@ package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import net.minecraft.block.*;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.List;
 
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 
 public class DrillBlock extends Block implements MechPwrAccepter {
-    public static final EnumProperty<Direction> FACING = Properties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
-    public DrillBlock(Settings settings) {
+    public DrillBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(ON_OFF_PWR, OFF).with(FACING, Direction.UP));
+        this.registerDefaultState(this.stateDefinition.any().setValue(ON_OFF_PWR, OFF).setValue(FACING, Direction.UP));
     }
 
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getSide());
-    }
-
-    @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return (WallMountedBlock.canPlaceAt(world, pos, state.get(FACING).getOpposite())
-        || world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isOf(Blocks.HONEY_BLOCK));
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState().setValue(FACING, ctx.getClickedFace());
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(
-            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
-    ) {        return state.get(FACING) == direction && !state.canPlaceAt(world, pos)
-            ? Blocks.AIR.getDefaultState()
-            : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        return (FaceAttachedHorizontalDirectionalBlock.canAttach(world, pos, state.getValue(FACING).getOpposite())
+        || world.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).is(Blocks.HONEY_BLOCK));
     }
 
     @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+    protected BlockState updateShape(
+            BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos
+    ) {        return state.getValue(FACING) == direction && !state.canSurvive(world, pos)
+            ? Blocks.AIR.defaultBlockState()
+            : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
+    }
+
+    @Override
+    protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
         if (notify) {
-            world.setBlockState(pos, state.with(ON_OFF_PWR, SCHEDULED_STOP));
-            world.scheduleBlockTick(pos, this, 10);
-            if (!world.isClient) {
-                mine((ServerWorld) world, pos);
+            world.setBlockAndUpdate(pos, state.setValue(ON_OFF_PWR, SCHEDULED_STOP));
+            world.scheduleTick(pos, this, 10);
+            if (!world.isClientSide) {
+                mine((ServerLevel) world, pos);
             }
         }
-        super.onBlockAdded(state, world, pos, oldState, notify);
+        super.onPlace(state, world, pos, oldState, notify);
     }
 
-    private void mine(ServerWorld world, BlockPos thisPos) {
+    private void mine(ServerLevel world, BlockPos thisPos) {
         BlockState thisState = world.getBlockState(thisPos);
         if (thisState.getBlock() instanceof DrillBlock) {
-            BlockPos miningPos = thisPos.offset(thisState.get(FACING));
-            if (miningPos.getY() > world.getBottomY() && miningPos.getY() < world.getTopY() && world.getWorldBorder().contains(miningPos)) {
+            BlockPos miningPos = thisPos.relative(thisState.getValue(FACING));
+            if (miningPos.getY() > world.getMinBuildHeight() && miningPos.getY() < world.getMaxBuildHeight() && world.getWorldBorder().isWithinBounds(miningPos)) {
                 BlockState state = world.getBlockState(miningPos);
-                if (!state.isAir() && state.getHardness(world, miningPos) >= 0 && !state.isIn(BlockTags.INCORRECT_FOR_IRON_TOOL)) {
-                    List<ItemStack> drops = state.getDroppedStacks(
-                            new LootContextParameterSet.Builder(world)
-                                    .add(LootContextParameters.TOOL, Items.IRON_PICKAXE.getDefaultStack())
-                                    .add(LootContextParameters.ORIGIN, miningPos.toCenterPos())
+                if (!state.isAir() && state.getDestroySpeed(world, miningPos) >= 0 && !state.is(BlockTags.INCORRECT_FOR_IRON_TOOL)) {
+                    List<ItemStack> drops = state.getDrops(
+                            new LootParams.Builder(world)
+                                    .withParameter(LootContextParams.TOOL, Items.IRON_PICKAXE.getDefaultInstance())
+                                    .withParameter(LootContextParams.ORIGIN, miningPos.getCenter())
                     );
-                    world.breakBlock(miningPos, false);
+                    world.destroyBlock(miningPos, false);
                     if (!drops.isEmpty()) {
                         for (ItemStack drop : drops) {
-                            ItemScatterer.spawn(world, miningPos.getX()+0.5D, miningPos.getY()+0.5D, miningPos.getZ()+0.5D, drop);
+                            Containers.dropItemStack(world, miningPos.getX()+0.5D, miningPos.getY()+0.5D, miningPos.getZ()+0.5D, drop);
                         }
                     }
                 }
@@ -87,41 +89,41 @@ public class DrillBlock extends Block implements MechPwrAccepter {
     }
 
     @Override
-    public void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount)
+    public void receivePower(Level world, BlockPos thisPos, Direction sideFrom, int amount)
     {
         // Schedules to stop
-        world.setBlockState(thisPos, world.getBlockState(thisPos).with(ON_OFF_PWR, ON));
-        world.scheduleBlockTick(thisPos, this, 10);
-        if (!world.isClient) {
-            mine((ServerWorld) world, thisPos);
+        world.setBlockAndUpdate(thisPos, world.getBlockState(thisPos).setValue(ON_OFF_PWR, ON));
+        world.scheduleTick(thisPos, this, 10);
+        if (!world.isClientSide) {
+            mine((ServerLevel) world, thisPos);
         };
     }
 
     @Override
-    public boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom)
+    public boolean acceptsPower(Level world, BlockPos thisPos, Direction sideFrom)
     {
         // Drill can only accept power from the back and not when it's already on
         BlockState state = world.getBlockState(thisPos);
-        return (state.getProperties().contains(FACING) && state.get(FACING).getOpposite() == sideFrom &&
+        return (state.getProperties().contains(FACING) && state.getValue(FACING).getOpposite() == sideFrom &&
                 state.getProperties().contains(ON_OFF_PWR));
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        super.scheduledTick(state, world, pos, random);
+    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        super.tick(state, world, pos, random);
         if (state.getBlock() != this) {
             return;
         }
-        if (state.get(ON_OFF_PWR) == SCHEDULED_STOP)
-            world.setBlockState(pos, state.with(ON_OFF_PWR, OFF));
-        else if (state.get(ON_OFF_PWR) == ON){
-            world.scheduleBlockTick(pos, this, 10);
-            world.setBlockState(pos, state.with(ON_OFF_PWR, SCHEDULED_STOP));
+        if (state.getValue(ON_OFF_PWR) == SCHEDULED_STOP)
+            world.setBlockAndUpdate(pos, state.setValue(ON_OFF_PWR, OFF));
+        else if (state.getValue(ON_OFF_PWR) == ON){
+            world.scheduleTick(pos, this, 10);
+            world.setBlockAndUpdate(pos, state.setValue(ON_OFF_PWR, SCHEDULED_STOP));
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, ON_OFF_PWR);
     }
 }

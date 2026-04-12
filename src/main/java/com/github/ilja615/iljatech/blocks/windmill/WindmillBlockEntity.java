@@ -5,18 +5,16 @@ import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class WindmillBlockEntity extends BlockEntity implements TickableBlockEntity {
@@ -28,18 +26,18 @@ public class WindmillBlockEntity extends BlockEntity implements TickableBlockEnt
 
     @Override
     public void tick() {
-        if (world.isClient)
+        if (level.isClientSide)
             return;
-        if (getCachedState().get(MechPwrAccepter.ON_OFF_PWR) != MechPwrAccepter.OnOffPwr.ON)
+        if (getBlockState().getValue(MechPwrAccepter.ON_OFF_PWR) != MechPwrAccepter.OnOffPwr.ON)
             return;
         ticks++;
         update();
         if (ticks >= 16) {
             ticks = 0;
-            Direction dir = getCachedState().get(WindmillBlock.FACING).getOpposite();
-            Block other = this.world.getBlockState(pos.offset(dir)).getBlock();
-            if (other instanceof MechPwrAccepter && ((MechPwrAccepter) other).acceptsPower(this.world, pos.offset(dir), dir.getOpposite())) {
-                ((WindmillBlock) this.world.getBlockState(pos).getBlock()).sendPower(this.world, pos, dir, 4);
+            Direction dir = getBlockState().getValue(WindmillBlock.FACING).getOpposite();
+            Block other = this.level.getBlockState(worldPosition.relative(dir)).getBlock();
+            if (other instanceof MechPwrAccepter && ((MechPwrAccepter) other).acceptsPower(this.level, worldPosition.relative(dir), dir.getOpposite())) {
+                ((WindmillBlock) this.level.getBlockState(worldPosition).getBlock()).sendPower(this.level, worldPosition, dir, 4);
             }
         }
 //        if (world.random.nextFloat() < 0.5f) {
@@ -53,26 +51,26 @@ public class WindmillBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     @Override
-    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.saveAdditional(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        return createNbt(registryLookup);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+        return saveWithoutMetadata(registryLookup);
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public int getTicks() {
@@ -80,8 +78,8 @@ public class WindmillBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     private void update() {
-        markDirty();
-        if (world != null)
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+        setChanged();
+        if (level != null)
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 }

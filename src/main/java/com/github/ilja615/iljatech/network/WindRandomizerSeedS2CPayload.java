@@ -1,18 +1,18 @@
 package com.github.ilja615.iljatech.network;
 
 import com.github.ilja615.iljatech.IljaTech;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public record WindRandomizerSeedS2CPayload(long seed) implements CustomPayload {
-    public static final CustomPayload.Id<WindRandomizerSeedS2CPayload> ID = new CustomPayload.Id<>(Identifier.of(IljaTech.MOD_ID, "wind_randomizer_seed"));
-    public static final PacketCodec<RegistryByteBuf, WindRandomizerSeedS2CPayload> CODEC = PacketCodec.tuple(PacketCodecs.VAR_LONG, WindRandomizerSeedS2CPayload::seed, WindRandomizerSeedS2CPayload::new);
+public record WindRandomizerSeedS2CPayload(long seed) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<WindRandomizerSeedS2CPayload> ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "wind_randomizer_seed"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, WindRandomizerSeedS2CPayload> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_LONG, WindRandomizerSeedS2CPayload::seed, WindRandomizerSeedS2CPayload::new);
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

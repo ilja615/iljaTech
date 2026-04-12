@@ -1,16 +1,16 @@
 package com.github.ilja615.iljatech.fluids;
 
 import com.github.ilja615.iljatech.init.ModFluids;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Item;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Properties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 
 public abstract class CreosoteOilFluid extends AbstractFluid {
     @Override
-    public Fluid getStill() {
+    public Fluid getSource() {
         return ModFluids.STILL_CREOSOTE_OIL;
     }
 
@@ -20,41 +20,41 @@ public abstract class CreosoteOilFluid extends AbstractFluid {
     }
 
     @Override
-    public Item getBucketItem() {
+    public Item getBucket() {
         return ModFluids.CREOSOTE_OIL_BUCKET;
     }
 
     @Override
-    protected BlockState toBlockState(FluidState fluidState) {
-        return ModFluids.CREOSOTE_OIL_BLOCK.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
+    protected BlockState createLegacyBlock(FluidState fluidState) {
+        return ModFluids.CREOSOTE_OIL_BLOCK.defaultBlockState().setValue(BlockStateProperties.LEVEL, getLegacyLevel(fluidState));
     }
 
     public static class Flowing extends CreosoteOilFluid {
         @Override
-        protected void appendProperties(StateManager.Builder<Fluid, FluidState> builder) {
-            super.appendProperties(builder);
+        protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+            super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
 
         @Override
-        public int getLevel(FluidState fluidState) {
-            return fluidState.get(LEVEL);
+        public int getAmount(FluidState fluidState) {
+            return fluidState.getValue(LEVEL);
         }
 
         @Override
-        public boolean isStill(FluidState fluidState) {
+        public boolean isSource(FluidState fluidState) {
             return false;
         }
     }
 
     public static class Still extends CreosoteOilFluid {
         @Override
-        public int getLevel(FluidState fluidState) {
+        public int getAmount(FluidState fluidState) {
             return 8;
         }
 
         @Override
-        public boolean isStill(FluidState fluidState) {
+        public boolean isSource(FluidState fluidState) {
             return true;
         }
     }

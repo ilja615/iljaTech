@@ -13,12 +13,12 @@ import com.github.ilja615.iljatech.blocks.stampinghammer.StampingRecipe;
 import com.github.ilja615.iljatech.energy.BoilingRecipe;
 import com.github.ilja615.iljatech.util.CountedIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class ModRecipeTypes {
     public static final RecipeType<BoilingRecipe> BOILING_TYPE = register("boiling", new BoilingRecipe.Serializer());
@@ -38,7 +38,7 @@ public class ModRecipeTypes {
     }
 
     public static <T extends Recipe<?>> RecipeType<T> register(String name, RecipeSerializer<T> serializer) {
-        Identifier ID = Identifier.of(IljaTech.MOD_ID, name);
+        ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, name);
         RecipeType<T> type = new RecipeType<>() {
             @Override
             public String toString() {
@@ -46,8 +46,8 @@ public class ModRecipeTypes {
             }
         };
 
-        Registry.register(Registries.RECIPE_TYPE, ID, type);
-        Registry.register(Registries.RECIPE_SERIALIZER, ID, serializer);
+        Registry.register(BuiltInRegistries.RECIPE_TYPE, ID, type);
+        Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, ID, serializer);
 
         return type;
     }

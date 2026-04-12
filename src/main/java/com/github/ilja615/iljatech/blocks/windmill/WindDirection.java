@@ -1,12 +1,12 @@
 package com.github.ilja615.iljatech.blocks.windmill;
 
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.Direction;
 import org.joml.Vector2f;
 
 import java.util.Arrays;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 
-public enum WindDirection implements StringIdentifiable {
+public enum WindDirection implements StringRepresentable {
     N("n", new Vector2f(0, -1), new Direction[]{Direction.NORTH}),
     NE("ne", new Vector2f(0.70710678118f, -0.70710678118f), new Direction[]{Direction.NORTH, Direction.EAST}),
     E("e", new Vector2f(1, 0), new Direction[]{Direction.EAST}),
@@ -39,7 +39,7 @@ public enum WindDirection implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 }

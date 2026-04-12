@@ -4,58 +4,62 @@ import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.recipe.*;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
+import net.minecraft.world.level.Level;
 
-public record CarpentryRecipe(RawShapedRecipe raw, ItemStack result, int fluidAmount) implements Recipe<CraftingRecipeInput> {
+public record CarpentryRecipe(ShapedRecipePattern raw, ItemStack result, int fluidAmount) implements Recipe<CraftingInput> {
 
     public static final MapCodec<CarpentryRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    RawShapedRecipe.CODEC.forGetter(CarpentryRecipe::raw),
+                    ShapedRecipePattern.MAP_CODEC.forGetter(CarpentryRecipe::raw),
                     ItemStack.CODEC.fieldOf("result").forGetter(CarpentryRecipe::result),
                     Codec.INT.fieldOf("fluid_amount").forGetter(CarpentryRecipe::fluidAmount)
             ).apply(instance, CarpentryRecipe::new)
     );
 
-    public static final PacketCodec<RegistryByteBuf, CarpentryRecipe> PACKET_CODEC = PacketCodec.tuple(
-            RawShapedRecipe.PACKET_CODEC,
+    public static final StreamCodec<RegistryFriendlyByteBuf, CarpentryRecipe> STREAM_CODEC = StreamCodec.composite(
+            ShapedRecipePattern.STREAM_CODEC,
             CarpentryRecipe::raw,
-            ItemStack.PACKET_CODEC,
+            ItemStack.STREAM_CODEC,
             CarpentryRecipe::result,
-            PacketCodecs.INTEGER,
+            ByteBufCodecs.INT,
             CarpentryRecipe::fluidAmount,
             CarpentryRecipe::new
     );
 
     @Override
-    public boolean matches(CraftingRecipeInput input, World world) {
+    public boolean matches(CraftingInput input, Level world) {
         return this.raw.matches(input);
     }
 
     @Override
-    public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup registries) {
-        return this.getResult(registries).copy();
+    public ItemStack craft(CraftingInput input, HolderLookup.Provider registries) {
+        return this.getResultItem(registries).copy();
     }
 
     @Override
-    public boolean fits(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
+    public ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
         return ItemStack.EMPTY;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Registries.RECIPE_SERIALIZER.get(Registries.RECIPE_TYPE.getId(getType()));
+        return BuiltInRegistries.RECIPE_SERIALIZER.get(BuiltInRegistries.RECIPE_TYPE.getKey(getType()));
     }
 
     @Override
@@ -70,8 +74,8 @@ public record CarpentryRecipe(RawShapedRecipe raw, ItemStack result, int fluidAm
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, CarpentryRecipe> packetCodec() {
-            return PACKET_CODEC;
+        public StreamCodec<RegistryFriendlyByteBuf, CarpentryRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

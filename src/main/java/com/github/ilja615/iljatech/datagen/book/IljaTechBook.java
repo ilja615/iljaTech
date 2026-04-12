@@ -6,7 +6,7 @@ import com.github.ilja615.iljatech.datagen.book.iljatech.PyroMetallurgyCategory;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconLanguageProvider;
 import com.klikli_dev.modonomicon.api.datagen.SingleBookSubProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookModel;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class IljaTechBook extends SingleBookSubProvider {
 
@@ -39,7 +39,7 @@ public class IljaTechBook extends SingleBookSubProvider {
 
     @Override
     protected BookModel additionalSetup(BookModel book) {
-        return book.withModel(Identifier.of(IljaTech.MOD_ID, "book"))
+        return book.withModel(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "book"))
                 .withBookTextOffsetX(5)
                 .withBookTextOffsetY(0)
                 .withBookTextOffsetWidth(-5)

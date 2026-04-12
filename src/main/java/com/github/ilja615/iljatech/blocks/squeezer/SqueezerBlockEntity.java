@@ -18,38 +18,38 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class SqueezerBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
-    public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".squeezer");
+    public static final Component TITLE = Component.translatable("container." + IljaTech.MOD_ID + ".squeezer");
 
-    private final SimpleInventory inventory = new SimpleInventory(2) {
+    private final SimpleContainer inventory = new SimpleContainer(2) {
         @Override
-        public void markDirty() {
-            super.markDirty();
+        public void setChanged() {
+            super.setChanged();
             update();
         }
     };
@@ -67,7 +67,7 @@ public class SqueezerBlockEntity extends BlockEntity implements TickableBlockEnt
 
     @Override
     public void tick() {
-        if (this.world == null || this.world.isClient)
+        if (this.level == null || this.level.isClientSide)
             return;
 
         // Transfer fluids to the bucket or item if there is one
@@ -92,19 +92,19 @@ public class SqueezerBlockEntity extends BlockEntity implements TickableBlockEnt
         if (ticks > 0) {
             this.ticks--;
 
-            BlockState state = world.getBlockState(pos);
-            if (!state.isOf(ModBlocks.SQUEEZER)) { return; }
+            BlockState state = level.getBlockState(worldPosition);
+            if (!state.is(ModBlocks.SQUEEZER)) { return; }
 
             if (ticks == 0) {
-                if (state.get(SqueezerBlock.PRESS) == 1) {
-                    world.setBlockState(pos, state.with(SqueezerBlock.PRESS, 2));
+                if (state.getValue(SqueezerBlock.PRESS) == 1) {
+                    level.setBlockAndUpdate(worldPosition, state.setValue(SqueezerBlock.PRESS, 2));
 
-                    List<RecipeEntry<SqueezingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.SQUEEZING_TYPE);
-                    for (RecipeEntry<SqueezingRecipe> rr : recipes)
+                    List<RecipeHolder<SqueezingRecipe>> recipes = level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.SQUEEZING_TYPE);
+                    for (RecipeHolder<SqueezingRecipe> rr : recipes)
                     {
                         SqueezingRecipe r = rr.value();
 
-                        if (r.matches(new SqueezingRecipe.InputContainer(inventory.getStack(0)), world))
+                        if (r.matches(new SqueezingRecipe.InputContainer(inventory.getItem(0)), level))
                         {
                             // The recipe is finished. The output is handled.
                             long insertedAmount = 0;
@@ -116,22 +116,22 @@ public class SqueezerBlockEntity extends BlockEntity implements TickableBlockEnt
                                 }
                             }
                             if (insertedAmount > 0) {
-                                inventory.getStack(0).decrement(1);
+                                inventory.getItem(0).shrink(1);
                             }
                             break;
                         }
                     }
-                } else if (state.get(SqueezerBlock.PRESS) == 3) {
-                    world.setBlockState(pos, state.with(SqueezerBlock.PRESS, 0));
+                } else if (state.getValue(SqueezerBlock.PRESS) == 3) {
+                    level.setBlockAndUpdate(worldPosition, state.setValue(SqueezerBlock.PRESS, 0));
                 }
             }
         }
     }
 
     private void update() {
-        markDirty();
-        if (world != null)
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+        setChanged();
+        if (level != null)
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
     public boolean isValid(ItemStack stack, int slot) {
@@ -142,41 +142,41 @@ public class SqueezerBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     @Override
-    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
 
-        if (nbt.contains("Inventory", NbtElement.COMPOUND_TYPE))
-            Inventories.readNbt(nbt.getCompound("Inventory"), this.inventory.getHeldStacks(), registryLookup);
+        if (nbt.contains("Inventory", Tag.TAG_COMPOUND))
+            ContainerHelper.loadAllItems(nbt.getCompound("Inventory"), this.inventory.getItems(), registryLookup);
 
-        if (nbt.contains("FluidTank", NbtElement.COMPOUND_TYPE))
+        if (nbt.contains("FluidTank", Tag.TAG_COMPOUND))
             this.fluidStorage.readNbt(nbt.getCompound("FluidTank"), registryLookup);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.saveAdditional(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
 
-        var inventoryNbt = new NbtCompound();
-        Inventories.writeNbt(inventoryNbt, this.inventory.getHeldStacks(), registryLookup);
+        var inventoryNbt = new CompoundTag();
+        ContainerHelper.saveAllItems(inventoryNbt, this.inventory.getItems(), registryLookup);
         nbt.put("Inventory", inventoryNbt);
 
-        var fluidNbt = new NbtCompound();
+        var fluidNbt = new CompoundTag();
         this.fluidStorage.writeNbt(fluidNbt, registryLookup);
         nbt.put("FluidTank", fluidNbt);
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        var nbt = super.toInitialChunkDataNbt(registryLookup);
-        writeNbt(nbt, registryLookup);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+        var nbt = super.getUpdateTag(registryLookup);
+        saveAdditional(nbt, registryLookup);
         return nbt;
     }
 
@@ -192,7 +192,7 @@ public class SqueezerBlockEntity extends BlockEntity implements TickableBlockEnt
         return storage;
     }
 
-    public SimpleInventory getInventory() {
+    public SimpleContainer getInventory() {
         return this.inventory;
     }
 
@@ -206,18 +206,18 @@ public class SqueezerBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     @Override
-    public BlockPosPayload getScreenOpeningData(ServerPlayerEntity player) {
-        return new BlockPosPayload(this.pos);
+    public BlockPosPayload getScreenOpeningData(ServerPlayer player) {
+        return new BlockPosPayload(this.worldPosition);
     }
 
     @Override
-    public Text getDisplayName() {
+    public Component getDisplayName() {
         return TITLE;
     }
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
         return new SqueezerScreenHandler(syncId, playerInventory, this, this.inventory);
     }
 }
