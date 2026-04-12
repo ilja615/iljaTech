@@ -1,0 +1,42 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 1,
+  "category": "pyrometallurgy",
+  "description": "book.iljatech.iljatech.pyrometallurgy.nickel.description",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "iljatech:nickel_ingot"
+  },
+  "name": "book.iljatech.iljatech.pyrometallurgy.nickel.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
+      "show_title_separator": true,
+      "text": "book.iljatech.iljatech.pyrometallurgy.nickel.page1.text",
+      "title": "book.iljatech.iljatech.pyrometallurgy.nickel.page1.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/pulverizer",
+      "line_enabled": true,
+      "line_reversed": false
+    },
+    {
+      "draw_arrow": true,
+      "entry": "pyrometallurgy/sifter",
+      "line_enabled": true,
+      "line_reversed": true
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "sort_number": 12,
+  "x": 11,
+  "y": 0
+}

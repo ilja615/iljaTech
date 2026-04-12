@@ -59,6 +59,9 @@ public class ModItems {
     public static final Item FLAX_FIBER = register("flax_fiber", new Item(new Item.Settings()));
     public static final Item BLUE_PRINT = register("blue_print", new Item(new Item.Settings()));
     public static final Item WINDMILL_PART = register("windmill_part", new Item(new Item.Settings()));
+    public static final Item SULFUR = register("sulfur", new Item(new Item.Settings()));
+    public static final Item SALTPETER = register("saltpeter", new Item(new Item.Settings()));
+
 
     public static <T extends Item> T register(String name, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(IljaTech.MOD_ID, name), item);

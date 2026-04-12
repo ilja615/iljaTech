@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.blocks.cokeoven;
 
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModSounds;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.mojang.serialization.MapCodec;
@@ -66,6 +67,8 @@ public class CokeOvenBlock extends HorizontalFacingBlock implements BlockEntityP
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
+        if (ctx.getPlayerLookDirection() == Direction.DOWN)
+            return ModBlocks.ITEM_HATCH.getDefaultState();
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 

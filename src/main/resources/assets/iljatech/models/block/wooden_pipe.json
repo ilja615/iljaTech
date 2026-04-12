@@ -2,9 +2,9 @@
 	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "minecraft:block/clay",
-		"1": "iljatech:block/clay_pipe_opening",
-		"particle": "minecraft:block/clay"
+		"0": "iljatech:block/wooden_pipe",
+		"1": "iljatech:block/wooden_pipe_opening",
+		"particle": "iljatech:block/wooden_pipe"
 	},
 	"elements": [
 		{

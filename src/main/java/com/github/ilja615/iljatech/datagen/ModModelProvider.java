@@ -50,6 +50,8 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.FLAX_FIBER, Models.GENERATED);
         itemModelGenerator.register(ModItems.BLUE_PRINT, Models.GENERATED);
         itemModelGenerator.register(ModItems.WINDMILL_PART, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SULFUR, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SALTPETER, Models.GENERATED);
 
     }
 
@@ -92,7 +94,6 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.WARPED_FRAME);
 
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.FIRE_CLAY);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.ITEM_HATCH);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.STEEL_BLOCK);
 
         var limestoneFamily = new BlockFamily.Builder(ModBlocks.LIMESTONE)

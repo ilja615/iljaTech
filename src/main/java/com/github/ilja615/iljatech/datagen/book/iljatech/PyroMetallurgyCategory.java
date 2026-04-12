@@ -25,9 +25,9 @@ public class PyroMetallurgyCategory extends CategoryProvider {
                 "______________________________",
                 "______________________________",
                 "__________________t___________",
-                "___________b__ƃ_____ḅ_________",
+                "___________b__ƃ_____ḅ__ś______",
                 "______________________________",
-                "___________c__ḃ__f____________",
+                "___________c__ḃ__f________n___",
                 "______________________________",
                 "______________p_____s__ṕ______",
                 "__________________l___________",
@@ -69,6 +69,12 @@ public class PyroMetallurgyCategory extends CategoryProvider {
 
         var pulverizerMillEntry = this.add(new PulverizerMillEntry(this).generate('ṕ'));
         pulverizerMillEntry.withParent(steelEntry);
+        var sifterEntry = this.add(new SifterEntry(this).generate('ś'));
+        sifterEntry.withParent(bronzeEntry);
+
+        var nickelEntry = this.add(new NickelEntry(this).generate('n'));
+        nickelEntry.withParent(pulverizerMillEntry)
+                .withParent(BookEntryParentModel.create( sifterEntry.getId()).withLineReversed(true));
     }
 
     @Override

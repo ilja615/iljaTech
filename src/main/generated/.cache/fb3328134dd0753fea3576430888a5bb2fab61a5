@@ -1,7 +1,7 @@
-// 1.21.1	2026-02-21T17:32:58.2024516	iljaTech/Tags for minecraft:block
-acc34020f6474c740da92ac0f7d4c526e7ad1aef data\minecraft\tags\block\mineable\shovel.json
+// 1.21.1	2026-04-12T19:20:46.0496414	iljaTech/Tags for minecraft:block
+7fc6caaf115a689268accdf605e1ee0a96054d4a data\minecraft\tags\block\mineable\shovel.json
 33816ed8f969700c389fd5e2c70b3890796d63da data\minecraft\tags\block\needs_stone_tool.json
 22fc6a4c84c4d430deebbd4cc5d7f3123cb0c886 data\minecraft\tags\block\mineable\pickaxe.json
-259ce020384ac88b4c8281c814902cbe413dc6b2 data\minecraft\tags\block\mineable\axe.json
+a3549bd3a612062d3894872e0c4f61fb597e0d7c data\minecraft\tags\block\mineable\axe.json
 b76dae9e6d0031da416a45a8f029e62d3f704f2c data\minecraft\tags\block\needs_iron_tool.json
 ad0679b40410ff98d70e9da3e62071ff7c770a64 data\minecraft\tags\block\walls.json

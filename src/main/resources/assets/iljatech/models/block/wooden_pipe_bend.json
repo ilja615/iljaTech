@@ -2,10 +2,10 @@
 	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "minecraft:block/clay",
-		"1": "minecraft:block/clay",
-		"2": "iljatech:block/clay_pipe_opening",
-		"particle": "minecraft:block/clay"
+		"0": "iljatech:block/wooden_pipe",
+		"1": "iljatech:block/wooden_pipe_bend",
+		"2": "iljatech:block/wooden_pipe_opening",
+		"particle": "iljatech:block/wooden_pipe"
 	},
 	"elements": [
 		{
@@ -26,10 +26,10 @@
 			"to": [12, 12, 16],
 			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 8, 8], "texture": "#0"},
+				"north": {"uv": [4, 0, 12, 8], "texture": "#0"},
 				"east": {"uv": [0, 0, 12, 8], "texture": "#0"},
 				"south": {"uv": [1, 1, 9, 9], "texture": "#2"},
-				"west": {"uv": [0, 0, 12, 8], "texture": "#0"},
+				"west": {"uv": [12, 0, 0, 8], "texture": "#0"},
 				"up": {"uv": [4, 4, 16, 12], "rotation": 90, "texture": "#1"},
 				"down": {"uv": [4, 12, 16, 4], "rotation": 270, "texture": "#1"}
 			}
@@ -54,7 +54,7 @@
 			"faces": {
 				"north": {"uv": [0, 0, 4, 8], "texture": "#0"},
 				"east": {"uv": [1, 1, 9, 9], "texture": "#2"},
-				"south": {"uv": [0, 0, 4, 8], "texture": "#0"},
+				"south": {"uv": [4, 0, 0, 8], "texture": "#0"},
 				"west": {"uv": [0, 0, 7, 8], "texture": "#missing"},
 				"up": {"uv": [4, 0, 12, 4], "rotation": 90, "texture": "#1"},
 				"down": {"uv": [4, 4, 12, 0], "rotation": 270, "texture": "#1"}

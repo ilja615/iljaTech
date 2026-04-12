@@ -8,10 +8,7 @@ import com.github.ilja615.iljatech.particles.StarParticle;
 import com.github.ilja615.iljatech.particles.SteamParticle;
 import com.github.ilja615.iljatech.particles.WindLeadingParticle;
 import com.github.ilja615.iljatech.particles.WindParticle;
-import com.github.ilja615.iljatech.renderer.ConveyorBeltRenderer;
-import com.github.ilja615.iljatech.renderer.RollerMillRenderer;
-import com.github.ilja615.iljatech.renderer.SeatEntityRenderer;
-import com.github.ilja615.iljatech.renderer.WindmillRenderer;
+import com.github.ilja615.iljatech.renderer.*;
 import com.github.ilja615.iljatech.screen.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -44,6 +41,7 @@ public class IljaTechClient implements ClientModInitializer {
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.ROLLER_MILL, RollerMillRenderer::new);
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.WINDMILL, WindmillRenderer::new);
 		BlockEntityRendererFactories.register(ModBlockEntityTypes.CONVEYOR_BELT, ConveyorBeltRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntityTypes.SIFTER, SifterRenderer::new);
 
 		// Register particle factories
 		ParticleFactoryRegistry.getInstance().register(ModParticles.STAR, StarParticle.Factory::new);

@@ -1,0 +1,17 @@
+{
+  "type": "iljatech:carpentry",
+  "key": {
+    "X": {
+      "tag": "iljatech:nailed_wooden_boards"
+    }
+  },
+  "pattern": [
+    " X",
+    "XX"
+  ],
+  "result": {
+    "count": 3,
+    "id": "iljatech:wooden_funnel"
+  },
+  "fluid_amount": 8100
+}

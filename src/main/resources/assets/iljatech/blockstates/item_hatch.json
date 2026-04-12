@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "": {
+      "model": "iljatech:block/coke_oven_closed_off",
+      "x": 90
+    }
+  }
+}

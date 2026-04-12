@@ -16,6 +16,8 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -71,7 +73,7 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
 
                 if (r.stack().getMatchingStacks()[0].getItem() == stack0.getItem())
                 {
-                    this.inventory.getStack(0).decrement(1);
+                    this.inventory.setStack(0, this.inventory.getStack(0).copyWithCount(this.inventory.getStack(0).getCount() -1));
                     Vec3d outputPos = pos.offset(direction).toCenterPos();
                     world.spawnEntity(new ItemEntity(world, outputPos.getX(), outputPos.getY(), outputPos.getZ(), resultingStack, 0d, 0d, 0d));
                     ((ServerWorld) this.world).getChunkManager().markForUpdate(this. getPos());
@@ -86,7 +88,16 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.readNbt(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
-        Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+
+        NbtList nbtList = nbt.getList("Items", NbtElement.COMPOUND_TYPE);
+        for(int i = 0; i < nbtList.size(); ++i) {
+            NbtCompound nbtCompound = nbtList.getCompound(i);
+            int j = nbtCompound.getByte("Slot") & 255;
+            if (j >= 0 && j < this.inventory.size()) {
+                this.inventory.setStack(j, ItemStack.fromNbt(registryLookup, nbtCompound).orElse(ItemStack.EMPTY));
+            }
+        }
+        //Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
     @Override

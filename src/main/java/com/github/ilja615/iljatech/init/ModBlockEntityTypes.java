@@ -43,7 +43,7 @@ public class ModBlockEntityTypes {
     public static final BlockEntityType<WindmillBlockEntity> WINDMILL = register("windmill",
             FabricBlockEntityTypeBuilder.create(WindmillBlockEntity::new, ModBlocks.WINDMILL).build());
     public static final BlockEntityType<FunnelBlockEntity> FUNNEL = register("funnel",
-            FabricBlockEntityTypeBuilder.create(FunnelBlockEntity::new, ModBlocks.FUNNEL).build());
+            FabricBlockEntityTypeBuilder.create(FunnelBlockEntity::new, ModBlocks.FUNNEL, ModBlocks.WOODEN_FUNNEL).build());
     public static final BlockEntityType<ConveyorBeltBlockEntity> CONVEYOR_BELT = register("conveyor_belt",
             FabricBlockEntityTypeBuilder.create(ConveyorBeltBlockEntity::new, ModBlocks.CONVEYOR_BELT).build());
     public static final BlockEntityType<PulverizerMillBlockEntity> PULVERIZER_MILL = register("pulverizer_mill",

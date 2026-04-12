@@ -46,13 +46,14 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocks.STEEL_BLOCK).add(ModBlocks.PULVERIZER_MILL);
 
         getOrCreateTagBuilder(BlockTags.SHOVEL_MINEABLE)
-                .add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.FIRE_CLAY).add(ModBlocks.CLAY_PIPE);
+                .add(ModBlocks.GRAVEL_ALUMINIUM_ORE).add(ModBlocks.FIRE_CLAY);
 
         getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
                 .add(ModBlocks.CRANK).add(ModBlocks.WOODEN_SHAFT).add(ModBlocks.CONVEYOR_BELT).add(ModBlocks.NAILED_ACACIA_PLANKS)
                 .add(ModBlocks.NAILED_BAMBOO_PLANKS).add(ModBlocks.NAILED_BIRCH_PLANKS).add(ModBlocks.NAILED_CHERRY_PLANKS)
                 .add(ModBlocks.NAILED_CRIMSON_PLANKS).add(ModBlocks.NAILED_DARK_OAK_PLANKS).add(ModBlocks.NAILED_JUNGLE_PLANKS)
-                .add(ModBlocks.NAILED_MANGROVE_PLANKS).add(ModBlocks.NAILED_OAK_PLANKS).add(ModBlocks.NAILED_SPRUCE_PLANKS).add(ModBlocks.NAILED_WARPED_PLANKS);
+                .add(ModBlocks.NAILED_MANGROVE_PLANKS).add(ModBlocks.NAILED_OAK_PLANKS).add(ModBlocks.NAILED_SPRUCE_PLANKS).add(ModBlocks.NAILED_WARPED_PLANKS)
+                .add(ModBlocks.WOODEN_FUNNEL).add(ModBlocks.WOODEN_PIPE);
 
         getOrCreateTagBuilder(BlockTags.WALLS)
                 .add(ModBlocks.LIMESTONE_WALL);
