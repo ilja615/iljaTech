@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks;
 
+import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;

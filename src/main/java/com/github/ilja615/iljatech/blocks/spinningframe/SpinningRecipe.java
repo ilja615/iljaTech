@@ -42,7 +42,7 @@ public record SpinningRecipe(Ingredient stack, ItemStack output) implements Reci
     }
 
     @Override
-    public ItemStack assemble(InputContainer input, HolderLookup.Provider registries) {
+    public ItemStack craft(InputContainer input, HolderLookup.Provider registries) {
         return output.copy();
     }
 

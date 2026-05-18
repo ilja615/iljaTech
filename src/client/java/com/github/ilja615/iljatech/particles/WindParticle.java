@@ -1,7 +1,5 @@
 package com.github.ilja615.iljatech.particles;
 
-import ParticleTextureSheet;
-import SpriteProvider;
 import com.github.ilja615.iljatech.blocks.windmill.Wind;
 import com.github.ilja615.iljatech.blocks.windmill.WindDirection;
 import com.github.ilja615.iljatech.blocks.windmill.WindParticleEffect;

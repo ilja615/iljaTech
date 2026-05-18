@@ -27,6 +27,7 @@ import com.github.ilja615.iljatech.blocks.windmill.WindVaneBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillSailBlock;
 import com.github.ilja615.iljatech.blocks.wire.WireBlock;
+import net.minecraft.block.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

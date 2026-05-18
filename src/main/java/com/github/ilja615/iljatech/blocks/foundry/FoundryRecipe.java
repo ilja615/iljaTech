@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.recipe.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -108,7 +109,7 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
     }
 
     @Override
-    public ItemStack assemble(FoundryRecipe.InputContainer input, HolderLookup.Provider registries) {
+    public ItemStack craft(FoundryRecipe.InputContainer input, HolderLookup.Provider registries) {
         return output.copy();
     }
 

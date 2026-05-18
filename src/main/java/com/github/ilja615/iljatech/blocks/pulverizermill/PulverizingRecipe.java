@@ -42,7 +42,7 @@ public record PulverizingRecipe(Ingredient stack, ItemStack output) implements R
     }
 
     @Override
-    public ItemStack assemble(InputContainer input, HolderLookup.Provider registries) {
+    public ItemStack craft(InputContainer input, HolderLookup.Provider registries) {
         return output.copy();
     }
 

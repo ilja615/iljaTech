@@ -2,6 +2,7 @@ package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.energy.Heat;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

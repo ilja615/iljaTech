@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
+import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

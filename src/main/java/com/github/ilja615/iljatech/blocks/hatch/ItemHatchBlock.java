@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.blocks.hatch;
 
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;

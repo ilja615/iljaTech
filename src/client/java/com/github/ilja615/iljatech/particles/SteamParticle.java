@@ -1,7 +1,5 @@
 package com.github.ilja615.iljatech.particles;
 
-import ParticleTextureSheet;
-import SpriteProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.*;
