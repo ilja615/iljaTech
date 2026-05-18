@@ -5,9 +5,7 @@ import com.github.ilja615.iljatech.worldgen.featureconfigs.DoubleBlockFeatureCon
 import com.github.ilja615.iljatech.worldgen.features.DoubleBlockFeature;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.registry.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 public class ModFeatures {

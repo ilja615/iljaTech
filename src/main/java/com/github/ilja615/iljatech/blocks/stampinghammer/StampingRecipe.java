@@ -42,7 +42,7 @@ public record StampingRecipe(Ingredient stack, ItemStack output) implements Reci
     }
 
     @Override
-    public ItemStack craft(InputContainer input, HolderLookup.Provider registries) {
+    public ItemStack assemble(InputContainer input, HolderLookup.Provider registries) {
         return output.copy();
     }
 

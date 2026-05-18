@@ -7,7 +7,6 @@ import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
-import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -89,8 +88,8 @@ public class FunnelBlockEntity  extends BlockEntity implements TickableBlockEnti
                 if (level.getBlockState(nextPos).getBlock() instanceof CauldronBlock) {
                     level.setBlockAndUpdate(nextPos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MIN_FILL_LEVEL));
                 } else if (level.getBlockState(nextPos).getBlock() instanceof LayeredCauldronBlock && level.getBlockState(nextPos).is(Blocks.WATER_CAULDRON)) {
-                    int level = level.getBlockState(nextPos).getValue(LayeredCauldronBlock.LEVEL);
-                    level.setBlockAndUpdate(nextPos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, Math.min(LayeredCauldronBlock.MAX_FILL_LEVEL, level + 1)));
+                    int amount = level.getBlockState(nextPos).getValue(LayeredCauldronBlock.LEVEL);
+                    level.setBlockAndUpdate(nextPos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, Math.min(LayeredCauldronBlock.MAX_FILL_LEVEL, amount + 1)));
                 }
                 update();
             }

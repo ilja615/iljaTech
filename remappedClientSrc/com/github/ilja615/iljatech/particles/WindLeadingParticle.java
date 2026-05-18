@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.particles;
 
+import SpriteProvider;
 import com.github.ilja615.iljatech.blocks.windmill.Wind;
 import com.github.ilja615.iljatech.blocks.windmill.WindParticleEffect;
 import com.github.ilja615.iljatech.init.ModParticles;

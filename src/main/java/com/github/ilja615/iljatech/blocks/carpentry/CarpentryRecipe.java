@@ -9,7 +9,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.recipe.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Recipe;
@@ -43,7 +42,7 @@ public record CarpentryRecipe(ShapedRecipePattern raw, ItemStack result, int flu
     }
 
     @Override
-    public ItemStack craft(CraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
         return this.getResultItem(registries).copy();
     }
 

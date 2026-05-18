@@ -2,7 +2,6 @@ package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.entities.SeatEntity;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;

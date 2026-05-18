@@ -1,17 +1,17 @@
 package com.github.ilja615.iljatech.particles;
 
+import SpriteProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.SimpleParticleType;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.core.particles.SimpleParticleType;
 
-public class StarParticle extends SpriteBillboardParticle {
+public class StarParticle extends TextureSheetParticle {
 
-    protected StarParticle(ClientWorld clientWorld, double x, double y, double z) {
+    protected StarParticle(ClientLevel clientWorld, double x, double y, double z) {
         super(clientWorld, x, y, z);
-        this.maxAge = 25;
+        this.lifetime = 25;
     }
 
     @Override
@@ -30,14 +30,13 @@ public class StarParticle extends SpriteBillboardParticle {
         }
     }
 
-
     @Override
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @Environment(EnvType.CLIENT)
-    public static class Factory implements ParticleFactory<SimpleParticleType> {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
         private final SpriteProvider spriteProvider;
 
         public Factory(SpriteProvider spriteProvider) {

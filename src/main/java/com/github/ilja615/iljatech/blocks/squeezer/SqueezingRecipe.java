@@ -51,7 +51,7 @@ public record SqueezingRecipe(Ingredient ingredient, FluidVariant fluidOutput, i
     }
 
     @Override
-    public ItemStack craft(InputContainer input, HolderLookup.Provider registries) {
+    public ItemStack assemble(InputContainer input, HolderLookup.Provider registries) {
         return ItemStack.EMPTY;
     }
 
