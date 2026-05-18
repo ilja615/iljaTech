@@ -1,8 +1,8 @@
 package com.github.ilja615.iljatech.blocks.wire;
 
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.StringIdentifiable;
 
-public enum WireShape implements StringRepresentable {
+public enum WireShape implements StringIdentifiable {
     NORTH_SOUTH("north_south"),
     EAST_WEST("east_west"),
     ASCENDING_EAST("ascending_east"),
@@ -22,7 +22,7 @@ public enum WireShape implements StringRepresentable {
     }
 
     @Override
-    public String getSerializedName() {
+    public String asString() {
         return this.name;
     }
 

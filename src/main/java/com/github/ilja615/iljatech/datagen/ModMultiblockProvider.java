@@ -4,10 +4,10 @@ import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModTags;
 import com.klikli_dev.modonomicon.api.datagen.MultiblockProvider;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataOutput;
 
 public class ModMultiblockProvider extends MultiblockProvider {
-    public ModMultiblockProvider(PackOutput packOutput) {
+    public ModMultiblockProvider(DataOutput packOutput) {
         super(packOutput, IljaTech.MOD_ID);
     }
 

@@ -10,8 +10,8 @@ import com.klikli_dev.modonomicon.api.datagen.LanguageProviderCache;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.registry.RegistryBuilder;
+import net.minecraft.registry.RegistryKeys;
 
 public class IljaTechDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -37,9 +37,9 @@ public class IljaTechDataGenerator implements DataGeneratorEntrypoint {
 	}
 
 	@Override
-	public void buildRegistry(RegistrySetBuilder registryBuilder) {
+	public void buildRegistry(RegistryBuilder registryBuilder) {
 		DataGeneratorEntrypoint.super.buildRegistry(registryBuilder);
-		registryBuilder.add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootStrap);
-		registryBuilder.add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootStrap);
+		registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, ModConfiguredFeatures::bootStrap);
+		registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, ModPlacedFeatures::bootStrap);
 	}
 }

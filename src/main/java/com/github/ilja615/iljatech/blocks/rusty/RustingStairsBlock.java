@@ -1,21 +1,21 @@
 package com.github.ilja615.iljatech.blocks.rusty;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 
-public class RustingStairsBlock extends StairBlock implements Rusting {
-    public RustingStairsBlock(BlockState baseBlockState, Properties settings) {
+public class RustingStairsBlock extends StairsBlock implements Rusting {
+    public RustingStairsBlock(BlockState baseBlockState, Settings settings) {
         super(baseBlockState, settings);
     }
 
-    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         tryRust(state, world, pos, random);
     }
 
-    protected boolean isRandomlyTicking(BlockState state) {
+    protected boolean hasRandomTicks(BlockState state) {
         return getRustyLevel(state) < 3;
     }
 }

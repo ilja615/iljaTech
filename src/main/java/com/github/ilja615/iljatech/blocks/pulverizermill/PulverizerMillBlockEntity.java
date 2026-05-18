@@ -5,24 +5,24 @@ import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.init.ModSounds;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -31,10 +31,10 @@ public class PulverizerMillBlockEntity  extends BlockEntity implements TickableB
     private int ticks = 0;
 
     // TODO: Might change it to SidedInventory later
-    private final SimpleContainer inventory = new SimpleContainer(1) {
+    private final SimpleInventory inventory = new SimpleInventory(1) {
         @Override
-        public void setChanged() {
-            super.setChanged();
+        public void markDirty() {
+            super.markDirty();
             update();
         }
     };
@@ -46,25 +46,25 @@ public class PulverizerMillBlockEntity  extends BlockEntity implements TickableB
 
     @Override
     public void tick() {
-        if (this.level == null || this.level.isClientSide())
+        if (this.world == null || this.world.isClient())
             return;
 
-        ItemStack stack0 = this.inventory.getItem(0);
+        ItemStack stack0 = this.inventory.getStack(0);
         if (stack0.isEmpty()) {
             this.ticks = 0;
         }
-        List<RecipeHolder<PulverizingRecipe>> recipes = level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.PULVERIZING_TYPE);
+        List<RecipeEntry<PulverizingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.PULVERIZING_TYPE);
         if (ticks > 0 && ticks % 10 == 0) {
-            for (RecipeHolder<PulverizingRecipe> rr : recipes)
+            for (RecipeEntry<PulverizingRecipe> rr : recipes)
             {
                 PulverizingRecipe r = rr.value();
                 ItemStack resultingStack = r.output().copy();
-                if (r.stack().getItems()[0].isEmpty())
+                if (r.stack().getMatchingStacks()[0].isEmpty())
                     continue;
 
-                if (r.stack().getItems()[0].getItem() == stack0.getItem())
+                if (r.stack().getMatchingStacks()[0].getItem() == stack0.getItem())
                 {
-                    level.playSound(null, worldPosition, ModSounds.ORE_CRUSHING, SoundSource.BLOCKS, 1.0f, 1.0f);
+                    world.playSound(null, pos, ModSounds.ORE_CRUSHING, SoundCategory.BLOCKS, 1.0f, 1.0f);
                     break;
                 }
             }
@@ -72,20 +72,20 @@ public class PulverizerMillBlockEntity  extends BlockEntity implements TickableB
         if (ticks++ > 100) {
             this.ticks = 0;
 
-            Direction direction = this.getBlockState().getValue(PulverizerMillBlock.FACING);
-            for (RecipeHolder<PulverizingRecipe> rr : recipes)
+            Direction direction = this.getCachedState().get(PulverizerMillBlock.FACING);
+            for (RecipeEntry<PulverizingRecipe> rr : recipes)
             {
                 PulverizingRecipe r = rr.value();
                 ItemStack resultingStack = r.output().copy();
-                if (r.stack().getItems()[0].isEmpty())
+                if (r.stack().getMatchingStacks()[0].isEmpty())
                     continue;
 
-                if (r.stack().getItems()[0].getItem() == stack0.getItem())
+                if (r.stack().getMatchingStacks()[0].getItem() == stack0.getItem())
                 {
-                    this.inventory.getItem(0).shrink(1);
-                    Vec3 outputPos = worldPosition.relative(direction, 2).getCenter();
-                    level.addFreshEntity(new ItemEntity(level, outputPos.x(), outputPos.y(), outputPos.z(), resultingStack, direction.getStepX() * 0.1f, 0, direction.getStepZ() * 0.1f));
-                    ((ServerLevel) this.level).getChunkSource().blockChanged(this. getBlockPos());
+                    this.inventory.getStack(0).decrement(1);
+                    Vec3d outputPos = pos.offset(direction, 2).toCenterPos();
+                    world.spawnEntity(new ItemEntity(world, outputPos.getX(), outputPos.getY(), outputPos.getZ(), resultingStack, direction.getOffsetX() * 0.1f, 0, direction.getOffsetZ() * 0.1f));
+                    ((ServerWorld) this.world).getChunkManager().markForUpdate(this. getPos());
                     this.update();
                     break;
                 }
@@ -94,29 +94,29 @@ public class PulverizerMillBlockEntity  extends BlockEntity implements TickableB
     }
 
     @Override
-    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.loadAdditional(nbt, registryLookup);
+    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
-        ContainerHelper.loadAllItems(nbt, this.inventory.getItems(), registryLookup);
+        Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.saveAdditional(nbt, registryLookup);
+    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
-        ContainerHelper.saveAllItems(nbt, this.inventory.getItems(), registryLookup);
+        Inventories.writeNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
     @Nullable
     @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
     }
 
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
-        var nbt = super.getUpdateTag(registryLookup);
-        saveAdditional(nbt, registryLookup);
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        var nbt = super.toInitialChunkDataNbt(registryLookup);
+        writeNbt(nbt, registryLookup);
         return nbt;
     }
 
@@ -125,16 +125,16 @@ public class PulverizerMillBlockEntity  extends BlockEntity implements TickableB
     }
 
     private void update() {
-        setChanged();
-        if (level != null)
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        markDirty();
+        if (world != null)
+            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     public InventoryStorage getInventoryProvider(Direction direction) {
         return storage;
     }
 
-    public SimpleContainer getInventory() {
+    public SimpleInventory getInventory() {
         return this.inventory;
     }
 }

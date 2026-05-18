@@ -1,34 +1,35 @@
 package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.blocks.windmill.WindDirection;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
 
 public class SawDustBlock extends Block {
-    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 1, 4);
+    public static final IntProperty LEVEL = IntProperty.of("level", 1, 4);
 
     protected static final VoxelShape[] LAYERS_TO_SHAPE = new VoxelShape[]{
-            Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0)};
+            Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 12.0, 16.0)};
 
-    public SawDustBlock(Properties settings) {
+    public SawDustBlock(Settings settings) {
         super(settings);
-        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 1));
+        this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, 1));
     }
 
-    protected boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-        int i = state.getValue(LEVEL);
-        if (context.getItemInHand().is(this.asItem()) && i < 4) {
-            if (context.replacingClickedOnBlock()) {
-                return context.getClickedFace() == Direction.UP;
+    protected boolean canReplace(BlockState state, ItemPlacementContext context) {
+        int i = state.get(LEVEL);
+        if (context.getStack().isOf(this.asItem()) && i < 4) {
+            if (context.canReplaceExisting()) {
+                return context.getSide() == Direction.UP;
             } else {
                 return true;
             }
@@ -38,33 +39,33 @@ public class SawDustBlock extends Block {
     }
 
     @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        BlockState blockState = ctx.getLevel().getBlockState(ctx.getClickedPos());
-        if (blockState.is(this)) {
-            int i = blockState.getValue(LEVEL);
-            return blockState.setValue(LEVEL, Math.min(4, i + 1));
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
+        if (blockState.isOf(this)) {
+            int i = blockState.get(LEVEL);
+            return blockState.with(LEVEL, Math.min(4, i + 1));
         } else {
-            return super.getStateForPlacement(ctx);
+            return super.getPlacementState(ctx);
         }
     }
 
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(LEVEL);
     }
 
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return LAYERS_TO_SHAPE[state.getValue(LEVEL) - 1];
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return LAYERS_TO_SHAPE[state.get(LEVEL) - 1];
     }
 
-    protected VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return LAYERS_TO_SHAPE[state.getValue(LEVEL) - 1];
+    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return LAYERS_TO_SHAPE[state.get(LEVEL) - 1];
     }
 
-    protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
-        return LAYERS_TO_SHAPE[state.getValue(LEVEL) - 1];
+    protected VoxelShape getSidesShape(BlockState state, BlockView world, BlockPos pos) {
+        return LAYERS_TO_SHAPE[state.get(LEVEL) - 1];
     }
 
-    protected VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return LAYERS_TO_SHAPE[state.getValue(LEVEL) - 1];
+    protected VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return LAYERS_TO_SHAPE[state.get(LEVEL) - 1];
     }
 }

@@ -6,12 +6,16 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -19,19 +23,19 @@ import java.util.stream.Stream;
 public record CountedIngredient(int count, Ingredient ingredient) implements CustomIngredient {
     public static MapCodec<CountedIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.optionalFieldOf("count", 1).forGetter(CountedIngredient::count),
-            Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(CountedIngredient::ingredient)
+            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient").forGetter(CountedIngredient::ingredient)
     ).apply(instance, CountedIngredient::new));
 
-    public static StreamCodec<RegistryFriendlyByteBuf, CountedIngredient> PACKET_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, CountedIngredient::count,
-            Ingredient.CONTENTS_STREAM_CODEC, CountedIngredient::ingredient,
+    public static PacketCodec<RegistryByteBuf, CountedIngredient> PACKET_CODEC = PacketCodec.tuple(
+            PacketCodecs.INTEGER, CountedIngredient::count,
+            Ingredient.PACKET_CODEC, CountedIngredient::ingredient,
             CountedIngredient::new
     );
 
     public static final Serializer SERIALIZER = new Serializer();
 
     public static CountedIngredient ofStacks(int count, ItemStack... items) {
-        return new CountedIngredient(count, Ingredient.of(items));
+        return new CountedIngredient(count, Ingredient.ofStacks(items));
     }
 
     @Override
@@ -41,7 +45,7 @@ public record CountedIngredient(int count, Ingredient ingredient) implements Cus
 
     @Override
     public List<ItemStack> getMatchingStacks() {
-        return List.of(Arrays.stream(this.ingredient.getItems()).map(stack -> {
+        return List.of(Arrays.stream(this.ingredient.getMatchingStacks()).map(stack -> {
             ItemStack copy = stack.copy();
             copy.setCount(this.count);
             return copy;
@@ -59,10 +63,10 @@ public record CountedIngredient(int count, Ingredient ingredient) implements Cus
     }
 
     public static class Serializer implements CustomIngredientSerializer<CountedIngredient> {
-        public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "counted_ingredient");
+        public static final Identifier ID = Identifier.of(IljaTech.MOD_ID, "counted_ingredient");
 
         @Override
-        public ResourceLocation getIdentifier() {
+        public Identifier getIdentifier() {
             return ID;
         }
 
@@ -72,7 +76,7 @@ public record CountedIngredient(int count, Ingredient ingredient) implements Cus
         }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CountedIngredient> getPacketCodec() {
+        public PacketCodec<RegistryByteBuf, CountedIngredient> getPacketCodec() {
             return PACKET_CODEC;
         }
     }

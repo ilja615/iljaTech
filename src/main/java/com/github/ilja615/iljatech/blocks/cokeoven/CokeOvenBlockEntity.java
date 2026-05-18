@@ -23,28 +23,30 @@ import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
@@ -52,12 +54,12 @@ import java.util.List;
 
 public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEntity, ExtendedScreenHandlerFactory<BlockPosPayload> {
     private int ticks = 0;
-    public static final Component TITLE = Component.translatable("container." + IljaTech.MOD_ID + ".coke_oven");
+    public static final Text TITLE = Text.translatable("container." + IljaTech.MOD_ID + ".coke_oven");
     public static final int PROCESS_TIME = 12000; // 12000 ticks is ten minutes
-    private final SimpleContainer inventory = new SimpleContainer(3) {
+    private final SimpleInventory inventory = new SimpleInventory(3) {
         @Override
-        public void setChanged() {
-            super.setChanged();
+        public void markDirty() {
+            super.markDirty();
             update();
         }
     };
@@ -76,17 +78,17 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     public void tick() {
         if (validateCokeOvenMultiblock()) {
             // Transfer items from the item hatch if there is one
-            Direction facing = level.getBlockState(worldPosition).getValue(CokeOvenBlock.FACING);
-            if (level.getBlockEntity(worldPosition.relative(facing.getOpposite()).above(2)) instanceof ItemHatchBlockEntity itemHatch) {
-                for (ItemStack stack : itemHatch.getInventory().getItems()) {
+            Direction facing = world.getBlockState(pos).get(CokeOvenBlock.FACING);
+            if (world.getBlockEntity(pos.offset(facing.getOpposite()).up(2)) instanceof ItemHatchBlockEntity itemHatch) {
+                for (ItemStack stack : itemHatch.getInventory().getHeldStacks()) {
                     if (!stack.isEmpty()) {
-                        if (inventory.getItem(0).isEmpty()) {
-                            inventory.setItem(0, new ItemStack(stack.getItem(), 1));
-                            stack.shrink(1);
+                        if (inventory.getStack(0).isEmpty()) {
+                            inventory.setStack(0, new ItemStack(stack.getItem(), 1));
+                            stack.decrement(1);
                             break;
-                        } else if (inventory.getItem(0).is(stack.getItem())) {
-                            inventory.getItem(0).grow(1);
-                            stack.shrink(1);
+                        } else if (inventory.getStack(0).isOf(stack.getItem())) {
+                            inventory.getStack(0).increment(1);
+                            stack.decrement(1);
                             break;
                         }
                     }
@@ -112,16 +114,16 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                 }
             }
 
-            List<RecipeHolder<CokingRecipe>> recipes = level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.COKING_TYPE);
+            List<RecipeEntry<CokingRecipe>> recipes = world.getRecipeManager().listAllOfType(ModRecipeTypes.COKING_TYPE);
             boolean flag = false;
-            for (RecipeHolder<CokingRecipe> rr : recipes)
+            for (RecipeEntry<CokingRecipe> rr : recipes)
             {
                 CokingRecipe r = rr.value();
                 ItemStack resultingStack = r.output().copy();
 
-                if (r.matches(new CokingRecipe.InputContainer(inventory.getItem(0)), level))
+                if (r.matches(new CokingRecipe.InputContainer(inventory.getStack(0)), world))
                 {
-                    level.setBlockAndUpdate(worldPosition, level.getBlockState(worldPosition).setValue(CokeOvenBlock.LIT, true));
+                    world.setBlockState(pos, world.getBlockState(pos).with(CokeOvenBlock.LIT, true));
                     ItemStack output = r.output().copy();
                     if (!output.isEmpty()) {
                         if (ticks++ > PROCESS_TIME) {
@@ -135,15 +137,15 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                                 }
                             }
                             if (insertedAmount > 0) {
-                                if (inventory.getItem(1).isEmpty()) { // 1 is output slot
+                                if (inventory.getStack(1).isEmpty()) { // 1 is output slot
                                     // In this case a new result ItemStack is added with 1 of the result.
-                                    inventory.getItem(0).shrink(r.countedIngredient().count());
-                                    inventory.setItem(1, output);
-                                } else if (inventory.getItem(1).getItem() == output.getItem() &&
-                                        inventory.getItem(1).getCount() + output.getCount() <= inventory.getItem(1).getMaxStackSize()) {
+                                    inventory.getStack(0).decrement(r.countedIngredient().count());
+                                    inventory.setStack(1, output);
+                                } else if (inventory.getStack(1).getItem() == output.getItem() &&
+                                        inventory.getStack(1).getCount() + output.getCount() <= inventory.getStack(1).getMaxCount()) {
                                     // In this case the result ItemStack is added to what was already there
-                                    inventory.getItem(0).shrink(r.countedIngredient().count());
-                                    inventory.getItem(1).grow(output.getCount());
+                                    inventory.getStack(0).decrement(r.countedIngredient().count());
+                                    inventory.getStack(1).increment(output.getCount());
                                 }
                                 this.ticks = 0;
                             }
@@ -154,7 +156,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                 }
             }
             if (!flag)
-                level.setBlockAndUpdate(worldPosition, level.getBlockState(worldPosition).setValue(CokeOvenBlock.LIT, false));
+                world.setBlockState(pos, world.getBlockState(pos).with(CokeOvenBlock.LIT, false));
         } else {
             // Progress resets if Multiblock becomes invalidated
             this.ticks = 0;
@@ -163,13 +165,13 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     public boolean validateCokeOvenMultiblock() {
-        Rotation rotation = ModonomiconAPI.get().getMultiblock(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "coke_oven")).validate(level, worldPosition);
-        Direction facing = level.getBlockState(worldPosition).getValue(CokeOvenBlock.FACING);
+        BlockRotation rotation = ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos);
+        Direction facing = world.getBlockState(pos).get(CokeOvenBlock.FACING);
         if (rotation != null) {
-            return (ModonomiconAPI.get().getMultiblock(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "coke_oven_wall")).validate(level, worldPosition.relative(facing.getClockWise()), rotation)
-                    || ModonomiconAPI.get().getMultiblock(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "coke_oven")).validate(level, worldPosition.relative(facing.getClockWise()), rotation))
-                    && (ModonomiconAPI.get().getMultiblock(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "coke_oven_wall")).validate(level, worldPosition.relative(facing.getCounterClockWise()), rotation)
-                    || ModonomiconAPI.get().getMultiblock(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "coke_oven")).validate(level, worldPosition.relative(facing.getCounterClockWise()), rotation));
+            return (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven_wall")).validate(world, pos.offset(facing.rotateYClockwise()), rotation)
+                    || ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos.offset(facing.rotateYClockwise()), rotation))
+                    && (ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven_wall")).validate(world, pos.offset(facing.rotateYCounterclockwise()), rotation)
+                    || ModonomiconAPI.get().getMultiblock(Identifier.of(IljaTech.MOD_ID, "coke_oven")).validate(world, pos.offset(facing.rotateYCounterclockwise()), rotation));
         }
         return false;
     }
@@ -182,41 +184,41 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     @Override
-    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.loadAdditional(nbt, registryLookup);
+    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
 
-        if (nbt.contains("Inventory", Tag.TAG_COMPOUND))
-            ContainerHelper.loadAllItems(nbt.getCompound("Inventory"), this.inventory.getItems(), registryLookup);
+        if (nbt.contains("Inventory", NbtElement.COMPOUND_TYPE))
+            Inventories.readNbt(nbt.getCompound("Inventory"), this.inventory.getHeldStacks(), registryLookup);
 
-        if (nbt.contains("FluidTank", Tag.TAG_COMPOUND))
+        if (nbt.contains("FluidTank", NbtElement.COMPOUND_TYPE))
             this.fluidStorage.readNbt(nbt.getCompound("FluidTank"), registryLookup);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
-        super.saveAdditional(nbt, registryLookup);
+    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
 
-        var inventoryNbt = new CompoundTag();
-        ContainerHelper.saveAllItems(inventoryNbt, this.inventory.getItems(), registryLookup);
+        var inventoryNbt = new NbtCompound();
+        Inventories.writeNbt(inventoryNbt, this.inventory.getHeldStacks(), registryLookup);
         nbt.put("Inventory", inventoryNbt);
 
-        var fluidNbt = new CompoundTag();
+        var fluidNbt = new NbtCompound();
         this.fluidStorage.writeNbt(fluidNbt, registryLookup);
         nbt.put("FluidTank", fluidNbt);
     }
 
     @Nullable
     @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
     }
 
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
-        var nbt = super.getUpdateTag(registryLookup);
-        saveAdditional(nbt, registryLookup);
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        var nbt = super.toInitialChunkDataNbt(registryLookup);
+        writeNbt(nbt, registryLookup);
         return nbt;
     }
 
@@ -225,16 +227,16 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     private void update() {
-        setChanged();
-        if (level != null)
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        markDirty();
+        if (world != null)
+            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
     }
 
     public InventoryStorage getInventoryProvider(Direction direction) {
         return storage;
     }
 
-    public SimpleContainer getInventory() {
+    public SimpleInventory getInventory() {
         return this.inventory;
     }
 
@@ -247,18 +249,18 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
     }
 
     @Override
-    public BlockPosPayload getScreenOpeningData(ServerPlayer player) {
-        return new BlockPosPayload(this.worldPosition);
+    public BlockPosPayload getScreenOpeningData(ServerPlayerEntity player) {
+        return new BlockPosPayload(this.pos);
     }
 
     @Override
-    public Component getDisplayName() {
+    public Text getDisplayName() {
         return TITLE;
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
         return new CokeOvenScreenHandler(syncId, playerInventory, this, this.inventory);
     }
 }

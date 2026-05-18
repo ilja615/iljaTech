@@ -1,58 +1,63 @@
 package com.github.ilja615.iljatech.fluids;
 
-import java.util.function.Supplier;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.item.Item;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 
-public abstract class AbstractFluid extends FlowingFluid {
+import java.util.function.Supplier;
+
+public abstract class AbstractFluid extends FlowableFluid {
     @Override
-    public boolean isSame(Fluid fluid) {
-        return fluid == getSource() || fluid == getFlowing();
+    public boolean matchesType(Fluid fluid) {
+        return fluid == getStill() || fluid == getFlowing();
     }
 
     @Override
-    protected boolean canConvertToSource(Level world) {
+    protected boolean isInfinite(World world) {
         return false;
     }
 
     @Override
-    protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state) {
+    protected void beforeBreakingBlock(WorldAccess world, BlockPos pos, BlockState state) {
         BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
-        Block.dropResources(state, world, pos, blockEntity);
+        Block.dropStacks(state, world, pos, blockEntity);
     }
 
     @Override
-    protected int getSlopeFindDistance(LevelReader world) {
+    protected int getMaxFlowDistance(WorldView world) {
         return 5;
     }
 
     @Override
-    protected int getDropOff(LevelReader world) {
+    protected int getLevelDecreasePerBlock(WorldView world) {
         return 1;
     }
 
     @Override
-    protected boolean canBeReplacedWith(FluidState state, BlockGetter world, BlockPos pos, Fluid fluid, Direction direction) {
+    protected boolean canBeReplacedWith(FluidState state, BlockView world, BlockPos pos, Fluid fluid, Direction direction) {
         return false;
     }
 
     @Override
-    public int getTickDelay(LevelReader world) {
+    public int getTickRate(WorldView world) {
         return 45;
     }
 
     @Override
-    protected float getExplosionResistance() {
+    protected float getBlastResistance() {
         return 120f;
     }
 }

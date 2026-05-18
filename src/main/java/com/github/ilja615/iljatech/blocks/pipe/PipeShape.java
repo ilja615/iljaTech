@@ -1,9 +1,9 @@
 package com.github.ilja615.iljatech.blocks.pipe;
 
-import net.minecraft.core.Direction;
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.math.Direction;
 
-public enum PipeShape implements StringRepresentable {
+public enum PipeShape implements StringIdentifiable {
     // Straight pipes
     NORTH_SOUTH("north_south", Direction.NORTH, Direction.SOUTH),
     EAST_WEST("east_west", Direction.EAST, Direction.WEST),
@@ -39,7 +39,7 @@ public enum PipeShape implements StringRepresentable {
     }
 
     @Override
-    public String getSerializedName() {
+    public String asString() {
         return this.name;
     }
 

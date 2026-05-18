@@ -5,19 +5,17 @@ import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.recipe.*;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
+import net.minecraft.recipe.input.RecipeInput;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.world.World;
+
 import java.util.List;
 
 public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack output, CountedIngredient flux, ItemStack slag,
@@ -33,38 +31,38 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
             Codec.BOOL.fieldOf("is_flux_required").forGetter(FoundryRecipe::isFluxRequired)
     ).apply(instance, FoundryRecipe::new));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, FoundryRecipe> STREAM_CODEC = new StreamCodec<>() {
-        private final StreamCodec<RegistryFriendlyByteBuf, List<CountedIngredient>> ingredientsCodec = CountedIngredient.PACKET_CODEC.apply(ByteBufCodecs.list());
+    public static final PacketCodec<RegistryByteBuf, FoundryRecipe> PACKET_CODEC = new PacketCodec<>() {
+        private final PacketCodec<RegistryByteBuf, List<CountedIngredient>> ingredientsCodec = CountedIngredient.PACKET_CODEC.collect(PacketCodecs.toList());
 
         @Override
-        public FoundryRecipe decode(RegistryFriendlyByteBuf buf) {
+        public FoundryRecipe decode(RegistryByteBuf buf) {
             List<CountedIngredient> ingredients = ingredientsCodec.decode(buf);
-            ItemStack output = ItemStack.STREAM_CODEC.decode(buf);
+            ItemStack output = ItemStack.PACKET_CODEC.decode(buf);
             CountedIngredient flux = CountedIngredient.PACKET_CODEC.decode(buf);
-            ItemStack slag = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
-            int processingTime = ByteBufCodecs.INT.decode(buf);
-            float slagChance = ByteBufCodecs.FLOAT.decode(buf);
-            float slagChanceUsingFlux = ByteBufCodecs.FLOAT.decode(buf);
-            boolean isFluxRequired = ByteBufCodecs.BOOL.decode(buf);
+            ItemStack slag = ItemStack.OPTIONAL_PACKET_CODEC.decode(buf);
+            int processingTime = PacketCodecs.INTEGER.decode(buf);
+            float slagChance = PacketCodecs.FLOAT.decode(buf);
+            float slagChanceUsingFlux = PacketCodecs.FLOAT.decode(buf);
+            boolean isFluxRequired = PacketCodecs.BOOL.decode(buf);
             return new FoundryRecipe(ingredients, output, flux, slag, processingTime, slagChance, slagChanceUsingFlux, isFluxRequired);
         }
 
         @Override
-        public void encode(RegistryFriendlyByteBuf buf, FoundryRecipe recipe) {
+        public void encode(RegistryByteBuf buf, FoundryRecipe recipe) {
             ingredientsCodec.encode(buf, recipe.ingredients);
-            ItemStack.STREAM_CODEC.encode(buf, recipe.output);
+            ItemStack.PACKET_CODEC.encode(buf, recipe.output);
             CountedIngredient.PACKET_CODEC.encode(buf, recipe.flux);
-            ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, recipe.slag);
-            ByteBufCodecs.INT.encode(buf, recipe.processingTime);
-            ByteBufCodecs.FLOAT.encode(buf, recipe.slagChanceWithoutFlux);
-            ByteBufCodecs.FLOAT.encode(buf, recipe.slagChanceUsingFlux);
-            ByteBufCodecs.BOOL.encode(buf, recipe.isFluxRequired);
+            ItemStack.OPTIONAL_PACKET_CODEC.encode(buf, recipe.slag);
+            PacketCodecs.INTEGER.encode(buf, recipe.processingTime);
+            PacketCodecs.FLOAT.encode(buf, recipe.slagChanceWithoutFlux);
+            PacketCodecs.FLOAT.encode(buf, recipe.slagChanceUsingFlux);
+            PacketCodecs.BOOL.encode(buf, recipe.isFluxRequired);
         }
     };
 
     @Override
-    public boolean matches(FoundryRecipe.InputContainer input, Level world) {
-        if (input.size() != this.ingredients.size()) {
+    public boolean matches(FoundryRecipe.InputContainer input, World world) {
+        if (input.getSize() != this.ingredients.size()) {
             return false;
         } else {
             if (this.isFluxRequired) {
@@ -78,7 +76,7 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
                 }
             }
 
-            List<Item> a = this.ingredients.stream().map(countedIngredient -> countedIngredient.ingredient().getItems()[0].getItem()).toList();
+            List<Item> a = this.ingredients.stream().map(countedIngredient -> countedIngredient.ingredient().getMatchingStacks()[0].getItem()).toList();
             List<Item> b = input.stacks.stream().map(ItemStack::getItem).toList();
             if (a.containsAll(b) && b.containsAll(a)) {
                 // Technically a matching recipe was found but amounts have to be still checked
@@ -109,23 +107,23 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
     }
 
     @Override
-    public ItemStack craft(FoundryRecipe.InputContainer input, HolderLookup.Provider registries) {
+    public ItemStack craft(FoundryRecipe.InputContainer input, RegistryWrapper.WrapperLookup registries) {
         return output.copy();
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean fits(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
+    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
         return output.copy();
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return BuiltInRegistries.RECIPE_SERIALIZER.get(BuiltInRegistries.RECIPE_TYPE.getKey(getType()));
+        return Registries.RECIPE_SERIALIZER.get(Registries.RECIPE_TYPE.getId(getType()));
     }
 
     @Override
@@ -135,12 +133,12 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
 
     public record InputContainer(List<ItemStack> stacks, ItemStack flux) implements RecipeInput {
         @Override
-        public ItemStack getItem(int slot) {
+        public ItemStack getStackInSlot(int slot) {
             return stacks.get(slot);
         }
 
         @Override
-        public int size() {
+        public int getSize() {
             return stacks.size();
         }
     }
@@ -152,8 +150,8 @@ public record FoundryRecipe(List<CountedIngredient> ingredients, ItemStack outpu
         }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FoundryRecipe> streamCodec() {
-            return STREAM_CODEC;
+        public PacketCodec<RegistryByteBuf, FoundryRecipe> packetCodec() {
+            return PACKET_CODEC;
         }
     }
 }

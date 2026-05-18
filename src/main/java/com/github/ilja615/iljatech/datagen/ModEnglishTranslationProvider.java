@@ -5,11 +5,13 @@ import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.klikli_dev.modonomicon.api.datagen.AbstractModonomiconLanguageProvider;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataOutput;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import org.jetbrains.annotations.NotNull;
 
 public class ModEnglishTranslationProvider extends AbstractModonomiconLanguageProvider {
-    public ModEnglishTranslationProvider(PackOutput output, ModonomiconLanguageProvider cachedProvider) {
+    public ModEnglishTranslationProvider(DataOutput output, ModonomiconLanguageProvider cachedProvider) {
         super(output, IljaTech.MOD_ID, "en_us", cachedProvider);
     }
 

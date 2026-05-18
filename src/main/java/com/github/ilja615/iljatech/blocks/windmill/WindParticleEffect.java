@@ -4,20 +4,20 @@ import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.util.ExtraCodecs;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.function.BiFunction;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
-public class WindParticleEffect extends ParticleType<WindParticleEffect> implements ParticleOptions {
+public class WindParticleEffect extends ParticleType<WindParticleEffect> implements ParticleEffect {
 
     public static final MapCodec<WindParticleEffect> CODEC;
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, WindParticleEffect> PACKET_CODEC;
+    public static final PacketCodec<RegistryByteBuf, WindParticleEffect> PACKET_CODEC;
 
     private final Vector2f direction;
 
@@ -30,11 +30,11 @@ public class WindParticleEffect extends ParticleType<WindParticleEffect> impleme
         direction = vector2f;
     }
 
-    public MapCodec<WindParticleEffect> codec() {
+    public MapCodec<WindParticleEffect> getCodec() {
         return this.CODEC;
     }
 
-    public StreamCodec<RegistryFriendlyByteBuf, WindParticleEffect> streamCodec() {
+    public PacketCodec<RegistryByteBuf, WindParticleEffect> getPacketCodec() {
         return this.PACKET_CODEC;
     }
 
@@ -44,7 +44,7 @@ public class WindParticleEffect extends ParticleType<WindParticleEffect> impleme
                 return effect.direction;
             })).apply(instance, WindParticleEffect::new);
         });
-        PACKET_CODEC = StreamCodec.composite(ExtraCodecs.VECTOR_2F_PACKET, (effect) -> {
+        PACKET_CODEC = PacketCodec.tuple(ExtraCodecs.VECTOR_2F_PACKET, (effect) -> {
             return ((WindParticleEffect)effect).direction;
         }, WindParticleEffect::new);
     }

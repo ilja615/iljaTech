@@ -1,50 +1,50 @@
 package com.github.ilja615.iljatech.blocks.carpentry;
 
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CarpentryBlock extends Block implements EntityBlock {
-    public CarpentryBlock(Properties settings) {
+public class CarpentryBlock extends Block implements BlockEntityProvider {
+    public CarpentryBlock(Settings settings) {
         super(settings);
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        if(!world.isClientSide) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if(!world.isClient) {
             if(world.getBlockEntity(pos) instanceof CarpentryBlockEntity carpentryBlockEntity) {
-                player.openMenu(carpentryBlockEntity);
+                player.openHandledScreen(carpentryBlockEntity);
                 carpentryBlockEntity.checkRecipes();
             }
         }
 
-        return InteractionResult.sidedSuccess(world.isClientSide);
+        return ActionResult.success(world.isClient);
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return ModBlockEntityTypes.CARPENTRY.create(pos, state);
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntityTypes.CARPENTRY.instantiate(pos, state);
     }
 
     @Override
-    protected void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof CarpentryBlockEntity carpentryBlockEntity) {
-                Containers.dropContents(world, pos, carpentryBlockEntity.getInventory());
-                world.updateNeighbourForOutputSignal(pos, this);
+                ItemScatterer.spawn(world, pos, carpentryBlockEntity.getInventory());
+                world.updateComparators(pos, this);
             }
         }
-        super.onRemove(state, world, pos, newState, moved);
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 }

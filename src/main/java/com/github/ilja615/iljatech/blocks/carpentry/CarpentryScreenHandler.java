@@ -13,45 +13,48 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.util.Tuple;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryChangedListener;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.util.Pair;
+
 import java.util.Optional;
 
-public class CarpentryScreenHandler extends AbstractContainerMenu {
+public class CarpentryScreenHandler extends ScreenHandler {
     private final CarpentryBlockEntity blockEntity;
-    private final SimpleContainer inventory;
-    private final ContainerLevelAccess context;
+    private final SimpleInventory inventory;
+    private final ScreenHandlerContext context;
 
     // Client Constructor
-    public CarpentryScreenHandler(int syncId, Inventory playerInventory, BlockPosPayload payload) {
+    public CarpentryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
         super(ModScreenHandlerTypes.CARPENTRY, syncId);
 
-        this.blockEntity = (CarpentryBlockEntity) playerInventory.player.level().getBlockEntity(payload.pos());
-        this.context = ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos());
-        this.inventory = new SimpleContainer(7);
+        this.blockEntity = (CarpentryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos());
+        this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
+        this.inventory = new SimpleInventory(7);
 
         addSlots(playerInventory);
     }
 
     // Main Constructor - (Directly called from server)
-    public CarpentryScreenHandler(int syncId, Inventory playerInventory, CarpentryBlockEntity blockEntity, SimpleContainer inventory) {
+    public CarpentryScreenHandler(int syncId, PlayerInventory playerInventory, CarpentryBlockEntity blockEntity, SimpleInventory inventory) {
         super(ModScreenHandlerTypes.CARPENTRY, syncId);
 
         this.blockEntity = blockEntity;
-        this.context = ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos());
+        this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
         this.inventory = inventory;
 
         addSlots(playerInventory);
     }
 
-    private void addSlots(Inventory playerInventory) {
+    private void addSlots(PlayerInventory playerInventory) {
         addSlot(new MaxStackSize1Slot(inventory, 0, 44, 26));
         addSlot(new MaxStackSize1Slot(inventory, 1, 62, 35));
         addSlot(new MaxStackSize1Slot(inventory, 2, 26, 35));
@@ -59,7 +62,7 @@ public class CarpentryScreenHandler extends AbstractContainerMenu {
         addSlot(new Slot(inventory, 4, 8, 17)); // Nails slot
         addSlot(new Slot(inventory, 5, 148, 35){ // Output slot
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean canInsert(ItemStack stack) {
                 return false;
             }
         });
@@ -70,8 +73,8 @@ public class CarpentryScreenHandler extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, ClickType actionType, Player player) {
-        ItemStack cursorStack = this.getCarried();
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+        ItemStack cursorStack = this.getCursorStack();
         if (slotIndex == 6) {
             Storage<FluidVariant> itemFluidStorage = ContainerItemContext.ofPlayerCursor(player, this).find(FluidStorage.ITEM);
             if (itemFluidStorage != null) {
@@ -89,7 +92,7 @@ public class CarpentryScreenHandler extends AbstractContainerMenu {
                                     System.out.println(transferredAmount);
                                     if (transferredAmount == acceptedAmount) {
                                         transaction.commit();
-                                        this.inventory.setChanged();
+                                        this.inventory.markDirty();
                                         this.blockEntity.update();
                                     }
                                 }
@@ -108,7 +111,7 @@ public class CarpentryScreenHandler extends AbstractContainerMenu {
                             System.out.println(transferredAmount);
                             if (transferredAmount == acceptedAmount) {
                                 transaction.commit();
-                                this.inventory.setChanged();
+                                this.inventory.markDirty();
                                 this.blockEntity.update();
                             }
                         }
@@ -116,17 +119,17 @@ public class CarpentryScreenHandler extends AbstractContainerMenu {
                 }
             }
         } else {
-            super.clicked(slotIndex, button, actionType, player);
+            super.onSlotClick(slotIndex, button, actionType, player);
         }
     }
 
     @Override
-    public boolean clickMenuButton(Player player, int id) {
+    public boolean onButtonClick(PlayerEntity player, int id) {
         switch (id) {
             case 0 -> {hammer(); return true;}
             case 1 -> {saw(); return true;}
             case 2 -> {finish(); return true;}
-            case 3 -> {this.inventory.setChanged(); blockEntity.checkRecipes(); return true;}
+            case 3 -> {this.inventory.markDirty(); blockEntity.checkRecipes(); return true;}
             default -> {
                 return false;
             }
@@ -135,38 +138,38 @@ public class CarpentryScreenHandler extends AbstractContainerMenu {
 
     public void hammer() {
         this.blockEntity.hammer();
-        this.inventory.setChanged();
+        this.inventory.markDirty();
     }
 
     public void saw() {
         this.blockEntity.saw();
-        this.inventory.setChanged();
+        this.inventory.markDirty();
     }
 
     public void finish() {
         this.blockEntity.finish();
-        this.inventory.setChanged();
+        this.inventory.markDirty();
     }
 
-    public Tuple<Boolean, String> canHammer() {
-        if (!inventory.getItem(4).isEmpty() && inventory.getItem(4).is(ModItems.IRON_NAILS)) {
-            return new Tuple<>(true, "");
+    public Pair<Boolean, String> canHammer() {
+        if (!inventory.getStack(4).isEmpty() && inventory.getStack(4).isOf(ModItems.IRON_NAILS)) {
+            return new Pair<>(true, "");
         } else {
-            return new Tuple<>(false, "Missing Nails");
+            return new Pair<>(false, "Missing Nails");
         }
     }
 
-    public Tuple<Boolean, String> canFinish() {
-        this.inventory.setChanged();
+    public Pair<Boolean, String> canFinish() {
+        this.inventory.markDirty();
         String craftingStatus = this.blockEntity.getCraftingStatus();
         if (craftingStatus.isEmpty()) {
-            return new Tuple<>(true, "");
+            return new Pair<>(true, "");
         } else {
-            return new Tuple<>(false, craftingStatus);
+            return new Pair<>(false, craftingStatus);
         }
     }
 
-    private void addPlayerInventory(Inventory playerInv) {
+    private void addPlayerInventory(PlayerInventory playerInv) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addSlot(new Slot(playerInv, 9 + (column + (row * 9)), 8 + (column * 18), 84 + (row * 18)));
@@ -174,20 +177,20 @@ public class CarpentryScreenHandler extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInv) {
+    private void addPlayerHotbar(PlayerInventory playerInv) {
         for (int column = 0; column < 9; column++) {
             addSlot(new Slot(playerInv, column, 8 + (column * 18), 142));
         }
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMove(PlayerEntity player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return stillValid(this.context, player, ModBlocks.CARPENTRY);
+    public boolean canUse(PlayerEntity player) {
+        return canUse(this.context, player, ModBlocks.CARPENTRY);
     }
 
     public CarpentryBlockEntity getBlockEntity() {

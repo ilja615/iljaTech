@@ -3,34 +3,34 @@ package com.github.ilja615.iljatech.blocks.squeezer;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.slot.Slot;
 
-public class SqueezerScreenHandler extends AbstractContainerMenu {
+public class SqueezerScreenHandler extends ScreenHandler {
     private final SqueezerBlockEntity blockEntity;
-    private final ContainerLevelAccess context;
+    private final ScreenHandlerContext context;
 
     // Client Constructor
-    public SqueezerScreenHandler(int syncId, Inventory playerInventory, BlockPosPayload payload) {
-        this(syncId, playerInventory, (SqueezerBlockEntity) playerInventory.player.level().getBlockEntity(payload.pos()), new SimpleContainer(2));
+    public SqueezerScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
+        this(syncId, playerInventory, (SqueezerBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()), new SimpleInventory(2));
     }
 
     // Main Constructor - (Directly called from server)
-    public SqueezerScreenHandler(int syncId, Inventory playerInventory, SqueezerBlockEntity blockEntity, SimpleContainer inventory) {
+    public SqueezerScreenHandler(int syncId, PlayerInventory playerInventory, SqueezerBlockEntity blockEntity, SimpleInventory inventory) {
         super(ModScreenHandlerTypes.SQUEEZER, syncId);
 
         this.blockEntity = blockEntity;
-        this.context = ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos());
+        this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
 
         addSlot(new Slot(inventory, 0, 44, 24));
         addSlot(new Slot(inventory, 1, 116, 24) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean canInsert(ItemStack stack) {
                 return blockEntity.isValid(stack, 1);
             }
         });
@@ -39,7 +39,7 @@ public class SqueezerScreenHandler extends AbstractContainerMenu {
         addPlayerHotbar(playerInventory);
     }
 
-    private void addPlayerInventory(Inventory playerInv) {
+    private void addPlayerInventory(PlayerInventory playerInv) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addSlot(new Slot(playerInv, 9 + (column + (row * 9)), 8 + (column * 18), 84 + (row * 18)));
@@ -47,20 +47,20 @@ public class SqueezerScreenHandler extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInv) {
+    private void addPlayerHotbar(PlayerInventory playerInv) {
         for (int column = 0; column < 9; column++) {
             addSlot(new Slot(playerInv, column, 8 + (column * 18), 142));
         }
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMove(PlayerEntity player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return stillValid(this.context, player, ModBlocks.SQUEEZER);
+    public boolean canUse(PlayerEntity player) {
+        return canUse(this.context, player, ModBlocks.SQUEEZER);
     }
 
     public SqueezerBlockEntity getBlockEntity() {

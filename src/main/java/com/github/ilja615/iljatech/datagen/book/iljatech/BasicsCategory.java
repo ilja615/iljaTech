@@ -8,7 +8,7 @@ import com.klikli_dev.modonomicon.api.datagen.SingleBookSubProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookCategoryModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookEntryParentModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 public class BasicsCategory extends CategoryProvider {
     public static final String ID = "basics";
@@ -61,8 +61,8 @@ public class BasicsCategory extends CategoryProvider {
     @Override
     protected BookCategoryModel additionalSetup(BookCategoryModel category) {
         return super.additionalSetup(category)
-                .withEntryTextures(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "textures/gui/book/entry_textures.png"))
-                .withBackground(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "textures/gui/book/book_background.png"));
+                .withEntryTextures(Identifier.of(IljaTech.MOD_ID, "textures/gui/book/entry_textures.png"))
+                .withBackground(Identifier.of(IljaTech.MOD_ID, "textures/gui/book/book_background.png"));
     }
 
     @Override

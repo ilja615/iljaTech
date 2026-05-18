@@ -4,30 +4,34 @@ import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.screen.slot.CraftingResultSlot;
+import net.minecraft.screen.slot.FurnaceOutputSlot;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
-public class FoundryScreenHandler extends AbstractContainerMenu {
+public class FoundryScreenHandler extends ScreenHandler {
     private final FoundryBlockEntity blockEntity;
-    private final ContainerLevelAccess context;
+    private final ScreenHandlerContext context;
 
     // Client Constructor
-    public FoundryScreenHandler(int syncId, Inventory playerInventory, BlockPosPayload payload) {
-        this(syncId, playerInventory, (FoundryBlockEntity) playerInventory.player.level().getBlockEntity(payload.pos()), new SimpleContainer(5));
+    public FoundryScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
+        this(syncId, playerInventory, (FoundryBlockEntity) playerInventory.player.getWorld().getBlockEntity(payload.pos()), new SimpleInventory(5));
     }
 
     // Main Constructor - (Directly called from server)
-    public FoundryScreenHandler(int syncId, Inventory playerInventory, FoundryBlockEntity blockEntity, SimpleContainer inventory) {
+    public FoundryScreenHandler(int syncId, PlayerInventory playerInventory, FoundryBlockEntity blockEntity, SimpleInventory inventory) {
         super(ModScreenHandlerTypes.FOUNDRY, syncId);
 
         this.blockEntity = blockEntity;
-        this.context = ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos());
+        this.context = ScreenHandlerContext.create(this.blockEntity.getWorld(), this.blockEntity.getPos());
 
         addSlot(new Slot(inventory, 0, 34, 35));
         addSlot(new Slot(inventory, 1, 52, 35));
@@ -39,7 +43,7 @@ public class FoundryScreenHandler extends AbstractContainerMenu {
         addPlayerHotbar(playerInventory);
     }
 
-    private void addPlayerInventory(Inventory playerInv) {
+    private void addPlayerInventory(PlayerInventory playerInv) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addSlot(new Slot(playerInv, 9 + (column + (row * 9)), 8 + (column * 18), 84 + (row * 18)));
@@ -47,20 +51,20 @@ public class FoundryScreenHandler extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInv) {
+    private void addPlayerHotbar(PlayerInventory playerInv) {
         for (int column = 0; column < 9; column++) {
             addSlot(new Slot(playerInv, column, 8 + (column * 18), 142));
         }
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMove(PlayerEntity player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return stillValid(this.context, player, ModBlocks.FOUNDRY);
+    public boolean canUse(PlayerEntity player) {
+        return canUse(this.context, player, ModBlocks.FOUNDRY);
     }
 
     public FoundryBlockEntity getBlockEntity() {

@@ -1,32 +1,32 @@
 package com.github.ilja615.iljatech.blocks;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 
 public class AxisRodBlock extends Block {
-    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
-    protected static final VoxelShape Y_SHAPE = Block.box(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
-    protected static final VoxelShape Z_SHAPE = Block.box(6.0, 6.0, 0.0, 10.0, 10.0, 16.0);
-    protected static final VoxelShape X_SHAPE = Block.box(0.0, 6.0, 6.0, 16.0, 10.0, 10.0);
+    public static final EnumProperty<Direction.Axis> AXIS = Properties.AXIS;
+    protected static final VoxelShape Y_SHAPE = Block.createCuboidShape(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
+    protected static final VoxelShape Z_SHAPE = Block.createCuboidShape(6.0, 6.0, 0.0, 10.0, 10.0, 16.0);
+    protected static final VoxelShape X_SHAPE = Block.createCuboidShape(0.0, 6.0, 6.0, 16.0, 10.0, 10.0);
 
-    public AxisRodBlock(Properties settings) {
+    public AxisRodBlock(Settings settings) {
         super(settings);
-        this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.Y));
+        this.setDefaultState(this.stateManager.getDefaultState().with(AXIS, Direction.Axis.Y));
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        switch (state.getValue(AXIS)) {
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        switch (state.get(AXIS)) {
             case X:
             default:
                 return X_SHAPE;
@@ -38,19 +38,19 @@ public class AxisRodBlock extends Block {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        Direction direction = ctx.getClickedFace();
-        BlockState blockState = ctx.getLevel().getBlockState(ctx.getClickedPos().relative(direction.getOpposite()));
-        return this.defaultBlockState().setValue(AXIS, direction.getAxis());
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        Direction direction = ctx.getSide();
+        BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos().offset(direction.getOpposite()));
+        return this.getDefaultState().with(AXIS, direction.getAxis());
     }
 
     @Override
-    protected boolean isPathfindable(BlockState state, PathComputationType type) {
+    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
         return false;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(AXIS);
     }
 }

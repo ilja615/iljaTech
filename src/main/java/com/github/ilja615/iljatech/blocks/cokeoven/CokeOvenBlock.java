@@ -5,99 +5,99 @@ import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModSounds;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CokeOvenBlock extends HorizontalDirectionalBlock implements EntityBlock {
-    public static final BooleanProperty LIT = BlockStateProperties.LIT;
-    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+public class CokeOvenBlock extends HorizontalFacingBlock implements BlockEntityProvider {
+    public static final BooleanProperty LIT = Properties.LIT;
+    public static final BooleanProperty OPEN = Properties.OPEN;
 
-    public CokeOvenBlock(Properties settings) {
+    public CokeOvenBlock(Settings settings) {
         super(settings);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false).setValue(OPEN, false));
+        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(LIT, false).with(OPEN, false));
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        if (state.getValue(OPEN)) {
-            if(!world.isClientSide) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (state.get(OPEN)) {
+            if(!world.isClient) {
                 if(world.getBlockEntity(pos) instanceof CokeOvenBlockEntity cokeOvenBlockEntity) {
                     if (cokeOvenBlockEntity.validateCokeOvenMultiblock())
-                        player.openMenu(cokeOvenBlockEntity);
+                        player.openHandledScreen(cokeOvenBlockEntity);
                     else {
-                        world.setBlockAndUpdate(pos, state.setValue(OPEN, false));
-                        world.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 1.0f, 1.0f);
+                        world.setBlockState(pos, state.with(OPEN, false));
+                        world.playSound(null, pos, SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
                     }
                 }
             }
-            world.setBlockAndUpdate(pos, state.setValue(OPEN, false));
-            return InteractionResult.sidedSuccess(world.isClientSide);
+            world.setBlockState(pos, state.with(OPEN, false));
+            return ActionResult.success(world.isClient);
         } else {
-            world.setBlockAndUpdate(pos, state.setValue(OPEN, true));
-            if (!world.isClientSide) {
-                world.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.setBlockState(pos, state.with(OPEN, true));
+            if (!world.isClient) {
+                world.playSound(null, pos, SoundEvents.BLOCK_IRON_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
             }
-            return InteractionResult.sidedSuccess(world.isClientSide);
+            return ActionResult.success(world.isClient);
         }
     }
 
     @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+    protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
         return null;
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        if (ctx.getNearestLookingDirection() == Direction.DOWN)
-            return ModBlocks.ITEM_HATCH.defaultBlockState();
-        return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        if (ctx.getPlayerLookDirection() == Direction.DOWN)
+            return ModBlocks.ITEM_HATCH.getDefaultState();
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(FACING, LIT, OPEN);
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return ModBlockEntityTypes.COKE_OVEN.create(pos, state);
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntityTypes.COKE_OVEN.instantiate(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return TickableBlockEntity.getTicker(world);
     }
 
     @Override
-    protected void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof CokeOvenBlockEntity cokeOvenBlockEntity) {
-                Containers.dropContents(world, pos, cokeOvenBlockEntity.getInventory());
-                world.updateNeighbourForOutputSignal(pos, this);
+                ItemScatterer.spawn(world, pos, cokeOvenBlockEntity.getInventory());
+                world.updateComparators(pos, this);
             }
         }
-        super.onRemove(state, world, pos, newState, moved);
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 }

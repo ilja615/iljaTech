@@ -3,59 +3,55 @@ package com.github.ilja615.iljatech.blocks;
 import com.github.ilja615.iljatech.energy.Heat;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 
-public class StokedFireBlock extends BaseFireBlock {
-    public static final IntegerProperty STOKED = IntegerProperty.create("stoked", 0, 3);
+public class StokedFireBlock extends AbstractFireBlock {
+    public static final IntProperty STOKED = IntProperty.of("stoked", 0, 3);
 
-    public StokedFireBlock(Properties settings) {
+    public StokedFireBlock(Settings settings) {
         super(settings, 2);
-        this.registerDefaultState(this.defaultBlockState().setValue(STOKED, 3));
+        this.setDefaultState(this.getDefaultState().with(STOKED, 3));
     }
 
     @Override
-    protected MapCodec<? extends BaseFireBlock> codec() {
+    protected MapCodec<? extends AbstractFireBlock> getCodec() {
         return null;
     }
 
     @Override
-    protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
-        Heat.emitHeat(world, pos.above());
-        world.scheduleTick(pos, this, 60);
-        super.onPlace(state, world, pos, oldState, notify);
+    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+        Heat.emitHeat(world, pos.up());
+        world.scheduleBlockTick(pos, this, 60);
+        super.onBlockAdded(state, world, pos, oldState, notify);
     }
 
     @Override
-    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        super.tick(state, world, pos, random);
+    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        super.scheduledTick(state, world, pos, random);
         if (!state.getProperties().contains(STOKED)) return;
-        int stoked = state.getValue(STOKED);
+        int stoked = state.get(STOKED);
         if (stoked == 0)
         {
-            world.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+            world.setBlockState(pos, Blocks.FIRE.getDefaultState());
         } else {
-            world.setBlockAndUpdate(pos, state.setValue(STOKED, Math.max(0, stoked - 1)));
-            world.scheduleTick(pos, this, 60);
-            Heat.emitHeat(world, pos.above());
+            world.setBlockState(pos, state.with(STOKED, Math.max(0, stoked - 1)));
+            world.scheduleBlockTick(pos, this, 60);
+            Heat.emitHeat(world, pos.up());
         }
     } 
 
     @Override
-    protected boolean canBurn(BlockState state) {
+    protected boolean isFlammable(BlockState state) {
         return true;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(STOKED);
     }
 }

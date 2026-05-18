@@ -2,52 +2,49 @@ package com.github.ilja615.iljatech.blocks.hatch;
 
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import net.minecraft.block.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemHatchBlock extends Block implements EntityBlock {
+public class ItemHatchBlock extends Block implements BlockEntityProvider {
 
-    public ItemHatchBlock(BlockBehaviour.Properties settings) {
+    public ItemHatchBlock(AbstractBlock.Settings settings) {
         super(settings);
-        this.registerDefaultState(this.stateDefinition.any());
+        this.setDefaultState(this.stateManager.getDefaultState());
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        if(!world.isClientSide) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if(!world.isClient) {
             if(world.getBlockEntity(pos) instanceof ItemHatchBlockEntity itemHatchBlockEntity) {
-                player.openMenu(itemHatchBlockEntity);
+                player.openHandledScreen(itemHatchBlockEntity);
             }
         }
 
-        return InteractionResult.sidedSuccess(world.isClientSide);
+        return ActionResult.success(world.isClient);
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return ModBlockEntityTypes.ITEM_HATCH.create(pos, state);
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return ModBlockEntityTypes.ITEM_HATCH.instantiate(pos, state);
     }
 
     @Override
-    protected void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof ItemHatchBlockEntity itemHatchBlockEntity) {
-                Containers.dropContents(world, pos, itemHatchBlockEntity.getInventory());
-                world.updateNeighbourForOutputSignal(pos, this);
+                ItemScatterer.spawn(world, pos, itemHatchBlockEntity.getInventory());
+                world.updateComparators(pos, this);
             }
         }
-        super.onRemove(state, world, pos, newState, moved);
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 }

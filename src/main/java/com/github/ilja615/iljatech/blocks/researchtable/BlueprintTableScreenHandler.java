@@ -4,58 +4,66 @@ import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.init.*;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.google.common.collect.Lists;
-import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.advancement.AdvancementEntry;
+import net.minecraft.advancement.PlayerAdvancementTracker;
+import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.recipe.StonecuttingRecipe;
+import net.minecraft.screen.Property;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+
 import java.util.List;
 
-public class BlueprintTableScreenHandler extends AbstractContainerMenu {
-    private final ContainerLevelAccess context;
-    private final Player player;
-    private final DataSlot selected;
-    private final DataSlot points;
+public class BlueprintTableScreenHandler extends ScreenHandler {
+    private final ScreenHandlerContext context;
+    private final PlayerEntity player;
+    private final Property selected;
+    private final Property points;
 
-    private List<RecipeHolder<BlueprintingRecipe>> availableRecipes;
+    private List<RecipeEntry<BlueprintingRecipe>> availableRecipes;
 
     // Client Constructor
-    public BlueprintTableScreenHandler(int syncId, Inventory playerInventory, BlockPosPayload payload) {
+    public BlueprintTableScreenHandler(int syncId, PlayerInventory playerInventory, BlockPosPayload payload) {
         this(syncId, playerInventory, payload.pos());
     }
 
     // Main Constructor - (Directly called from server)
-    public BlueprintTableScreenHandler(int syncId, Inventory playerInventory, BlockPos pos) {
+    public BlueprintTableScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
         super(ModScreenHandlerTypes.RESEARCH, syncId);
 
-        this.selected = DataSlot.standalone();
-        this.points = DataSlot.standalone();
-        this.context = ContainerLevelAccess.create(playerInventory.player.level(), pos);
+        this.selected = Property.create();
+        this.points = Property.create();
+        this.context = ScreenHandlerContext.create(playerInventory.player.getWorld(), pos);
 
         this.player = playerInventory.player;
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
 
-        this.availableRecipes = player.level().getRecipeManager().getAllRecipesFor(ModRecipeTypes.BLUEPRINTING_TYPE);
+        this.availableRecipes = player.getWorld().getRecipeManager().listAllOfType(ModRecipeTypes.BLUEPRINTING_TYPE);
 
-        this.addDataSlot(this.selected);
-        this.addDataSlot(this.points);
+        this.addProperty(this.selected);
+        this.addProperty(this.points);
 
         // TODO: gui wont open if the player has not yet any research pts (null value error)
         this.points.set(this.player.getAttached(ModDataAttachments.RESEARCH_PNTS));
         this.selected.set(999);
     }
 
-    private void addPlayerInventory(Inventory playerInv) {
+    private void addPlayerInventory(PlayerInventory playerInv) {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
                 addSlot(new Slot(playerInv, 9 + (column + (row * 9)), 8 + (column * 18), 84 + (row * 18)));
@@ -63,13 +71,13 @@ public class BlueprintTableScreenHandler extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerHotbar(Inventory playerInv) {
+    private void addPlayerHotbar(PlayerInventory playerInv) {
         for (int column = 0; column < 9; column++) {
             addSlot(new Slot(playerInv, column, 8 + (column * 18), 142));
         }
     }
 
-    public boolean clickMenuButton(Player player, int i) {
+    public boolean onButtonClick(PlayerEntity player, int i) {
         if (i < getAvailableRecipeCount()) {
             this.selected.set(i);
             return true;
@@ -79,7 +87,7 @@ public class BlueprintTableScreenHandler extends AbstractContainerMenu {
             BlueprintingRecipe r = getAvailableRecipes().get(this.getSelected()).value();
             int newPts = this.points.get() - r.pointsCost();
 
-            ServerPlayer serverPlayer = player.getServer().getPlayerList().getPlayer(player.getUUID());
+            ServerPlayerEntity serverPlayer = player.getServer().getPlayerManager().getPlayer(player.getUuid());
             boolean alreadyDone = isAlreadyUnlocked(serverPlayer, r.output());
             if (newPts >= 0 && !alreadyDone) {
                 this.points.set(newPts);
@@ -92,24 +100,24 @@ public class BlueprintTableScreenHandler extends AbstractContainerMenu {
         return false;
     }
 
-    public boolean isAlreadyUnlocked(ServerPlayer serverPlayer, ItemStack itemStack) {
-        String str = itemStack.getDescriptionId();
+    public boolean isAlreadyUnlocked(ServerPlayerEntity serverPlayer, ItemStack itemStack) {
+        String str = itemStack.getTranslationKey();
         str = str.substring(str.lastIndexOf(".")+1);
-        ResourceLocation id = ResourceLocation.parse("iljatech/blueprint_"+str);
-        AdvancementHolder advancement = player.getServer().getAdvancements().get(id);
+        Identifier id = Identifier.of("iljatech/blueprint_"+str);
+        AdvancementEntry advancement = player.getServer().getAdvancementLoader().get(id);
         if (advancement == null)
             return false;
-        return serverPlayer.getAdvancements().getOrStartProgress(advancement).isDone();
+        return serverPlayer.getAdvancementTracker().getProgress(advancement).isDone();
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slot) {
+    public ItemStack quickMove(PlayerEntity player, int slot) {
         return null;
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return stillValid(this.context, player, ModBlocks.BLUEPRINT_TABLE);
+    public boolean canUse(PlayerEntity player) {
+        return canUse(this.context, player, ModBlocks.BLUEPRINT_TABLE);
     }
 
     public int getPoints() {
@@ -120,7 +128,7 @@ public class BlueprintTableScreenHandler extends AbstractContainerMenu {
         return this.selected.get();
     }
 
-    public List<RecipeHolder<BlueprintingRecipe>> getAvailableRecipes() {
+    public List<RecipeEntry<BlueprintingRecipe>> getAvailableRecipes() {
         return this.availableRecipes;
     }
 
