@@ -1,21 +1,21 @@
 package com.github.ilja615.iljatech.blocks.rusty;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class RustingSlabBlock extends SlabBlock implements Rusting {
-    public RustingSlabBlock(Settings settings) {
+    public RustingSlabBlock(Properties settings) {
         super(settings);
     }
 
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         tryRust(state, world, pos, random);
     }
 
-    protected boolean hasRandomTicks(BlockState state) {
+    protected boolean isRandomlyTicking(BlockState state) {
         return getRustyLevel(state) < 3;
     }
 }

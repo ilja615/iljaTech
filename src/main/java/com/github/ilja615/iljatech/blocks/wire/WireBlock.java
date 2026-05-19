@@ -1,42 +1,41 @@
 package com.github.ilja615.iljatech.blocks.wire;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class WireBlock extends Block {
-    protected static final VoxelShape FLAT_AABB = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
-    protected static final VoxelShape HALF_BLOCK_AABB = Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    public static final EnumProperty<WireShape> WIRE_SHAPE = EnumProperty.of("wire_shape", WireShape.class);
-    public static final IntProperty DISTANCE = IntProperty.of("distance", 0, 7);
+    protected static final VoxelShape FLAT_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+    protected static final VoxelShape HALF_BLOCK_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+    public static final EnumProperty<WireShape> WIRE_SHAPE = EnumProperty.create("wire_shape", WireShape.class);
+    public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 0, 7);
 
-    public WireBlock(Settings settings) {
+    public WireBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(WIRE_SHAPE, WireShape.NORTH_SOUTH).with(DISTANCE, 7));
+        this.registerDefaultState(this.stateDefinition.any().setValue(WIRE_SHAPE, WireShape.NORTH_SOUTH).setValue(DISTANCE, 7));
     }
 
     @Override
-    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        WireShape wireShape = state.getBlock() instanceof WireBlock ? state.get(WIRE_SHAPE) : null;
+    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        WireShape wireShape = state.getBlock() instanceof WireBlock ? state.getValue(WIRE_SHAPE) : null;
         return wireShape != null && wireShape.isAscending() ? HALF_BLOCK_AABB : FLAT_AABB;
     }
 
-    public static boolean isWire(World world, BlockPos pos) {
+    public static boolean isWire(Level world, BlockPos pos) {
         return isWire(world.getBlockState(pos));
     }
 
@@ -45,78 +44,78 @@ public class WireBlock extends Block {
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockState blockstate = this.getDefaultState();
-        return updateBlockState(ctx.getWorld(), ctx.getBlockPos(), blockstate, true);
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        BlockState blockstate = this.defaultBlockState();
+        return updateBlockState(ctx.getLevel(), ctx.getClickedPos(), blockstate, true);
     }
 
-    protected BlockState updateBlockState(World world, BlockPos pos, BlockState state, boolean notify) {
-        if (world.isClient) {
+    protected BlockState updateBlockState(Level world, BlockPos pos, BlockState state, boolean notify) {
+        if (world.isClientSide) {
             return state;
         } else {
-            WireShape wireshape = state.get(WIRE_SHAPE);
+            WireShape wireshape = state.getValue(WIRE_SHAPE);
             BlockState returnState = (new WirePlacementHelper(world, pos, state)).place(notify, wireshape).getState();
             int i = calculateDistance(world, pos);
-            return returnState.with(DISTANCE, i);
+            return returnState.setValue(DISTANCE, i);
         }
     }
 
     @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        if (!world.isClient) {
+    protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean notify) {
+        if (!world.isClientSide) {
             this.updateBlockState(world, pos, state, false);
-            world.scheduleBlockTick(pos, this, 1);
+            world.scheduleTick(pos, this, 1);
         }
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {        if (!world.isClient && world.getBlockState(pos).isOf(this)) {
+    protected void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {        if (!world.isClientSide && world.getBlockState(pos).is(this)) {
             this.updateBlockState(world, pos, state, false);
-            world.scheduleBlockTick(pos, this, 1);
+            world.scheduleTick(pos, this, 1);
         }
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {        if (!world.isClient()) {
-            world.scheduleBlockTick(pos, this, 1);
+    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {        if (!world.isClientSide()) {
+            world.scheduleTick(pos, this, 1);
         }
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);    }
+        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);    }
 
     @Override
-    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+    protected void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
         if (!moved) {
-            super.onStateReplaced(state, world, pos, newState, moved);
-            if ((state.get(WIRE_SHAPE)).isAscending()) {
-                world.updateNeighborsAlways(pos.up(), this);
+            super.onRemove(state, world, pos, newState, moved);
+            if ((state.getValue(WIRE_SHAPE)).isAscending()) {
+                world.updateNeighborsAt(pos.above(), this);
             }
         }
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    protected void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         int i = calculateDistance(world, pos);
-        BlockState blockState = state.with(DISTANCE, i);
-        if (blockState.get(DISTANCE) == 7) {
-            FallingBlockEntity.spawnFromBlock(world, pos, blockState);
+        BlockState blockState = state.setValue(DISTANCE, i);
+        if (blockState.getValue(DISTANCE) == 7) {
+            FallingBlockEntity.fall(world, pos, blockState);
         } else if (state != blockState) {
-            world.setBlockState(pos, blockState, Block.NOTIFY_ALL);
+            world.setBlock(pos, blockState, Block.UPDATE_ALL);
         }
     }
 
-    public static int calculateDistance(BlockView world, BlockPos pos) {
-        BlockPos.Mutable mutable = pos.mutableCopy().move(Direction.DOWN);
+    public static int calculateDistance(BlockGetter world, BlockPos pos) {
+        BlockPos.MutableBlockPos mutable = pos.mutable().move(Direction.DOWN);
         BlockState blockState = world.getBlockState(mutable);
         int i = 7;
         if (blockState.getBlock() instanceof WireBlock) {
-            i = blockState.get(DISTANCE);
-        } else if (blockState.isSideSolidFullSquare(world, mutable, Direction.UP)) {
+            i = blockState.getValue(DISTANCE);
+        } else if (blockState.isFaceSturdy(world, mutable, Direction.UP)) {
             return 0;
         }
 
-        for (Direction direction : Direction.Type.HORIZONTAL) {
-            BlockState blockState2 = world.getBlockState(mutable.set(pos, direction));
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockState blockState2 = world.getBlockState(mutable.setWithOffset(pos, direction));
             if (blockState2.getBlock() instanceof WireBlock) {
-                i = Math.min(i, blockState2.get(DISTANCE) + 1);
+                i = Math.min(i, blockState2.getValue(DISTANCE) + 1);
                 if (i == 1) {
                     break;
                 }
@@ -127,7 +126,7 @@ public class WireBlock extends Block {
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(WIRE_SHAPE, DISTANCE);
     }
 }

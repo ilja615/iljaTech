@@ -1,55 +1,54 @@
 package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.energy.MechPwrSender;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.WallMountedBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class CrankBlock extends Block implements MechPwrSender {
-    public static final IntProperty ROTATION = IntProperty.of("rotation", 0, 7);
-    public static final DirectionProperty FACING = Properties.FACING;
+    public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 7);
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public CrankBlock(Settings settings) {
+    public CrankBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(ROTATION, 0).with(FACING, Direction.UP));
+        this.registerDefaultState(this.stateDefinition.any().setValue(ROTATION, 0).setValue(FACING, Direction.UP));
 
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return WallMountedBlock.canPlaceAt(world, pos, state.get(FACING));
+    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        return FaceAttachedHorizontalDirectionalBlock.canAttach(world, pos, state.getValue(FACING));
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getBlock() == this)
         {
-            sendPower(world, pos, state.get(FACING), 4);
-            world.setBlockState(pos, state.with(ROTATION, (state.get(ROTATION)+1)%8), Block.NOTIFY_ALL);
-            return ActionResult.SUCCESS;
+            sendPower(world, pos, state.getValue(FACING), 4);
+            world.setBlock(pos, state.setValue(ROTATION, (state.getValue(ROTATION)+1)%8), Block.UPDATE_ALL);
+            return InteractionResult.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hit);
+        return super.useWithoutItem(state, world, pos, player, hit);
     }
 
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockState blockState = this.getDefaultState().with(FACING, ctx.getSide().getOpposite());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        BlockState blockState = this.defaultBlockState().setValue(FACING, ctx.getClickedFace().getOpposite());
 
-        if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos())) {
+        if (blockState.canSurvive(ctx.getLevel(), ctx.getClickedPos())) {
             return blockState;
         }
 
@@ -57,15 +56,15 @@ public class CrankBlock extends Block implements MechPwrSender {
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(
-            BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
-    ) {        return state.get(FACING) == direction && !state.canPlaceAt(world, pos)
-                ? Blocks.AIR.getDefaultState()
-                : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    protected BlockState updateShape(
+            BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos
+    ) {        return state.getValue(FACING) == direction && !state.canSurvive(world, pos)
+                ? Blocks.AIR.defaultBlockState()
+                : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, ROTATION);
     }
 }

@@ -3,39 +3,38 @@ package com.github.ilja615.iljatech.particles;
 import com.github.ilja615.iljatech.blocks.windmill.Wind;
 import com.github.ilja615.iljatech.blocks.windmill.WindParticleEffect;
 import com.github.ilja615.iljatech.init.ModParticles;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.SimpleParticleType;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.world.Heightmap;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.joml.Vector2f;
 
 public class WindLeadingParticle extends WindParticle {
     private Vector2f vector;
 
-    public WindLeadingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
+    public WindLeadingParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteSet spriteProvider) {
         super(new WindParticleEffect(Wind.getWindDirectionUnitVectorAt(null, (int) x >> 4, (int) z >> 4)),
                 world, Math.floor(x), y, Math.floor(z), velocityX, velocityY, velocityZ, spriteProvider);
-        this.maxAge = 80;
+        this.lifetime = 80;
     }
 
     @Override
     public void tick() {
-        this.prevPosX = this.x;
-        this.prevPosY = this.y;
-        this.prevPosZ = this.z;
-        if (this.age++ >= this.maxAge || onGround) {
-            this.markDead();
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if (this.age++ >= this.lifetime || onGround) {
+            this.remove();
         } else {
-            this.setSpriteForAge(this.spriteProvider);
+            this.setSpriteFromAge(this.sprites);
             if (this.age % 4 == 0) {
                 vector = Wind.getWindDirectionUnitVectorAt(null, (int) x >> 4, (int) z >> 4);
-                int heightY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, (int) this.x, (int) this.z);
-                int deltaY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, (int) (this.x + vector.x * 4), (int) (this.z + vector.y * 4)) - heightY;
+                int heightY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, (int) this.x, (int) this.z);
+                int deltaY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, (int) (this.x + vector.x * 4), (int) (this.z + vector.y * 4)) - heightY;
                 if (deltaY > 4) {
                     this.move(0, 0.5f, 0);
                 } else if (deltaY > 1) {
@@ -47,7 +46,7 @@ public class WindLeadingParticle extends WindParticle {
                     this.move(0, -0.25f, 0);
                 }
                 WindParticleEffect parameters = new WindParticleEffect(vector);
-                world.addParticle(parameters, x, y, z, 0, 0, 0);
+                level.addParticle(parameters, x, y, z, 0, 0, 0);
                 if (deltaY > 4) {
                     this.move(vector.x, 0.5f, vector.y);
                 } else if (deltaY > 1) {
@@ -65,21 +64,21 @@ public class WindLeadingParticle extends WindParticle {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class Factory implements ParticleFactory<SimpleParticleType> {
-        private final SpriteProvider spriteProvider;
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteProvider;
 
-        public Factory(SpriteProvider spriteProvider) {
+        public Factory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
             WindLeadingParticle windParticle = new WindLeadingParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
             return windParticle;
         }
     }
 
     @Override
-    public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
+    public void render(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
         return;
     }
 }

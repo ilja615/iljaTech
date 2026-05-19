@@ -8,36 +8,30 @@ import com.github.ilja615.iljatech.util.FluidItemSlot;
 import com.github.ilja615.iljatech.util.MaxStackSize1Slot;
 import com.google.common.collect.Lists;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerListener;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.util.math.MathHelper;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ServerboundContainerButtonClickPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 import java.util.List;
 
-public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
-    private static final Identifier TEXTURE = Identifier.of(IljaTech.MOD_ID, "textures/gui/carpentry.png");
-    private final List<ClickableWidget> buttons = Lists.newArrayList();
+public class CarpentryScreen extends AbstractContainerScreen<CarpentryScreenHandler> {
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "textures/gui/carpentry.png");
+    private final List<AbstractWidget> buttons = Lists.newArrayList();
 
-    public CarpentryScreen(CarpentryScreenHandler handler, PlayerInventory inventory, Text title) {
+    public CarpentryScreen(CarpentryScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 166;
+        this.imageWidth = 176;
+        this.imageHeight = 166;
     }
 
-    private <T extends ClickableWidget> void addButton(T button) {
-        this.addDrawableChild(button);
+    private <T extends AbstractWidget> void addButton(T button) {
+        this.addRenderableWidget(button);
         this.buttons.add(button);
     }
 
@@ -46,44 +40,44 @@ public class CarpentryScreen extends HandledScreen<CarpentryScreenHandler> {
         super.init();
         this.buttons.clear();
 
-        addDrawable(new FluidWidget(this.handler.getBlockEntity().getFluidStorage(),
-                this.x + 103, this.y + 17, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
+        addRenderableOnly(new FluidWidget(this.menu.getBlockEntity().getFluidStorage(),
+                this.leftPos + 103, this.topPos + 17, () -> this.menu.getBlockEntity().getBlockPos(), this.font));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 7, this.y + 34, 18, 18, TEXTURE, 176, 0, this::hammer, this.handler::canHammer));
+        this.addButton(new ConditionalButtonWidget(this.leftPos + 7, this.topPos + 34, 18, 18, TEXTURE, 176, 0, this::hammer, this.menu::canHammer));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 7, this.y + 52, 18, 18, TEXTURE, 176, 18, this::saw, () -> new Pair<>(true, "")));
+        this.addButton(new ConditionalButtonWidget(this.leftPos + 7, this.topPos + 52, 18, 18, TEXTURE, 176, 18, this::saw, () -> new Tuple<>(true, "")));
 
-        this.addButton(new ConditionalButtonWidget(this.x + 102, this.y + 34, 18, 18, TEXTURE, 176, 36, this::finish, this.handler::canFinish));
+        this.addButton(new ConditionalButtonWidget(this.leftPos + 102, this.topPos + 34, 18, 18, TEXTURE, 176, 36, this::finish, this.menu::canFinish));
     }
 
     public void hammer() {
-        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 0));
+        this.minecraft.getConnection().send(new ServerboundContainerButtonClickPacket(menu.containerId, 0));
     }
 
     public void saw() {
-        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 1));
+        this.minecraft.getConnection().send(new ServerboundContainerButtonClickPacket(menu.containerId, 1));
     }
 
     public void finish() {
-        this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 2));
+        this.minecraft.getConnection().send(new ServerboundContainerButtonClickPacket(menu.containerId, 2));
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+    protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
+        context.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
-    protected void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType) {
-        super.onMouseClick(slot, slotId, button, actionType);
+    protected void slotClicked(Slot slot, int slotId, int button, ClickType actionType) {
+        super.slotClicked(slot, slotId, button, actionType);
         if (slot != null) {
-            this.client.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(handler.syncId, 3));
+            this.minecraft.getConnection().send(new ServerboundContainerButtonClickPacket(menu.containerId, 3));
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        drawMouseoverTooltip(context, mouseX, mouseY);
+        renderTooltip(context, mouseX, mouseY);
     }
 }

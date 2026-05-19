@@ -3,40 +3,40 @@ package com.github.ilja615.iljatech.renderer;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.sifter.SifterBlockEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class SifterRenderer implements BlockEntityRenderer<SifterBlockEntity> {
-    private final BlockEntityRendererFactory.Context context;
+    private final BlockEntityRendererProvider.Context context;
     private static final float SIZE = 1.998F; // bit smaller than 2.0 otherwise there is Z-fighting
 
     private Direction direction = null;
 
-    public SifterRenderer(BlockEntityRendererFactory.Context ctx) {
+    public SifterRenderer(BlockEntityRendererProvider.Context ctx) {
         context = ctx;
     }
 
     @Override
-    public void render(SifterBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        SimpleInventory inventory = entity.getInventory();
-        World world = entity.getWorld();
+    public void render(SifterBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        SimpleContainer inventory = entity.getInventory();
+        Level world = entity.getLevel();
 
-        ItemStack stack0 = inventory.getStack(0);
+        ItemStack stack0 = inventory.getItem(0);
         if (!stack0.isEmpty()) {
-            matrices.push();
+            matrices.pushPose();
             double yProgress = Math.ceil(0.08 * (entity.getTicks()-5))*0.125;
             matrices.translate(0.5d, 1.5d - yProgress, 0.5d);
             matrices.scale(SIZE, SIZE, SIZE);
-            this.context.getItemRenderer().renderItem(stack0, ModelTransformationMode.FIXED,
+            this.context.getItemRenderer().renderStatic(stack0, ItemDisplayContext.FIXED,
                     light, overlay, matrices, vertexConsumers, world, 0);
-            matrices.pop();
+            matrices.popPose();
         }
     }
 }

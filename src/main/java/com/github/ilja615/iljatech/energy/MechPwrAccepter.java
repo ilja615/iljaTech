@@ -1,20 +1,20 @@
 package com.github.ilja615.iljatech.energy;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public interface MechPwrAccepter {
-    public static final IntProperty MECH_PWR = IntProperty.of("mech_pwr", 0, 16);
-    public static final BooleanProperty SCHEDULE_STOP = BooleanProperty.of("schedule_stop");
-    public static final EnumProperty<OnOffPwr> ON_OFF_PWR = EnumProperty.of("on_off_pwr", OnOffPwr.class);
+    public static final IntegerProperty MECH_PWR = IntegerProperty.create("mech_pwr", 0, 16);
+    public static final BooleanProperty SCHEDULE_STOP = BooleanProperty.create("schedule_stop");
+    public static final EnumProperty<OnOffPwr> ON_OFF_PWR = EnumProperty.create("on_off_pwr", OnOffPwr.class);
 
-    public enum OnOffPwr implements StringIdentifiable {
+    public enum OnOffPwr implements StringRepresentable {
         ON("on"),
         OFF("off"),
         SCHEDULED_STOP("scheduled_stop");
@@ -26,30 +26,30 @@ public interface MechPwrAccepter {
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name;
         }
     }
 
     // If the block is able to receive power or not
-    default boolean acceptsPower(World world, BlockPos thisPos, Direction sideFrom) {
+    default boolean acceptsPower(Level world, BlockPos thisPos, Direction sideFrom) {
         BlockState state = world.getBlockState(thisPos);
         return (state.getProperties().contains(MECH_PWR)) || (state.getProperties().contains(ON_OFF_PWR));
     }
 
     // What the block will do upon receiving power
-    default void receivePower(World world, BlockPos thisPos, Direction sideFrom, int amount) {
+    default void receivePower(Level world, BlockPos thisPos, Direction sideFrom, int amount) {
         if (amount <= 0) return;
         if (world.getBlockState(thisPos).getProperties().contains(MECH_PWR)) {
             amount = Math.min(amount, 16); // Can not send more than 16 power
-            world.setBlockState(thisPos, world.getBlockState(thisPos).with(MECH_PWR, amount));
+            world.setBlockAndUpdate(thisPos, world.getBlockState(thisPos).setValue(MECH_PWR, amount));
         }
         if (world.getBlockState(thisPos).getProperties().contains(ON_OFF_PWR)) {
-            world.setBlockState(thisPos, world.getBlockState(thisPos).with(ON_OFF_PWR, OnOffPwr.ON));
+            world.setBlockAndUpdate(thisPos, world.getBlockState(thisPos).setValue(ON_OFF_PWR, OnOffPwr.ON));
         }
         if (world.getBlockState(thisPos).getProperties().contains(SCHEDULE_STOP)) {
             // Remove any scheduled stop, since the power was just added
-            world.setBlockState(thisPos, world.getBlockState(thisPos).with(SCHEDULE_STOP, false));
+            world.setBlockAndUpdate(thisPos, world.getBlockState(thisPos).setValue(SCHEDULE_STOP, false));
         }
     }
 }

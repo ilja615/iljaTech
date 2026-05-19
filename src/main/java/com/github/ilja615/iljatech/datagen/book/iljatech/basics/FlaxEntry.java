@@ -9,8 +9,8 @@ import com.klikli_dev.modonomicon.api.datagen.book.page.BookCraftingRecipePageMo
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookSpotlightPageModel;
 import com.klikli_dev.modonomicon.api.datagen.book.page.BookTextPageModel;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 
 public class FlaxEntry extends EntryProvider {
     public static final String ID = "flax";
@@ -23,7 +23,7 @@ public class FlaxEntry extends EntryProvider {
     protected void generatePages() {
         this.page("page1", () -> BookSpotlightPageModel.create()
                 .withTitle(this.context().pageTitle())
-                .withItem(Ingredient.ofItems(ModBlocks.FLAX))
+                .withItem(Ingredient.of(ModBlocks.FLAX))
                 .withText(this.context().pageText())
         );
 

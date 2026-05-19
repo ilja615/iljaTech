@@ -9,31 +9,31 @@ import com.github.ilja615.iljatech.blocks.researchtable.BlueprintTableScreenHand
 import com.github.ilja615.iljatech.blocks.squeezer.SqueezerScreenHandler;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 
 public class ModScreenHandlerTypes {
-    public static final ScreenHandlerType<FoundryScreenHandler> FOUNDRY =
+    public static final MenuType<FoundryScreenHandler> FOUNDRY =
             register("foundry", FoundryScreenHandler::new, BlockPosPayload.PACKET_CODEC);
-    public static final ScreenHandlerType<CokeOvenScreenHandler> COKE_OVEN =
+    public static final MenuType<CokeOvenScreenHandler> COKE_OVEN =
             register("coke_oven", CokeOvenScreenHandler::new, BlockPosPayload.PACKET_CODEC);
-    public static final ScreenHandlerType<ItemHatchScreenHandler> ITEM_HATCH =
+    public static final MenuType<ItemHatchScreenHandler> ITEM_HATCH =
             register("item_hatch", ItemHatchScreenHandler::new, BlockPosPayload.PACKET_CODEC);
-    public static final ScreenHandlerType<SqueezerScreenHandler> SQUEEZER =
+    public static final MenuType<SqueezerScreenHandler> SQUEEZER =
             register("squeezer", SqueezerScreenHandler::new, BlockPosPayload.PACKET_CODEC);
-    public static final ScreenHandlerType<CarpentryScreenHandler> CARPENTRY =
+    public static final MenuType<CarpentryScreenHandler> CARPENTRY =
             register("carpentry", CarpentryScreenHandler::new, BlockPosPayload.PACKET_CODEC);
-    public static final ScreenHandlerType<BlueprintTableScreenHandler> RESEARCH =
+    public static final MenuType<BlueprintTableScreenHandler> RESEARCH =
             register("blueprints", BlueprintTableScreenHandler::new, BlockPosPayload.PACKET_CODEC);
 
-    public static <T extends ScreenHandler, D extends CustomPayload> ExtendedScreenHandlerType<T, D> register(String name, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, PacketCodec<? super RegistryByteBuf, D> codec) {
-        return Registry.register(Registries.SCREEN_HANDLER, Identifier.of(IljaTech.MOD_ID, name), new ExtendedScreenHandlerType<>(factory, codec));
+    public static <T extends AbstractContainerMenu, D extends CustomPacketPayload> ExtendedScreenHandlerType<T, D> register(String name, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, StreamCodec<? super RegistryFriendlyByteBuf, D> codec) {
+        return Registry.register(BuiltInRegistries.MENU, ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, name), new ExtendedScreenHandlerType<>(factory, codec));
     }
 
     public static void load() {}

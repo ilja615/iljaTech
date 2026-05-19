@@ -5,62 +5,62 @@ import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenScreenHandler;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryScreenHandler;
 import com.github.ilja615.iljatech.screen.widget.FluidWidget;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
 
-public class CokeOvenScreen extends HandledScreen<CokeOvenScreenHandler> {
-    private static final Identifier TEXTURE = Identifier.of(IljaTech.MOD_ID, "textures/gui/coke_oven.png");
+public class CokeOvenScreen extends AbstractContainerScreen<CokeOvenScreenHandler> {
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "textures/gui/coke_oven.png");
 
-    public CokeOvenScreen(CokeOvenScreenHandler handler, PlayerInventory inventory, Text title) {
+    public CokeOvenScreen(CokeOvenScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
-        this.backgroundWidth = 176;
-        this.backgroundHeight = 166;
+        this.imageWidth = 176;
+        this.imageHeight = 166;
     }
 
     @Override
     protected void init() {
         super.init();
 
-        addDrawable(new FluidWidget(this.handler.getBlockEntity().getFluidStorage(),
-                this.x + 116, this.y + 42, () -> this.handler.getBlockEntity().getPos(), this.textRenderer));
+        addRenderableOnly(new FluidWidget(this.menu.getBlockEntity().getFluidStorage(),
+                this.leftPos + 116, this.topPos + 42, () -> this.menu.getBlockEntity().getBlockPos(), this.font));
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
-        context.drawTexture(TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        int l = MathHelper.ceil((float) ((CokeOvenScreenHandler) this.handler).getTicks() / CokeOvenBlockEntity.PROCESS_TIME * 48);
-        context.drawTexture(TEXTURE,this.x + 64, this.y + 24, 176, 0, l, 16);
-        switch (((CokeOvenScreenHandler)this.handler).getLitState()) {
-            case ON -> context.drawTexture(TEXTURE,this.x + 39, this.y + 54, 176, 16, 24, 14);
-            case STOKED -> context.drawTexture(TEXTURE,this.x + 39, this.y + 54, 176, 30, 24, 14);
-            case CHOKING -> context.drawTexture(TEXTURE,this.x + 39, this.y + 54, 176, 44, 24, 14);
+    protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
+        context.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        int l = Mth.ceil((float) ((CokeOvenScreenHandler) this.menu).getTicks() / CokeOvenBlockEntity.PROCESS_TIME * 48);
+        context.blit(TEXTURE,this.leftPos + 64, this.topPos + 24, 176, 0, l, 16);
+        switch (((CokeOvenScreenHandler)this.menu).getLitState()) {
+            case ON -> context.blit(TEXTURE,this.leftPos + 39, this.topPos + 54, 176, 16, 24, 14);
+            case STOKED -> context.blit(TEXTURE,this.leftPos + 39, this.topPos + 54, 176, 30, 24, 14);
+            case CHOKING -> context.blit(TEXTURE,this.leftPos + 39, this.topPos + 54, 176, 44, 24, 14);
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        drawMouseoverTooltip(context, mouseX, mouseY);
+        renderTooltip(context, mouseX, mouseY);
 
-        if (isPointWithinBounds(76, 62, 24, 14, mouseX, mouseY)) {
-            String toolTip = switch (((CokeOvenScreenHandler)this.handler).getLitState()) {
+        if (isHovering(76, 62, 24, 14, mouseX, mouseY)) {
+            String toolTip = switch (((CokeOvenScreenHandler)this.menu).getLitState()) {
                 case ON -> "Firebox burning as normally";
                 case OFF -> "Provide heat with large firebox";
                 case STOKED -> "Firebox is being stoked";
                 case CHOKING -> "Firebox choking. Cleaning needed.";
             };
-            context.drawTooltip(this.textRenderer, Text.literal(toolTip), mouseX, mouseY);
+            context.renderTooltip(this.font, Component.literal(toolTip), mouseX, mouseY);
         }
-        if (isPointWithinBounds(64, 24, 48, 16, mouseX, mouseY) && ((CokeOvenScreenHandler) this.handler).getTicks() > 0) {
-            int ticksRemaining = CokeOvenBlockEntity.PROCESS_TIME - ((CokeOvenScreenHandler) this.handler).getTicks();
-            int minutes = MathHelper.floor(ticksRemaining / 1200f);
-            int seconds = MathHelper.floor((ticksRemaining % 1200f) / 20f);
+        if (isHovering(64, 24, 48, 16, mouseX, mouseY) && ((CokeOvenScreenHandler) this.menu).getTicks() > 0) {
+            int ticksRemaining = CokeOvenBlockEntity.PROCESS_TIME - ((CokeOvenScreenHandler) this.menu).getTicks();
+            int minutes = Mth.floor(ticksRemaining / 1200f);
+            int seconds = Mth.floor((ticksRemaining % 1200f) / 20f);
             String toolTip = "Time left: " + (minutes < 10 ? "0"+minutes : minutes) + ":" + (seconds < 10 ? "0"+seconds : seconds);
-            context.drawTooltip(this.textRenderer, Text.literal(toolTip), mouseX, mouseY);
+            context.renderTooltip(this.font, Component.literal(toolTip), mouseX, mouseY);
         }
     }
 

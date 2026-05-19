@@ -4,35 +4,31 @@ import com.github.ilja615.iljatech.screen.CarpentryScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.BeaconScreen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.network.packet.c2s.play.UpdateBeaconC2SPacket;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class ConditionalButtonWidget extends ClickableWidget {
-    private Identifier texture;
+public class ConditionalButtonWidget extends AbstractWidget {
+    private ResourceLocation texture;
     private int x;
     private int y;
     private int u;
     private int v;
     private Runnable action;
-    private Supplier<Pair<Boolean, String>> condition;
+    private Supplier<Tuple<Boolean, String>> condition;
 
-    public ConditionalButtonWidget(int x, int y, int width, int height, Identifier texture, int u, int v, Runnable action, Supplier<Pair<Boolean, String>> condition) {
-        super(x, y, width, height, Text.of(" "));
+    public ConditionalButtonWidget(int x, int y, int width, int height, ResourceLocation texture, int u, int v, Runnable action, Supplier<Tuple<Boolean, String>> condition) {
+        super(x, y, width, height, Component.nullToEmpty(" "));
         this.x = x;
         this.y = y;
         this.u = u;
@@ -48,8 +44,8 @@ public class ConditionalButtonWidget extends ClickableWidget {
     }
 
     @Override
-    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.drawTexture(this.texture, this.getX(), this.getY(), this.u + (this.condition.get().getLeft() ? (this.isMouseOver(mouseX, mouseY) ? 18 : 0) : 36), this.v, this.getWidth(), this.getHeight());
+    protected void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
+        context.blit(this.texture, this.getX(), this.getY(), this.u + (this.condition.get().getA() ? (this.isMouseOver(mouseX, mouseY) ? 18 : 0) : 36), this.v, this.getWidth(), this.getHeight());
         if (isPointWithinBounds(this.x, this.y, mouseX, mouseY)) {
             drawTooltip(context, mouseX, mouseY);
         }
@@ -60,16 +56,16 @@ public class ConditionalButtonWidget extends ClickableWidget {
     }
 
     @Override
-    public void appendClickableNarrations(NarrationMessageBuilder builder) {
-        this.appendDefaultNarrations(builder);
+    public void updateWidgetNarration(NarrationElementOutput builder) {
+        this.defaultButtonNarrationText(builder);
     }
 
-    protected void drawTooltip(DrawContext context, int mouseX, int mouseY) {
-        TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-        if (!this.condition.get().getLeft() && this.condition.get().getRight() != null && !this.condition.get().getRight().isEmpty()) {
-            List<Text> texts = List.of(
-                    Text.literal(this.condition.get().getRight()));
-            context.drawTooltip(textRenderer, texts, mouseX, mouseY);
+    protected void drawTooltip(GuiGraphics context, int mouseX, int mouseY) {
+        Font textRenderer = Minecraft.getInstance().font;
+        if (!this.condition.get().getA() && this.condition.get().getB() != null && !this.condition.get().getB().isEmpty()) {
+            List<Component> texts = List.of(
+                    Component.literal(this.condition.get().getB()));
+            context.renderComponentTooltip(textRenderer, texts, mouseX, mouseY);
         }
     }
 }

@@ -2,42 +2,41 @@ package com.github.ilja615.iljatech.renderer;
 
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class RollerMillRenderer implements BlockEntityRenderer<RollerMillBlockEntity> {
-    private final BlockEntityRendererFactory.Context context;
+    private final BlockEntityRendererProvider.Context context;
     private static final float SIZE = 0.75F;
 
     private Direction direction = null;
 
-    public RollerMillRenderer(BlockEntityRendererFactory.Context ctx) {
+    public RollerMillRenderer(BlockEntityRendererProvider.Context ctx) {
         context = ctx;
     }
 
     @Override
-    public void render(RollerMillBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        SimpleInventory inventory = entity.getInventory();
-        World world = entity.getWorld();
+    public void render(RollerMillBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        SimpleContainer inventory = entity.getInventory();
+        Level world = entity.getLevel();
 
-        ItemStack stack0 = inventory.getStack(0);
+        ItemStack stack0 = inventory.getItem(0);
         if (!stack0.isEmpty()) {
-            matrices.push();
-            direction = entity.getCachedState().get(RollerMillBlock.FACING);
+            matrices.pushPose();
+            direction = entity.getBlockState().getValue(RollerMillBlock.FACING);
             matrices.translate(0.5d, 0.5d, 0.5d);
-            matrices.translate(direction.getOffsetX() * 0.01 * (entity.getTicks() - 50), 0d, direction.getOffsetZ() * 0.01 * (entity.getTicks() - 50));
+            matrices.translate(direction.getStepX() * 0.01 * (entity.getTicks() - 50), 0d, direction.getStepZ() * 0.01 * (entity.getTicks() - 50));
             matrices.scale(SIZE, SIZE, SIZE);
-            this.context.getItemRenderer().renderItem(stack0, ModelTransformationMode.FIXED,
+            this.context.getItemRenderer().renderStatic(stack0, ItemDisplayContext.FIXED,
                     light, overlay, matrices, vertexConsumers, world, 0);
-            matrices.pop();
+            matrices.popPose();
         }
     }
 }

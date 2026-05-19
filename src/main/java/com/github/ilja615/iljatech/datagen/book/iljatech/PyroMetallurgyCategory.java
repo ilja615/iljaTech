@@ -10,7 +10,7 @@ import com.klikli_dev.modonomicon.api.datagen.SingleBookSubProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookCategoryModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookEntryParentModel;
 import com.klikli_dev.modonomicon.api.datagen.book.BookIconModel;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class PyroMetallurgyCategory extends CategoryProvider {
     public static final String ID = "pyrometallurgy";
@@ -80,8 +80,8 @@ public class PyroMetallurgyCategory extends CategoryProvider {
     @Override
     protected BookCategoryModel additionalSetup(BookCategoryModel category) {
         return super.additionalSetup(category)
-                .withEntryTextures(Identifier.of(IljaTech.MOD_ID, "textures/gui/book/entry_textures.png"))
-                .withBackground(Identifier.of(IljaTech.MOD_ID, "textures/gui/book/book_background.png"));
+                .withEntryTextures(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "textures/gui/book/entry_textures.png"))
+                .withBackground(ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "textures/gui/book/book_background.png"));
     }
 
     @Override

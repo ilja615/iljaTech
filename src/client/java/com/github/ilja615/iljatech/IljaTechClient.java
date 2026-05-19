@@ -17,31 +17,31 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.resources.ResourceLocation;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
-import net.minecraft.util.Identifier;
 
 public class IljaTechClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		// Block render layers
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
 				ModBlocks.DRILL, ModBlocks.ROLLER_MILL, ModBlocks.COPPER_WIRE, ModBlocks.STOKED_FIRE, ModBlocks.COKE_OVEN,
 				ModBlocks.PULVERIZER_MILL, ModBlocks.FLAX_SEEDS, ModBlocks.FLAX, ModBlocks.SPINNING_FRAME,
 				ModBlocks.ACACIA_FRAME, ModBlocks.BAMBOO_FRAME, ModBlocks.BIRCH_FRAME, ModBlocks.CHERRY_FRAME, ModBlocks.CRIMSON_FRAME,
 				ModBlocks.DARK_OAK_FRAME, ModBlocks.JUNGLE_FRAME, ModBlocks.MANGROVE_FRAME, ModBlocks.OAK_FRAME, ModBlocks.SPRUCE_FRAME, ModBlocks.WARPED_FRAME,
 				ModBlocks.SAWDUST, ModBlocks.RESEARCH_TABLE, ModBlocks.BLUEPRINT_TABLE);
 
-		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(),
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
 				ModBlocks.WINDMILL_SAIL);
 
 		// Block entity renderers
-		BlockEntityRendererFactories.register(ModBlockEntityTypes.ROLLER_MILL, RollerMillRenderer::new);
-		BlockEntityRendererFactories.register(ModBlockEntityTypes.WINDMILL, WindmillRenderer::new);
-		BlockEntityRendererFactories.register(ModBlockEntityTypes.CONVEYOR_BELT, ConveyorBeltRenderer::new);
-		BlockEntityRendererFactories.register(ModBlockEntityTypes.SIFTER, SifterRenderer::new);
+		BlockEntityRenderers.register(ModBlockEntityTypes.ROLLER_MILL, RollerMillRenderer::new);
+		BlockEntityRenderers.register(ModBlockEntityTypes.WINDMILL, WindmillRenderer::new);
+		BlockEntityRenderers.register(ModBlockEntityTypes.CONVEYOR_BELT, ConveyorBeltRenderer::new);
+		BlockEntityRenderers.register(ModBlockEntityTypes.SIFTER, SifterRenderer::new);
 
 		// Register particle factories
 		ParticleFactoryRegistry.getInstance().register(ModParticles.STAR, StarParticle.Factory::new);
@@ -50,27 +50,27 @@ public class IljaTechClient implements ClientModInitializer {
 		ParticleFactoryRegistry.getInstance().register(ModParticles.WIND_LEADING, WindLeadingParticle.Factory::new);
 
 		// Bind screen to Handler
-		HandledScreens.register(ModScreenHandlerTypes.FOUNDRY, FoundryScreen::new);
-		HandledScreens.register(ModScreenHandlerTypes.COKE_OVEN, CokeOvenScreen::new);
-		HandledScreens.register(ModScreenHandlerTypes.ITEM_HATCH, ItemHatchScreen::new);
-		HandledScreens.register(ModScreenHandlerTypes.SQUEEZER, SqueezerScreen::new);
-		HandledScreens.register(ModScreenHandlerTypes.CARPENTRY, CarpentryScreen::new);
-		HandledScreens.register(ModScreenHandlerTypes.RESEARCH, BlueprintSelectionScreen::new);
+		MenuScreens.register(ModScreenHandlerTypes.FOUNDRY, FoundryScreen::new);
+		MenuScreens.register(ModScreenHandlerTypes.COKE_OVEN, CokeOvenScreen::new);
+		MenuScreens.register(ModScreenHandlerTypes.ITEM_HATCH, ItemHatchScreen::new);
+		MenuScreens.register(ModScreenHandlerTypes.SQUEEZER, SqueezerScreen::new);
+		MenuScreens.register(ModScreenHandlerTypes.CARPENTRY, CarpentryScreen::new);
+		MenuScreens.register(ModScreenHandlerTypes.RESEARCH, BlueprintSelectionScreen::new);
 
 		// Register fluid render handlers
 		FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.STILL_CREOSOTE_OIL, ModFluids.FLOWING_CREOSOTE_OIL, new SimpleFluidRenderHandler(
-				Identifier.of("iljatech:block/oil_still"),
-				Identifier.of("iljatech:block/oil_flowing"),
+				ResourceLocation.parse("iljatech:block/oil_still"),
+				ResourceLocation.parse("iljatech:block/oil_flowing"),
 				0x452514
 		));
 		FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.STILL_SEED_OIL, ModFluids.FLOWING_SEED_OIL, new SimpleFluidRenderHandler(
-				Identifier.of("iljatech:block/oil_still"),
-				Identifier.of("iljatech:block/oil_flowing"),
+				ResourceLocation.parse("iljatech:block/oil_still"),
+				ResourceLocation.parse("iljatech:block/oil_flowing"),
 				0xd9be77
 		));
 
 		// Fluid render layers
-		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
+		BlockRenderLayerMap.INSTANCE.putFluids(RenderType.translucent(),
 				ModFluids.STILL_CREOSOTE_OIL, ModFluids.FLOWING_CREOSOTE_OIL,
 				ModFluids.STILL_SEED_OIL, ModFluids.FLOWING_SEED_OIL);
 

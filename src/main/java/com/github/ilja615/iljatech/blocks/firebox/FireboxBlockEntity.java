@@ -5,29 +5,29 @@ import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class FireboxBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int ticks = 0;
     private int stokedTicks = 0;
 
-    private final SimpleInventory inventory = new SimpleInventory(1) {
+    private final SimpleContainer inventory = new SimpleContainer(1) {
         @Override
-        public void markDirty() {
-            super.markDirty();
+        public void setChanged() {
+            super.setChanged();
             update();
         }
     };
@@ -39,22 +39,22 @@ public class FireboxBlockEntity extends BlockEntity implements TickableBlockEnti
 
     @Override
     public void tick() {
-        if (this.world == null || this.world.isClient)
+        if (this.level == null || this.level.isClientSide)
             return;
 
         if (ticks > 0) {
             this.ticks--;
             if (ticks % 100 == 0)
             {
-                Heat.emitHeat(world, pos.up());
-                int ash_level = world.getBlockState(pos).get(FireboxBlock.ASH_LEVEL);
-                world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.ASH_LEVEL, Math.min(ash_level + 1, 5)), 3);
+                Heat.emitHeat(level, worldPosition.above());
+                int ash_level = level.getBlockState(worldPosition).getValue(FireboxBlock.ASH_LEVEL);
+                level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(FireboxBlock.ASH_LEVEL, Math.min(ash_level + 1, 5)), 3);
             }
         }
         if (stokedTicks > 0) {
             this.stokedTicks--;
         }
-        ItemStack itemstack = this.inventory.getStack(0);
+        ItemStack itemstack = this.inventory.getItem(0);
         if (ticks == 0)
         {
             if (FuelRegistry.INSTANCE.get(itemstack.getItem()) != null && FuelRegistry.INSTANCE.get(itemstack.getItem()) > 0)
@@ -62,53 +62,53 @@ public class FireboxBlockEntity extends BlockEntity implements TickableBlockEnti
             if (ticks > 0)
             {
                 if (!itemstack.isEmpty()) {
-                    itemstack.decrement(1);
-                    this.inventory.setStack(0, itemstack);
+                    itemstack.shrink(1);
+                    this.inventory.setItem(0, itemstack);
                 }
             }
         }
 
         if (ticks > 0) {
-            if (world.getBlockState(pos).get(FireboxBlock.ASH_LEVEL) == 5) {
-                world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.CHOKING), 3);
+            if (level.getBlockState(worldPosition).getValue(FireboxBlock.ASH_LEVEL) == 5) {
+                level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(FireboxBlock.LIT, FireboxBlock.Lit.CHOKING), 3);
             } else {
                 if (stokedTicks > 0) {
-                    world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.STOKED), 3);
+                    level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(FireboxBlock.LIT, FireboxBlock.Lit.STOKED), 3);
                 } else {
-                    world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.ON), 3);
+                    level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(FireboxBlock.LIT, FireboxBlock.Lit.ON), 3);
                 }
             }
         } else {
-            world.setBlockState(pos, world.getBlockState(pos).with(FireboxBlock.LIT, FireboxBlock.Lit.OFF), 3);
+            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(FireboxBlock.LIT, FireboxBlock.Lit.OFF), 3);
         }
 
         this.update();
     }
 
     @Override
-    protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.readNbt(nbt, registryLookup);
+    protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
-        Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+        ContainerHelper.loadAllItems(nbt, this.inventory.getItems(), registryLookup);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        super.writeNbt(nbt, registryLookup);
+    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
+        super.saveAdditional(nbt, registryLookup);
         nbt.putInt("Ticks", this.ticks);
-        Inventories.writeNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+        ContainerHelper.saveAllItems(nbt, this.inventory.getItems(), registryLookup);
     }
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
-        var nbt = super.toInitialChunkDataNbt(registryLookup);
-        writeNbt(nbt, registryLookup);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
+        var nbt = super.getUpdateTag(registryLookup);
+        saveAdditional(nbt, registryLookup);
         return nbt;
     }
 
@@ -125,16 +125,16 @@ public class FireboxBlockEntity extends BlockEntity implements TickableBlockEnti
     }
 
     private void update() {
-        markDirty();
-        if (world != null)
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_ALL);
+        setChanged();
+        if (level != null)
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
     public InventoryStorage getInventoryProvider(Direction direction) {
         return storage;
     }
 
-    public SimpleInventory getInventory() {
+    public SimpleContainer getInventory() {
         return this.inventory;
     }
 }

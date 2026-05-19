@@ -7,22 +7,18 @@ import com.github.ilja615.iljatech.blocks.windmill.WindmillBlockEntity;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillSailBlock;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlocks;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
 
 public class WindmillRenderer  implements BlockEntityRenderer<WindmillBlockEntity> {
-    private final BlockEntityRendererFactory.Context context;
+    private final BlockEntityRendererProvider.Context context;
     private final static String[] Z_FRAME_0 = new String[]{
             "      201    ",
             "      2001   ",
@@ -81,12 +77,12 @@ public class WindmillRenderer  implements BlockEntityRenderer<WindmillBlockEntit
             "             "};
     private int time = 0;
 
-    public WindmillRenderer(BlockEntityRendererFactory.Context ctx) {
+    public WindmillRenderer(BlockEntityRendererProvider.Context ctx) {
         context = ctx;
     }
 
     @Override
-    public void render(WindmillBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(WindmillBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
         int n = Z_FRAME_0.length;
         for (int i = 0; i < n; i++) {
             String row;
@@ -101,25 +97,25 @@ public class WindmillRenderer  implements BlockEntityRenderer<WindmillBlockEntit
                 row = Z_FRAME_3[i];
             }
 
-            Direction.Axis a = entity.getCachedState().get(WindmillBlock.FACING).getAxis();
-            int m = entity.getCachedState().get(WindmillBlock.FACING).getDirection().offset();
-            boolean on = entity.getCachedState().get(MechPwrAccepter.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.ON;
+            Direction.Axis a = entity.getBlockState().getValue(WindmillBlock.FACING).getAxis();
+            int m = entity.getBlockState().getValue(WindmillBlock.FACING).getAxisDirection().getStep();
+            boolean on = entity.getBlockState().getValue(MechPwrAccepter.ON_OFF_PWR) == MechPwrAccepter.OnOffPwr.ON;
             for (int j = 0; j < n; j++) {
                 char ch = row.toCharArray()[j];
                 int x = a == Direction.Axis.X ? 0 : m * (i - (n - 1) / 2);
                 int y = j-(n-1)/2;
                 int z = a == Direction.Axis.Z ? 0 : m * (i - (n - 1) / 2);
                 if (ch == '0' || ch == '2') {
-                    matrices.push();
+                    matrices.pushPose();
                     matrices.translate(x,y, z);
-                    this.context.getRenderManager().renderBlock(ModBlocks.WINDMILL_SAIL.getDefaultState().with(WindmillSailBlock.FACING, entity.getCachedState().get(WindmillBlock.FACING)), entity.getPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getCutout()), false, entity.getWorld().random);
-                    matrices.pop();
+                    this.context.getBlockRenderDispatcher().renderBatched(ModBlocks.WINDMILL_SAIL.defaultBlockState().setValue(WindmillSailBlock.FACING, entity.getBlockState().getValue(WindmillBlock.FACING)), entity.getBlockPos(), entity.getLevel(), matrices, vertexConsumers.getBuffer(RenderType.cutout()), false, entity.getLevel().random);
+                    matrices.popPose();
                 }
                 if (on && ch == '1') {
-                    matrices.push();
+                    matrices.pushPose();
                     matrices.translate(x,y, z);
-                    this.context.getRenderManager().renderBlock(ModBlocks.WINDMILL_SAIL.getDefaultState().with(WindmillSailBlock.VARIANT, 1).with(WindmillSailBlock.FACING, entity.getCachedState().get(WindmillBlock.FACING)), entity.getPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getTranslucent()), false, entity.getWorld().random);
-                    matrices.pop();
+                    this.context.getBlockRenderDispatcher().renderBatched(ModBlocks.WINDMILL_SAIL.defaultBlockState().setValue(WindmillSailBlock.VARIANT, 1).setValue(WindmillSailBlock.FACING, entity.getBlockState().getValue(WindmillBlock.FACING)), entity.getBlockPos(), entity.getLevel(), matrices, vertexConsumers.getBuffer(RenderType.translucent()), false, entity.getLevel().random);
+                    matrices.popPose();
                 }
             }
         }

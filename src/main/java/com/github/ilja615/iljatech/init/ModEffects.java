@@ -2,17 +2,17 @@ package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.effects.StunnedEffect;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 
 public class ModEffects {
-    public static final RegistryEntry<StatusEffect> STUNNED = register("stunned", new StunnedEffect());
+    public static final Holder<MobEffect> STUNNED = register("stunned", new StunnedEffect());
 
-    public static RegistryEntry<StatusEffect> register(String id, StatusEffect statusEffect) {
-        return Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of(IljaTech.MOD_ID, id), statusEffect);
+    public static Holder<MobEffect> register(String id, MobEffect statusEffect) {
+        return Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, id), statusEffect);
     }
 
     public static void load() {}
