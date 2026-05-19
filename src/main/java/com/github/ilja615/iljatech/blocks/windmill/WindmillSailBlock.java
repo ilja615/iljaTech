@@ -1,7 +1,5 @@
 package com.github.ilja615.iljatech.blocks.windmill;
 
-import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -11,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import org.jetbrains.annotations.Nullable;
 
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.ON_OFF_PWR;
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.OFF;

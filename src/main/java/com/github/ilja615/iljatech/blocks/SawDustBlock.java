@@ -1,6 +1,5 @@
 package com.github.ilja615.iljatech.blocks;
 
-import com.github.ilja615.iljatech.blocks.windmill.WindDirection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;

@@ -1,7 +1,6 @@
 package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
-import com.github.ilja615.iljatech.fluids.AbstractFluid;
 import com.github.ilja615.iljatech.fluids.CreosoteOilFluid;
 import com.github.ilja615.iljatech.fluids.SeedOilFluid;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -15,7 +14,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
-import java.util.function.Supplier;
 
 public class ModFluids {
     public static final FlowingFluid STILL_CREOSOTE_OIL = Registry.register(BuiltInRegistries.FLUID, ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "creosote_oil"), new CreosoteOilFluid.Still());

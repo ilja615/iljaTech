@@ -1,12 +1,9 @@
 package com.github.ilja615.iljatech.datagen;
 
 import com.github.ilja615.iljatech.IljaTech;
-import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.klikli_dev.modonomicon.api.datagen.AbstractModonomiconLanguageProvider;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconLanguageProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.data.PackOutput;
-import org.jetbrains.annotations.NotNull;
 
 public class ModEnglishTranslationProvider extends AbstractModonomiconLanguageProvider {
     public ModEnglishTranslationProvider(PackOutput output, ModonomiconLanguageProvider cachedProvider) {

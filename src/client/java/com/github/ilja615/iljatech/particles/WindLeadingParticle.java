@@ -2,7 +2,6 @@ package com.github.ilja615.iljatech.particles;
 
 import com.github.ilja615.iljatech.blocks.windmill.Wind;
 import com.github.ilja615.iljatech.blocks.windmill.WindParticleEffect;
-import com.github.ilja615.iljatech.init.ModParticles;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

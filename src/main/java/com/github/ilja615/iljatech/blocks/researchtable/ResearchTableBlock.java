@@ -1,10 +1,7 @@
 package com.github.ilja615.iljatech.blocks.researchtable;
 
-import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.init.ModDataAttachments;
-import com.github.ilja615.iljatech.network.BlockPosPayload;
 import com.mojang.serialization.MapCodec;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

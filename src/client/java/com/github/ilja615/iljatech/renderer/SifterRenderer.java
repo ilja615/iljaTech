@@ -1,7 +1,5 @@
 package com.github.ilja615.iljatech.renderer;
 
-import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
-import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.sifter.SifterBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;

@@ -24,7 +24,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 
 public class PlateBlock extends Block implements SimpleWaterloggedBlock
 {

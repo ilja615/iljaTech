@@ -1,9 +1,5 @@
 package com.github.ilja615.iljatech.blocks.pipe;
 
-import com.github.ilja615.iljatech.blocks.wire.WireBlock;
-import com.github.ilja615.iljatech.blocks.wire.WirePlacementHelper;
-import com.github.ilja615.iljatech.blocks.wire.WireShape;
-import java.nio.channels.Pipe;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;

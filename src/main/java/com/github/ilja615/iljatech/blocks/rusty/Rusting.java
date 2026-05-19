@@ -1,7 +1,6 @@
 package com.github.ilja615.iljatech.blocks.rusty;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
-import java.util.List;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
