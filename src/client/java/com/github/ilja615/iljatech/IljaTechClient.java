@@ -32,7 +32,7 @@ public class IljaTechClient implements ClientModInitializer {
 				ModBlocks.PULVERIZER_MILL, ModBlocks.FLAX_SEEDS, ModBlocks.FLAX, ModBlocks.SPINNING_FRAME,
 				ModBlocks.ACACIA_FRAME, ModBlocks.BAMBOO_FRAME, ModBlocks.BIRCH_FRAME, ModBlocks.CHERRY_FRAME, ModBlocks.CRIMSON_FRAME,
 				ModBlocks.DARK_OAK_FRAME, ModBlocks.JUNGLE_FRAME, ModBlocks.MANGROVE_FRAME, ModBlocks.OAK_FRAME, ModBlocks.SPRUCE_FRAME, ModBlocks.WARPED_FRAME,
-				ModBlocks.SAWDUST, ModBlocks.RESEARCH_TABLE, ModBlocks.BLUEPRINT_TABLE);
+				ModBlocks.SAWDUST, ModBlocks.RESEARCH_TABLE, ModBlocks.BLUEPRINT_TABLE, ModBlocks.RUBBLE);
 
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
 				ModBlocks.WINDMILL_SAIL);
@@ -42,6 +42,7 @@ public class IljaTechClient implements ClientModInitializer {
 		BlockEntityRenderers.register(ModBlockEntityTypes.WINDMILL, WindmillRenderer::new);
 		BlockEntityRenderers.register(ModBlockEntityTypes.CONVEYOR_BELT, ConveyorBeltRenderer::new);
 		BlockEntityRenderers.register(ModBlockEntityTypes.SIFTER, SifterRenderer::new);
+		BlockEntityRenderers.register(ModBlockEntityTypes.RUBBLE, RubbleRenderer::new);
 
 		// Register particle factories
 		ParticleFactoryRegistry.getInstance().register(ModParticles.STAR, StarParticle.Factory::new);

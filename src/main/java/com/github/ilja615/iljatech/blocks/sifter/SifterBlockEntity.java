@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.blocks.sifter;
 
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
@@ -23,6 +24,8 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -57,10 +60,14 @@ public class SifterBlockEntity extends BlockEntity implements TickableBlockEntit
         if (stack0.isEmpty()) {
             this.ticks = 0;
             if (!level.getBlockState(worldPosition.above()).isAir()) {
-                // TODO : check if is one of the recipe's inputs
-                this.inventory.setItem(0, new ItemStack(level.getBlockState(worldPosition.above()).getBlock(), 1));
-                level.setBlockAndUpdate(worldPosition.above(), Blocks.AIR.defaultBlockState());
-                this.update();
+                BlockState blockState1 = level.getBlockState(worldPosition.above());
+                if (blockState1.is(Blocks.SAND))
+                {
+                    // TODO : check if is one of the recipe's inputs
+                    this.inventory.setItem(0, new ItemStack(level.getBlockState(worldPosition.above()).getBlock(), 1));
+                    level.setBlockAndUpdate(worldPosition.above(), Blocks.AIR.defaultBlockState());
+                    this.update();
+                }
             }
         } else {
             if (level.random.nextFloat() > 0.8f && !this.inventory.getItem(0).isEmpty())
@@ -74,6 +81,10 @@ public class SifterBlockEntity extends BlockEntity implements TickableBlockEntit
             Vec3 outputPos = worldPosition.getCenter().add(0.0d, -0.4d, 0.0d);
             ItemStack resultingStack = new ItemStack(ModItems.SULFUR);
             level.addFreshEntity(new ItemEntity(level, outputPos.x(), outputPos.y(), outputPos.z(), resultingStack, 0d, 0d, 0d));
+            level.setBlock(worldPosition.above(), ModBlocks.RUBBLE.defaultBlockState(), Block.UPDATE_ALL);
+            if (level.getBlockEntity(worldPosition.above()) instanceof RubbleBlockEntity rubbleBlockEntity) {
+                rubbleBlockEntity.getInventory().setItem(0, new ItemStack(Items.FLINT));
+            }
             ((ServerLevel) this.level).getChunkSource().blockChanged(this. getBlockPos());
             this.update();
         }

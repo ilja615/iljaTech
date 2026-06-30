@@ -11,6 +11,7 @@ import com.github.ilja615.iljatech.blocks.funnel.FunnelBlockEntity;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
 import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
+import com.github.ilja615.iljatech.blocks.sifter.RubbleBlockEntity;
 import com.github.ilja615.iljatech.blocks.sifter.SifterBlockEntity;
 import com.github.ilja615.iljatech.blocks.spinningframe.SpinningFrameBlockEntity;
 import com.github.ilja615.iljatech.blocks.squeezer.SqueezerBlockEntity;
@@ -56,6 +57,8 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(CarpentryBlockEntity::new, ModBlocks.CARPENTRY).build());
     public static final BlockEntityType<SifterBlockEntity> SIFTER = register("sifter",
             FabricBlockEntityTypeBuilder.create(SifterBlockEntity::new, ModBlocks.SIFTER).build());
+    public static final BlockEntityType<RubbleBlockEntity> RUBBLE = register("rubble",
+            FabricBlockEntityTypeBuilder.create(RubbleBlockEntity::new, ModBlocks.RUBBLE).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
