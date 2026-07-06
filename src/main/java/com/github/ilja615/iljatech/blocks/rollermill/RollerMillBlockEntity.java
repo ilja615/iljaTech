@@ -58,7 +58,7 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
         if (stack0.isEmpty()) {
             this.ticks = 0;
         }
-        if (ticks++ > 100) {
+        if (ticks++ >=100) {
             this.ticks = 0;
 
             Direction direction = this.getBlockState().getValue(RollerMillBlock.FACING);
@@ -89,14 +89,17 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
         super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
 
-        ListTag nbtList = nbt.getList("Items", Tag.TAG_COMPOUND);
-        for(int i = 0; i < nbtList.size(); ++i) {
-            CompoundTag nbtCompound = nbtList.getCompound(i);
-            int j = nbtCompound.getByte("Slot") & 255;
-            if (j >= 0 && j < this.inventory.getContainerSize()) {
-                this.inventory.setItem(j, ItemStack.parse(registryLookup, nbtCompound).orElse(ItemStack.EMPTY));
-            }
-        }
+        this.inventory.items.clear();
+        ContainerHelper.loadAllItems(nbt, this.inventory.items, registryLookup);
+
+//        ListTag nbtList = nbt.getList("Items", Tag.TAG_COMPOUND);
+//        for(int i = 0; i < nbtList.size(); ++i) {
+//            CompoundTag nbtCompound = nbtList.getCompound(i);
+//            int j = nbtCompound.getByte("Slot") & 255;
+//            if (j >= 0 && j < this.inventory.getContainerSize()) {
+//                this.inventory.setItem(j, ItemStack.parse(registryLookup, nbtCompound).orElse(ItemStack.EMPTY));
+//            }
+//        }
         //Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
     }
 
@@ -117,6 +120,7 @@ public class RollerMillBlockEntity extends BlockEntity implements TickableBlockE
     public CompoundTag getUpdateTag(HolderLookup.Provider registryLookup) {
         var nbt = super.getUpdateTag(registryLookup);
         saveAdditional(nbt, registryLookup);
+        System.out.println(nbt);
         return nbt;
     }
 

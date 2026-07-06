@@ -8,6 +8,7 @@ import com.mojang.math.Axis;
 import com.mojang.math.Transformation;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
@@ -46,10 +47,10 @@ public class SifterRenderer implements BlockEntityRenderer<SifterBlockEntity> {
 
         }
         BlockPos blockPos = entity.getBlockPos();
-        int i = world.getBrightness(LightLayer.SKY, blockPos);
-        int j = world.getBrightness(LightLayer.BLOCK, blockPos);
-        int newLight = i << 20 | j << 4;
-
+//        int i = world.getBrightness(LightLayer.SKY, blockPos);
+//        int j = world.getBrightness(LightLayer.BLOCK, blockPos);
+//        int newLight = i << 20 | j << 4;
+        int newLight = (world != null) ? LevelRenderer.getLightColor(world, entity.getBlockPos()) : 15728880;
         ItemStack stack0 = inventory.getItem(0);
 
         if (stack0.getItem() instanceof BlockItem blockItem) {
@@ -69,32 +70,33 @@ public class SifterRenderer implements BlockEntityRenderer<SifterBlockEntity> {
             float maxV = sprite.getV(1.0f);
 
             // front face
-            drawQuad(vertexConsumer, entry, 0f, 1.0f, 0.001f, 1f, 1.0f + height, 0.001f, minU, minV, maxU, midV, newLight, overlay);
+            drawQuad(vertexConsumer, entry, 0f, 1.0f, 0.001f, 1f, 1.0f + height, 0.001f, minU, minV, maxU, midV, newLight, overlay, 0, 0, 1);
 
             // back face
-            drawQuad(vertexConsumer, entry, 1f, 1.0f, 0.999f, 0f, 1.0f + height, 0.999f,  minU, minV, maxU, midV, newLight, overlay);
+            drawQuad(vertexConsumer, entry, 1f, 1.0f, 0.999f, 0f, 1.0f + height, 0.999f,  minU, minV, maxU, midV, newLight, overlay, 0, 0, -1);
 
             // left face
-            drawQuad(vertexConsumer, entry, 0.001f, 1.0f, 1f, 0.001f, 1.0f + height, 0f,  minU, minV, maxU, midV, newLight, overlay);
+            drawQuad(vertexConsumer, entry, 0.001f, 1.0f, 1f, 0.001f, 1.0f + height, 0f,  minU, minV, maxU, midV, newLight, overlay, -1, 0, 0);
 
             // right face
-            drawQuad(vertexConsumer, entry, 0.999f, 1.0f, 0f, 0.999f, 1.0f + height, 1f,  minU, minV, maxU, midV, newLight, overlay);
+            drawQuad(vertexConsumer, entry, 0.999f, 1.0f, 0f, 0.999f, 1.0f + height, 1f,  minU, minV, maxU, midV, newLight, overlay, 1, 0, 0);
 
             // top face
-            drawQuad(vertexConsumer, entry, 0f, 1.0f + height, 0f, 0f, 1.0f + height, 1f, 1f, 1.0f + height, 1f, 1f, 1.0f + height, 0f,  minU, minV, maxU, maxV, newLight, overlay);
+            drawQuad(vertexConsumer, entry, 0f, 1.0f + height, 0f, 0f, 1.0f + height, 1f, 1f, 1.0f + height, 1f, 1f, 1.0f + height, 0f,  minU, minV, maxU, maxV, newLight, overlay, 0, 1, 0);
 
             matrices.popPose();
         }
     }
-        private static void drawQuad(VertexConsumer vertexConsumer, PoseStack.Pose entry, float x1, float y1, float z1, float x2, float y2, float z2, float minU, float minV, float maxU, float maxV, int light, int overlay) {
-            drawQuad(vertexConsumer, entry, x1, y1, z1, x1, y2, z1, x2, y2, z2, x2, y1, z2, minU, minV, maxU, maxV, light, overlay);
+        private static void drawQuad(VertexConsumer vertexConsumer, PoseStack.Pose entry, float x1, float y1, float z1, float x2, float y2, float z2, float minU, float minV, float maxU, float maxV, int light, int overlay, int nx, int ny, int nz) {
+            drawQuad(vertexConsumer, entry, x1, y1, z1, x1, y2, z1, x2, y2, z2, x2, y1, z2, minU, minV, maxU, maxV, light, overlay, nx, ny, nz);
         }
     private static void drawQuad(VertexConsumer vertexConsumer, PoseStack.Pose entry,
                                  float x1, float y1, float z1,
                                  float x2, float y2, float z2,
                                  float x3, float y3, float z3,
                                  float x4, float y4, float z4,
-                                 float minU, float minV, float maxU, float maxV, int light, int overlay) {
+                                 float minU, float minV, float maxU, float maxV, int light, int overlay,
+                                 float nx, float ny, float nz) {
         vertexConsumer.addVertex(entry, x1, y1, z1)
                 .setColor(-1)
                 .setUv(minU, minV)

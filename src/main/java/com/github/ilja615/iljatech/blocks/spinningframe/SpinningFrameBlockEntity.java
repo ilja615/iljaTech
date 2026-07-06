@@ -66,7 +66,7 @@ public class SpinningFrameBlockEntity extends BlockEntity implements TickableBlo
                 if (!getBlockState().getValue(SpinningFrameBlock.THREAD))
                     level.setBlockAndUpdate(worldPosition, getBlockState().setValue(SpinningFrameBlock.THREAD, true));
 
-                if (ticks++ > 100) {
+                if (ticks++ >= 100) {
                     this.ticks = 0;
 
                     this.inventory.getItem(0).shrink(1);
@@ -87,8 +87,12 @@ public class SpinningFrameBlockEntity extends BlockEntity implements TickableBlo
     protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
         super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
-        ContainerHelper.loadAllItems(nbt, this.inventory.getItems(), registryLookup);
+
+        this.inventory.items.clear();
+        ContainerHelper.loadAllItems(nbt, this.inventory.items, registryLookup);
+
     }
+
 
     @Override
     protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {

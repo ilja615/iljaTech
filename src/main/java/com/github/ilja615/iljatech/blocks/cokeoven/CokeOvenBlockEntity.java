@@ -124,7 +124,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements TickableBlockEnt
                     level.setBlockAndUpdate(worldPosition, level.getBlockState(worldPosition).setValue(CokeOvenBlock.LIT, true));
                     ItemStack output = r.output().copy();
                     if (!output.isEmpty()) {
-                        if (ticks++ > PROCESS_TIME) {
+                        if (ticks++ >= PROCESS_TIME) {
                             // The recipe is finished. The output is handled.
                             long insertedAmount = 0;
                             try(Transaction transaction = Transaction.openOuter()) {

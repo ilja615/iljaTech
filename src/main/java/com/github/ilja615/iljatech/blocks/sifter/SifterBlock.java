@@ -1,15 +1,19 @@
 package com.github.ilja615.iljatech.blocks.sifter;
 
+import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlockEntity;
 import com.github.ilja615.iljatech.blocks.spinningframe.SpinningFrameBlockEntity;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
+import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -20,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -105,5 +110,19 @@ public class SifterBlock extends Block implements EntityBlock, MechPwrAccepter {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ON_OFF_PWR);
+    }
+
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+        if (world.getBlockState(pos.above()).is(ModBlocks.RUBBLE))
+            return 15;
+        if (world.getBlockEntity(pos) instanceof SifterBlockEntity sifterBlockEntity) {
+            int n = sifterBlockEntity.getTicks()/25 + 1;
+            return Math.min(n, 4);
+        }
+        return 0;
     }
 }

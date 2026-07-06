@@ -78,7 +78,7 @@ public class FoundryBlockEntity extends BlockEntity implements TickableBlockEnti
 
                         ItemStack output = r.output().copy();
                         if (!output.isEmpty()) {
-                            if (ticks++ > r.processingTime()) {
+                            if (ticks++ >= r.processingTime()) {
                                 // The recipe is finished. The output is handled.
                                 if (inventory.getItem(3).isEmpty()) { // 3 is output slot
                                     // In this case a new result ItemStack is added with 1 of the result.

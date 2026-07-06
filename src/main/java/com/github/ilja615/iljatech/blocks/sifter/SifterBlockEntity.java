@@ -74,7 +74,7 @@ public class SifterBlockEntity extends BlockEntity implements TickableBlockEntit
                 ((ServerLevel) level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.inventory.getItem(0)), worldPosition.getX() + 0.5d + (level.random.nextFloat() - 0.5) * 0.25, worldPosition.getY() + 0.45d, worldPosition.getZ() + 0.5d + (level.random.nextFloat() - 0.5) * 0.25, 4, 0.0f, -0.1f, 0.0f, 0.0);
 
         }
-        if (ticks++ > 100) {
+        if (ticks++ >= 100) {
             this.ticks = 0;
 
             this.inventory.setItem(0, this.inventory.getItem(0).copyWithCount(this.inventory.getItem(0).getCount() -1));
@@ -83,7 +83,7 @@ public class SifterBlockEntity extends BlockEntity implements TickableBlockEntit
             level.addFreshEntity(new ItemEntity(level, outputPos.x(), outputPos.y(), outputPos.z(), resultingStack, 0d, 0d, 0d));
             level.setBlock(worldPosition.above(), ModBlocks.RUBBLE.defaultBlockState(), Block.UPDATE_ALL);
             if (level.getBlockEntity(worldPosition.above()) instanceof RubbleBlockEntity rubbleBlockEntity) {
-                rubbleBlockEntity.getInventory().setItem(0, new ItemStack(Items.FLINT));
+                rubbleBlockEntity.getInventory().setItem(0, new ItemStack(Items.NAUTILUS_SHELL));
             }
             ((ServerLevel) this.level).getChunkSource().blockChanged(this. getBlockPos());
             this.update();
@@ -95,15 +95,9 @@ public class SifterBlockEntity extends BlockEntity implements TickableBlockEntit
         super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
 
-        ListTag nbtList = nbt.getList("Items", Tag.TAG_COMPOUND);
-        for(int i = 0; i < nbtList.size(); ++i) {
-            CompoundTag nbtCompound = nbtList.getCompound(i);
-            int j = nbtCompound.getByte("Slot") & 255;
-            if (j >= 0 && j < this.inventory.getContainerSize()) {
-                this.inventory.setItem(j, ItemStack.parse(registryLookup, nbtCompound).orElse(ItemStack.EMPTY));
-            }
-        }
-        //Inventories.readNbt(nbt, this.inventory.getHeldStacks(), registryLookup);
+        this.inventory.items.clear();
+        ContainerHelper.loadAllItems(nbt, this.inventory.items, registryLookup);
+
     }
 
     @Override
