@@ -1,7 +1,6 @@
 package com.github.ilja615.iljatech.datagen.book.iljatech.basics;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModItems;
 import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.EntryBackground;
 import com.klikli_dev.modonomicon.api.datagen.EntryProvider;

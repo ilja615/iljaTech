@@ -1,8 +1,6 @@
 package com.github.ilja615.iljatech.blocks.cokeoven;
 
 import com.github.ilja615.iljatech.blocks.firebox.FireboxBlock;
-import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
-import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;

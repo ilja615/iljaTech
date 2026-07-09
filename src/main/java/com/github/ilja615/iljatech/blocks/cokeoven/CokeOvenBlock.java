@@ -2,7 +2,6 @@ package com.github.ilja615.iljatech.blocks.cokeoven;
 
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModSounds;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;

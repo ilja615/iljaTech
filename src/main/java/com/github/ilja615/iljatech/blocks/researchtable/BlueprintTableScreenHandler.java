@@ -1,13 +1,10 @@
 package com.github.ilja615.iljatech.blocks.researchtable;
 
-import com.github.ilja615.iljatech.IljaTech;
 import com.github.ilja615.iljatech.init.*;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
-import com.google.common.collect.Lists;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

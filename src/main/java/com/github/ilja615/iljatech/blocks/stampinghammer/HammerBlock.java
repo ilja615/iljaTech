@@ -7,8 +7,6 @@ import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.init.ModSounds;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;

@@ -1,9 +1,5 @@
 package com.github.ilja615.iljatech.blocks.rusty;
 
-import com.github.ilja615.iljatech.init.ModBlocks;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;

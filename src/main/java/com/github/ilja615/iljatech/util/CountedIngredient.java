@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public record CountedIngredient(int count, Ingredient ingredient) implements CustomIngredient {
     public static MapCodec<CountedIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

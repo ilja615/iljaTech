@@ -1,7 +1,6 @@
 package com.github.ilja615.iljatech.init;
 
 import com.github.ilja615.iljatech.IljaTech;
-import com.klikli_dev.modonomicon.util.StreamCodecs;
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate;

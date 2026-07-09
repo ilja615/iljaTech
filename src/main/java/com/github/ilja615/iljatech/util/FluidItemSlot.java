@@ -1,6 +1,5 @@
 package com.github.ilja615.iljatech.util;
 
-import com.github.ilja615.iljatech.init.ModFluids;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;

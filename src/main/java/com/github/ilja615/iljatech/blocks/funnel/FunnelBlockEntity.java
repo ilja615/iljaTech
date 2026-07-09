@@ -3,7 +3,6 @@ package com.github.ilja615.iljatech.blocks.funnel;
 import com.github.ilja615.iljatech.blocks.pipe.PipeBlock;
 import com.github.ilja615.iljatech.blocks.pipe.PipeShape;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;

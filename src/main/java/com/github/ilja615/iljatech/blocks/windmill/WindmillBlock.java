@@ -1,9 +1,7 @@
 package com.github.ilja615.iljatech.blocks.windmill;
 
-import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.energy.MechPwrSender;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.init.ModParticles;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;

@@ -1,8 +1,6 @@
 package com.github.ilja615.iljatech.blocks.squeezer;
 
 import com.github.ilja615.iljatech.IljaTech;
-import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlock;
-import com.github.ilja615.iljatech.blocks.cokeoven.CokingRecipe;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModFluids;

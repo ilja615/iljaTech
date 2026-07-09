@@ -1,18 +1,14 @@
 package com.github.ilja615.iljatech.blocks.rollermill;
 
-import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlockEntity;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
-import com.github.ilja615.iljatech.init.ModBlocks;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.util.TickableBlockEntity;
-import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -30,7 +26,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 public class RollerMillBlockEntity extends BlockEntity implements TickableBlockEntity {
     private int ticks = 0;
