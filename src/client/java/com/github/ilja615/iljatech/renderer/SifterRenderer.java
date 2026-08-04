@@ -50,7 +50,6 @@ public class SifterRenderer implements BlockEntityRenderer<SifterBlockEntity> {
 //        int i = world.getBrightness(LightLayer.SKY, blockPos);
 //        int j = world.getBrightness(LightLayer.BLOCK, blockPos);
 //        int newLight = i << 20 | j << 4;
-        int newLight = (world != null) ? LevelRenderer.getLightColor(world, entity.getBlockPos()) : 15728880;
         ItemStack stack0 = inventory.getItem(0);
 
         if (stack0.getItem() instanceof BlockItem blockItem) {
@@ -70,18 +69,23 @@ public class SifterRenderer implements BlockEntityRenderer<SifterBlockEntity> {
             float maxV = sprite.getV(1.0f);
 
             // front face
+            int newLight = (world != null) ? LevelRenderer.getLightColor(world, entity.getBlockState(), entity.getBlockPos().south()) : 15728880;
             drawQuad(vertexConsumer, entry, 0f, 1.0f, 0.001f, 1f, 1.0f + height, 0.001f, minU, minV, maxU, midV, newLight, overlay, 0, 0, 1);
 
             // back face
+            newLight = (world != null) ? LevelRenderer.getLightColor(world, entity.getBlockState(), entity.getBlockPos().north()) : 15728880;
             drawQuad(vertexConsumer, entry, 1f, 1.0f, 0.999f, 0f, 1.0f + height, 0.999f,  minU, minV, maxU, midV, newLight, overlay, 0, 0, -1);
 
             // left face
+            newLight = (world != null) ? LevelRenderer.getLightColor(world, entity.getBlockState(), entity.getBlockPos().west()) : 15728880;
             drawQuad(vertexConsumer, entry, 0.001f, 1.0f, 1f, 0.001f, 1.0f + height, 0f,  minU, minV, maxU, midV, newLight, overlay, -1, 0, 0);
 
             // right face
+            newLight = (world != null) ? LevelRenderer.getLightColor(world, entity.getBlockState(), entity.getBlockPos().east()) : 15728880;
             drawQuad(vertexConsumer, entry, 0.999f, 1.0f, 0f, 0.999f, 1.0f + height, 1f,  minU, minV, maxU, midV, newLight, overlay, 1, 0, 0);
 
             // top face
+            newLight = (world != null) ? LevelRenderer.getLightColor(world, entity.getBlockState(), entity.getBlockPos().above()) : 15728880;
             drawQuad(vertexConsumer, entry, 0f, 1.0f + height, 0f, 0f, 1.0f + height, 1f, 1f, 1.0f + height, 1f, 1f, 1.0f + height, 0f,  minU, minV, maxU, maxV, newLight, overlay, 0, 1, 0);
 
             matrices.popPose();
@@ -97,32 +101,33 @@ public class SifterRenderer implements BlockEntityRenderer<SifterBlockEntity> {
                                  float x4, float y4, float z4,
                                  float minU, float minV, float maxU, float maxV, int light, int overlay,
                                  float nx, float ny, float nz) {
+
         vertexConsumer.addVertex(entry, x1, y1, z1)
                 .setColor(-1)
                 .setUv(minU, minV)
                 .setLight(light)
                 .setOverlay(overlay)
-                .setNormal(0.0F, 1.0F, 0.0F);
+                .setNormal(nx, ny, nz);
 
         vertexConsumer.addVertex(entry, x2, y2, z2)
                 .setColor(-1)
                 .setUv(minU, maxV)
                 .setLight(light)
                 .setOverlay(overlay)
-                .setNormal(0.0F, 1.0F, 0.0F);
+                .setNormal(nx, ny, nz);
 
         vertexConsumer.addVertex(entry, x3, y3, z3)
                 .setColor(-1)
                 .setUv(maxU, maxV)
                 .setLight(light)
                 .setOverlay(overlay)
-                .setNormal(0.0F, 1.0F, 0.0F);
+                .setNormal(nx, ny, nz);
 
         vertexConsumer.addVertex(entry, x4, y4, z4)
                 .setColor(-1)
                 .setUv(maxU, minV)
                 .setLight(light)
                 .setOverlay(overlay)
-                .setNormal(0.0F, 1.0F, 0.0F);
+                .setNormal(nx, ny, nz);
     }
 }
