@@ -1,0 +1,26 @@
+{
+  "type": "iljatech:sifting",
+  "ingredient": {
+    "item": "minecraft:sand"
+  },
+  "fines": [
+    {
+      "item": "iljatech:silica_dust",
+      "chance": 0.4
+    },
+    {
+      "item": "iljatech:crushed_tin_ore",
+      "chance": 0.4
+    }
+  ],
+  "coarse": [
+    {
+      "item": "minecraft:nautilus_shell",
+      "chance": 0.25
+    },
+    {
+      "item": "minecraft:dead_bush",
+      "chance": 0.25
+    }
+  ]
+}

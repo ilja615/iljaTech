@@ -32,15 +32,7 @@ public class ModSimpleLootTableProvider extends SimpleFabricLootTableProvider {
 
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
-        LootPool.Builder mainPool = LootPool.lootPool();
-        mainPool
-                .setRolls(ConstantValue.exactly(4))
-                .add(LootItem.lootTableItem(ModItems.SALTPETER).setWeight(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-                .add(LootItem.lootTableItem(ModItems.SILICA_DUST));
 
-        LootTable.Builder builder = LootTable.lootTable();
-        builder.withPool(mainPool);
-        biConsumer.accept(createResourceKey("sifter/sand_fines"), builder);
     }
 
 

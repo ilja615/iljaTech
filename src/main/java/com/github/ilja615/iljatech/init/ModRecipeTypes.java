@@ -7,6 +7,7 @@ import com.github.ilja615.iljatech.blocks.foundry.FoundryRecipe;
 import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizingRecipe;
 import com.github.ilja615.iljatech.blocks.researchtable.BlueprintingRecipe;
 import com.github.ilja615.iljatech.blocks.rollermill.RollingRecipe;
+import com.github.ilja615.iljatech.blocks.sifter.SiftingRecipe;
 import com.github.ilja615.iljatech.blocks.spinningframe.SpinningRecipe;
 import com.github.ilja615.iljatech.blocks.squeezer.SqueezingRecipe;
 import com.github.ilja615.iljatech.blocks.stampinghammer.StampingRecipe;
@@ -31,6 +32,7 @@ public class ModRecipeTypes {
     public static final RecipeType<SpinningRecipe> SPINNING_TYPE = register("spinning", new SpinningRecipe.Serializer());
     public static final RecipeType<CarpentryRecipe> CARPENTRY_TYPE = register("carpentry", new CarpentryRecipe.Serializer());
     public static final RecipeType<BlueprintingRecipe> BLUEPRINTING_TYPE = register("blueprinting", new BlueprintingRecipe.Serializer());
+    public static final RecipeType<SiftingRecipe> SIFTING_TYPE = register("sifting", new SiftingRecipe.Serializer());
 
     public static void registerIngredientTypes()
     {

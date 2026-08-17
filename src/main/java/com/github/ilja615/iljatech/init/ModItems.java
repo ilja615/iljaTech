@@ -64,6 +64,8 @@ public class ModItems {
     public static final Item SULFUR = register("sulfur", new Item(new Item.Properties()));
     public static final Item SALTPETER = register("saltpeter", new Item(new Item.Properties()));
     public static final Item SILICA_DUST = register("silica_dust", new Item(new Item.Properties()));
+    public static final Item SALT = register("salt", new Item(new Item.Properties()));
+
 
 
     public static <T extends Item> T register(String name, T item) {

@@ -18,6 +18,7 @@ import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingSlabBlock;
 import com.github.ilja615.iljatech.blocks.rusty.RustingStairsBlock;
+import com.github.ilja615.iljatech.blocks.sifter.PlaceHolderBlock;
 import com.github.ilja615.iljatech.blocks.sifter.RubbleBlock;
 import com.github.ilja615.iljatech.blocks.sifter.SifterBlock;
 import com.github.ilja615.iljatech.blocks.spinningframe.SpinningFrameBlock;
@@ -133,6 +134,7 @@ public class ModBlocks {
     public static final Block WIND_VANE = registerWithItem("wind_vane", new WindVaneBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(1.0F, 0.5F).sound(SoundType.WOOD).noOcclusion()));
     public static final Block SIFTER = registerWithItem("sifter", new SifterBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.COPPER).noOcclusion()));
     public static final Block RUBBLE = registerWithItem("rubble", new RubbleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).strength(0.3F, 0.6F).sound(SoundType.GRAVEL).noOcclusion().pushReaction(PushReaction.DESTROY)));
+    public static final Block PLACEHOLDER = registerWithItem("placeholder", new PlaceHolderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).strength(-1.0F, 3600000.0F).noLootTable().noOcclusion().pushReaction(PushReaction.BLOCK)));
 
     public static final Block CHAIR = registerWithItem("chair", new ChairBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(1.0F, 4.0F).sound(SoundType.WOOD).noOcclusion()));
     public static final Block RESEARCH_TABLE = registerWithItem("research_table", new ResearchTableBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).strength(3.0F, 6.0F).sound(SoundType.WOOD).noOcclusion()));
