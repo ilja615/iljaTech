@@ -1,8 +1,6 @@
 package com.github.ilja615.iljatech.blocks.squeezer;
 
-import com.github.ilja615.iljatech.blocks.rollermill.RollingRecipe;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
-import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

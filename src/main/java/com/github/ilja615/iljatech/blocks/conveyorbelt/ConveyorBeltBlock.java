@@ -40,8 +40,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-
 import static com.github.ilja615.iljatech.energy.MechPwrAccepter.OnOffPwr.*;
 
 public class ConveyorBeltBlock extends HorizontalDirectionalBlock implements EntityBlock, MechPwrAccepter, MechPwrSender {

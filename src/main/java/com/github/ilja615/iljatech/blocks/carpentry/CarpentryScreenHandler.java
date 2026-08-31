@@ -1,7 +1,6 @@
 package com.github.ilja615.iljatech.blocks.carpentry;
 
 import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModFluids;
 import com.github.ilja615.iljatech.init.ModItems;
 import com.github.ilja615.iljatech.init.ModScreenHandlerTypes;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
@@ -22,7 +21,6 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import java.util.Optional;
 
 public class CarpentryScreenHandler extends AbstractContainerMenu {
     private final CarpentryBlockEntity blockEntity;

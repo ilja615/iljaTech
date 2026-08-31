@@ -5,9 +5,7 @@ import com.github.ilja615.iljatech.util.ExtraCodecs;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 
-import java.util.function.BiFunction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.RegistryFriendlyByteBuf;

@@ -1,6 +1,5 @@
 package com.github.ilja615.iljatech.blocks.cokeoven;
 
-import com.github.ilja615.iljatech.blocks.foundry.FoundryRecipe;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.mojang.serialization.Codec;

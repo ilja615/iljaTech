@@ -1,10 +1,8 @@
 package com.github.ilja615.iljatech.datagen.book.iljatech;
 
 import com.github.ilja615.iljatech.IljaTech;
-import com.github.ilja615.iljatech.datagen.book.iljatech.basics.*;
 import com.github.ilja615.iljatech.datagen.book.iljatech.pyrometallurgy.*;
 import com.github.ilja615.iljatech.init.ModBlocks;
-import com.github.ilja615.iljatech.init.ModItems;
 import com.klikli_dev.modonomicon.api.datagen.CategoryProvider;
 import com.klikli_dev.modonomicon.api.datagen.SingleBookSubProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookCategoryModel;

@@ -1,16 +1,12 @@
 package com.github.ilja615.iljatech.renderer;
 
-import com.github.ilja615.iljatech.IljaTech;
-import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlock;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillBlockEntity;
 import com.github.ilja615.iljatech.blocks.windmill.WindmillSailBlock;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
 import com.github.ilja615.iljatech.init.ModBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
-import org.joml.Quaternionf;
 
-import java.util.ArrayList;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
