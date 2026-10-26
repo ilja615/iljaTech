@@ -1,6 +1,7 @@
 package com.github.ilja615.iljatech.blocks.sifter;
 
 import com.github.ilja615.iljatech.blocks.cokeoven.CokingRecipe;
+import com.github.ilja615.iljatech.blocks.foundry.FoundryRecipe;
 import com.github.ilja615.iljatech.init.ModRecipeTypes;
 import com.github.ilja615.iljatech.util.CountedIngredient;
 import com.mojang.serialization.Codec;
@@ -23,7 +24,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import java.util.Arrays;
 import java.util.List;
 
-public record SiftingRecipe(Ingredient ingredient,List<SiftingResult> fines,List<SiftingResult> coarse) implements Recipe<SiftingRecipe.InputContainer> {
+public record SiftingRecipe(Ingredient ingredient,List<SiftingResult> fines, int nrolls, List<SiftingResult> coarse) implements Recipe<SiftingRecipe.InputContainer> {
 
     public static final MapCodec<SiftingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Ingredient.CODEC.fieldOf("ingredient")
@@ -32,6 +33,8 @@ public record SiftingRecipe(Ingredient ingredient,List<SiftingResult> fines,List
             SiftingResult.CODEC.listOf()
                     .fieldOf("fines")
                     .forGetter(SiftingRecipe::fines),
+
+            Codec.INT.fieldOf("nrolls").forGetter(SiftingRecipe::nrolls),
 
             SiftingResult.CODEC.listOf()
                     .fieldOf("coarse")
@@ -46,6 +49,8 @@ public record SiftingRecipe(Ingredient ingredient,List<SiftingResult> fines,List
             SiftingRecipe::ingredient,
             SiftingResult.STREAM_CODEC.apply(ByteBufCodecs.list()),
             SiftingRecipe::fines,
+            ByteBufCodecs.INT,
+            SiftingRecipe::nrolls,
             SiftingResult.STREAM_CODEC.apply(ByteBufCodecs.list()),
             SiftingRecipe::coarse,
             SiftingRecipe::new

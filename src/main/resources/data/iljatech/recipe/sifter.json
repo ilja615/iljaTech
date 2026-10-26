@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "iljatech:mesh"
+    },
+    "G": {
+      "item": "iljatech:bronze_gear"
+    },
+    "B": {
+      "item": "iljatech:bronze_ingot"
+    },
+    "/": {
+      "item": "iljatech:copper_rod"
+    }
+  },
+  "pattern": [
+    "B#B",
+    "G#G",
+    "/ /"
+  ],
+  "result": {
+    "count": 1,
+    "id": "iljatech:sifter"
+  }
+}

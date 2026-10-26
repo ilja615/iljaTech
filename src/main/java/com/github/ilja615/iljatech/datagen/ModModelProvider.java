@@ -26,13 +26,6 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.generateFlatItem(ModItems.NICKEL_INGOT, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.ALUMINIUM_INGOT, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.CHROME_INGOT, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_RAW_ALUMINIUM, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_RAW_CHROME, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_RAW_NICKEL, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_RAW_COPPER, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_RAW_GOLD, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_RAW_TIN, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_RAW_IRON, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.BRONZE_INGOT, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.BRONZE_GEAR, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.FIRE_CLAY_BALL, ModelTemplates.FLAT_ITEM);
@@ -54,6 +47,14 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.generateFlatItem(ModItems.SALTPETER, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.SALT, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.SILICA_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.IRON_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.GOLD_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.COPPER_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.TIN_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.NICKEL_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.ALUMINIUM_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.CHROME_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.MESH, ModelTemplates.FLAT_ITEM);
 
     }
 

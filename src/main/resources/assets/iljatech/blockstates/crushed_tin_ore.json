@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=1": {
+      "model": "iljatech:block/crushed_tin_ore_1"
+    },
+    "level=2": {
+      "model": "iljatech:block/crushed_tin_ore_2"
+    },
+    "level=3": {
+      "model": "iljatech:block/crushed_tin_ore_3"
+    },
+    "level=4": {
+      "model": "iljatech:block/crushed_tin_ore_4"
+    }
+  }
+}

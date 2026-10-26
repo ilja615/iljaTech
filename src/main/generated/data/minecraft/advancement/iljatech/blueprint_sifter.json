@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "sifter": {
+      "conditions": {
+        "item": {
+          "items": "iljatech:sifter"
+        }
+      },
+      "trigger": "iljatech:blueprint_unlock"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": "Unlocked sifter with the blueprinting",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "iljatech:sifter"
+    },
+    "title": "Sieve Researched"
+  },
+  "requirements": [
+    [
+      "sifter"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

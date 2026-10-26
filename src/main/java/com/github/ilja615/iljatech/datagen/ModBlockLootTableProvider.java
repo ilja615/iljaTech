@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.datagen;
 
+import com.github.ilja615.iljatech.blocks.CrushedOreBlock;
 import com.github.ilja615.iljatech.blocks.FlaxBlock;
 import com.github.ilja615.iljatech.blocks.SawDustBlock;
 import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlock;
@@ -114,6 +115,19 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
                 return SetItemCountFunction.setCount(ConstantValue.exactly((float)amount)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(SawDustBlock.LEVEL, amount)));
             }))));
         });
+        add(ModBlocks.CRUSHED_RAW_ALUMINIUM, this::crushedOreDrops);
+        add(ModBlocks.CRUSHED_RAW_CHROME, this::crushedOreDrops);
+        add(ModBlocks.CRUSHED_RAW_COPPER, this::crushedOreDrops);
+        add(ModBlocks.CRUSHED_RAW_GOLD, this::crushedOreDrops);
+        add(ModBlocks.CRUSHED_RAW_GOLD, this::crushedOreDrops);
+        add(ModBlocks.CRUSHED_RAW_NICKEL, this::crushedOreDrops);
+        add(ModBlocks.CRUSHED_RAW_TIN, this::crushedOreDrops);
+    }
+
+    public LootTable.Builder crushedOreDrops(Block block) {
+        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add((LootPoolEntryContainer.Builder) this.applyExplosionDecay(block, LootItem.lootTableItem(block).apply(IntStream.rangeClosed(1, 4).boxed().toList(), (amount) -> {
+            return SetItemCountFunction.setCount(ConstantValue.exactly((float)amount)).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CrushedOreBlock.LEVEL, amount)));
+        }))));
     }
 
     public LootTable.Builder pulverizerMillDrops(Block block) {

@@ -13,6 +13,7 @@
       "chance": 0.4
     }
   ],
+  "nrolls": 1,
   "coarse": [
     {
       "item": "minecraft:nautilus_shell",

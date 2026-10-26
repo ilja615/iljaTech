@@ -73,8 +73,7 @@ public class PyroMetallurgyCategory extends CategoryProvider {
         sifterEntry.withParent(bronzeEntry);
 
         var nickelEntry = this.add(new NickelEntry(this).generate('n'));
-        nickelEntry.withParent(pulverizerMillEntry)
-                .withParent(BookEntryParentModel.create( sifterEntry.getId()).withLineReversed(true));
+        nickelEntry.withParent(pulverizerMillEntry).withParent(sifterEntry);
     }
 
     @Override

@@ -1,0 +1,43 @@
+{
+  "variants": {
+    "wire_shape=ascending_east": {
+      "model": "iljatech:block/rope_raised_ne",
+      "y": 90
+    },
+    "wire_shape=ascending_north": {
+      "model": "iljatech:block/rope_raised_ne"
+    },
+    "wire_shape=ascending_south": {
+      "model": "iljatech:block/rope_raised_sw"
+    },
+    "wire_shape=ascending_west": {
+      "model": "iljatech:block/rope_raised_sw",
+      "y": 90
+    },
+    "wire_shape=east_west": {
+      "model": "iljatech:block/rope",
+      "y": 90
+    },
+    "wire_shape=north_east": {
+      "model": "iljatech:block/rope_corner",
+      "y": 270
+    },
+    "wire_shape=north_south": {
+      "model": "iljatech:block/rope"
+    },
+    "wire_shape=north_west": {
+      "model": "iljatech:block/rope_corner",
+      "y": 180
+    },
+    "wire_shape=south_east": {
+      "model": "iljatech:block/rope_corner"
+    },
+    "wire_shape=south_west": {
+      "model": "iljatech:block/rope_corner",
+      "y": 90
+    },
+    "wire_shape=crossroad": {
+      "model": "iljatech:block/rope_crossroad"
+    }
+  }
+}

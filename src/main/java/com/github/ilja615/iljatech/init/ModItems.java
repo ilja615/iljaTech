@@ -32,14 +32,6 @@ public class ModItems {
     public static final Item ALUMINIUM_INGOT = register("aluminium_ingot", new Item(new Item.Properties()));
     public static final Item CHROME_INGOT = register("chrome_ingot", new Item(new Item.Properties()));
 
-    public static final Item CRUSHED_RAW_TIN = register("crushed_tin_ore", new Item(new Item.Properties()));
-    public static final Item CRUSHED_RAW_NICKEL = register("crushed_nickel_ore", new Item(new Item.Properties()));
-    public static final Item CRUSHED_RAW_ALUMINIUM = register("crushed_aluminium_ore", new Item(new Item.Properties()));
-    public static final Item CRUSHED_RAW_CHROME = register("crushed_chrome_ore", new Item(new Item.Properties()));
-    public static final Item CRUSHED_RAW_IRON = register("crushed_iron_ore", new Item(new Item.Properties()));
-    public static final Item CRUSHED_RAW_GOLD = register("crushed_gold_ore", new Item(new Item.Properties()));
-    public static final Item CRUSHED_RAW_COPPER = register("crushed_copper_ore", new Item(new Item.Properties()));
-
     public static final Item BRONZE_INGOT = register("bronze_ingot", new Item(new Item.Properties()));
     public static final Item BRONZE_GEAR = register("bronze_gear", new Item(new Item.Properties()));
     public static final Item STEEL_INGOT = register("steel_ingot", new Item(new Item.Properties()));
@@ -59,12 +51,21 @@ public class ModItems {
     public static final Item STEEL_BLOOM = register("steel_bloom", new Item(new Item.Properties()));
     public static final Item CLOTH = register("cloth", new Item(new Item.Properties()));
     public static final Item FLAX_FIBER = register("flax_fiber", new Item(new Item.Properties()));
+    public static final Item MESH = register("mesh", new Item(new Item.Properties()));
     public static final Item BLUE_PRINT = register("blue_print", new Item(new Item.Properties()));
     public static final Item WINDMILL_PART = register("windmill_part", new Item(new Item.Properties()));
     public static final Item SULFUR = register("sulfur", new Item(new Item.Properties()));
     public static final Item SALTPETER = register("saltpeter", new Item(new Item.Properties()));
     public static final Item SILICA_DUST = register("silica_dust", new Item(new Item.Properties()));
     public static final Item SALT = register("salt", new Item(new Item.Properties()));
+
+    public static final Item IRON_DUST = register("iron_dust", new Item(new Item.Properties()));
+    public static final Item GOLD_DUST = register("gold_dust", new Item(new Item.Properties()));
+    public static final Item COPPER_DUST = register("copper_dust", new Item(new Item.Properties()));
+    public static final Item TIN_DUST = register("tin_dust", new Item(new Item.Properties()));
+    public static final Item NICKEL_DUST = register("nickel_dust", new Item(new Item.Properties()));
+    public static final Item ALUMINIUM_DUST = register("aluminium_dust", new Item(new Item.Properties()));
+    public static final Item CHROME_DUST = register("chrome_dust", new Item(new Item.Properties()));
 
 
 

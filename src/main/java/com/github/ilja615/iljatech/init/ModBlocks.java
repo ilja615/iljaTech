@@ -63,6 +63,13 @@ public class ModBlocks {
     public static final Block RAW_NICKEL_ORE = registerWithItem("raw_nickel_ore", new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_IRON_BLOCK).mapColor(MapColor.COLOR_BROWN)));
     public static final Block RAW_ALUMINIUM_ORE = registerWithItem("raw_aluminium_ore", new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK).mapColor(MapColor.COLOR_BROWN)));
     public static final Block RAW_CHROME_ORE = registerWithItem("raw_chrome_ore", new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK).mapColor(MapColor.COLOR_LIGHT_GRAY)));
+    public static final Block CRUSHED_RAW_TIN = registerWithItem("crushed_tin_ore", new CrushedOreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.COLOR_BLACK)));
+    public static final Block CRUSHED_RAW_NICKEL = registerWithItem("crushed_nickel_ore", new CrushedOreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.COLOR_BROWN)));
+    public static final Block CRUSHED_RAW_ALUMINIUM = registerWithItem("crushed_aluminium_ore", new CrushedOreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.COLOR_BROWN)));
+    public static final Block CRUSHED_RAW_CHROME = registerWithItem("crushed_chrome_ore", new CrushedOreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.COLOR_LIGHT_GRAY)));
+    public static final Block CRUSHED_RAW_IRON = registerWithItem("crushed_iron_ore", new CrushedOreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.RAW_IRON)));
+    public static final Block CRUSHED_RAW_GOLD = registerWithItem("crushed_gold_ore", new CrushedOreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.GOLD)));
+    public static final Block CRUSHED_RAW_COPPER = registerWithItem("crushed_copper_ore", new CrushedOreBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.COLOR_ORANGE)));
 
     public static final Block NAILED_ACACIA_PLANKS = registerWithItem("nailed_acacia_planks", new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.ACACIA_PLANKS)));
     public static final Block NAILED_BAMBOO_PLANKS = registerWithItem("nailed_bamboo_planks", new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.BAMBOO_PLANKS)));
@@ -156,6 +163,7 @@ public class ModBlocks {
 
     public static final Block FLAX_SEEDS = registerWithItem("flax_seeds", new FlaxBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).noCollission().randomTicks().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
     public static final Block FLAX = registerWithItem("flax", new DoublePlantBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).noCollission().instabreak().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY)));
+    public static final Block ROPE = registerWithItem("rope", new WireBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.RAIL)));
 
     public static <T extends Block> T register(String name, T block) {
         return Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, name), block);

@@ -32,7 +32,7 @@
       "draw_arrow": true,
       "entry": "pyrometallurgy/sifter",
       "line_enabled": true,
-      "line_reversed": true
+      "line_reversed": false
     }
   ],
   "show_when_any_parent_unlocked": false,

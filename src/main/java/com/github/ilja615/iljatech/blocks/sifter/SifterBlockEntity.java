@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks.sifter;
 
+import com.github.ilja615.iljatech.blocks.CrushedOreBlock;
 import com.github.ilja615.iljatech.energy.BoilingRecipe;
 import com.github.ilja615.iljatech.init.ModBlockEntityTypes;
 import com.github.ilja615.iljatech.init.ModBlocks;
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -40,6 +42,7 @@ import java.util.List;
 
 public class SifterBlockEntity extends BlockEntity implements TickableBlockEntity, WorldlyContainer {
     private int ticks = 0;
+
     private static final int[] EMPTY = new int[0];
 
     private final SimpleContainer inventory = new SimpleContainer(1) {
@@ -72,37 +75,48 @@ public class SifterBlockEntity extends BlockEntity implements TickableBlockEntit
                 {
                     SiftingRecipe r = rr.value();
                     if (r.ingredient().test(new ItemStack(blockState1.getBlock()))) {
-                        this.inventory.setItem(0, new ItemStack(level.getBlockState(worldPosition.above()).getBlock(), 1));
-                        level.setBlockAndUpdate(worldPosition.above(), ModBlocks.PLACEHOLDER.defaultBlockState());
+                        if (blockState1.getBlock() instanceof CrushedOreBlock){
+                            if (blockState1.getValue(CrushedOreBlock.LEVEL) == 4) {
+                                this.inventory.setItem(0, new ItemStack(level.getBlockState(worldPosition.above()).getBlock(), 1));
+                                level.setBlockAndUpdate(worldPosition.above(), ModBlocks.PLACEHOLDER.defaultBlockState());
+                            }
+                        } else {
+                            this.inventory.setItem(0, new ItemStack(level.getBlockState(worldPosition.above()).getBlock(), 1));
+                            level.setBlockAndUpdate(worldPosition.above(), ModBlocks.PLACEHOLDER.defaultBlockState());
+                        }
                         this.update();
                     }
                 }
             }
-        } else {
-            if (level.random.nextFloat() > 0.8f && !this.inventory.getItem(0).isEmpty())
+        }
+        if (level.random.nextFloat() > 0.8f) {
+            if (!this.inventory.getItem(0).isEmpty())
                 ((ServerLevel) level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, this.inventory.getItem(0)), worldPosition.getX() + 0.5d + (level.random.nextFloat() - 0.5) * 0.25, worldPosition.getY() + 0.45d, worldPosition.getZ() + 0.5d + (level.random.nextFloat() - 0.5) * 0.25, 4, 0.0f, -0.1f, 0.0f, 0.0);
-
         }
         if (ticks++ >= 100) {
             this.ticks = 0;
 
-            level.setBlockAndUpdate(worldPosition.above(), Blocks.AIR.defaultBlockState());
-
             Vec3 outputPos = worldPosition.getCenter().add(0.0d, -0.4d, 0.0d);
-
             List<RecipeHolder<SiftingRecipe>> recipes = level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.SIFTING_TYPE);
+
+            BlockState blockState1 = level.getBlockState(worldPosition.above());
+
             for (RecipeHolder<SiftingRecipe> rr : recipes)
             {
                 SiftingRecipe r = rr.value();
                 if (r.ingredient().test(this.inventory.getItem(0))) {
+
                     // consume the sifted block
-                    this.inventory.setItem(0, this.inventory.getItem(0).copyWithCount(this.inventory.getItem(0).getCount() -1));
+                    level.setBlockAndUpdate(worldPosition.above(), Blocks.AIR.defaultBlockState());
+                    this.inventory.setItem(0, this.inventory.getItem(0).copyWithCount(this.inventory.getItem(0).getCount() - 1));
 
                     // handle the outputting of all the fines
-                    for (SiftingRecipe.SiftingResult resultHolder : r.fines()) {
-                        if (resultHolder.chance() >= level.random.nextFloat()) {
-                            ItemStack resultingStack = new ItemStack(resultHolder.item().value());
-                            level.addFreshEntity(new ItemEntity(level, outputPos.x(), outputPos.y(), outputPos.z(), resultingStack, 0d, 0d, 0d));
+                    for (int j = 0; j < r.nrolls(); j++) {
+                        for (SiftingRecipe.SiftingResult resultHolder : r.fines()) {
+                            if (resultHolder.chance() >= level.random.nextFloat()) {
+                                ItemStack resultingStack = new ItemStack(resultHolder.item().value());
+                                level.addFreshEntity(new ItemEntity(level, outputPos.x(), outputPos.y(), outputPos.z(), resultingStack, 0d, 0d, 0d));
+                            }
                         }
                     }
 
@@ -153,7 +167,6 @@ public class SifterBlockEntity extends BlockEntity implements TickableBlockEntit
     protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
         super.loadAdditional(nbt, registryLookup);
         this.ticks = nbt.getInt("Ticks");
-
         this.inventory.items.clear();
         ContainerHelper.loadAllItems(nbt, this.inventory.items, registryLookup);
 

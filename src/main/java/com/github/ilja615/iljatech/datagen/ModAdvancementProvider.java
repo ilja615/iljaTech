@@ -28,6 +28,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
         generateBlueprintAdvancement(registryLookup, consumer, ModBlocks.FOUNDRY);
         generateBlueprintAdvancement(registryLookup, consumer, ModBlocks.PULVERIZER_MILL);
         generateBlueprintAdvancement(registryLookup, consumer, ModBlocks.COKE_OVEN);
+        generateBlueprintAdvancement(registryLookup, consumer, ModBlocks.SIFTER);
 
     }
 

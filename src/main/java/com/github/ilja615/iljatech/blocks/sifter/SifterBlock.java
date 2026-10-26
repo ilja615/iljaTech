@@ -56,18 +56,6 @@ public class SifterBlock extends Block implements EntityBlock, MechPwrAccepter {
         return FULL;
     }
 
-    @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!world.isClientSide)
-        {
-            if (world.getBlockEntity(pos) instanceof SpinningFrameBlockEntity blockEntity && player != null) {
-                //player.sendMessage(Text.of("ticks: " + blockEntity.getTicks()), true);
-                return InteractionResult.SUCCESS;
-            }
-        }
-        return super.useWithoutItem(state, world, pos, player, hit);
-    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {

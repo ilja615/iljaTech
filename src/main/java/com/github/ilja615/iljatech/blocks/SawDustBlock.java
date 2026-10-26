@@ -1,11 +1,14 @@
 package com.github.ilja615.iljatech.blocks;
 
 import com.github.ilja615.iljatech.blocks.windmill.WindDirection;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.SoulSandBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -13,8 +16,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class SawDustBlock extends Block {
+public class SawDustBlock extends FallingBlock {
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 1, 4);
+    public static final MapCodec<SawDustBlock> CODEC = simpleCodec(SawDustBlock::new);
 
     protected static final VoxelShape[] LAYERS_TO_SHAPE = new VoxelShape[]{
             Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0)};
@@ -22,6 +26,11 @@ public class SawDustBlock extends Block {
     public SawDustBlock(Properties settings) {
         super(settings);
         this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 1));
+    }
+
+    @Override
+    protected MapCodec<? extends FallingBlock> codec() {
+        return CODEC;
     }
 
     protected boolean canBeReplaced(BlockState state, BlockPlaceContext context) {

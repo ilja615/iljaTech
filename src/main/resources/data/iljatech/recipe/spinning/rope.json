@@ -1,0 +1,10 @@
+{
+  "type": "iljatech:spinning",
+  "ingredient": {
+    "item": "iljatech:flax_fiber"
+  },
+  "result": {
+    "count": 3,
+    "id": "iljatech:rope"
+  }
+}

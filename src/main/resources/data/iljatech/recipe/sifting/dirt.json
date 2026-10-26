@@ -1,0 +1,27 @@
+{
+  "type": "iljatech:sifting",
+  "ingredient": {
+    "item": "minecraft:dirt"
+  },
+  "fines": [
+    {
+      "item": "iljatech:saltpeter",
+      "chance": 0.2
+    },
+    {
+      "item": "minecraft:wheat_seeds",
+      "chance": 0.05
+    }
+  ],
+  "nrolls": 1,
+  "coarse": [
+    {
+      "item": "minecraft:flint",
+      "chance": 0.1
+    },
+    {
+      "item": "minecraft:clay_ball",
+      "chance": 0.05
+    }
+  ]
+}
