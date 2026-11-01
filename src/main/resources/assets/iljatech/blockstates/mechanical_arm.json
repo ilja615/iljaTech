@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,triggered=true": {
       "model": "iljatech:block/mechanical_arm",
       "y": 90
     },
-    "facing=north": {
+    "facing=north,triggered=true": {
       "model": "iljatech:block/mechanical_arm"
     },
-    "facing=south": {
+    "facing=south,triggered=true": {
       "model": "iljatech:block/mechanical_arm",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,triggered=true": {
       "model": "iljatech:block/mechanical_arm",
+      "y": 270
+    },
+    "facing=east,triggered=false": {
+      "model": "iljatech:block/mechanical_arm_retracted",
+      "y": 90
+    },
+    "facing=north,triggered=false": {
+      "model": "iljatech:block/mechanical_arm_retracted"
+    },
+    "facing=south,triggered=false": {
+      "model": "iljatech:block/mechanical_arm_retracted",
+      "y": 180
+    },
+    "facing=west,triggered=false": {
+      "model": "iljatech:block/mechanical_arm_retracted",
       "y": 270
     }
   }

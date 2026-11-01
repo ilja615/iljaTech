@@ -78,26 +78,4 @@ public class MechanicalArmScreenHandler extends AbstractContainerMenu {
         return this.blockEntity;
     }
 
-    @Override
-    public boolean clickMenuButton(Player player, int id) {
-        switch (id) {
-            case 0 -> {mouseSide(); return true;}
-            default -> {
-                return false;
-            }
-        }
-    }
-
-    public void mouseSide() {
-        this.blockEntity.toggleMouseSide();
-        this.inventory.setChanged();
-    }
-
-    public Tuple<Boolean, String> getSetting() {
-        if (this.blockEntity.getMouseSide()) {
-            return new Tuple<>(true, "Currently set to: Right-Clicking");
-        } else {
-            return new Tuple<>(false, "Currently set to: Left-Clicking");
-        }
-    }
 }

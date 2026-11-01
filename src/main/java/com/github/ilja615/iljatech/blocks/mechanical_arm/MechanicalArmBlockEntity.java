@@ -32,8 +32,6 @@ import com.github.ilja615.iljatech.util.TickableBlockEntity;
 
 public class MechanicalArmBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPosPayload> {
     public static final Component TITLE = Component.translatable("container." + IljaTech.MOD_ID + ".mechanical_arm");
-    private boolean mouseRightClickToggle = true;
-    private int ticks = 0;
 
     private final SimpleContainer inventory = new SimpleContainer(1) {
         @Override
@@ -51,15 +49,12 @@ public class MechanicalArmBlockEntity extends BlockEntity implements ExtendedScr
     @Override
     protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
         super.loadAdditional(nbt, registryLookup);
-        this.mouseRightClickToggle = nbt.getBoolean("MouseSide");
         ContainerHelper.loadAllItems(nbt, this.inventory.getItems(), registryLookup);
     }
 
     @Override
     protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider registryLookup) {
         super.saveAdditional(nbt, registryLookup);
-        nbt.putBoolean("MouseSide", this.mouseRightClickToggle);
-
         ContainerHelper.saveAllItems(nbt, this.inventory.getItems(), registryLookup);
     }
 
@@ -123,20 +118,5 @@ public class MechanicalArmBlockEntity extends BlockEntity implements ExtendedScr
 //        }
 //    }
 
-    public void toggleMouseSide() {
-        this.mouseRightClickToggle = !this.mouseRightClickToggle;
-        update();
-    }
 
-    public boolean getMouseSide() {
-        return mouseRightClickToggle;
-    }
-
-    private FakePlayer getFakePlayer() {
-        if (!(this.level instanceof ServerLevel serverWorld)) {
-            return null;
-        }
-
-        return FakePlayer.get(serverWorld);
-    }
 }

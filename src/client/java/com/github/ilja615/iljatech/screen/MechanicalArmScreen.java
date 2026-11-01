@@ -20,7 +20,6 @@ import java.util.List;
 
 public class MechanicalArmScreen extends AbstractContainerScreen<MechanicalArmScreenHandler> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, "textures/gui/mechanical_arm.png");
-    private final List<AbstractWidget> buttons = Lists.newArrayList();
 
     public MechanicalArmScreen(MechanicalArmScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
@@ -29,17 +28,6 @@ public class MechanicalArmScreen extends AbstractContainerScreen<MechanicalArmSc
         this.inventoryLabelY = 39;
     }
 
-    private <T extends AbstractWidget> void addButton(T button) {
-        this.addRenderableWidget(button);
-        this.buttons.add(button);
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.buttons.clear();
-        this.addButton(new TwoCaseButtonWidget(this.leftPos + 97, this.topPos + 19, 18, 18, TEXTURE, 176, 0, this::mouseSide, this.menu::getSetting));
-    }
 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
@@ -50,9 +38,5 @@ public class MechanicalArmScreen extends AbstractContainerScreen<MechanicalArmSc
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         renderTooltip(context, mouseX, mouseY);
-    }
-
-    public void mouseSide() {
-        this.minecraft.getConnection().send(new ServerboundContainerButtonClickPacket(menu.containerId, 0));
     }
 }
