@@ -5,6 +5,7 @@ import com.github.ilja615.iljatech.blocks.carpentry.CarpentryScreenHandler;
 import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenScreenHandler;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryScreenHandler;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchScreenHandler;
+import com.github.ilja615.iljatech.blocks.mechanical_arm.MechanicalArmScreenHandler;
 import com.github.ilja615.iljatech.blocks.researchtable.BlueprintTableScreenHandler;
 import com.github.ilja615.iljatech.blocks.squeezer.SqueezerScreenHandler;
 import com.github.ilja615.iljatech.network.BlockPosPayload;
@@ -31,6 +32,8 @@ public class ModScreenHandlerTypes {
             register("carpentry", CarpentryScreenHandler::new, BlockPosPayload.PACKET_CODEC);
     public static final MenuType<BlueprintTableScreenHandler> RESEARCH =
             register("blueprints", BlueprintTableScreenHandler::new, BlockPosPayload.PACKET_CODEC);
+    public static final MenuType<MechanicalArmScreenHandler> MECHANICAL_ARM =
+            register("mechanical_arm", MechanicalArmScreenHandler::new, BlockPosPayload.PACKET_CODEC);
 
     public static <T extends AbstractContainerMenu, D extends CustomPacketPayload> ExtendedScreenHandlerType<T, D> register(String name, ExtendedScreenHandlerType.ExtendedFactory<T, D> factory, StreamCodec<? super RegistryFriendlyByteBuf, D> codec) {
         return Registry.register(BuiltInRegistries.MENU, ResourceLocation.fromNamespaceAndPath(IljaTech.MOD_ID, name), new ExtendedScreenHandlerType<>(factory, codec));

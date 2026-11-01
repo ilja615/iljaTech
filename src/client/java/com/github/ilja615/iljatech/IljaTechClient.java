@@ -32,7 +32,7 @@ public class IljaTechClient implements ClientModInitializer {
 				ModBlocks.PULVERIZER_MILL, ModBlocks.FLAX_SEEDS, ModBlocks.FLAX, ModBlocks.SPINNING_FRAME,
 				ModBlocks.ACACIA_FRAME, ModBlocks.BAMBOO_FRAME, ModBlocks.BIRCH_FRAME, ModBlocks.CHERRY_FRAME, ModBlocks.CRIMSON_FRAME,
 				ModBlocks.DARK_OAK_FRAME, ModBlocks.JUNGLE_FRAME, ModBlocks.MANGROVE_FRAME, ModBlocks.OAK_FRAME, ModBlocks.SPRUCE_FRAME, ModBlocks.WARPED_FRAME,
-				ModBlocks.SAWDUST, ModBlocks.RESEARCH_TABLE, ModBlocks.BLUEPRINT_TABLE, ModBlocks.RUBBLE, ModBlocks.ROPE);
+				ModBlocks.SAWDUST, ModBlocks.RESEARCH_TABLE, ModBlocks.BLUEPRINT_TABLE, ModBlocks.RUBBLE, ModBlocks.ROPE, ModBlocks.MECHANICAL_ARM);
 
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
 				ModBlocks.WINDMILL_SAIL);
@@ -57,6 +57,7 @@ public class IljaTechClient implements ClientModInitializer {
 		MenuScreens.register(ModScreenHandlerTypes.SQUEEZER, SqueezerScreen::new);
 		MenuScreens.register(ModScreenHandlerTypes.CARPENTRY, CarpentryScreen::new);
 		MenuScreens.register(ModScreenHandlerTypes.RESEARCH, BlueprintSelectionScreen::new);
+		MenuScreens.register(ModScreenHandlerTypes.MECHANICAL_ARM, MechanicalArmScreen::new);
 
 		// Register fluid render handlers
 		FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.STILL_CREOSOTE_OIL, ModFluids.FLOWING_CREOSOTE_OIL, new SimpleFluidRenderHandler(

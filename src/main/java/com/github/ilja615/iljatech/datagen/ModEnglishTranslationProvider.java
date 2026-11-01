@@ -154,6 +154,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("block.iljatech.crushed_nickel_ore", "Crushed Raw Nickel");
         this.add("block.iljatech.crushed_aluminium_ore", "Crushed Raw Aluminium");
         this.add("block.iljatech.crushed_chrome_ore", "Crushed Raw Chromium");
+        this.add("block.iljatech.mechanical_arm", "Mechanical Arm");
         this.add("effect.iljatech.stunned", "Stunned");
         this.add("subtitles.iljatech.bellows_inhale", "Bellows Inhale");
         this.add("subtitles.iljatech.bellows_exhale", "Bellows Exhale");
@@ -167,6 +168,7 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("container.iljatech.squeezer", "Squeezer");
         this.add("container.iljatech.carpentry", "Carpentry");
         this.add("container.iljatech.research", "Research");
+        this.add("container.iljatech.mechanical_arm", "Mechanical Arm");
 
 
     }

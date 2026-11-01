@@ -9,6 +9,7 @@ import com.github.ilja615.iljatech.blocks.firebox.FireboxBlockEntity;
 import com.github.ilja615.iljatech.blocks.foundry.FoundryBlockEntity;
 import com.github.ilja615.iljatech.blocks.funnel.FunnelBlockEntity;
 import com.github.ilja615.iljatech.blocks.hatch.ItemHatchBlockEntity;
+import com.github.ilja615.iljatech.blocks.mechanical_arm.MechanicalArmBlockEntity;
 import com.github.ilja615.iljatech.blocks.pulverizermill.PulverizerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.rollermill.RollerMillBlockEntity;
 import com.github.ilja615.iljatech.blocks.sifter.RubbleBlockEntity;
@@ -59,6 +60,8 @@ public class ModBlockEntityTypes {
             FabricBlockEntityTypeBuilder.create(SifterBlockEntity::new, ModBlocks.SIFTER).build());
     public static final BlockEntityType<RubbleBlockEntity> RUBBLE = register("rubble",
             FabricBlockEntityTypeBuilder.create(RubbleBlockEntity::new, ModBlocks.RUBBLE).build());
+    public static final BlockEntityType<MechanicalArmBlockEntity> MECHANICAL_ARM = register("mechanical_arm",
+            FabricBlockEntityTypeBuilder.create(MechanicalArmBlockEntity::new, ModBlocks.MECHANICAL_ARM).build());
 
     public static void registerStorages() {
         ItemStorage.SIDED.registerForBlockEntity(RollerMillBlockEntity::getInventoryProvider, ModBlockEntityTypes.ROLLER_MILL);
@@ -70,6 +73,7 @@ public class ModBlockEntityTypes {
         ItemStorage.SIDED.registerForBlockEntity(SqueezerBlockEntity::getInventoryProvider, ModBlockEntityTypes.SQUEEZER);
         ItemStorage.SIDED.registerForBlockEntity(SpinningFrameBlockEntity::getInventoryProvider, ModBlockEntityTypes.SPINNING_FRAME);
         ItemStorage.SIDED.registerForBlockEntity(CarpentryBlockEntity::getInventoryProvider, ModBlockEntityTypes.CARPENTRY);
+        ItemStorage.SIDED.registerForBlockEntity(MechanicalArmBlockEntity::getInventoryProvider, ModBlockEntityTypes.MECHANICAL_ARM);
 
         FluidStorage.SIDED.registerForBlockEntity(CokeOvenBlockEntity::getFluidTankProvider, ModBlockEntityTypes.COKE_OVEN);
         FluidStorage.SIDED.registerForBlockEntity(FunnelBlockEntity::getFluidTankProvider, ModBlockEntityTypes.FUNNEL);
