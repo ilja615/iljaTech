@@ -1,0 +1,19 @@
+{
+  "type": "iljatech:sifting",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "fines": [
+    {
+      "item": "iljatech:crushed_limestone",
+      "chance": 0.4
+    }
+  ],
+  "nrolls": 1,
+  "coarse": [
+    {
+      "item": "minecraft:flint",
+      "chance": 0.25
+    }
+  ]
+}

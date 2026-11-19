@@ -1,0 +1,23 @@
+{
+  "type": "iljatech:sifting",
+  "ingredient": {
+    "item": "minecraft:rooted_dirt"
+  },
+  "fines": [
+    {
+      "item": "iljatech:saltpeter",
+      "chance": 0.4
+    },
+    {
+      "item": "minecraft:wheat_seeds",
+      "chance": 0.4
+    }
+  ],
+  "nrolls": 1,
+  "coarse": [
+    {
+      "item": "minecraft:hanging_roots",
+      "chance": 1
+    }
+  ]
+}

@@ -47,6 +47,7 @@ public class IljaTech implements ModInitializer {
 		});
 
 		ModBlockEntityTypes.registerStorages();
+		IljaTechEvents.registerFuels();
 
 		// TODO: move the wind code elsewhere
 		ServerTickEvents.START_WORLD_TICK.register(world -> {

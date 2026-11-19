@@ -1,0 +1,27 @@
+{
+  "type": "iljatech:sifting",
+  "ingredient": {
+    "item": "iljatech:crushed_iron_ore"
+  },
+  "fines": [
+    {
+      "item": "iljatech:iron_dust",
+      "chance": 1.0
+    },
+    {
+      "item": "iljatech:iron_dust",
+      "chance": 0.2
+    }
+  ],
+  "nrolls": 4,
+  "coarse": [
+    {
+      "item": "iljatech:crushed_iron_ore",
+      "chance": 0.2
+    },
+    {
+      "item": "iljatech:crushed_nickel_ore",
+      "chance": 0.2
+    }
+  ]
+}

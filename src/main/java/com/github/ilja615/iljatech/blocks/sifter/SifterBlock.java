@@ -1,5 +1,6 @@
 package com.github.ilja615.iljatech.blocks.sifter;
 
+import com.github.ilja615.iljatech.blocks.cokeoven.CokeOvenBlockEntity;
 import com.github.ilja615.iljatech.blocks.conveyorbelt.ConveyorBeltBlockEntity;
 import com.github.ilja615.iljatech.blocks.spinningframe.SpinningFrameBlockEntity;
 import com.github.ilja615.iljatech.energy.MechPwrAccepter;
@@ -11,12 +12,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -112,5 +115,19 @@ public class SifterBlock extends Block implements EntityBlock, MechPwrAccepter {
             return Math.min(n, 4);
         }
         return 0;
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof SifterBlockEntity sifterBlockEntity) {
+                Containers.dropContents(world, pos, sifterBlockEntity.getInventory());
+                world.updateNeighbourForOutputSignal(pos, this);
+            }
+            if (world.getBlockState(pos.above()).is(ModBlocks.PLACEHOLDER))
+                world.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 2);
+        }
+        super.onRemove(state, world, pos, newState, moved);
     }
 }

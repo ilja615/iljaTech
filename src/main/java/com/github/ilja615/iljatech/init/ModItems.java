@@ -58,6 +58,8 @@ public class ModItems {
     public static final Item SALTPETER = register("saltpeter", new Item(new Item.Properties()));
     public static final Item SILICA_DUST = register("silica_dust", new Item(new Item.Properties()));
     public static final Item SALT = register("salt", new Item(new Item.Properties()));
+    public static final Item CRUSHED_LIMESTONE = register("crushed_limestone", new Item(new Item.Properties()));
+    public static final Item PEAT = register("peat", new Item(new Item.Properties()));
 
     public static final Item IRON_DUST = register("iron_dust", new Item(new Item.Properties()));
     public static final Item GOLD_DUST = register("gold_dust", new Item(new Item.Properties()));

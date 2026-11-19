@@ -1,0 +1,24 @@
+{
+  "type": "iljatech:sifting",
+  "ingredient": {
+    "item": "iljatech:crushed_tin_ore"
+  },
+  "fines": [
+    {
+      "item": "iljatech:tin_dust",
+      "chance": 1.0
+    },
+    {
+      "item": "iljatech:tin_dust",
+      "chance": 0.2
+    },
+    {
+      "item": "iljatech:silica_dust",
+      "chance": 0.2
+    }
+  ],
+  "nrolls": 4,
+  "coarse": [
+
+  ]
+}

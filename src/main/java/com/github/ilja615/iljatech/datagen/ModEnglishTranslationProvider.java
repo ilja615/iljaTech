@@ -56,6 +56,8 @@ public class ModEnglishTranslationProvider extends AbstractModonomiconLanguagePr
         this.add("item.iljatech.nickel_dust", "Nickel Dust");
         this.add("item.iljatech.aluminium_dust", "Aluminium Dust");
         this.add("item.iljatech.chrome_dust", "Chromium Dust");
+        this.add("item.iljatech.crushed_limestone", "Crushed Limestone");
+        this.add("item.iljatech.peat", "Peat");
         this.add("block.iljatech.tin_ore", "Tin Ore");
         this.add("block.iljatech.nickel_ore", "Nickel Ore");
         this.add("block.iljatech.chrome_ore", "Chromium Ore");

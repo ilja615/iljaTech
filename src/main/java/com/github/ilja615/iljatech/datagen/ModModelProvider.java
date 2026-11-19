@@ -55,6 +55,8 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.generateFlatItem(ModItems.ALUMINIUM_DUST, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.CHROME_DUST, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.MESH, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.CRUSHED_LIMESTONE, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.PEAT, ModelTemplates.FLAT_ITEM);
 
     }
 

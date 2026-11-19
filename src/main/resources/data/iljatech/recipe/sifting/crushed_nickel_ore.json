@@ -11,6 +11,10 @@
     {
       "item": "iljatech:nickel_dust",
       "chance": 1.0
+    },
+    {
+      "item": "iljatech:nickel_dust",
+      "chance": 0.2
     }
   ],
   "nrolls": 4,
